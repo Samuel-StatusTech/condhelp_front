@@ -6,7 +6,7 @@ import { ReactComponent as GoalsIcon } from "../../../../assets/icons/goals.svg"
 import { ReactComponent as CompaniesIcon } from "../../../../assets/icons/companies.svg"
 import { ReactComponent as CardIcon } from "../../../../assets/icons/card.svg"
 import { ReactComponent as NewsboardIcon } from "../../../../assets/icons/newspaper.svg"
-import { ReactComponent as PlusIcon } from "../../../../assets/icons/plus-circle.svg"
+import { ReactComponent as PlusIcon } from "../../../../assets/icons/plus_circle.svg"
 
 type Props = {
   from: "people" | "goals" | "companies" | "departments" | "newsboard"

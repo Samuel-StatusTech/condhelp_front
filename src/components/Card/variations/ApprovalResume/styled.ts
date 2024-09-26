@@ -35,7 +35,7 @@ export const StatusColor = styled.div<{
       ? theme.colors.green
       : $status === "awaiting"
       ? theme.colors.yellow
-      : theme.colors.red};
+      : theme.colors.red.main};
 `
 
 export const Graph = styled.div`
@@ -57,7 +57,7 @@ export const GraphData = styled.div<{
       ? theme.colors.green
       : $type === "awaiting"
       ? theme.colors.yellow
-      : theme.colors.red};
+      : theme.colors.red.main};
   transition: width 0.3s;
 
   span {

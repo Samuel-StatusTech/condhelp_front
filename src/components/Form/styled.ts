@@ -32,7 +32,7 @@ export const GroupInfo = styled.div`
 export const GroupTitle = styled.span<{ $k: number }>`
   font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.brown.medium};
+  color: ${({ theme }) => theme.colors.yellow.dark};
 
   opacity: 0;
   ${({ $k, theme }) =>

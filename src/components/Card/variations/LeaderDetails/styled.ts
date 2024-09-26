@@ -103,7 +103,7 @@ export const Color = styled.div<{
       ? theme.colors.green
       : $color === "awaiting"
       ? theme.colors.yellow
-      : theme.colors.red};
+      : theme.colors.red.main};
 `
 
 export const Legend = styled.div<{ $k?: number }>`

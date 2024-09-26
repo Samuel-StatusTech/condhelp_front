@@ -77,6 +77,6 @@ export const Option = styled.div`
   z-index: 2;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.brown.light};
+    background-color: ${({ theme }) => theme.colors.yellow.light};
   }
 `

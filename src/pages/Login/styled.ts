@@ -11,7 +11,7 @@ export const Page = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 48px;
+  gap: 96px;
   padding: 48px;
 `
 
@@ -23,11 +23,16 @@ export const FormContainer = styled.div`
   width: 100%;
   max-width: 300px;
   transition: height 0.3s;
+
+  span {
+    text-align: center;
+    color: ${({ theme }) => theme.colors.neutral.white};
+  }
 `
 
 export const Subaction = styled.button`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.brown.light};
+  color: ${({ theme }) => theme.colors.green.soft};
   text-align: center;
   background: none;
   outline: none;
@@ -40,15 +45,30 @@ export const Subaction = styled.button`
   }
 `
 
+export const NewAccount = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  span {
+    font-size: 14px;
+  }
+
+  button {
+    margin: 0;
+  }
+`
+
 export const StepTitle = styled.span`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.brown.soft};
+  color: ${({ theme }) => theme.colors.yellow.main};
   text-align: center;
 `
 
 export const StepDescription = styled.span`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.brown.light};
+  color: ${({ theme }) => theme.colors.yellow.light};
   text-align: left;
 `

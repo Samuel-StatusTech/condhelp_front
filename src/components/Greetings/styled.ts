@@ -10,7 +10,7 @@ export const Element = styled.div`
   border: none;
   border-radius: 4px;
   padding: 14px;
-  background-color: ${({ theme }) => theme.colors.brown.medium};
+  background-color: ${({ theme }) => theme.colors.yellow.dark};
   cursor: pointer;
 `
 

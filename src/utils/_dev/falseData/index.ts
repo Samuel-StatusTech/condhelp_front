@@ -1,4 +1,4 @@
-import { TUser } from "../../@types/data/user"
+import { TUser } from "../../@types/data/_user"
 import { TGoal } from "../../@types/data/goal"
 import { TCompany } from "../../@types/data/company"
 import { TDepartment } from "../../@types/data/department"

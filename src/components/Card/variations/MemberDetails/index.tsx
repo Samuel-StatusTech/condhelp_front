@@ -44,7 +44,7 @@ const GraphBlock = ({ k, graph }: PGraphBlock) => {
         series={[graph.approved, graph.awaiting, graph.rejected]}
         options={{
           labels: [`Aprovadas`, "Aguardando", "Reprovadas"],
-          colors: [theme.colors.green, theme.colors.yellow, theme.colors.red],
+          colors: [theme.colors.green, theme.colors.yellow, theme.colors.red.main],
           legend: {
             show: false,
           },

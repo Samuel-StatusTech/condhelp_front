@@ -3,17 +3,19 @@ import "./styled-components"
 declare module "styled-components" {
   export interface DefaultTheme {
     colors: {
-      gold: string
-      purple: string
-      blue: string
-      yellow: string
-      green: string
-      red: string
-      brown: {
-        soft: string
-        light: string
-        medium: string
+      green: {
         dark: string
+        medium: string
+        light: string
+        soft: string
+      }
+      red: {
+        main: string
+      }
+      yellow: {
+        dark: string
+        main: string
+        light: string
       }
       neutral: {
         white: string

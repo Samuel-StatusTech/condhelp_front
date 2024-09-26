@@ -45,7 +45,7 @@ export const UserNameArea = styled.div`
 export const UserName = styled.span`
   font-size: 14px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.brown.medium};
+  color: ${({ theme }) => theme.colors.yellow.dark};
 `
 
 export const UserPoints = styled.span`

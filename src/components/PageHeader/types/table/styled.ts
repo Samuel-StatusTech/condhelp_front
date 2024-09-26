@@ -24,7 +24,7 @@ export const Button = styled.button<{ $k: number }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: ${({ theme }) => theme.colors.brown.medium};
+  background: ${({ theme }) => theme.colors.yellow.dark};
   border: none;
   outline: none;
   padding: 6px 10px;

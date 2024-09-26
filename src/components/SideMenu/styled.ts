@@ -2,8 +2,8 @@ import styled from "styled-components"
 
 export const Element = styled.aside<{ $opened: boolean }>`
   position: sticky;
-  top: 32px;
-  max-height: calc(100svh - 64px);
+  top: 20px;
+  max-height: calc(100svh - 40px);
   max-width: 240px;
   width: 100%;
   display: flex;
@@ -11,9 +11,8 @@ export const Element = styled.aside<{ $opened: boolean }>`
   align-items: center;
   gap: 16px;
   padding: 20px;
-  background-color: ${({ theme }) => theme.colors.brown.soft};
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.neutral.white};
+  border-radius: 8px;
   transition: margin-left 0.3s;
 
   & > svg {
@@ -42,7 +41,7 @@ export const BurguerWrapper = styled.div<{ $opened: boolean }>`
     ${({ $opened }) => ($opened ? "50%" : "calc(100% + 7px)")}
   );
   transition: transform 0.3s;
-  background-color: ${({ theme }) => theme.colors.brown.soft};
+  background-color: ${({ theme }) => theme.colors.neutral.soft};
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
   border-radius: 200px;
   padding: 8px;
@@ -66,6 +65,8 @@ export const MenuContainer = styled.div`
   align-items: stretch;
   gap: 12px;
   width: 100%;
+  border-top: 1px solid ${({ theme }) => theme.colors.neutral.medium};
+  padding-top: 24px;
 `
 
 export const UserControl = styled.div`
@@ -76,9 +77,9 @@ export const UserControl = styled.div`
 
 export const LoggedUserArea = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  cursor: pointer;
+  gap: 10px;
 
   opacity: 0;
   ${({ theme }) =>
@@ -87,30 +88,42 @@ export const LoggedUserArea = styled.div`
     theme.animations.delays.main(5)}
 `
 
-export const UserNameBox = styled.div`
-  font-size: 16px;
-  font-weight: 800;
-  color: ${({ theme }) => theme.colors.brown.dark};
-  background-color: ${({ theme }) => theme.colors.neutral.white};
-  padding: 4px;
-  border-radius: 16px;
-`
+export const UserProfile = styled.div`
+  border: 2px solid ${({ theme }) => theme.colors.neutral.white};
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
 
-export const NameArea = styled.div<{ $turned: boolean }>`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  border-radius: 75px;
 
+  img,
   svg {
-    transition: transform 0.3s;
-    transform: rotate(${({ $turned }) => ($turned ? 180 : 0)}deg);
+    min-width: 100%;
+    min-height: 100%;
   }
 `
 
+export const NameArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+`
+
 export const UserName = styled.span`
-  color: ${({ theme }) => theme.colors.neutral.dark};
+  color: ${({ theme }) => theme.colors.neutral.main};
+  font-size: 16px;
+  font-weight: 600;
+`
+
+export const UserRole = styled.span`
+  color: ${({ theme }) => theme.colors.green.medium};
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
 `
 
 export const DropBtn = styled.div`

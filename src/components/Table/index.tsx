@@ -8,7 +8,7 @@ import { DepartmentItem } from "./ListItems/department"
 import { NewsboardItem } from "./ListItems/newsboard"
 import Divider from "../_minimals/Divider"
 
-import { TUser } from "../../utils/@types/data/user"
+import { TUser } from "../../utils/@types/data/_user"
 import { TGoal } from "../../utils/@types/data/goal"
 import { TCompany } from "../../utils/@types/data/company"
 import { TDepartment } from "../../utils/@types/data/department"

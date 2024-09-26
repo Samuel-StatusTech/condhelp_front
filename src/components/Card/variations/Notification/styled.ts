@@ -31,7 +31,7 @@ export const ItemRow = styled.div`
 `
 
 export const Points = styled.span`
-  color: ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.red.main};
   font-size: 12px;
 `
 

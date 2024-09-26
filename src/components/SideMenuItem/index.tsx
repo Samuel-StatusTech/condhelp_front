@@ -1,17 +1,12 @@
 import * as S from "./styled"
-import { ReactComponent as DashboardIcon } from "../../assets/icons/dashboard.svg"
-import { ReactComponent as UsersIcon } from "../../assets/icons/users.svg"
-import { ReactComponent as GoalsIcon } from "../../assets/icons/goals.svg"
-import { ReactComponent as OkrIcon } from "../../assets/icons/okr_fill.svg"
-import { ReactComponent as CompaniesIcon } from "../../assets/icons/companies.svg"
-import { ReactComponent as CardIcon } from "../../assets/icons/card.svg"
-import { ReactComponent as BannerIcon } from "../../assets/icons/banner.svg"
-import { ReactComponent as NewsboardIcon } from "../../assets/icons/newspaper.svg"
-import { PSideMenuItem } from "../../utils/@types/components/SideMenuItem"
-import { Link } from "react-router-dom"
 import { getStore } from "../../store"
-import { system } from "../../utils/system"
-import { TUserLevel } from "../../utils/@types/data/user"
+
+import { TAccess } from "../../utils/@types/data/access"
+import { PSideMenuItem } from "../../utils/@types/components/SideMenuItem"
+
+import { Icons } from "../../assets/icons/icons"
+
+import { Link } from "react-router-dom"
 
 type Props = {
   data: PSideMenuItem
@@ -21,14 +16,15 @@ type Props = {
 }
 
 const iconRef: { [key: string]: JSX.Element } = {
-  dashboard: <DashboardIcon />,
-  users: <UsersIcon />,
-  goals: <GoalsIcon />,
-  okr: <OkrIcon />,
-  companies: <CompaniesIcon />,
-  card: <CardIcon />,
-  banner: <BannerIcon />,
-  newsboard: <NewsboardIcon />,
+  dashboard: <Icons.Dashboard />,
+  user: <Icons.User />,
+  condos: <Icons.Conds />,
+  folder: <Icons.Folder />,
+  subcategories: <Icons.Subcategory />,
+  location: <Icons.Location />,
+  chat: <Icons.Chat />,
+  faq: <Icons.Faq />,
+  reports: <Icons.Report />,
 }
 
 const SideMenuItem = ({ data, active, k, action }: Props) => {
@@ -36,10 +32,7 @@ const SideMenuItem = ({ data, active, k, action }: Props) => {
 
   const render = !data.access
     ? true
-    : data.tag === "okr"
-    ? user?.level === "employee"
-    : system.levelsRelations[data.access] <=
-      system.levelsRelations[user?.level as TUserLevel]
+    : data.access.includes(user?.role as TAccess)
 
   const renderIcon = () => {
     const icon = iconRef[data.icon]

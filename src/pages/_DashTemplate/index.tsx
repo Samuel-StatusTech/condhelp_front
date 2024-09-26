@@ -2,6 +2,7 @@ import * as S from "./styled"
 import SideMenu from "../../components/SideMenu"
 import { Outlet, useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
+import Header from "../../components/Header"
 
 const DashTemplate = () => {
   const location = useLocation()
@@ -23,10 +24,14 @@ const DashTemplate = () => {
 
   return (
     <S.Page>
-      <SideMenu page={page} />
-      <S.PageContent>
-        <Outlet />
-      </S.PageContent>
+      <Header />
+
+      <S.Main>
+        <SideMenu page={page} />
+        <S.PageContent>
+          <Outlet />
+        </S.PageContent>
+      </S.Main>
     </S.Page>
   )
 }

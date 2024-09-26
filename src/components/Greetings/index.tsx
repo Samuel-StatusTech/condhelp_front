@@ -7,28 +7,18 @@ const Greetings = () => {
   const renderGreetingsMessage = () => {
     let content = <></>
 
-    switch (user?.level) {
-      case "master":
+    switch (user?.role) {
+      case "manager":
         content = (
           <S.GreetingsResume>
-            Você está gerenciando <span className="info">{"11"}</span> líderes
+            Olá {"Lorem"}, estes são seus pedidos de orçamentos em andamento:
           </S.GreetingsResume>
         )
         break
-      case "leader":
+      case "provider":
         content = (
           <S.GreetingsResume>
-            Você está atualmente na colocação
-            <span className="info">{" #6"}</span>, com{" "}
-            <span className="info">{"120"}</span> pontos.
-          </S.GreetingsResume>
-        )
-        break
-      case "employee":
-        content = (
-          <S.GreetingsResume>
-            Seu rank na equipe é<span className="info">{" #6"}</span>, com{" "}
-            <span className="info">{"120"}</span> pontos.
+            Olá {"Lorem"}, estes são os orçamentos em andamento:
           </S.GreetingsResume>
         )
         break
@@ -42,13 +32,7 @@ const Greetings = () => {
 
   return (
     <S.GreetingsArea>
-      {user?.level !== "master" && (
-        <S.Light $color={user?.level === "leader" ? "orange" : "green"} />
-      )}
-      <S.Greetings>
-        <S.Main>Olá, {user?.name}!</S.Main>
-        {renderGreetingsMessage()}
-      </S.Greetings>
+      <S.Greetings>{renderGreetingsMessage()}</S.Greetings>
     </S.GreetingsArea>
   )
 }

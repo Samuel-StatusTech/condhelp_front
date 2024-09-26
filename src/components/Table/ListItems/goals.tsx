@@ -2,7 +2,7 @@ import { TGoal } from "../../../utils/@types/data/goal"
 import * as C from "../styled"
 
 import { ReactComponent as EditIcon } from "../../../assets/icons/edit.svg"
-import { levelRelation } from "../../../utils/@types/data/user"
+import { levelRelation } from "../../../utils/@types/data/_user"
 
 type Props = {
   data: TGoal

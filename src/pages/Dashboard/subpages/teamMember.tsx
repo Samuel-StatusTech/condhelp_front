@@ -47,21 +47,6 @@ const TeamMember = ({ handleSubPageChange, data }: Props) => {
     handleSubPageChange("main")
   }
 
-  const handleSelectOkr = (okr: any) => {
-    if (okr) {
-      setModal({
-        visible: true,
-        data: {
-          ...initials.modals.goalApprove,
-          title: "OKR",
-          points: 0,
-          user: fdata.cards.myTeam.find((l) => l.id === data.id),
-        },
-        role: "okrPoints",
-      })
-    }
-  }
-
   const handleSelectGoal = (goal: any) => {
     if (goal) {
       setModal({
@@ -142,13 +127,6 @@ const TeamMember = ({ handleSubPageChange, data }: Props) => {
               graphs: getGraphs(),
             }}
             actions={{ togglePointsModal }}
-          />
-          <Card
-            k={2}
-            type="okr"
-            title="OKR"
-            data={fdata.cards.okr}
-            actions={{ handleSelectOkr }}
           />
         </PageCol>
         <PageCol size={2}>

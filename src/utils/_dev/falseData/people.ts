@@ -1,4 +1,4 @@
-import { TUser } from "../../@types/data/user"
+import { TUser } from "../../@types/data/_user"
 
 export const FDpeople: TUser[] = [
   {

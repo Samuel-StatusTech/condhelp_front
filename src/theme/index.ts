@@ -2,17 +2,19 @@ import { DefaultTheme } from "styled-components"
 
 export const theme: DefaultTheme = {
   colors: {
-    gold: "#CEB77D",
-    purple: "#7D37B4",
-    blue: "#45D0EE",
-    yellow: "#FFA903",
-    green: "#90CC61",
-    red: "#D8484A",
-    brown: {
-      soft: "#EDEEEE",
-      light: "#A59486",
-      medium: "#786047",
-      dark: "#282525",
+    green: {
+      dark: "#1C321E",
+      medium: "#2F5024",
+      light: "#4E7C3C",
+      soft: "#90CC61",
+    },
+    red: {
+      main: "#D8484A",
+    },
+    yellow: {
+      dark: "#EDC32E",
+      main: "#F3D332",
+      light: "rgba(243, 211, 50, 0.5)",
     },
     neutral: {
       white: "#FFFFFF",

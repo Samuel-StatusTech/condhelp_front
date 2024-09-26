@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { TUser, levelRelation } from "../../../utils/@types/data/user"
+import { TUser, levelRelation } from "../../../utils/@types/data/_user"
 import { getInitials } from "../../../utils/tb/format/name"
 import * as C from "../styled"
 

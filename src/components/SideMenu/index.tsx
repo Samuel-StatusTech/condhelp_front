@@ -3,13 +3,11 @@ import * as S from "./styled"
 import { system } from "../../utils/system"
 import SideMenuItem from "../SideMenuItem"
 
-import { ReactComponent as MenuLogo } from "../../assets/icons/small_named_logo.svg"
-import { ReactComponent as DropdownIcon } from "../../assets/icons/dropdown.svg"
-import { getStore } from "../../store"
-import { getInitials } from "../../utils/tb/format/name"
 import { Icons } from "../../assets/icons/icons"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { getStore } from "../../store"
+import { relations } from "../../utils/system/relations"
 
 type Props = {
   page: string
@@ -46,9 +44,25 @@ const SideMenu = (props: Props) => {
       <S.BurguerWrapper $opened={sideOpened} onClick={toggleSideMenu}>
         <Icons.Burguer />
       </S.BurguerWrapper>
-      <MenuLogo />
+
+      <S.LoggedUserArea>
+        <S.UserProfile>
+          {user?.image ? (
+            <img src={user?.image} alt="" width={"100%"} />
+          ) : (
+            <Icons.User />
+          )}
+        </S.UserProfile>
+        <S.NameArea>
+          <S.UserName>{user?.name}</S.UserName>
+          <S.UserRole>
+            {user?.role ? relations.roles[user?.role] : ""}
+          </S.UserRole>
+        </S.NameArea>
+      </S.LoggedUserArea>
+
       <S.MenuContainer>
-        {system.menu.map((item, k) => (
+        {system.menu.side.map((item, k) => (
           <SideMenuItem
             k={k}
             key={k}
@@ -58,18 +72,6 @@ const SideMenu = (props: Props) => {
           />
         ))}
         <S.UserControl onClick={toggleUserDrop}>
-          <S.LoggedUserArea>
-            <S.UserNameBox>
-              {getInitials([user?.name as string, user?.surname as string])}
-            </S.UserNameBox>
-            <S.NameArea $turned={userDrop}>
-              <S.UserName>{user?.name}</S.UserName>
-              <S.DropBtn>
-                <DropdownIcon width={24} />
-              </S.DropBtn>
-            </S.NameArea>
-          </S.LoggedUserArea>
-
           <S.DropUserWrapper className={userDrop ? "visible" : ""}>
             <S.DropUserContent>
               <S.DUItem onClick={handleLogout}>

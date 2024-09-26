@@ -1,18 +1,17 @@
 import styled from "styled-components"
 
 export const Wrapper = styled.div<{ $active: boolean; $k: number }>`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.neutral.medium};
-
-  &:nth-child(1) {
-    border-top: 1px solid ${({ theme }) => theme.colors.neutral.medium};
-  }
+  border-radius: 4px;
+  background-color: ${({ $active, theme }) =>
+    $active ? theme.colors.neutral.soft : "transparent"};
+  transition: background-color 0.3s;
+  padding: 8px 5px;
 
   a {
     display: flex;
     align-items: center;
     gap: 8px;
     width: 100%;
-    padding: 16px 0;
     text-decoration: none;
     filter: saturate(${({ $active }) => ($active ? 1 : 0)});
     opacity: ${({ $active }) => ($active ? 1 : 0.5)};
@@ -24,7 +23,7 @@ export const Wrapper = styled.div<{ $active: boolean; $k: number }>`
       opacity: 1;
     }
 
-    color: ${({ theme }) => theme.colors.brown.medium};
+    color: ${({ theme }) => theme.colors.green.medium};
     svg {
       width: 24px;
     }

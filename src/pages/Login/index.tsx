@@ -1,5 +1,5 @@
 import * as S from "./styled"
-import { ReactComponent as Logo } from "../../assets/icons/named_logo.svg"
+import { ReactComponent as Logo } from "../../assets/icons/logo_full.svg"
 import { useEffect, useState } from "react"
 import Input from "../../components/Input/login"
 import initials from "../../utils/initials"
@@ -15,15 +15,18 @@ const fixedAuth = {
 }
 
 const userData: TUser = {
-  name: "StatusTech",
-  surname: "Top",
-  level: "master",
-  id: "id1",
-  email: "email@email.com",
-  company: {
-    id: "id-empresa-1",
-    name: "Empresa legal 123",
+  id: "",
+  role: "admin",
+  data: {
+    document: {
+      type: "cpf",
+      register: "12345678901",
+      birthdate: "2001-01-01",
+    },
   },
+  email: "email@email.com",
+  name: "Jack Daniels",
+  image: "",
 }
 
 const Login = () => {
@@ -88,6 +91,10 @@ const Login = () => {
     setContent("passmailSent")
   }
 
+  const handleNewAccount = () => {
+    // ...
+  }
+
   const renderContent = () => {
     const dft = (
       <>
@@ -111,6 +118,12 @@ const Login = () => {
         <S.Subaction onClick={() => setContent("passmail")}>
           Esqueci minha senha
         </S.Subaction>
+        <S.NewAccount style={{ display: "flex", flexDirection: "column" }}>
+          <span>Ainda não tem cadastro?</span>
+          <S.Subaction onClick={handleNewAccount}>
+            Criar minha conta
+          </S.Subaction>
+        </S.NewAccount>
       </>
     )
 
@@ -173,7 +186,10 @@ const Login = () => {
     <S.Page>
       <Feedback {...feedback} />
       <Logo />
-      <S.FormContainer>{renderContent()}</S.FormContainer>
+      <S.FormContainer>
+        <span>ACESSO AO SISTEMA</span>
+        {renderContent()}
+      </S.FormContainer>
     </S.Page>
   )
 }

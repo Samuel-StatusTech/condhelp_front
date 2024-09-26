@@ -11,7 +11,7 @@ export const Element = styled.div<{
   border-radius: 6px;
   padding: 6px 8px;
   background-color: ${({ $type, theme }) =>
-    $type === "success" ? theme.colors.green : theme.colors.red};
+    $type === "success" ? theme.colors.green : theme.colors.red.main};
   top: 64px;
   left: 50%;
   transform: translate(-50%, ${({ $state }) => ($state ? 0 : "-120%")});

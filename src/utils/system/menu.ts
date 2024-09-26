@@ -1,59 +1,115 @@
 import { PSideMenuItem } from "../@types/components/SideMenuItem"
+import { TAccess } from "../@types/data/access"
 
-export const menu: PSideMenuItem[] = [
-  {
-    icon: "dashboard",
-    text: "Dashboard",
-    link: "",
-    tag: "dash",
-  },
-  {
-    icon: "users",
-    text: "Pessoas",
-    link: "/people",
-    tag: "people",
-    access: "leader",
-  },
-  {
-    icon: "okr",
-    text: "OKR",
-    link: "/okr",
-    tag: "okr",
-    access: "employee",
-  },
-  {
-    icon: "goals",
-    text: "Metas",
-    link: "/goals",
-    tag: "goals",
-    access: "leader",
-  },
-  {
-    icon: "companies",
-    text: "Empresas",
-    link: "/companies",
-    tag: "companies",
-    access: "master",
-  },
-  {
-    icon: "card",
-    text: "Departamentos",
-    link: "/departments",
-    tag: "departments",
-    access: "master",
-  },
-  {
-    icon: "banner",
-    text: "Banner",
-    link: "/banner",
-    tag: "banner",
-    access: "master",
-  },
-  {
-    icon: "newsboard",
-    text: "Mural",
-    link: "/newsboard",
-    tag: "newsboard",
-    access: "master",
-  },
-]
+type TNavItem = {
+  text: string
+  link: string
+  access: TAccess[]
+}
+
+export const menu: {
+  side: PSideMenuItem[]
+  nav: TNavItem[]
+} = {
+  side: [
+    {
+      icon: "dashboard",
+      text: "Painel",
+      link: "",
+      tag: "dash",
+    },
+    {
+      icon: "user",
+      text: "Usuários",
+      link: "/users",
+      tag: "users",
+      access: ["admin"],
+    },
+    {
+      icon: "condos",
+      text: "Condomínios",
+      link: "/condos",
+      tag: "condos",
+      access: ["admin"],
+    },
+    {
+      icon: "folder",
+      text: "Categorias",
+      link: "/categories",
+      tag: "categories",
+      access: ["admin"],
+    },
+    {
+      icon: "subcategories",
+      text: "Subcategorias",
+      link: "/subcategories",
+      tag: "subcategories",
+      access: ["admin"],
+    },
+    {
+      icon: "location",
+      text: "Regiões",
+      link: "/regions",
+      tag: "regions",
+      access: ["admin"],
+    },
+    {
+      icon: "chat",
+      text: "Recados",
+      link: "/messages",
+      tag: "messages",
+      access: ["admin"],
+    },
+    {
+      icon: "faq",
+      text: "Gerenciar FAQ's",
+      link: "/managefaq",
+      tag: "managefaq",
+      access: ["admin"],
+    },
+    {
+      icon: "reports",
+      text: "Relatórios",
+      link: "/reports",
+      tag: "reports",
+      access: ["admin"],
+    },
+  ],
+  nav: [
+    {
+      text: "Dashboard",
+      link: "/dashboard",
+      access: ["admin"],
+    },
+    {
+      text: "Monitoramento",
+      link: "/overviewing",
+      access: ["admin"],
+    },
+    {
+      text: "Histórico de Chamados",
+      link: "/callsHistory",
+      access: ["admin"],
+    },
+    {
+      text: "Sobre",
+      link: "/about",
+      access: ["admin"],
+    },
+    {
+      text: "FAQ",
+      link: "/faq",
+      access: ["admin"],
+    },
+    {
+      text: "Política de privacidade",
+      link: "/policy",
+      access: ["admin"],
+    },
+    {
+      text: "Minha conta",
+      link: "/myaccount",
+      access: ["admin"],
+    },
+  ],
+}

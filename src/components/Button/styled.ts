@@ -33,7 +33,7 @@ export const Element = styled.button<{ $type: string }>`
   padding: 14px;
   background-color: ${({ $type, theme }) =>
     $type === "main"
-      ? theme.colors.brown.medium
+      ? theme.colors.yellow.dark
       : $type === "secondary"
       ? theme.colors.neutral.medium
       : $type === "tertiary"

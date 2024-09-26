@@ -147,8 +147,8 @@ export const TableList = styled.tbody`
 export const Item = styled.tr<{ $k: number }>`
   background-color: ${({ theme }) => theme.colors.neutral.soft};
   border-radius: 4px;
-  border-top: 10px solid ${({ theme }) => theme.colors.brown.soft};
-  border-bottom: 10px solid ${({ theme }) => theme.colors.brown.soft};
+  border-top: 10px solid ${({ theme }) => theme.colors.yellow.main};
+  border-bottom: 10px solid ${({ theme }) => theme.colors.yellow.main};
   transition: background-color 0.3s;
 
   &:hover {
@@ -171,7 +171,7 @@ export const UserArea = styled.div`
 export const UserNameBox = styled.div`
   font-size: 16px;
   font-weight: 800;
-  color: ${({ theme }) => theme.colors.brown.dark};
+  color: ${({ theme }) => theme.colors.yellow.dark};
   background-color: ${({ theme }) => theme.colors.neutral.white};
   padding: 4px;
   border-radius: 16px;
@@ -188,7 +188,7 @@ export const NameArea = styled.div`
 export const UserName = styled.div`
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.gold};
+    color: ${({ theme }) => theme.colors.yellow.dark};
     font-weight: 600;
   }
 `
@@ -236,10 +236,10 @@ export const LevelFlag = styled.div<{ $level?: string }>`
   border-radius: 8px;
   background-color: ${({ $level, theme }) =>
     $level === "master"
-      ? theme.colors.gold
+      ? theme.colors.yellow.dark
       : $level === "leader"
-      ? theme.colors.purple
-      : theme.colors.blue};
+      ? theme.colors.yellow.dark
+      : theme.colors.yellow.dark};
 `
 
 export const LevelName = styled.span``

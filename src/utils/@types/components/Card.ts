@@ -1,10 +1,8 @@
 import { PGraph } from "../../../components/Card/variations/LeaderDetails"
 import { PEmployee } from "./Employee"
 import { PGoalViewItem } from "./GoalViewItem"
-import { PGoogleItem } from "./GoogleItem"
 import { PLeaderItem } from "./LeaderItem"
 import { PLighterItem } from "./LighterItem"
-import { POkr } from "./Okr"
 import { PTeamMember } from "./Team"
 
 export type PCard = {
@@ -23,9 +21,7 @@ type CardsProps =
   | CLeaderOverview
   | CLights
   | CMemberDetails
-  | COKR
   | CGoalsViews
-  | CGoogle
   | CTeam
   | CStatus
 
@@ -79,17 +75,9 @@ type CMemberDetails = {
     graphs: PGraph[]
   }
 }
-type COKR = {
-  type: "okr"
-  data: POkr[]
-}
 type CGoalsViews = {
   type: "goalsViews"
   data: any
-}
-type CGoogle = {
-  type: "google"
-  data: PGoogleItem["data"][]
 }
 type CTeam = {
   type: "team"

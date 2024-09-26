@@ -21,9 +21,6 @@ const Card = ({ k, type, title, data, actions }: Props) => {
           <Variations.GoalsViews k={k} title={title} data={data} {...actions} />
         )
         break
-      case "google":
-        el = <Variations.Google k={k} title={title} data={data} {...actions} />
-        break
       case "leaderOverview":
         el = <CardVariationsTemplate k={k} title={title} />
         break
@@ -42,9 +39,6 @@ const Card = ({ k, type, title, data, actions }: Props) => {
             {...actions}
           />
         )
-        break
-      case "okr":
-        el = <Variations.Okr k={k} title={title} data={data} {...actions} />
         break
       case "status":
         el = <CardVariationsTemplate k={k} title={title} />
