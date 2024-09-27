@@ -17,12 +17,16 @@ declare module "styled-components" {
         main: string
         light: string
       }
-      neutral: {
-        white: string
-        soft: string
-        medium: string
+      orange: {
         main: string
+      }
+      neutral: {
         dark: string
+        main: string
+        lightMain: string
+        medium: string
+        soft: string
+        white: string
       }
     }
     animations: {

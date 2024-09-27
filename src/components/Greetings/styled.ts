@@ -17,6 +17,11 @@ export const Element = styled.div`
 export const GreetingsArea = styled.div`
   display: flex;
   gap: 16px;
+
+  span {
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.neutral.dark};
+  }
 `
 
 export const Light = styled.div<{ $color: "orange" | "green" }>`

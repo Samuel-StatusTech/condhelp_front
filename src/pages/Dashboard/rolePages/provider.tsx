@@ -5,19 +5,37 @@ import Card from "../../../components/Card"
 import NewsboardSection from "../../../components/NewsboardSection"
 import Divider from "../../../components/_minimals/Divider"
 import PageRow from "../../../components/_minimals/PageRow"
-import * as S from ".././styled"
+import * as S from "../styled"
 import { getStore } from "../../../store"
 import { fdata } from "../../../utils/_dev/falseData"
 
 import Modal from "../../../components/Modal"
 import { TGoal } from "../../../utils/@types/data/goal"
 
-type Props = {
-  handleSubPageChange: (page: "main" | "leaderDetails", data?: any) => void
-}
-
-const Principal = ({ handleSubPageChange }: Props) => {
+const DashboardProvider = () => {
   const { user } = getStore()
+
+  const [page, setPage] = useState<"main" | "leaderDetails" | "teamMember">(
+    "main"
+  )
+  const [secondPageData, setSecondPageData] = useState<any>(null)
+
+  const handleSubPageChange = (
+    page: "main" | "leaderDetails" | "teamMember",
+    data?: any
+  ) => {
+    setSecondPageData(data)
+    setPage(page)
+  }
+
+  const PageContent = () => {
+    switch (user?.role) {
+      case "admin":
+        return null
+      default:
+        return null
+    }
+  }
 
   const [modal, setModal] = useState<{
     visible: boolean
@@ -29,34 +47,8 @@ const Principal = ({ handleSubPageChange }: Props) => {
     role: "",
   })
 
-  const [banner] = useState(null)
-
-  const handleSelectGoal = (goal: TGoal) => {}
-
-  // Cards
-
-  const renderCardsContent = () => {
-    let content: any = <></>
-
-    switch (user?.role) {
-      case "admin":
-        content = <></>
-        break
-      case "branch":
-        content = <></>
-        break
-      default:
-        content = null
-        break
-    }
-
-    return content
-  }
-
   return (
     <S.SubContent>
-      {banner ? <Banner /> : null}
-
       <Modal
         visible={modal.visible && modal.data}
         onClose={() => setModal({ visible: false, data: null })}
@@ -65,22 +57,10 @@ const Principal = ({ handleSubPageChange }: Props) => {
       />
 
       <PageRow>
-        <Card
-          k={1}
-          type="approvalResume"
-          title="Todas as metas"
-          data={fdata.cards.approval as any}
-          actions={{ handleSelectGoal }}
-        />
+        <PageContent />
       </PageRow>
-
-      <PageRow>{renderCardsContent()}</PageRow>
-
-      <Divider />
-
-      <NewsboardSection />
     </S.SubContent>
   )
 }
 
-export default Principal
+export default DashboardProvider

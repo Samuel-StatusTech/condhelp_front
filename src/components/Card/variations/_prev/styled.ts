@@ -1,27 +1,5 @@
 import styled from "styled-components"
 
-export const Element = styled.div<{ $k?: number }>`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
-  border-radius: 8px;
-  height: fit-content;
-  padding: 20px;
-
-  opacity: 0;
-  ${({ $k, theme }) =>
-    theme.animations.types.fade +
-    theme.animations.durations.main +
-    theme.animations.delays.main($k)}
-`
-
-export const CardTitle = styled.div`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.neutral.main};
-`
-
 export const DataResumeArea = styled.div`
   display: flex;
   align-items: center;
@@ -41,12 +19,8 @@ export const DataResumeItem = styled.div`
   gap: 6px;
 
   span {
-    font-size: 14px;
+    font-size: 12px;
     color: ${({ theme }) => theme.colors.neutral.main};
-
-    &:nth-child(1) {
-      font-weight: 600;
-    }
   }
 `
 
@@ -58,15 +32,15 @@ export const StatusColor = styled.div<{
   border-radius: 8px;
   background-color: ${({ $status, theme }) =>
     $status === "approved"
-      ? theme.colors.green.light
+      ? theme.colors.green
       : $status === "awaiting"
-      ? theme.colors.orange.main
+      ? theme.colors.yellow
       : theme.colors.red.main};
 `
 
 export const Graph = styled.div`
   display: flex;
-  border-radius: 4px;
+  border-radius: 30px;
   height: 30px;
   overflow: hidden;
 `
@@ -80,9 +54,9 @@ export const GraphData = styled.div<{
   place-items: center;
   background-color: ${({ $type, theme }) =>
     $type === "approved"
-      ? theme.colors.green.light
+      ? theme.colors.green
       : $type === "awaiting"
-      ? theme.colors.orange.main
+      ? theme.colors.yellow
       : theme.colors.red.main};
   transition: width 0.3s;
 

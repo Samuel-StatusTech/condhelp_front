@@ -8,17 +8,26 @@ const Greetings = () => {
     let content = <></>
 
     switch (user?.role) {
+      case "admin":
+        content = (
+          <S.GreetingsResume>
+            <span>Painel Administrativo</span>
+          </S.GreetingsResume>
+        )
+        break
       case "manager":
         content = (
           <S.GreetingsResume>
-            Olá {"Lorem"}, estes são seus pedidos de orçamentos em andamento:
+            <span>
+              Olá {"Lorem"}, estes são seus pedidos de orçamentos em andamento:
+            </span>
           </S.GreetingsResume>
         )
         break
       case "provider":
         content = (
           <S.GreetingsResume>
-            Olá {"Lorem"}, estes são os orçamentos em andamento:
+            <span>Olá {"Lorem"}, estes são os orçamentos em andamento:</span>
           </S.GreetingsResume>
         )
         break

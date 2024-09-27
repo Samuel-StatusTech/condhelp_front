@@ -16,12 +16,16 @@ export const theme: DefaultTheme = {
       main: "#F3D332",
       light: "rgba(243, 211, 50, 0.5)",
     },
+    orange: {
+      main: "#FFA903",
+    },
     neutral: {
-      white: "#FFFFFF",
-      soft: "#F4F5F7",
-      medium: "#E0E4EB",
-      main: "#61676A",
       dark: "#434546",
+      main: "#61676A",
+      lightMain: "#96999E",
+      medium: "#E0E4EB",
+      soft: "#F4F5F7",
+      white: "#FFFFFF",
     },
   },
   animations: {

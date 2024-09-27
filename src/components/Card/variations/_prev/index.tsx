@@ -1,7 +1,10 @@
 import * as C from "../../styled"
 import * as S from "./styled"
 
+import { ReactComponent as Papercheck } from "../../../../assets/icons/papercheck.svg"
+import { ReactComponent as DropdownIcon } from "../../../../assets/icons/dropdown.svg"
 import { useState } from "react"
+import Divider from "../../../_minimals/Divider"
 
 type Props = {
   k: number
@@ -11,36 +14,33 @@ type Props = {
     awaiting: number
     rejected: number
   }
-  isExpansible?: boolean
 }
 
-type PDataResumeItem = {
+const DataResumeItem = ({
+  type,
+  number,
+}: {
   type: "approved" | "awaiting" | "rejected"
   number: number
-  total: number
-}
-
-const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
+}) => {
   const renderType = () => {
-    const percentage = Math.round((number / total) * 100)
-
     let str = ""
 
     switch (type) {
       case "approved":
-        str = `Finalizada${number > 1 ? "s" : ""}`
+        str = `Aprovada${number > 1 ? "s" : ""}`
         break
       case "awaiting":
-        str = `Em andamento`
+        str = `Aguardando`
         break
       case "rejected":
-        str = `Cancelado${number > 1 ? "s" : ""}`
+        str = `Reprovada${number > 1 ? "s" : ""}`
         break
       default:
         break
     }
 
-    return str + ` (${percentage}%)`
+    return str
   }
 
   return (
@@ -53,12 +53,13 @@ const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
   )
 }
 
-type PGraphData = {
+const GraphData = ({
+  type,
+  size,
+}: {
   type: "approved" | "awaiting" | "rejected"
   size: number
-}
-
-const GraphData = ({ type, size }: PGraphData) => {
+}) => {
   const value = Math.round(size)
 
   return (
@@ -68,39 +69,30 @@ const GraphData = ({ type, size }: PGraphData) => {
   )
 }
 
-const ApprovalResume = ({ k, title, data, isExpansible }: Props) => {
+const DashboardCard = ({ k, title, data }: Props) => {
   const total = data.approved + data.awaiting + data.rejected
 
   const [isOpened, setIsOpened] = useState(true)
 
   return (
-    <S.Element $k={k}>
-      <C.HTop
-        $noHover={!isExpansible}
-        onClick={isExpansible ? () => setIsOpened(!isOpened) : undefined}
-      >
+    <C.Element $k={k}>
+      <C.HTop onClick={() => setIsOpened(!isOpened)}>
         <C.Header>
           <C.HPart $k={k}>
-            <S.CardTitle>{title}</S.CardTitle>
+            <Papercheck />
+            <span>{title}</span>
           </C.HPart>
           <S.DataResumeArea>
-            <DataResumeItem
-              type="approved"
-              number={data.approved}
-              total={total}
-            />
-            <DataResumeItem
-              type="awaiting"
-              number={data.awaiting}
-              total={total}
-            />
-            <DataResumeItem
-              type="rejected"
-              number={data.rejected}
-              total={total}
-            />
+            <DataResumeItem type="approved" number={data.approved} />
+            <DataResumeItem type="awaiting" number={data.awaiting} />
+            <DataResumeItem type="rejected" number={data.rejected} />
           </S.DataResumeArea>
+          <C.HPart $k={k} $expanded={isOpened}>
+            <span>{isOpened ? "Recolher" : "Expandir"}</span>
+            <DropdownIcon />
+          </C.HPart>
         </C.Header>
+        <Divider />
       </C.HTop>
       <C.MainWrapper $expanded={isOpened}>
         <C.ContentWrapper>
@@ -122,8 +114,8 @@ const ApprovalResume = ({ k, title, data, isExpansible }: Props) => {
           </C.Content>
         </C.ContentWrapper>
       </C.MainWrapper>
-    </S.Element>
+    </C.Element>
   )
 }
 
-export default ApprovalResume
+export default DashboardCard

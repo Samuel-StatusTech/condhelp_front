@@ -16,7 +16,18 @@ import { TBanner } from "../../@types/data/banner"
 
 // data
 
-export const fdata: {
+export const fdata: _TFalseData = {
+  goals: FDgoals,
+  people: FDpeople,
+  cards: FDcards,
+  googleAgenda: FDggagenda,
+  companies: FDcompanies,
+  departments: FDdepartments,
+  newsboard: FDnewsboard,
+  banner: FDbanner,
+} as any
+
+type _TFalseData = {
   people: TUser[]
   goals: TGoal[]
   companies: TCompany[]
@@ -34,13 +45,4 @@ export const fdata: {
     notifications: any[]
   }
   googleAgenda: any[]
-} = {
-  goals: FDgoals,
-  people: FDpeople,
-  cards: FDcards,
-  googleAgenda: FDggagenda,
-  companies: FDcompanies,
-  departments: FDdepartments,
-  newsboard: FDnewsboard,
-  banner: FDbanner,
-} as any
+}

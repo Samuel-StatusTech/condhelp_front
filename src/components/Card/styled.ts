@@ -15,12 +15,11 @@ export const Element = styled.div<{ $k?: number }>`
     theme.animations.delays.main($k)}
 `
 
-export const HTop = styled.div`
+export const HTop = styled.div<{ $noHover?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 10px;
-  cursor: pointer;
+  cursor: ${({ $noHover }) => ($noHover ? "unset" : "pointer")};
 `
 
 export const Header = styled.div`
@@ -73,7 +72,7 @@ export const ContentWrapper = styled.div`
 `
 
 export const Content = styled.div`
-  padding: 5px 10px 10px;
+  padding: 5px 0 10px;
   display: flex;
   flex-direction: column;
 `

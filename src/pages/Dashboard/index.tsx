@@ -1,54 +1,24 @@
-import { useState } from "react"
-import Greetings from "../../components/Greetings"
-import Divider from "../../components/_minimals/Divider"
 import * as S from "./styled"
-import { DashboardPages } from "./subpages"
+import { getStore } from "../../store"
+
+import { DashboardPages } from "./rolePages"
+import Greetings from "../../components/Greetings"
 
 const Dashboard = () => {
-  const [page, setPage] = useState<"main" | "leaderDetails" | "teamMember">(
-    "main"
-  )
-  const [secondPageData, setSecondPageData] = useState<any>(null)
-
-  const handleSubPageChange = (
-    page: "main" | "leaderDetails" | "teamMember",
-    data?: any
-  ) => {
-    setSecondPageData(data)
-    setPage(page)
-  }
+  const { user } = getStore()
 
   const PageContent = () => {
-    switch (page) {
-      case "main":
-        return (
-          <DashboardPages.Principal handleSubPageChange={handleSubPageChange} />
-        )
-      case "leaderDetails":
-        return (
-          <DashboardPages.Leaders
-            handleSubPageChange={handleSubPageChange}
-            data={secondPageData}
-          />
-        )
-      case "teamMember":
-        return (
-          <DashboardPages.TeamMember
-            handleSubPageChange={handleSubPageChange}
-            data={secondPageData}
-          />
-        )
+    switch (user?.role) {
+      case "admin":
+        return <DashboardPages.Admin />
       default:
-        return (
-          <DashboardPages.Principal handleSubPageChange={handleSubPageChange} />
-        )
+        return null
     }
   }
 
   return (
     <S.Content>
       <Greetings />
-      <Divider />
 
       <PageContent />
     </S.Content>

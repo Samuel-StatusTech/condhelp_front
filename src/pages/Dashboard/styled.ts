@@ -12,3 +12,9 @@ export const SubContent = styled.div`
   flex-direction: column;
   gap: 20px;
 `
+
+export const ShortcutsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+`

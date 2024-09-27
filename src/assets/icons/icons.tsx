@@ -13,6 +13,7 @@ import { ReactComponent as Chat } from "./chat.svg"
 import { ReactComponent as ChangingPoints } from "./changingPoints.svg"
 import { ReactComponent as CheckCircle } from "./check_circle.svg"
 import { ReactComponent as CheckFill } from "./check_fill.svg"
+import { ReactComponent as CircleIndicator } from "./circleIndicator.svg"
 import { ReactComponent as Check } from "./check.svg"
 import { ReactComponent as Clip } from "./clip.svg"
 import { ReactComponent as Clock } from "./clock.svg"
@@ -92,6 +93,7 @@ export const Icons = {
   Chat,
   CheckCircle,
   CheckFill,
+  CircleIndicator,
   Clip,
   Clock,
   Conds,

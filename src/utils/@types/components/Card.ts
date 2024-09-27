@@ -1,9 +1,4 @@
-import { PGraph } from "../../../components/Card/variations/LeaderDetails"
-import { PEmployee } from "./Employee"
 import { PGoalViewItem } from "./GoalViewItem"
-import { PLeaderItem } from "./LeaderItem"
-import { PLighterItem } from "./LighterItem"
-import { PTeamMember } from "./Team"
 
 export type PCard = {
   k: number
@@ -11,19 +6,7 @@ export type PCard = {
   actions?: any
 } & CardsProps
 
-type CardsProps =
-  | CApproval
-  | CGoals
-  | CEmployees
-  | CNotifications
-  | CLeaders
-  | CLeaderDetails
-  | CLeaderOverview
-  | CLights
-  | CMemberDetails
-  | CGoalsViews
-  | CTeam
-  | CStatus
+type CardsProps = CApproval | CGoals
 
 // Cards
 
@@ -39,51 +22,4 @@ type CApproval = {
 type CGoals = {
   type: "goalsViews"
   data: PGoalViewItem[]
-}
-
-type CEmployees = {
-  type: "employees"
-  data: PEmployee[]
-}
-type CNotifications = {
-  type: "notifications"
-  data: any
-}
-type CLeaders = {
-  type: "leaders"
-  data: PLeaderItem[]
-}
-type CLeaderDetails = {
-  type: "leaderDetails"
-  data: {
-    leader: PLeaderItem
-    graphs: PGraph[]
-  }
-}
-type CLeaderOverview = {
-  type: "leaderOverview"
-  data: any
-}
-type CLights = {
-  type: "lights"
-  data: PLighterItem[]
-}
-type CMemberDetails = {
-  type: "memberDetails"
-  data: {
-    leader: PLeaderItem
-    graphs: PGraph[]
-  }
-}
-type CGoalsViews = {
-  type: "goalsViews"
-  data: any
-}
-type CTeam = {
-  type: "team"
-  data: PTeamMember["data"][]
-}
-type CStatus = {
-  type: "status"
-  data: any
 }
