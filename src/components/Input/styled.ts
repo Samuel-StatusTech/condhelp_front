@@ -22,7 +22,7 @@ export const Box = styled.div<{ $state: boolean }>`
   background-color: ${({ $state, theme }) =>
     $state ? theme.colors.neutral.medium : theme.colors.neutral.white};
   width: 48px;
-  height: 24px;
+  height: 46px;
   display: flex;
   align-items: center;
   padding: 3px;

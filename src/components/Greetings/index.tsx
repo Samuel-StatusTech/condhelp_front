@@ -7,7 +7,7 @@ const Greetings = () => {
   const renderGreetingsMessage = () => {
     let content = <></>
 
-    switch (user?.role) {
+    switch (user?.profile) {
       case "admin":
         content = (
           <S.GreetingsResume>

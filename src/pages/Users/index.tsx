@@ -5,8 +5,9 @@ import Table from "../../components/Table"
 import { fdata } from "../../utils/_dev/falseData"
 import PageHeader from "../../components/PageHeader"
 import { useNavigate } from "react-router-dom"
+import { tableConfig } from "../../utils/system/table"
 
-const PeoplePage = () => {
+const UsersPage = () => {
   const navigate = useNavigate()
 
   const [people] = useState(fdata.people)
@@ -15,15 +16,25 @@ const PeoplePage = () => {
     navigate("single")
   }
 
+  const handleEditUser = () => {
+    navigate("single")
+  }
+
   return (
     <S.Content>
-      <PageHeader type={"table"} from={"people"} action={handleNew} />
+      <PageHeader type={"table"} from={"users"} action={handleNew} />
       <Divider />
 
       {/* Table content */}
-      <Table type="people" data={people} />
+      <Table
+        config={tableConfig.users}
+        data={people}
+        actions={{
+          edit: handleEditUser,
+        }}
+      />
     </S.Content>
   )
 }
 
-export default PeoplePage
+export default UsersPage

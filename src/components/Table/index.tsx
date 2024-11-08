@@ -1,174 +1,137 @@
-import { useEffect, useState } from "react"
 import * as S from "./styled"
-
-import { CompanyItem } from "./ListItems/company"
-import { GoalsItem } from "./ListItems/goals"
-import { PeopleItem } from "./ListItems/people"
-import { DepartmentItem } from "./ListItems/department"
-import { NewsboardItem } from "./ListItems/newsboard"
-import Divider from "../_minimals/Divider"
-
-import { TUser } from "../../utils/@types/data/_user"
-import { TGoal } from "../../utils/@types/data/goal"
-import { TCompany } from "../../utils/@types/data/company"
-import { TDepartment } from "../../utils/@types/data/department"
-import { TNewsData } from "../../utils/@types/data/newsData"
-
-import { ReactComponent as DropdownIcon } from "../../assets/icons/dropdown.svg"
-import { ReactComponent as SearchIcon } from "../../assets/icons/search.svg"
-import { ReactComponent as CheckIcon } from "../../assets/icons/check.svg"
-import { system } from "../../utils/system"
+import { TConfig } from "../../utils/system/table"
+import { useState } from "react"
 
 type Props = {
-  type: "people" | "goals" | "companies" | "departments" | "newsboard"
-  data: TUser[] | TGoal[] | TCompany[] | TDepartment[] | TNewsData[]
+  config: TConfig
+  data: any[]
+  actions?: {
+    [key: string]: (...props: any[]) => void | any
+  }
+  noHover?: boolean
+  search?: string
+  searchFields?: string[]
+  expandComponent?: (item: any) => JSX.Element
 }
 
-const Table = (props: Props) => {
-  const { type, data } = props
-
-  const [showData, setShowData] = useState(data)
-
-  const [search, setSearch] = useState("")
-  const [filters, setFilters] = useState({
-    master: { active: true },
-    leader: { active: true },
-    employee: { active: true },
-  })
-
-  const handleSearch = () => {
-    if (data.length > 0) {
-      const list = (data as any[]).filter((i: any) => {
-        const vals = Object.entries(i)
-          .map((entries) => {
-            if (typeof entries[1] === "string") return entries[1]
-            else if (typeof entries[1] === "object") {
-              const subEntries = Object.entries(entries[1] as Object).map(
-                (ent) => ent[1]
-              )[1]
-              return subEntries
-            } else return null
-          })
-          .flat()
-
-        return vals.some((v: any) =>
-          v.toLowerCase().includes(search.toLowerCase())
-        )
-      })
-
-      setShowData(list as Props["data"])
-    }
-  }
-
-  useEffect(() => {
-    if (!search) setShowData(data)
-  }, [search, data])
-
-  const handleFilter = (f: "master" | "leader" | "employee") => {
-    setFilters({
-      ...filters,
-      [f]: { active: !filters[f].active },
-    })
-  }
-
-  const renderList = () => {
-    let ItemComponent = (item: any) => <></>
-
-    switch (type) {
-      case "companies":
-        ItemComponent = CompanyItem
-        break
-      case "goals":
-        ItemComponent = GoalsItem
-        break
-      case "people":
-        ItemComponent = PeopleItem
-        break
-      case "departments":
-        ItemComponent = DepartmentItem
-        break
-      case "newsboard":
-        ItemComponent = NewsboardItem
-        break
-      default:
-        break
-    }
-
-    return showData.map((item, k) => (
-      <ItemComponent key={k} data={item} k={k + 1} />
-    ))
-  }
-
+const Table = ({
+  config,
+  data,
+  noHover,
+  actions,
+  search,
+  searchFields,
+  expandComponent,
+}: Props) => {
   return (
     <S.Wrapper>
-      <S.TableControl>
-        <S.SearchArea>
-          <S.SearchInput
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Digite para pesquisar na lista"
-          />
-          <S.SearchBtn onClick={handleSearch}>
-            <SearchIcon />
-          </S.SearchBtn>
-        </S.SearchArea>
-        {type === "people" && (
-          <S.FiltersArea>
-            <S.FilterItem onClick={() => handleFilter("master")}>
-              <S.FilterCheck>
-                {filters.master.active && <CheckIcon />}
-              </S.FilterCheck>
-              <span>Master</span>
-            </S.FilterItem>
-            <S.FilterItem onClick={() => handleFilter("leader")}>
-              <S.FilterCheck>
-                {filters.leader.active && <CheckIcon />}
-              </S.FilterCheck>
-              <span>Líder</span>
-            </S.FilterItem>
-            <S.FilterItem onClick={() => handleFilter("employee")}>
-              <S.FilterCheck>
-                {filters.employee.active && <CheckIcon />}
-              </S.FilterCheck>
-              <span>Funcionário</span>
-            </S.FilterItem>
-          </S.FiltersArea>
-        )}
-      </S.TableControl>
-      <Divider />
-      <S.TableWrapper>
-        <S.TableContent>
-          <S.TableHeader>
-            <tr>
-              {system.tables.headers[type].map((headerItem, key) => (
-                <S.TH
-                  key={key}
-                  $k={key}
-                  $qt={system.tables.headers[type].length}
-                  $hasProfile={type === "people"}
-                  $w={
-                    typeof headerItem.size === "number"
-                      ? headerItem.size
-                      : undefined
+      <S.Table>
+        <S.TableHead>
+          <S.RowItem>
+            {config.columns.map((col, k) => (
+              <S.TCol
+                key={k}
+                $size={col.size}
+                $align={col.align}
+                $width={col.width}
+              >
+                {col.title}
+              </S.TCol>
+            ))}
+          </S.RowItem>
+        </S.TableHead>
+        <S.TableBody $noHover={noHover}>
+          {data
+            .filter((item) => {
+              let ok = false
+
+              if (!!search) {
+                searchFields?.forEach((sf) => {
+                  if (!ok) {
+                    const v = sf.includes(".")
+                      ? item[sf.split(".")[0]][sf.split(".")[1]]
+                      : item[sf]
+
+                    ok = String(v).toLowerCase().includes(search.toLowerCase())
                   }
-                  $wp={
-                    typeof headerItem.size === "string"
-                      ? headerItem.size
-                      : undefined
-                  }
-                >
-                  <S.ColControl>
-                    <span>{headerItem.title}</span>
-                    <DropdownIcon />
-                  </S.ColControl>
-                </S.TH>
-              ))}
-            </tr>
-          </S.TableHeader>
-          <S.TableList>{renderList()}</S.TableList>
-        </S.TableContent>
-      </S.TableWrapper>
+                })
+              } else ok = true
+
+              return ok
+            })
+            .map((item, k) => (
+              <RowItem
+                key={k}
+                item={item}
+                config={config}
+                actions={actions}
+                expandComponent={expandComponent}
+              />
+            ))}
+        </S.TableBody>
+      </S.Table>
     </S.Wrapper>
+  )
+}
+
+type TRowItemProps = {
+  item: any
+  config: TConfig
+  actions: any
+  expandComponent?: any
+}
+
+const RowItem = (props: TRowItemProps) => {
+  const { item, config, actions, expandComponent } = props
+
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const toggleExpand = () => setIsExpanded(!isExpanded)
+
+  return (
+    <>
+      <S.RowItem className={isExpanded ? "highlighted" : ""}>
+        {config.columns.map((col, k) => {
+          let content: any = null
+
+          const field = config.specialFields[col.field]
+
+          content = field
+            ? field(item, {
+                data: {
+                  size: col.size as number,
+                },
+                callbacks: actions,
+              })
+            : item[col.field]
+
+          return (
+            <S.ItemData
+              key={k}
+              $hasPointer={expandComponent && k !== config.columns.length - 1}
+              $align={col.align}
+              $width={col.width}
+              onClick={
+                expandComponent && k !== config.columns.length - 1
+                  ? toggleExpand
+                  : undefined
+              }
+            >
+              {content}
+            </S.ItemData>
+          )
+        })}
+      </S.RowItem>
+      {config.isExpandable && expandComponent && (
+        <S.RowExpandable className={isExpanded ? "highlighted noBg" : "noBg"}>
+          <S.REWrapper colSpan={6}>
+            <S.REBox $visible={isExpanded}>
+              <S.REContainer>{expandComponent(item)}</S.REContainer>
+            </S.REBox>
+          </S.REWrapper>
+        </S.RowExpandable>
+      )}
+    </>
   )
 }
 

@@ -16,7 +16,7 @@ const DashboardAdmin = () => {
   const renderCardsContent = () => {
     let content: any = <></>
 
-    switch (user?.role) {
+    switch (user?.profile) {
       case "admin":
         content = [
           <Card.Dashboard

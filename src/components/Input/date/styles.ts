@@ -16,9 +16,9 @@ export const DataArea = styled.div<{ $disabled?: boolean }>`
   background-color: ${({ $disabled, theme }) =>
     !$disabled ? theme.colors.neutral.white : theme.colors.neutral.medium};
   cursor: ${({ $disabled }) => ($disabled ? undefined : "pointer")};
-  border-radius: 4px;
-  padding: 10px;
   transition: background-color 0.3s;
+  padding: 15px;
+  border-radius: 10px;
 
   svg {
     transition: transform 0.3s;

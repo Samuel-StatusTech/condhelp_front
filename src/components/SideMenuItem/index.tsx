@@ -32,7 +32,7 @@ const SideMenuItem = ({ data, active, k, action }: Props) => {
 
   const render = !data.access
     ? true
-    : data.access.includes(user?.role as TAccess)
+    : data.access.includes(user?.profile as TAccess)
 
   const renderIcon = () => {
     const icon = iconRef[data.icon]

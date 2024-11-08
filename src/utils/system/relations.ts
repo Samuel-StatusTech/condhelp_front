@@ -6,4 +6,9 @@ export const relations = {
     manager: "Síndico",
     provider: "Prestador",
   },
+  status: {
+    active: "Ativo",
+    inactive: "Inativo",
+    awaiting: "Aguardando",
+  },
 }

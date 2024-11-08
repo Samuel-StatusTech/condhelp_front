@@ -39,7 +39,8 @@ export const CheckArea = styled.div`
 `
 
 export const Input = styled.input`
-  border-radius: 4px;
+  padding: 15px;
+  border-radius: 10px;
   border: none;
   outline: none;
   height: 100%;

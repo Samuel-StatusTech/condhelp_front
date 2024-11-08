@@ -15,18 +15,13 @@ const fixedAuth = {
 }
 
 const userData: TUser = {
-  id: "",
-  role: "admin",
-  data: {
-    document: {
-      type: "cpf",
-      register: "12345678901",
-      birthdate: "2001-01-01",
-    },
-  },
+  id: "user-1",
+  status: "active",
+  profile: "admin",
+  name: "StatusTech",
+  surname: "Top",
   email: "email@email.com",
-  name: "Jack Daniels",
-  image: "",
+  image: null,
 }
 
 const Login = () => {

@@ -7,6 +7,14 @@ export const Element = styled.header`
   padding: 20px;
   background-color: ${({ theme }) => theme.colors.green.dark};
   border-radius: 8px;
+
+  & > svg {
+    opacity: 0;
+    ${({ theme }) =>
+      theme.animations.types.fade +
+      theme.animations.durations.slow +
+      theme.animations.delays.main(12)}
+  }
 `
 
 export const Nav = styled.nav`
@@ -15,7 +23,7 @@ export const Nav = styled.nav`
   gap: 36px;
 `
 
-export const MenuItem = styled.div`
+export const MenuItem = styled.div<{ $k: number }>`
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.green.soft};
@@ -26,4 +34,10 @@ export const MenuItem = styled.div`
       color: ${({ theme }) => theme.colors.neutral.white};
     }
   }
+
+  opacity: 0;
+  ${({ $k, theme }) =>
+    theme.animations.types.fadeBottom +
+    theme.animations.durations.main +
+    theme.animations.delays.main($k / 2)}
 `

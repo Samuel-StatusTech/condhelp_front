@@ -8,7 +8,7 @@ const Dashboard = () => {
   const { user } = getStore()
 
   const PageContent = () => {
-    switch (user?.role) {
+    switch (user?.profile) {
       case "admin":
         return <DashboardPages.Admin />
       default:

@@ -10,7 +10,7 @@ const Header = () => {
 
       <S.Nav>
         {system.menu.nav.map((mi, k) => (
-          <S.MenuItem key={k}>
+          <S.MenuItem key={k} $k={k}>
             <Link to={mi.link}>{mi.text}</Link>
           </S.MenuItem>
         ))}

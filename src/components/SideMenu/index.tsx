@@ -56,7 +56,7 @@ const SideMenu = (props: Props) => {
         <S.NameArea>
           <S.UserName>{user?.name}</S.UserName>
           <S.UserRole>
-            {user?.role ? relations.roles[user?.role] : ""}
+            {user?.profile ? relations.roles[user?.profile] : ""}
           </S.UserRole>
         </S.NameArea>
       </S.LoggedUserArea>

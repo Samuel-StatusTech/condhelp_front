@@ -2,17 +2,24 @@ import { memo } from "react"
 import BreadcrumbPageHeader from "./types/breadcrumb"
 import TablePageHeader from "./types/table"
 
-type TFrom = "people" | "goals" | "companies" | "departments" | "newsboard"
+export type THeaderFrom =
+  | "users"
+  | "goals"
+  | "companies"
+  | "departments"
+  | "newsboard"
+
+export type TBreadCrumFrom = "banner" | THeaderFrom
 
 type Props =
   | {
       type: "table"
-      from: TFrom
+      from: THeaderFrom
       action: (p?: any) => void
     }
   | {
       type: "breadcrumb"
-      from: TFrom | "banner"
+      from: TBreadCrumFrom
     }
 
 const PageHeader = (p: Props) => {

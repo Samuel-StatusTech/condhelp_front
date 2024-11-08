@@ -20,8 +20,8 @@ export const Label = styled.label`
 `
 
 export const Input = styled.input`
-  padding: 10px;
-  border-radius: 4px;
+  padding: 15px;
+  border-radius: 10px;
   background-color: ${({ theme }) => theme.colors.neutral.white};
   border: none;
   outline: none;

@@ -1,6 +1,13 @@
 import styled from "styled-components"
 
-export const Wrapper = styled.div``
+export const Wrapper = styled.div`
+  flex: 1;
+  width: 100%;
+  min-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`
 
 export const TableControl = styled.div`
   display: flex;
@@ -21,6 +28,8 @@ export const SearchArea = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+  background: ${({ theme }) => theme.colors.neutral.white};
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.08);
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     width: 100%;
@@ -29,7 +38,6 @@ export const SearchArea = styled.div`
 
 export const SearchInput = styled.input`
   flex: 1;
-  background: ${({ theme }) => theme.colors.neutral.white};
   border: none;
   outline: none;
   border-radius: 4px;
@@ -88,13 +96,25 @@ export const FilterCheck = styled.div`
     width: 14px;
   }
 `
+// #
+// #
+// #
+// #
+// #
+// #
+// # Table
+// #
+// #
+// #
+// #
+// #
+// #
 
 export const TableWrapper = styled.div`
   max-width: 100%;
   overflow: auto;
 `
-
-export const TableContent = styled.table`
+export const Table = styled.table`
   margin-top: 20px;
   width: 100%;
   border-collapse: collapse;
@@ -145,27 +165,32 @@ export const TableList = styled.tbody`
 
 // Table Content
 export const Item = styled.tr<{ $k: number }>`
-  background-color: ${({ theme }) => theme.colors.neutral.soft};
-  border-radius: 4px;
-  border-top: 10px solid ${({ theme }) => theme.colors.yellow.main};
-  border-bottom: 10px solid ${({ theme }) => theme.colors.yellow.main};
+  border-radius: 8px;
+  border-top: 10px solid ${({ theme }) => "transparent"};
+  border-bottom: 10px solid ${({ theme }) => "transparent"};
   transition: background-color 0.3s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.neutral.white};
-  }
+  cursor: pointer;
 
   opacity: 0;
   ${({ $k, theme }) =>
     theme.animations.types.fadeTop +
     theme.animations.durations.main +
     theme.animations.delays.main($k)}
-`
 
-export const UserArea = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
+  td {
+    background-color: ${({ theme }) => theme.colors.neutral.white};
+    overflow: hidden;
+  }
+
+  td:nth-child(1) {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  td:nth-last-child(1) {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 `
 
 export const UserNameBox = styled.div`
@@ -174,28 +199,8 @@ export const UserNameBox = styled.div`
   color: ${({ theme }) => theme.colors.yellow.dark};
   background-color: ${({ theme }) => theme.colors.neutral.white};
   padding: 4px;
+  width: fit-content;
   border-radius: 16px;
-`
-
-export const NameArea = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-`
-
-export const UserName = styled.div`
-  a {
-    text-decoration: none;
-    color: ${({ theme }) => theme.colors.yellow.dark};
-    font-weight: 600;
-  }
-`
-
-export const DropBtn = styled.div`
-  display: grid;
-  place-items: center;
 `
 
 export const Data = styled.td<{ $w?: number; $wp?: number }>`
@@ -255,4 +260,112 @@ export const EditBtn = styled.button`
   cursor: pointer;
 
   filter: saturate(0.6);
+`
+
+// ---------------------
+
+export const TableHead = styled.thead`
+  border-collapse: collapse;
+`
+
+export const TCol = styled.th<{
+  $size?: string | number
+  $align?: string
+  $width?: string
+}>`
+  text-align: ${({ $align }) => $align ?? "left"};
+  font-size: 14px;
+  padding: 12px;
+  width: ${({ $width }) => $width ?? "unset"};
+  color: ${({ theme }) => theme.colors.neutral.main};
+  font-weight: 400;
+`
+
+export const TableBody = styled.tbody<{ $noHover?: boolean }>`
+  border-collapse: collapse;
+
+  tr {
+    transition: background-color 0.3s, opacity 0.3s;
+
+    &:not(.noHover):hover {
+      .actions-area {
+        opacity: 1;
+      }
+    }
+
+    &.noBg,
+    &.noBg:hover {
+      background-color: transparent;
+    }
+  }
+
+  &:has(.highlighted) {
+    tr:not(.highlighted):not(.normal) {
+      opacity: 0.2;
+    }
+  }
+`
+
+export const RowItem = styled.tr`
+  &:nth-last-child(1) {
+    td {
+      border: none;
+    }
+  }
+
+  &.highlighted {
+    opacity: 1;
+    z-index: 2;
+  }
+`
+
+export const BoxWrapper = styled.div``
+
+export const BoxContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 8px 32px 16px;
+`
+
+export const RowExpandable = styled.tr`
+  color: inherit;
+  display: table-row;
+  outline: 0px;
+  cursor: unset;
+`
+
+export const REWrapper = styled.td`
+  color: inherit;
+  vertical-align: middle;
+  outline: 0px;
+`
+
+export const REBox = styled.div<{ $visible: boolean }>`
+  display: grid;
+  grid-template-rows: ${({ $visible }) => ($visible ? 1 : 0)}fr;
+  overflow: hidden;
+  transition: grid-template-rows 0.3s;
+`
+
+export const REContainer = styled.div`
+  min-height: 0;
+  padding: 0 12px;
+`
+
+export const ItemData = styled.td<{
+  $align?: string
+  $hasPointer?: boolean
+  $width?: string
+}>`
+  text-align: ${({ $align }) => $align ?? "left"};
+  justify-items: ${({ $align }) => $align ?? "left"};
+  font-size: 14px;
+  font-weight: 400;
+  padding: 12px;
+  border-left: none;
+  border-right: none;
+  cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
+  width: ${({ $width }) => $width ?? "unset"};
+  background-color: ${({ theme }) => theme.colors.neutral.white};
 `

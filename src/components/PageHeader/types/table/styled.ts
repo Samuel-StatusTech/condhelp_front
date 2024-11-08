@@ -16,6 +16,7 @@ export const PageIndicator = styled.div<{ $k: number }>`
   }
 
   span {
+    font-weight: 500;
     ${({ $k, theme }) => theme.animations.delays.main($k + 0.5)}
   }
 `
@@ -24,13 +25,13 @@ export const Button = styled.button<{ $k: number }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: ${({ theme }) => theme.colors.yellow.dark};
   border: none;
   outline: none;
+  background: none;
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.neutral.white};
+  color: ${({ theme }) => theme.colors.neutral.dark};
 
   opacity: 0;
   ${({ $k, theme }) =>

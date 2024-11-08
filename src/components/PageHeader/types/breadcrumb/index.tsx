@@ -8,19 +8,16 @@ import { ReactComponent as CardIcon } from "../../../../assets/icons/card.svg"
 import { ReactComponent as NewsboardIcon } from "../../../../assets/icons/newspaper.svg"
 import { ReactComponent as BannerIcon } from "../../../../assets/icons/banner.svg"
 import BreadCrumb, { PPath } from "../../../BreadCrumb"
+import { TBreadCrumFrom } from "../.."
 
 type Props = {
-  from:
-    | "people"
-    | "goals"
-    | "companies"
-    | "departments"
-    | "newsboard"
-    | "banner"
+  from: TBreadCrumFrom
 }
 
-const iconsRelations = {
-  people: <PeopleIcon />,
+const iconsRelations: {
+  [key in Props["from"]]: JSX.Element
+} = {
+  users: <PeopleIcon />,
   goals: <GoalsIcon />,
   companies: <CompaniesIcon />,
   departments: <CardIcon />,
@@ -63,10 +60,10 @@ const BreadcrumbPageHeader = ({ from }: Props) => {
           { title: "Detalhes", to: "/dashboard/newsboard/single" },
         ]
         break
-      case "people":
+      case "users":
         pts = [
-          { title: "Pessoas", to: "/dashboard/people" },
-          { title: "Detalhes", to: "/dashboard/people/single" },
+          { title: "Pessoas", to: "/dashboard/users" },
+          { title: "Detalhes", to: "/dashboard/users/single" },
         ]
         break
 

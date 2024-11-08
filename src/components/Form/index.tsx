@@ -1,71 +1,21 @@
 import { memo } from "react"
+import * as S from "./styled"
+
 import { Icons } from "../../assets/icons/icons"
 import { TGoalQuestion } from "../../utils/initials/forms/goal"
 import Button from "../Button"
 import Input from "../Input"
-import { TInputDefault } from "../Input/default"
-import { TInputImageProfile } from "../Input/image"
-import { TInputPoint } from "../Input/points"
-import { TInputSelect } from "../Input/select"
-import { TInputToggler } from "../Input/toggler"
+
 import Divider from "../_minimals/Divider"
-import * as S from "./styled"
 import { generateQuestion } from "../../utils/tb/generateQuestion"
-import { TInputDate } from "../Input/date"
-import { TInputTextArea } from "../Input/textarea"
 
-type Props = {
-  handleField: (field: string, value: any) => void
-  handleCancel: (params?: any) => void
-  handleSave: (form: any) => Promise<void>
-  handleDelete?: () => Promise<void>
-  insertQuestion?: (newField: any) => void
-  removeQuestion?: (key: number) => void
-  duplicateQuestion?: (key: number) => void
-  handleQuestion?: (questionKey: number, field: string, value: any) => void
-  groups: TGroup[]
-}
+import { TForm } from "../../utils/@types/components/Form"
+import { FormField } from "../../utils/@types/components/FormFields"
 
-type IDate = { type: "date" } & TInputDate
-type IDefault = { type: "input" } & TInputDefault
-type IImage = { type: "image" } & TInputImageProfile
-type IPoints = { type: "points" } & TInputPoint
-type IProfile = { type: "profile" } & TInputImageProfile
-type IQuestion = { type: "question" } & TGoalQuestion
-type ISelect = { type: "select"; multiple?: boolean } & TInputSelect
-type ITextArea = { type: "textarea" } & TInputTextArea
-type IToggler = { type: "toggler" } & TInputToggler
-
-export type Field =
-  | IDate
-  | IDefault
-  | IImage
-  | IProfile
-  | IPoints
-  | IQuestion
-  | ISelect
-  | ITextArea
-  | IToggler
-
-type TContent = Field | Field[]
-
-type TGroup = {
-  groupInfo: {
-    name: string
-    description: string[]
-  }
-  fields: TContent[]
-  list?: TList
-  hasFieldControl?: boolean
-}
-
-type TList = {
-  title: string
-  items: any[]
-}
+type Props = TForm
 
 const getElement = (
-  field: Field,
+  field: FormField,
   handleField: Props["handleField"],
   handleQuestion: Props["handleQuestion"],
   removeQuestion: Props["removeQuestion"],
@@ -108,7 +58,6 @@ const getElement = (
 }
 
 const Form = ({
-  groups,
   handleField,
   handleCancel,
   handleQuestion,
@@ -117,8 +66,9 @@ const Form = ({
   duplicateQuestion,
   handleSave,
   insertQuestion,
+  blocks,
 }: Props) => {
-  const renderInput = (field: Field, key: number) => {
+  const renderInput = (field: FormField, key: number) => {
     return (
       getElement(
         field,
@@ -143,63 +93,46 @@ const Form = ({
   return (
     <S.Content>
       <S.Groups>
-        {groups.map((group, gKey) => (
-          <>
-            <S.GroupArea key={gKey}>
-              <S.GroupInfo>
-                <S.GroupTitle $k={gKey}>{group.groupInfo.name}</S.GroupTitle>
-                <S.DescriptionArea>
-                  {group.groupInfo.description.map((desc, dKey) => (
-                    <S.Description $k={gKey + (dKey + 1.5)} key={dKey}>
-                      {desc}
-                    </S.Description>
-                  ))}
-                </S.DescriptionArea>
-                {group.list && (
-                  <S.List>
-                    <S.ListTitle>{group.list.title}</S.ListTitle>
-                    <S.ListItemsWrapper>
-                      <S.ListItems>
-                        {group.list.items.map((i, k) => (
-                          <S.LItem key={k}>
-                            <S.LIMain>{i.main}</S.LIMain>
-                            <S.LISecondary>{i.secondary}</S.LISecondary>
-                          </S.LItem>
-                        ))}
-                      </S.ListItems>
-                    </S.ListItemsWrapper>
-                  </S.List>
-                )}
-              </S.GroupInfo>
-              <S.FormArea>
-                {group.fields.map((line, k) =>
-                  Array.isArray(line) ? (
-                    <S.FormLine
-                      $k={gKey + (k + 1)}
-                      $length={group.fields.length + 2}
-                    >
-                      {line.map((f, fKey) => renderInput(f, fKey))}
-                    </S.FormLine>
-                  ) : (
-                    <S.FormLine
-                      $k={gKey + (k + 1)}
-                      key={k}
-                      $length={group.fields.length}
-                    >
-                      {renderInput(line, k)}
-                    </S.FormLine>
-                  )
-                )}
-                {group.hasFieldControl && (
-                  <S.Button onClick={handleInsertQuestion}>
-                    <Icons.PlusCircle width={24} height={24} />
-                    <span>Inserir campo</span>
-                  </S.Button>
-                )}
-              </S.FormArea>
-            </S.GroupArea>
+        {blocks.map((block, blockKey) => (
+          <S.Block key={blockKey}>
+            <S.BlockTitle>{block.title}</S.BlockTitle>
+
             <Divider />
-          </>
+
+            {block.groups.map((group, gKey) => (
+              <>
+                <S.GroupArea key={gKey}>
+                  <S.FormArea>
+                    {group.fields.map((line, k) =>
+                      Array.isArray(line) ? (
+                        <S.FormLine
+                          $k={gKey + (k + 1)}
+                          $length={group.fields.length + 2}
+                        >
+                          {line.map((f, fKey) => renderInput(f, fKey))}
+                        </S.FormLine>
+                      ) : (
+                        <S.FormLine
+                          $k={gKey + (k + 1)}
+                          key={k}
+                          $length={group.fields.length}
+                        >
+                          {renderInput(line, k)}
+                        </S.FormLine>
+                      )
+                    )}
+                    {group.hasFieldControl && (
+                      <S.Button onClick={handleInsertQuestion}>
+                        <Icons.PlusCircle width={24} height={24} />
+                        <span>Inserir campo</span>
+                      </S.Button>
+                    )}
+                  </S.FormArea>
+                </S.GroupArea>
+                <Divider />
+              </>
+            ))}
+          </S.Block>
         ))}
       </S.Groups>
       <S.Buttons>

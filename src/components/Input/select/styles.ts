@@ -16,13 +16,12 @@ export const DataArea = styled.div<{ $disabled?: boolean }>`
   background-color: ${({ $disabled, theme }) =>
     !$disabled ? theme.colors.neutral.white : theme.colors.neutral.medium};
   cursor: ${({ $disabled }) => ($disabled ? undefined : "pointer")};
-  border-radius: 4px;
-  padding: 10px;
+  padding: 15px;
+  border-radius: 10px;
   transition: background-color 0.3s;
 
   svg {
     transition: transform 0.3s;
-    fill: ${({ theme }) => theme.colors.neutral.dark};
     transform: rotate(0deg);
   }
 
