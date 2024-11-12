@@ -9,7 +9,7 @@ export type TUser = {
   image: null | string
 }
 
-export type TUserStatus = "active" | "inactive" | "awaiting"
+export type TUserStatus = "active" | "disabled" | "awaiting"
 
 export type TUserProfile =
   | "admin"
@@ -24,10 +24,4 @@ export const profileRelation: { [key in TUserProfile]: string } = {
   branch: "Filial",
   provider: "Provedor",
   manager: "Síndico",
-}
-
-export const statusRelation: { [key in TUserStatus]: string } = {
-  active: "Ativo",
-  inactive: "Desativado",
-  awaiting: "Aguardando",
 }

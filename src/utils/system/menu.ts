@@ -56,8 +56,8 @@ export const menu: {
     {
       icon: "chat",
       text: "Recados",
-      link: "/messages",
-      tag: "messages",
+      link: "/errands",
+      tag: "errands",
       access: ["admin"],
     },
     {

@@ -1,0 +1,56 @@
+import { TCondominium } from "../../@types/data/condominium"
+
+export const FDcondos: TCondominium[] = [
+  {
+    id: "1",
+    name: "Condomínio legal",
+    units: 8,
+    cnpj: "11222333000199",
+    image: null,
+    address: {
+      street: "",
+      number: "",
+      cep: "",
+      neighborhood: "",
+      city: "Florianópolis",
+      state: "SC",
+    },
+    manager: {
+      id: "9",
+      email: "sindico@legal.com",
+      image: null,
+      name: "Síndico",
+      profile: "manager",
+      since: "'2024-01-15T03:00:00.000Z'",
+      status: "active",
+      surname: "Legal",
+    },
+    electionFile: undefined,
+  },
+  {
+    id: "2",
+    name: "Condomínio legal",
+    units: 8,
+    cnpj: "11222333000199",
+    image: null,
+    address: {
+      street: "",
+      number: "",
+      cep: "",
+      neighborhood: "",
+      city: "Florianópolis",
+      state: "SC",
+    },
+    manager: {
+      id: "9",
+      email: "sindico@legal.com",
+      image: null,
+      name: "Síndico",
+      profile: "manager",
+      since: "'2024-01-15T03:00:00.000Z'",
+      status: "active",
+      surname: "Legal",
+    },
+    electionFile: undefined,
+  },
+]

@@ -1,55 +1,30 @@
-import TableActions from "../../../components/TableActions"
-import UserImageItem from "../../../components/UserImageItem"
-import { TUser } from "../../@types/data/user"
-import { relations } from "../relations"
+import { userTableConfig } from "./userTableConfig"
+import { condoTableConfig } from "./condoTableConfig"
+import { categoryTableConfig } from "./categoryTableConfig"
+import { subcategoryTableConfig } from "./subcategoryTableConfig"
+import { regionTableConfig } from "./regionTableConfig"
+import { errandTableConfig } from "./errandTableConfig"
+import { faqTableConfig } from "./faqTableConfig"
 
-// import TableActions from "../../component/Table/TableActions"
-
-// import { formatCep } from "../helpers/formatters/cep"
-// import { formatCnpj } from "../helpers/formatters/cnpj"
-// import { formatCpf } from "../helpers/formatters/cpf"
-// import { parseDate } from "../helpers/formatters/date"
-// import { formatMoney } from "../helpers/formatters/money"
-// import { getStatus } from "../helpers/parsers/getStatus"
-
-type TTableConfigs = "users"
+type TTableConfigs =
+  | "users"
+  | "condos"
+  | "categories"
+  | "subcategories"
+  | "regions"
+  | "errands"
+  | "faqs"
 
 export const tableConfig: {
   [key in TTableConfigs]: TConfig
 } = {
-  users: {
-    columns: [
-      { title: "Foto", field: "image", size: 24, width: "36px" },
-      { title: "Nome", field: "name" },
-      { title: "Email", field: "email" },
-      { title: "Perfil", field: "profile" },
-      { title: "Status", field: "status" },
-      { title: "", field: "actions", align: "right" },
-    ],
-    specialFields: {
-      image: (item: TUser, props) => (
-        <UserImageItem
-          userImage={item.image}
-          size={props.data?.size as number}
-        />
-      ),
-      name: (item: TUser) => item.name + " " + item.surname,
-      profile: (item: TUser) => relations.roles[item.profile],
-      status: (item: TUser) => relations.status[item.status],
-      actions: (item: TUser, { callbacks }) => (
-        <TableActions
-          id={item.id}
-          content={[
-            {
-              role: "edit",
-              type: "icon",
-              action: callbacks?.edit as (id: string | number) => void | any,
-            },
-          ]}
-        />
-      ),
-    },
-  },
+  users: userTableConfig,
+  condos: condoTableConfig,
+  categories: categoryTableConfig,
+  subcategories: subcategoryTableConfig,
+  regions: regionTableConfig,
+  errands: errandTableConfig,
+  faqs: faqTableConfig,
 }
 
 type TColumn = {

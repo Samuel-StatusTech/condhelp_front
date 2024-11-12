@@ -8,6 +8,12 @@ import DashTemplate from "../pages/_DashTemplate"
 
 import UsersPage from "../pages/Users"
 import PersonPage from "../pages/Forms/Users"
+import CondosPage from "../pages/Condos"
+import CategoriesPage from "../pages/Categories"
+import SubcategoriesPage from "../pages/Subcategories"
+import RegionsPage from "../pages/Regions"
+import ErrandsPage from "../pages/Errands"
+import FaqsPage from "../pages/Faqs"
 
 const Router = () => {
   return (
@@ -20,6 +26,30 @@ const Router = () => {
             <Route path="users">
               <Route path="" element={<UsersPage />} />
               <Route path="single" element={<PersonPage />} />
+            </Route>
+            <Route path="condos">
+              <Route path="" element={<CondosPage />} />
+              {/* <Route path="single" element={<PersonPage />} /> */}
+            </Route>
+            <Route path="categories">
+              <Route path="" element={<CategoriesPage />} />
+              {/* <Route path="single" element={<PersonPage />} /> */}
+            </Route>
+            <Route path="subcategories">
+              <Route path="" element={<SubcategoriesPage />} />
+              {/* <Route path="single" element={<PersonPage />} /> */}
+            </Route>
+            <Route path="regions">
+              <Route path="" element={<RegionsPage />} />
+              {/* <Route path="single" element={<PersonPage />} /> */}
+            </Route>
+            <Route path="errands">
+              <Route path="" element={<ErrandsPage />} />
+              {/* <Route path="single" element={<PersonPage />} /> */}
+            </Route>
+            <Route path="managefaq">
+              <Route path="" element={<FaqsPage />} />
+              {/* <Route path="single" element={<PersonPage />} /> */}
             </Route>
           </Route>
         </Route>

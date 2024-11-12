@@ -8,5 +8,6 @@ export type TRegion = {
 
 type TCity = {
   id: string
+  acronym: string
   name: string
 }

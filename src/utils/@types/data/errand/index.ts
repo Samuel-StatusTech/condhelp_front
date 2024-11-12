@@ -2,13 +2,13 @@ export type TErrand = {
   id: string
   title: string
   target: {
-    branch: string
-    franchise: string
+    branch: string | null
+    franchise: string | null
   }
-  state: "sketch" | "send"
+  status: "sketch" | "send"
   content: {
     image: null | string
     message: string
   }
-  date?: string
+  date: string | Date
 }

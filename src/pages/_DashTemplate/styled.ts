@@ -29,8 +29,7 @@ export const PageContent = styled.div`
   flex: 1;
   padding: 20px;
   background-color: ${({ theme }) => theme.colors.neutral.soft};
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-radius: 8px;
   max-width: 100%;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {

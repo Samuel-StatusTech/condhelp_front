@@ -11,11 +11,13 @@ const FPpeople = () => {
   const navigate = useNavigate()
 
   const [person, setPerson] = useState(initials.forms.person)
-  const [, setOptions] = useState<any>({
+  const [options, setOptions] = useState<any>({
     company: [],
     department: [],
     level: [],
     leader: [],
+    profile: [],
+    status: [],
   })
 
   const handleCancel = () => {
@@ -65,18 +67,19 @@ const FPpeople = () => {
                 // eslint-disable-next-line no-sparse-arrays
                 fields: [
                   [
-                    // {
-                    //   type: "select",
-                    //   label: "Perfil",
-                    //   field: "role",
-                    //   options: options.profile,
-                    //   value: person.profile,
-                    // },
+                    {
+                      type: "select",
+                      label: "Perfil",
+                      field: "role",
+                      options: options.profile,
+                      value: person.profile,
+                    },
                     {
                       type: "toggler",
                       label: "Ativo",
                       field: "active",
                       value: person.active,
+                      hasTopSpace: true,
                     },
                   ],
                   [

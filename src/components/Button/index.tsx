@@ -3,7 +3,7 @@ import * as S from "./styled"
 
 type Props =
   | {
-      type: "main" | "secondary"
+      type: "main" | "secondary" | "outlined"
       text: string
       icon?: JSX.Element
       iconLeft?: boolean
@@ -21,7 +21,11 @@ type Props =
 
 const Button = (props: Props) => {
   return props.type !== "google" ? (
-    <S.Element $type={props.type} onClick={props.action}>
+    <S.Element
+      $type={props.type}
+      $outlined={props.type === "outlined"}
+      onClick={props.action}
+    >
       {
         // @ts-ignore
         props.icon && props.iconLeft ? props.icon : null

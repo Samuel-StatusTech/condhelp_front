@@ -5,6 +5,7 @@ export type TInputToggler = {
   label: string
   field: string
   value: boolean
+  hasTopSpace?: boolean
 }
 
 type Props = TInputToggler & {
@@ -12,14 +13,14 @@ type Props = TInputToggler & {
 }
 
 const InputToggler = (props: Props) => {
-  const { label, field, value, onChange } = props
+  const { hasTopSpace, label, field, value, onChange } = props
 
   const toggle = () => {
     onChange(field, !value)
   }
 
   return (
-    <S.Wrapper>
+    <S.Wrapper $hasTopSpace={hasTopSpace}>
       <S.Area onClick={toggle}>
         <S.Box $state={value}>
           <S.Dot $state={value} />

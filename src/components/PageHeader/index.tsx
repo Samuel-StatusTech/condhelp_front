@@ -4,12 +4,14 @@ import TablePageHeader from "./types/table"
 
 export type THeaderFrom =
   | "users"
-  | "goals"
-  | "companies"
-  | "departments"
-  | "newsboard"
+  | "condos"
+  | "categories"
+  | "subcategories"
+  | "regions"
+  | "errands"
+  | "faqs"
 
-export type TBreadCrumFrom = "banner" | THeaderFrom
+export type TBreadCrumFrom = THeaderFrom
 
 type Props =
   | {

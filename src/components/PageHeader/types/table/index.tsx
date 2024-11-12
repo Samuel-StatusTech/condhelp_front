@@ -3,6 +3,7 @@ import * as S from "./styled"
 
 import { ReactComponent as PlusIcon } from "../../../../assets/icons/plus_circle.svg"
 import { THeaderFrom } from "../.."
+import { memo } from "react"
 
 type Props = {
   from: THeaderFrom
@@ -11,10 +12,12 @@ type Props = {
 
 const titleRelations: { [key in THeaderFrom]: string } = {
   users: "Usuários",
-  goals: "Metas",
-  companies: "Empresas",
-  departments: "Departamentos",
-  newsboard: "Mural",
+  condos: "Condomínios",
+  categories: "Categorias",
+  subcategories: "Subcategorias",
+  regions: "Regiões",
+  errands: "Recados",
+  faqs: "Perguntas frequentes",
 }
 
 const TablePageHeader = ({ from, action }: Props) => {
@@ -35,4 +38,4 @@ const TablePageHeader = ({ from, action }: Props) => {
   )
 }
 
-export default TablePageHeader
+export default memo(TablePageHeader)

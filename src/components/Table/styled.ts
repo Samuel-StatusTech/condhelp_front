@@ -164,66 +164,6 @@ export const TableList = styled.tbody`
 `
 
 // Table Content
-export const Item = styled.tr<{ $k: number }>`
-  border-radius: 8px;
-  border-top: 10px solid ${({ theme }) => "transparent"};
-  border-bottom: 10px solid ${({ theme }) => "transparent"};
-  transition: background-color 0.3s;
-  cursor: pointer;
-
-  opacity: 0;
-  ${({ $k, theme }) =>
-    theme.animations.types.fadeTop +
-    theme.animations.durations.main +
-    theme.animations.delays.main($k)}
-
-  td {
-    background-color: ${({ theme }) => theme.colors.neutral.white};
-    overflow: hidden;
-  }
-
-  td:nth-child(1) {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-  }
-
-  td:nth-last-child(1) {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-  }
-`
-
-export const UserNameBox = styled.div`
-  font-size: 16px;
-  font-weight: 800;
-  color: ${({ theme }) => theme.colors.yellow.dark};
-  background-color: ${({ theme }) => theme.colors.neutral.white};
-  padding: 4px;
-  width: fit-content;
-  border-radius: 16px;
-`
-
-export const Data = styled.td<{ $w?: number; $wp?: number }>`
-  width: ${({ $w, $wp }) => ($w ? `${$w}px` : `${$wp ?? 24}%`)};
-  padding: 12px 20px;
-
-  &:nth-last-child(1) {
-    width: auto;
-
-    display: flex;
-    justify-content: flex-end;
-
-    button {
-      cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.3s;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-  }
-`
 
 export const Profile = styled.img``
 
@@ -304,14 +244,20 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
       opacity: 0.2;
     }
   }
+
+  &:hover {
+    tr:not(:has(:hover)) {
+      opacity: 0.4;
+    }
+  }
 `
 
 export const RowItem = styled.tr`
-  &:nth-last-child(1) {
-    td {
-      border: none;
-    }
-  }
+  border-radius: 8px;
+  overflow: hidden;
+  border-top: 10px solid ${({ theme }) => theme.colors.neutral.soft};
+  border-bottom: 10px solid ${({ theme }) => theme.colors.neutral.soft};
+  /* cursor: pointer; */
 
   &.highlighted {
     opacity: 1;
@@ -362,10 +308,17 @@ export const ItemData = styled.td<{
   justify-items: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 400;
-  padding: 12px;
-  border-left: none;
-  border-right: none;
+  padding: 0px 12px;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   width: ${({ $width }) => $width ?? "unset"};
   background-color: ${({ theme }) => theme.colors.neutral.white};
+
+  &:nth-child(1) {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+  &:nth-last-child(1) {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 `

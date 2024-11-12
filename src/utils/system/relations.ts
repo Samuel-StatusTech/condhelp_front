@@ -8,7 +8,26 @@ export const relations = {
   },
   status: {
     active: "Ativo",
-    inactive: "Inativo",
     awaiting: "Aguardando",
+    disabled: "Desativado",
+    sketch: "Rascunho",
+    send: "Enviado",
+  },
+  colors: {
+    status: {
+      active: "#90CC61",
+      awaiting: "#FFA903",
+      disabled: "#61676A",
+      rejected: "#D8484A",
+      sketch: "#D8484A",
+      send: "#90CC61",
+    },
+    profile: {
+      admin: "#90CC61",
+      branch: "#45D0EE",
+      franchise: "#45D0EE",
+      manager: "#7D37B4",
+      provider: "",
+    },
   },
 }

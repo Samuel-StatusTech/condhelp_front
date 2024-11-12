@@ -21,7 +21,7 @@ export const GoogleArea = styled.button`
   }
 `
 
-export const Element = styled.button<{ $type: string }>`
+export const Element = styled.button<{ $type: string; $outlined: boolean }>`
   flex: 1;
   display: flex;
   align-items: center;
@@ -29,10 +29,12 @@ export const Element = styled.button<{ $type: string }>`
   gap: 16px;
   outline: none;
   border: none;
-  border-radius: 4px;
-  padding: 14px;
-  background-color: ${({ $type, theme }) =>
-    $type === "main"
+  border-radius: 28px;
+  padding: 9.5px 14px;
+  background-color: ${({ $type, $outlined, theme }) =>
+    $outlined
+      ? "transparent"
+      : $type === "main"
       ? theme.colors.yellow.dark
       : $type === "secondary"
       ? theme.colors.neutral.medium
@@ -46,8 +48,8 @@ export const Text = styled.span<{ $type: string }>`
   font-size: 14px;
   font-weight: 600;
   color: ${({ $type, theme }) =>
-    $type === "main"
-      ? theme.colors.neutral.white
+    $type === "main" || $type === "outlined"
+      ? theme.colors.green.dark
       : $type === "secondary"
       ? theme.colors.neutral.dark
       : "transparent"};
