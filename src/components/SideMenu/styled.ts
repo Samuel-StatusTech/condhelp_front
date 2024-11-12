@@ -25,9 +25,10 @@ export const Element = styled.aside<{ $opened: boolean }>`
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    position: absolute;
+    position: fixed;
     z-index: 10;
     height: calc(100vh + 30px);
+    min-height: 100vh;
     margin: -20px;
     margin-left: ${({ $opened }) => ($opened ? 0 : -264)}px;
   }
@@ -35,10 +36,10 @@ export const Element = styled.aside<{ $opened: boolean }>`
 
 export const BurguerWrapper = styled.div<{ $opened: boolean }>`
   position: absolute;
-  top: -4px;
-  right: 0;
+  top: 12px;
+  right: -12px;
   transform: translateX(
-    ${({ $opened }) => ($opened ? "50%" : "calc(100% + 7px)")}
+    ${({ $opened }) => ($opened ? "calc(50% - 12px)" : "calc(100% + 7px)")}
   );
   transition: transform 0.3s;
   background-color: ${({ theme }) => theme.colors.neutral.soft};

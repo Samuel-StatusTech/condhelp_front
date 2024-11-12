@@ -5,9 +5,12 @@ export const SelectArea = styled.div`
   position: relative;
   flex-direction: column;
   gap: 8px;
-  width: fit-content;
-  width: 100%;
-  max-width: 154px;
+  width: 180px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    flex: 1;
+    max-width: unset;
+  }
 `
 
 export const DataArea = styled.div<{ $disabled?: boolean }>`

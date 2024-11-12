@@ -7,6 +7,8 @@ export const Element = styled.header`
   padding: 20px;
   background-color: ${({ theme }) => theme.colors.green.dark};
   border-radius: 8px;
+  overflow: auto;
+  max-width: 100%;
 
   & > svg {
     opacity: 0;
@@ -29,6 +31,7 @@ export const MenuItem = styled.div<{ $k: number }>`
     color: ${({ theme }) => theme.colors.green.soft};
     font-size: 14px;
     transition: color 0.3s;
+    white-space: nowrap;
 
     &:hover {
       color: ${({ theme }) => theme.colors.neutral.white};

@@ -16,10 +16,10 @@ export const Element = styled.div<{ $k?: number }>`
     align-items: center;
     background-color: ${({ theme }) => theme.colors.neutral.white};
     border-radius: 4px;
-    height: fit-content;
     padding: 20px;
     gap: 10px;
     color: ${({ theme }) => theme.colors.green.light};
+    height: 100%;
 
     svg {
       width: 32px;

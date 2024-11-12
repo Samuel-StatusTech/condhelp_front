@@ -35,21 +35,23 @@ const SearchBlock = (props: Props) => {
         />
       </S.SearchArea>
 
-      {filters?.map((filter, fk) => (
-        <Input.SearchSelect
-          key={fk}
-          field={filter.name}
-          label={filter.label}
-          options={filter.options}
-          value={filter.value}
-          onChange={onFilterChange}
-          byKey={filter.byKey}
-        />
-      ))}
+      <S.FiltersArea>
+        {filters?.map((filter, fk) => (
+          <Input.SearchSelect
+            key={fk}
+            field={filter.name}
+            label={filter.label}
+            options={filter.options}
+            value={filter.value}
+            onChange={onFilterChange}
+            byKey={filter.byKey}
+          />
+        ))}
+      </S.FiltersArea>
 
-      <div style={{ width: "fit-content" }}>
+      <S.ButtonWrapper>
         <Button text="Pesquisar" type="main" action={onSearch} />
-      </div>
+      </S.ButtonWrapper>
     </S.Element>
   )
 }

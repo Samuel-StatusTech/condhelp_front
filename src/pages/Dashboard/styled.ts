@@ -18,4 +18,8 @@ export const ShortcutsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `

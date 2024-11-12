@@ -3,8 +3,14 @@ import styled from "styled-components"
 export const Element = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 export const SearchArea = styled.div`
@@ -17,6 +23,11 @@ export const SearchArea = styled.div`
   height: 36px;
   border-radius: 8px;
   overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    flex: 3;
+    min-width: 100%;
+  }
 `
 
 export const Input = styled.input`
@@ -31,4 +42,17 @@ export const Input = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.colors.neutral.lightMain};
   }
+`
+
+export const FiltersArea = styled.div`
+  display: flex;
+  gap: 16px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    min-width: 100%;
+  }
+`
+
+export const ButtonWrapper = styled.div`
+  width: fit-content;
 `

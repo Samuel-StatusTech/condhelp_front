@@ -3,10 +3,12 @@ import styled from "styled-components"
 export const Wrapper = styled.div`
   flex: 1;
   width: 100%;
-  min-width: fit-content;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  overflow: auto;
 `
 
 export const TableControl = styled.div`
@@ -312,6 +314,7 @@ export const ItemData = styled.td<{
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   width: ${({ $width }) => $width ?? "unset"};
   background-color: ${({ theme }) => theme.colors.neutral.white};
+  white-space: nowrap;
 
   &:nth-child(1) {
     border-top-left-radius: 8px;
