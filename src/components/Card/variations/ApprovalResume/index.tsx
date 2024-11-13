@@ -12,15 +12,40 @@ type Props = {
     rejected: number
   }
   isExpansible?: boolean
+  role: "budgets" | "providers"
+  doubledCard?: boolean
 }
 
 type PDataResumeItem = {
   type: "approved" | "awaiting" | "rejected"
   number: number
   total: number
+  role: "budgets" | "providers"
 }
 
-const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
+/*
+ *  Component relations
+ */
+
+const textRelations = {
+  budgets: {
+    approved: "Finalizado",
+    awaiting: "Em andamento",
+    rejected: "Cancelado",
+  },
+  providers: {
+    approved: "Ativo",
+    awaiting: "Inativo",
+    rejected: "Cancelado",
+  },
+}
+
+export const DataResumeItem = ({
+  type,
+  number,
+  total,
+  role,
+}: PDataResumeItem) => {
   const renderType = () => {
     const percentage = Math.round((number / total) * 100)
 
@@ -28,13 +53,13 @@ const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
 
     switch (type) {
       case "approved":
-        str = `Finalizada${number > 1 ? "s" : ""}`
+        str = `${textRelations[role][type]}${number > 1 ? "s" : ""}`
         break
       case "awaiting":
-        str = `Em andamento`
+        str = `${textRelations[role][type]}`
         break
       case "rejected":
-        str = `Cancelado${number > 1 ? "s" : ""}`
+        str = `${textRelations[role][type]}${number > 1 ? "s" : ""}`
         break
       default:
         break
@@ -46,12 +71,15 @@ const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
   return (
     <S.DataResumeItem>
       <S.StatusColor $status={type} />
-      <span>
-        {number} {renderType()}
-      </span>
+      <span>{number}</span>
+      <span>{renderType()}</span>
     </S.DataResumeItem>
   )
 }
+
+/*
+ *  Graph Data
+ */
 
 type PGraphData = {
   type: "approved" | "awaiting" | "rejected"
@@ -68,7 +96,18 @@ const GraphData = ({ type, size }: PGraphData) => {
   )
 }
 
-const ApprovalResume = ({ k, title, data, isExpansible }: Props) => {
+/*
+ *  Approval Resume Component
+ */
+
+const ApprovalResume = ({
+  k,
+  title,
+  data,
+  isExpansible,
+  role,
+  doubledCard,
+}: Props) => {
   const total = data.approved + data.awaiting + data.rejected
 
   const [isOpened, setIsOpened] = useState(true)
@@ -83,21 +122,24 @@ const ApprovalResume = ({ k, title, data, isExpansible }: Props) => {
           <C.HPart $k={k}>
             <S.CardTitle>{title}</S.CardTitle>
           </C.HPart>
-          <S.DataResumeArea>
+          <S.DataResumeArea $selfLine={doubledCard}>
             <DataResumeItem
               type="approved"
               number={data.approved}
               total={total}
+              role={role}
             />
             <DataResumeItem
               type="awaiting"
               number={data.awaiting}
               total={total}
+              role={role}
             />
             <DataResumeItem
               type="rejected"
               number={data.rejected}
               total={total}
+              role={role}
             />
           </S.DataResumeArea>
         </C.Header>

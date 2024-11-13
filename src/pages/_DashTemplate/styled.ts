@@ -31,6 +31,12 @@ export const PageContent = styled.div`
   background-color: ${({ theme }) => theme.colors.neutral.soft};
   border-radius: 8px;
   max-width: 100%;
+  overflow-x: hidden;
+
+  &:has(.falseSubContentWrapper) {
+    background-color: transparent;
+    padding: 0;
+  }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     border-radius: 8px;

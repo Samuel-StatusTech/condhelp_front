@@ -117,7 +117,13 @@ const RowItem = (props: TRowItemProps) => {
                   : undefined
               }
             >
-              {content}
+              <S.ItemContent
+                $hasPointer={expandComponent && k !== config.columns.length - 1}
+                $align={col.align}
+                $width={col.width}
+              >
+                {content}
+              </S.ItemContent>
             </S.ItemData>
           )
         })}

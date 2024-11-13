@@ -5,6 +5,7 @@ import { subcategoryTableConfig } from "./subcategoryTableConfig"
 import { regionTableConfig } from "./regionTableConfig"
 import { errandTableConfig } from "./errandTableConfig"
 import { faqTableConfig } from "./faqTableConfig"
+import { finishedBudgetsTableConfig } from "./finishedBudgetsTableConfig"
 
 type TTableConfigs =
   | "users"
@@ -14,6 +15,7 @@ type TTableConfigs =
   | "regions"
   | "errands"
   | "faqs"
+  | "finishedBudgets"
 
 export const tableConfig: {
   [key in TTableConfigs]: TConfig
@@ -25,6 +27,7 @@ export const tableConfig: {
   regions: regionTableConfig,
   errands: errandTableConfig,
   faqs: faqTableConfig,
+  finishedBudgets: finishedBudgetsTableConfig,
 }
 
 type TColumn = {

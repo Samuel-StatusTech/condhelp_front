@@ -1,9 +1,13 @@
 import DashboardAdmin from "./admin"
+import DashboardBranch from "./branch"
+import DashboardFranchise from "./franchise"
+import DashboardManager from "./manager"
+import DashboardProvider from "./franchise"
 
 export const DashboardPages = {
   Admin: DashboardAdmin,
-  Branch: null,
-  Franchise: null,
-  Manager: null,
-  Provider: null,
+  Branch: DashboardBranch,
+  Franchise: DashboardFranchise,
+  Manager: DashboardManager,
+  Provider: DashboardProvider,
 }

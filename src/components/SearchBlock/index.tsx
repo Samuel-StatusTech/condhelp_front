@@ -50,7 +50,7 @@ const SearchBlock = (props: Props) => {
       </S.FiltersArea>
 
       <S.ButtonWrapper>
-        <Button text="Pesquisar" type="main" action={onSearch} />
+        <Button text="Buscar" type="main" action={onSearch} />
       </S.ButtonWrapper>
     </S.Element>
   )

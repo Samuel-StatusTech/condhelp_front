@@ -306,22 +306,40 @@ export const ItemData = styled.td<{
   $hasPointer?: boolean
   $width?: string
 }>`
-  text-align: ${({ $align }) => $align ?? "left"};
   justify-items: ${({ $align }) => $align ?? "left"};
-  font-size: 14px;
-  font-weight: 400;
-  padding: 0px 12px;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
-  width: ${({ $width }) => $width ?? "unset"};
-  background-color: ${({ theme }) => theme.colors.neutral.white};
-  white-space: nowrap;
 
-  &:nth-child(1) {
+  &:nth-child(1) div {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }
-  &:nth-last-child(1) {
+  &:nth-last-child(1) div {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
   }
+`
+
+export const ItemContent = styled.div<{
+  $align?: string
+  $hasPointer?: boolean
+  $width?: string
+}>`
+  display: flex;
+  align-items: center;
+  justify-content: ${({ $align }) =>
+    $align === "left"
+      ? "flex-start"
+      : $align === "right"
+      ? "flex-end"
+      : $align};
+  min-width: 100%;
+  height: 46px;
+  background-color: ${({ theme }) => theme.colors.neutral.white};
+  width: ${({ $width }) => $width ?? "unset"};
+  white-space: nowrap;
+  text-align: ${({ $align }) => $align ?? "left"};
+
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0 12px;
 `

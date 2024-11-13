@@ -3,15 +3,15 @@ import { TCondominium } from "../../@types/data/condominium"
 export const FDcondos: TCondominium[] = [
   {
     id: "1",
-    name: "Condomínio legal",
+    name: "Condomínio 1",
     units: 8,
     cnpj: "11222333000199",
     image: null,
     address: {
-      street: "",
-      number: "",
-      cep: "",
-      neighborhood: "",
+      street: "Rua legal",
+      number: "123",
+      cep: "88777666",
+      neighborhood: "Centro",
       city: "Florianópolis",
       state: "SC",
     },
@@ -29,7 +29,7 @@ export const FDcondos: TCondominium[] = [
   },
   {
     id: "2",
-    name: "Condomínio legal",
+    name: "Condomínio 2",
     units: 8,
     cnpj: "11222333000199",
     image: null,

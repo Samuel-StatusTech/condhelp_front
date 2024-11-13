@@ -7,6 +7,7 @@ import Points from "./points"
 import Profile from "./profile"
 import Question from "./question"
 import Select from "./select"
+import CondoSelect from "./condosSelect"
 import SearchSelect from "./searchSelect"
 import TextArea from "./textarea"
 import Toggler from "./toggler"
@@ -21,6 +22,7 @@ const Input = {
   Profile,
   Question,
   Select,
+  CondoSelect,
   SearchSelect,
   TextArea,
   Toggler,

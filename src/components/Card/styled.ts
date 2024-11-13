@@ -27,6 +27,8 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap;
+  gap: 16px;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     flex: 2;

@@ -7,13 +7,13 @@ import Divider from "../../../components/_minimals/Divider"
 import PageRow from "../../../components/_minimals/PageRow"
 import { dashboardShortcuts } from "../../../utils/system/dashboardShortcuts"
 
-const DashboardAdmin = () => {
+const DashboardFranchise = () => {
   // Cards
 
   const renderCardsContent = () => {
     const content: JSX.Element[] = [
       <Card.Dashboard
-        title="CONDOMÍNIOS"
+        title="FRANQUEADOS"
         k={2}
         data={{
           role: "superavit",
@@ -33,7 +33,7 @@ const DashboardAdmin = () => {
         }}
       />,
       <Card.Dashboard
-        title="USUÁRIOS"
+        title="CONDOMÍNIOS"
         k={4}
         data={{
           role: "superavit",
@@ -60,7 +60,7 @@ const DashboardAdmin = () => {
   const renderGridContent = () => {
     let content: any[] = []
 
-    dashboardShortcuts.admin.forEach((s, sk) => {
+    dashboardShortcuts.branch.forEach((s, sk) => {
       content.push(
         <Card.DashboardShortcut
           k={5 + (sk + 1) / 2}
@@ -73,7 +73,7 @@ const DashboardAdmin = () => {
     })
     content.push(
       <Card.DashboardShortcut
-        k={5 + dashboardShortcuts.admin.length / 2}
+        k={5 + dashboardShortcuts.branch.length / 2}
         title={"Configurações"}
         icon={"settings"}
         link={"/settings"}
@@ -87,7 +87,7 @@ const DashboardAdmin = () => {
   return (
     <S.SubContent>
       <S.BlockTitle $k={2}>
-        <span>Painel Administrativo</span>
+        <span>Painel Administrativo da Filial</span>
       </S.BlockTitle>
 
       {renderCardsContent()}
@@ -97,9 +97,17 @@ const DashboardAdmin = () => {
       <PageRow>
         <Card.ApprovalResume
           k={1}
-          title="Todas os Orçamentos"
+          title="Estatísticas gerais de orçamentos"
           data={fdata.cards.approval as any}
           role="budgets"
+          doubledCard={true}
+        />
+        <Card.ApprovalResume
+          k={1}
+          title="Estatísticas gerais de prestadores"
+          data={fdata.cards.approval as any}
+          role="providers"
+          doubledCard={true}
         />
       </PageRow>
 
@@ -110,4 +118,4 @@ const DashboardAdmin = () => {
   )
 }
 
-export default DashboardAdmin
+export default DashboardFranchise

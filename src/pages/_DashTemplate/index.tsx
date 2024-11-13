@@ -3,9 +3,12 @@ import SideMenu from "../../components/SideMenu"
 import { Outlet, useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
 import Header from "../../components/Header"
+import { getStore } from "../../store"
 
 const DashTemplate = () => {
   const location = useLocation()
+
+  const { user, controllers } = getStore()
 
   const [page, setPage] = useState("dash")
 
@@ -20,6 +23,13 @@ const DashTemplate = () => {
       : location.pathname
 
     setPage(!!val ? val : "dash")
+
+    if (user) {
+      controllers.user.setData({
+        ...user,
+        profile: "manager",
+      })
+    }
   }, [location])
 
   return (

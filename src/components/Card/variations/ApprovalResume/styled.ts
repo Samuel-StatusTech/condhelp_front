@@ -8,6 +8,7 @@ export const Element = styled.div<{ $k?: number }>`
   background-color: ${({ theme }) => theme.colors.neutral.white};
   border-radius: 8px;
   height: fit-content;
+  align-self: stretch;
   padding: 20px;
 
   opacity: 0;
@@ -22,10 +23,11 @@ export const CardTitle = styled.div`
   color: ${({ theme }) => theme.colors.neutral.main};
 `
 
-export const DataResumeArea = styled.div`
+export const DataResumeArea = styled.div<{ $selfLine?: boolean }>`
   display: flex;
   align-items: center;
   gap: 12px;
+  width: ${({ $selfLine }) => ($selfLine ? "100%" : "unset")};
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     order: 3;
@@ -45,7 +47,7 @@ export const DataResumeItem = styled.div`
     color: ${({ theme }) => theme.colors.neutral.main};
 
     &:nth-child(1) {
-      font-weight: 600;
+      font-weight: 400;
     }
   }
 `

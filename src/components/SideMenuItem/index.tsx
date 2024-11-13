@@ -22,6 +22,7 @@ const iconRef: { [key: string]: JSX.Element } = {
   folder: <Icons.Folder />,
   subcategories: <Icons.Subcategory />,
   location: <Icons.Location />,
+  budget: <Icons.Budget />,
   chat: <Icons.Chat />,
   faq: <Icons.Faq />,
   reports: <Icons.Report />,

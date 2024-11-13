@@ -1,28 +1,16 @@
 import styled from "styled-components"
 
-export const Element = styled.aside<{ $opened: boolean }>`
+export const Wrapper = styled.aside<{ $opened: boolean }>`
   position: sticky;
   top: 20px;
-  max-height: calc(100svh - 40px);
+  max-height: calc(100svh - 112px - 40px - 20px - 20px);
   max-width: 240px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 20px;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
-  border-radius: 8px;
   transition: margin-left 0.3s;
-
-  & > svg {
-    width: 135px;
-    opacity: 0;
-    ${({ theme }) =>
-      theme.animations.types.fade +
-      theme.animations.durations.slow +
-      theme.animations.delays.main(6)}
-  }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     position: fixed;
@@ -32,6 +20,33 @@ export const Element = styled.aside<{ $opened: boolean }>`
     margin: -20px;
     margin-left: ${({ $opened }) => ($opened ? 0 : -264)}px;
   }
+`
+
+export const MenuArea = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: ${({ theme }) => theme.colors.neutral.white};
+  border-radius: 8px;
+
+  & > svg {
+    width: 135px;
+    opacity: 0;
+    ${({ theme }) =>
+      theme.animations.types.fade +
+      theme.animations.durations.slow +
+      theme.animations.delays.main(6)}
+  }
+`
+
+export const ButtonWrapper = styled.div`
+  min-width: 100%;
+  height: fit-content;
+  display: flex;
 `
 
 export const BurguerWrapper = styled.div<{ $opened: boolean }>`
