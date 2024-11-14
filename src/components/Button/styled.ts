@@ -7,7 +7,8 @@ export const Element = styled.button<{
   $k?: number
 }>`
   ${({ $fit }) => ($fit ? `width: fit-content;` : `flex: 1;`)}
-  min-width: ${({ $type }) => ($type === "tertiary" ? "unset" : `160px`)};
+  min-width: ${({ $type, $fit }) =>
+    $type !== "tertiary" || !$fit ? `160px` : "unset"};
   display: flex;
   align-items: center;
   justify-content: center;

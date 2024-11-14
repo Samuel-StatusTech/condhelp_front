@@ -31,7 +31,6 @@ const FormDefaultButtons = ({
           text="Cancelar"
           icon={<Icons.Edit />}
           iconLeft={true}
-          fit={true}
         />
         <Button
           type="main"
@@ -39,7 +38,6 @@ const FormDefaultButtons = ({
           text="Salvar"
           icon={<Icons.CheckCircle />}
           iconLeft={true}
-          fit={true}
         />
       </S.BtnArea>
     </S.Buttons>

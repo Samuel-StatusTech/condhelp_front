@@ -31,7 +31,11 @@ const SubcategoriesList = ({ list, categoryId, handleDelete }: Props) => {
   return (
     <S.Wrapper>
       {list.map((subcategory, sk) => (
-        <S.SubcategoryItem key={sk} onClick={() => handleClick(subcategory.id)}>
+        <S.SubcategoryItem
+          $k={sk}
+          key={sk}
+          onClick={() => handleClick(subcategory.id)}
+        >
           <S.SCName>{subcategory.name}</S.SCName>
           <Icons.Expand />
         </S.SubcategoryItem>

@@ -50,8 +50,8 @@ const SubcategoriesPage = () => {
     navigate("single")
   }, [navigate])
 
-  const handleEdit = () => {
-    navigate("single")
+  const handleEdit = (id: string) => {
+    navigate(`single/${id}`)
   }
 
   return (

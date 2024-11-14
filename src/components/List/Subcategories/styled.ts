@@ -17,7 +17,7 @@ export const Wrapper = styled.div`
   }
 `
 
-export const SubcategoryItem = styled.div`
+export const SubcategoryItem = styled.div<{ $k: number }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -37,6 +37,12 @@ export const SubcategoryItem = styled.div`
       fill: ${({ theme }) => theme.colors.green.light};
     }
   }
+
+  opacity: 0;
+  ${({ $k, theme }) =>
+    theme.animations.types.fadeTop +
+    theme.animations.durations.main +
+    theme.animations.delays.main($k)}
 `
 
 export const SCName = styled.span``
