@@ -24,6 +24,7 @@ const TableActions = ({ id, content }: Props) => {
           type="tertiary"
           icon={<Icons.Edit />}
           action={() => c.action(id)}
+          fit={true}
         />
       ))}
     </S.Wrapper>

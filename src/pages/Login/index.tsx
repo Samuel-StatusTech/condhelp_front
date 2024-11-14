@@ -179,7 +179,7 @@ const Login = () => {
 
   return (
     <S.Page>
-      <Feedback {...feedback} />
+      <Feedback data={feedback} />
       <Logo />
       <S.FormContainer>
         <span>ACESSO AO SISTEMA</span>

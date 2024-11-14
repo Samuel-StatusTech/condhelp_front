@@ -6,4 +6,6 @@ export const Wrapper = styled.div`
   align-items: center;
   width: fit-content;
   gap: 16px;
+
+  color: ${({ theme }) => theme.colors.green.light};
 `

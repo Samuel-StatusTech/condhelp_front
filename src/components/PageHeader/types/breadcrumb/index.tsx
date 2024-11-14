@@ -1,28 +1,25 @@
 import * as C from "../../styled"
 import * as S from "./styled"
 
-import { ReactComponent as PeopleIcon } from "../../../../assets/icons/users.svg"
-
 import BreadCrumb, { PPath } from "../../../BreadCrumb"
 import { TBreadCrumFrom } from "../.."
+import { Icons } from "../../../../assets/icons/icons"
+import Button from "../../../Button"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   from: TBreadCrumFrom
+  forForm?: boolean
+  handleAction?: () => void
 }
 
-const iconsRelations: {
-  [key in Props["from"]]: JSX.Element
-} = {
-  users: <PeopleIcon />,
-  condos: <div></div>,
-  categories: <div></div>,
-  subcategories: <div></div>,
-  regions: <div></div>,
-  errands: <div></div>,
-  faqs: <div></div>,
-}
+const BreadcrumbPageHeader = ({ from, forForm }: Props) => {
+  const navigate = useNavigate()
 
-const BreadcrumbPageHeader = ({ from }: Props) => {
+  const handleAction = () => {
+    navigate(-1)
+  }
+
   const getPaths = () => {
     let pts: PPath[] = []
 
@@ -31,6 +28,15 @@ const BreadcrumbPageHeader = ({ from }: Props) => {
         pts = [
           { title: "Pessoas", to: "/dashboard/users" },
           { title: "Detalhes", to: "/dashboard/users/single" },
+        ]
+        break
+      case "categories":
+        pts = [
+          { title: "Categorias", to: "/dashboard/categories" },
+          {
+            title: "Detalhes da categoria",
+            to: "/dashboard/categories/single",
+          },
         ]
         break
       case "condos":
@@ -48,11 +54,21 @@ const BreadcrumbPageHeader = ({ from }: Props) => {
   }
 
   return (
-    <C.Element>
+    <C.Element className={forForm ? "falseSubContentWrapper" : ""}>
       <S.PageIndicator $k={1}>
-        {iconsRelations[from]}
         <BreadCrumb paths={getPaths()} />
       </S.PageIndicator>
+      {forForm && (
+        <Button
+          type="quaternary"
+          action={handleAction}
+          text="Voltar"
+          icon={<Icons.Back />}
+          iconLeft={true}
+          fit={true}
+          k={2}
+        />
+      )}
     </C.Element>
   )
 }

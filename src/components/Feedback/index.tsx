@@ -1,22 +1,25 @@
-import { useEffect } from "react"
 import * as S from "./styled"
 
+import { TFeedback } from "../../utils/@types/components/feedback"
+
 type Props = {
-  type: "success" | "failure"
-  text: string
-  state: boolean
-  time?: number
+  data: TFeedback
 }
 
-const Feedback = (props: Props) => {
-  const { type, text, state } = props
-
-  useEffect(() => {}, [])
-
+const Feedback = ({ data }: Props) => {
   return (
-    <S.Element $type={type} $state={state}>
-      <S.Text>{text}</S.Text>
-    </S.Element>
+    <S.Box
+      $color={
+        data.state === "success"
+          ? "green"
+          : data.state === "alert"
+          ? "orange"
+          : "red"
+      }
+      $visible={data.visible}
+    >
+      <span>{data.message}</span>
+    </S.Box>
   )
 }
 

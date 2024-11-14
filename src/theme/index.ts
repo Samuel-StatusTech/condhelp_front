@@ -50,4 +50,7 @@ export const theme: DefaultTheme = {
   bp: {
     small: 520,
   },
+  shadows: {
+    default: "0 3px 32px -4px rgba(0, 0, 0, 0.08)",
+  },
 }

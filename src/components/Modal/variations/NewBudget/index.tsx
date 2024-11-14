@@ -20,10 +20,10 @@ type Props = {
     user: any
   }
   onClose: () => void
-  handleOp: (op: string) => void
+  handleOp?: (op: string) => void
 }
 
-const MemberPoints = ({ data, onClose, handleOp }: Props) => {
+const NewBudget = ({ data, onClose, handleOp }: Props) => {
   const [update, setUpdate] = useState({
     ...data,
     ...initials.modals.goalApprove,
@@ -79,17 +79,6 @@ const MemberPoints = ({ data, onClose, handleOp }: Props) => {
             </S.PointsButton>
           </S.PointsControl>
         </S.PointsArea>
-        <Input.Select
-          field="status"
-          label="Alterar status"
-          onChange={handleField}
-          options={[
-            { key: "awaiting", value: "Aguardando" },
-            { key: "denied", value: "Reprovada" },
-            { key: "approved", value: "Aprovada" },
-          ]}
-          value={update.status}
-        />
         <Input.Default
           field="comment"
           label="Informe o motivo da alteração na pontuação"
@@ -105,4 +94,4 @@ const MemberPoints = ({ data, onClose, handleOp }: Props) => {
   )
 }
 
-export default MemberPoints
+export default NewBudget

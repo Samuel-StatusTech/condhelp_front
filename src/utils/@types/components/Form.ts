@@ -5,10 +5,6 @@ export type TForm = {
   handleCancel: (params?: any) => void
   handleSave: (form: any) => Promise<void>
   handleDelete?: () => Promise<void>
-  insertQuestion?: (newField: any) => void
-  removeQuestion?: (key: number) => void
-  duplicateQuestion?: (key: number) => void
-  handleQuestion?: (questionKey: number, field: string, value: any) => void
   blocks: TBlock[]
 }
 
@@ -19,13 +15,13 @@ type TBlock = {
   groups: TGroup[]
 }
 
-type TGroup = {
-  fields: TContent[]
-  list?: TList
-  hasFieldControl?: boolean
-}
-
-type TList = {
-  title: string
-  items: any[]
-}
+type TGroup =
+  | {
+      type: "custom"
+      element: JSX.Element
+    }
+  | {
+      type: "fields"
+      fields: TContent[]
+      hasFieldControl?: boolean
+    }

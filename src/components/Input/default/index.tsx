@@ -1,10 +1,10 @@
 import * as S from "./styled"
 
 export type TInputDefault = {
-  label: string
+  label?: string
+  placeholder?: string
   field: string | number
   value: string
-  placeholder?: string
 }
 
 type Props = TInputDefault & {
@@ -21,7 +21,7 @@ const InputDefault = (props: Props) => {
   return (
     <S.Wrapper>
       <S.Area>
-        <S.Label>{label}</S.Label>
+        {label && <S.Label>{label}</S.Label>}
         <S.Input
           placeholder={placeholder ?? label}
           value={value}

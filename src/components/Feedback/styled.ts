@@ -1,26 +1,39 @@
 import styled from "styled-components"
 
-export const Element = styled.div<{
-  $type: "success" | "failure"
-  $state: boolean
+export const Box = styled.div<{
+  $visible: boolean
+  $color: "green" | "orange" | "red"
 }>`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  gap: 16px;
-  border-radius: 6px;
-  padding: 6px 8px;
-  background-color: ${({ $type, theme }) =>
-    $type === "success" ? theme.colors.green : theme.colors.red.main};
-  top: 64px;
+  position: fixed;
+  top: 100px;
   left: 50%;
-  transform: translate(-50%, ${({ $state }) => ($state ? 0 : "-120%")});
-  opacity: ${({ $state }) => +$state};
-  transition: transform 0.3s, opacity 0.3s;
-`
+  transform: translate(-50%, ${({ $visible }) => ($visible ? "50" : "0")}%);
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: transform 0.3s, opacity 0.3s, background-color 0.3s, height 0.3s;
 
-export const Text = styled.span`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.neutral.white};
+  max-width: 75vw;
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  padding: 6px 14px;
+  border-radius: 24px;
+  background-color: ${({ $color, theme }) =>
+    $color === "green"
+      ? theme.colors.green
+      : $color === "orange"
+      ? theme.colors.yellow
+      : "#D8484A"};
+  box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
+
+  span {
+    font-size: 12px;
+    color: ${({ theme }) => theme.colors.neutral.white};
+    text-align: center;
+  }
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    padding: 6px 32px;
+
+    margin: 0 36px;
+  }
 `

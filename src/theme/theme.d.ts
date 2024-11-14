@@ -51,5 +51,8 @@ declare module "styled-components" {
     bp: {
       small: number
     }
+    shadows: {
+      default: string
+    }
   }
 }

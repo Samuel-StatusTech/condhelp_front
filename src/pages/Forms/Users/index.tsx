@@ -6,6 +6,7 @@ import Form from "../../../components/Form"
 import { useNavigate } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 import Divider from "../../../components/_minimals/Divider"
+import { List } from "../../../components/List"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -64,6 +65,7 @@ const FPpeople = () => {
             title: "Informações básicas",
             groups: [
               {
+                type: "fields",
                 // eslint-disable-next-line no-sparse-arrays
                 fields: [
                   [
@@ -102,12 +104,6 @@ const FPpeople = () => {
                     field: "email",
                     value: person.email,
                   },
-                  // {
-                  //   type: "profile",
-                  //   label: "Foto do perfil",
-                  //   field: "profile",
-                  //   value: person.profile,
-                  // },
                 ],
               },
             ],
@@ -116,7 +112,8 @@ const FPpeople = () => {
             title: "Informações do perfil",
             groups: [
               {
-                fields: [],
+                type: "custom",
+                element: <>Custom content</>,
               },
             ],
           },

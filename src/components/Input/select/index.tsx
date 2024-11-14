@@ -4,7 +4,8 @@ import * as S from "./styles"
 import { Icons } from "../../../assets/icons/icons"
 
 export type TInputSelect = {
-  label: string
+  label?: string
+  placeholder?: string
   field: string
   options: TOption[]
   value: string | null
@@ -22,6 +23,7 @@ type Props = TInputSelect & {
 
 const SelectDefault = ({
   label,
+  placeholder,
   value,
   field,
   options,
@@ -54,7 +56,7 @@ const SelectDefault = ({
     <C.Wrapper>
       <C.Area>
         <S.SelectArea>
-          <S.Label>{label}</S.Label>
+          {label && <S.Label>{label}</S.Label>}
           <S.DataArea
             onClick={!disabled ? toggleDropdown : undefined}
             className={showing ? "turnedIcon" : ""}
@@ -62,7 +64,9 @@ const SelectDefault = ({
           >
             <S.Left>
               <S.SelectedInfo>
-                {selected && selected.value ? selected?.value : `${label}...`}
+                {selected && selected.value
+                  ? selected?.value
+                  : `${placeholder ?? label}`}
               </S.SelectedInfo>
             </S.Left>
             <Icons.Dropdown width={16} height={16} />

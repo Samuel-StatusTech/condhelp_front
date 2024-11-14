@@ -22,6 +22,8 @@ type Props =
   | {
       type: "breadcrumb"
       from: TBreadCrumFrom
+      forForm?: boolean
+      action?: (p?: any) => void
     }
 
 const PageHeader = (p: Props) => {
@@ -30,7 +32,13 @@ const PageHeader = (p: Props) => {
       case "table":
         return <TablePageHeader from={p.from} action={p.action} />
       case "breadcrumb":
-        return <BreadcrumbPageHeader from={p.from} />
+        return (
+          <BreadcrumbPageHeader
+            from={p.from}
+            forForm={p.forForm}
+            handleAction={p.action}
+          />
+        )
       default:
         return null
     }

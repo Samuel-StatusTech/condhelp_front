@@ -1,29 +1,30 @@
-import { Icons } from "../../assets/icons/icons"
 import * as S from "./styled"
 
 type Props =
   | {
-      type: "main" | "secondary" | "outlined"
+      type: "main" | "secondary" | "quaternary" | "outlined"
       text: string
       icon?: JSX.Element
       iconLeft?: boolean
       action: (v?: any) => void
+      fit?: boolean
+      k?: number
     }
   | {
       type: "tertiary"
       icon: JSX.Element
       action: (v?: any) => void
-    }
-  | {
-      type: "google"
-      action: (v?: any) => void
+      fit?: boolean
+      k?: number
     }
 
 const Button = (props: Props) => {
-  return props.type !== "google" ? (
+  return (
     <S.Element
       $type={props.type}
       $outlined={props.type === "outlined"}
+      $fit={props.fit}
+      $k={props.k}
       onClick={props.action}
     >
       {
@@ -38,11 +39,6 @@ const Button = (props: Props) => {
         props.icon && !props.iconLeft ? props.icon : null
       }
     </S.Element>
-  ) : (
-    <S.GoogleArea onClick={props.action}>
-      <Icons.Google />
-      <span>Conectar com o Google</span>
-    </S.GoogleArea>
   )
 }
 

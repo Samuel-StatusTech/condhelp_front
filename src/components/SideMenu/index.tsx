@@ -5,7 +5,6 @@ import SideMenuItem from "../SideMenuItem"
 
 import { Icons } from "../../assets/icons/icons"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
 import { relations } from "../../utils/system/relations"
 import Button from "../Button"
@@ -19,25 +18,12 @@ const SideMenu = (props: Props) => {
 
   const { user } = getStore()
 
-  const navigate = useNavigate()
-
   const [sideOpened, setSideOpened] = useState(false)
-  const [userDrop, setUserDrop] = useState(false)
 
   const { page } = props
 
   const toggleSideMenu = () => {
     setSideOpened(!sideOpened)
-  }
-
-  const toggleUserDrop = () => {
-    setUserDrop(!userDrop)
-  }
-
-  const handleLogout = () => {
-    navigate("/login", {
-      replace: true,
-    })
   }
 
   return (
@@ -73,20 +59,10 @@ const SideMenu = (props: Props) => {
               active={page === item.tag}
             />
           ))}
-          <S.UserControl onClick={toggleUserDrop}>
-            <S.DropUserWrapper className={userDrop ? "visible" : ""}>
-              <S.DropUserContent>
-                <S.DUItem onClick={handleLogout}>
-                  <span>Sair</span>
-                  <Icons.Logout />
-                </S.DUItem>
-              </S.DropUserContent>
-            </S.DropUserWrapper>
-          </S.UserControl>
         </S.MenuContainer>
       </S.MenuArea>
 
-      {user?.profile === "franchise" && (
+      {(user?.profile === "franchise" || user?.profile === "manager") && (
         <S.ButtonWrapper>
           <Button
             type="main"

@@ -1,8 +1,10 @@
+import { TFeedback } from "../components/feedback"
 import { TUser } from "../data/user"
 
 // Shelfs
 
 export type TUserShelf = TUser | null
+export type TFeedbackShelf = TFeedback
 
 // Controls
 
@@ -11,12 +13,20 @@ export type TUserControls = {
   clear: () => void
 }
 
+export type TFeedbackControls = {
+  setData: (feedbackData: TFeedback) => void
+  clear: () => void
+  fade: () => void
+}
+
 // Data
 
 export type TStore = {
   user: TUserShelf
+  feedback: TFeedbackShelf
   controllers: {
     user: TUserControls
+    feedback: TFeedbackControls
   }
 }
 
