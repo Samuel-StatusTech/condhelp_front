@@ -15,11 +15,12 @@ function App() {
         }, 500)
       }, 4000)
     }
+    console.log(feedback)
   }, [feedback, controllers.feedback])
 
   return (
     <>
-      {feedback && <Feedback data={feedback} />}
+      <Feedback data={feedback} />
       <Router />
     </>
   )

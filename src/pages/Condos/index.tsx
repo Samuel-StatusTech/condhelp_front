@@ -27,8 +27,8 @@ const CondosPage = () => {
     navigate("single")
   }, [navigate])
 
-  const handleEdit = () => {
-    navigate("single")
+  const handleEdit = (id: string) => {
+    navigate(`single/${id}`)
   }
 
   const handleFilters = (filter: Partial<TFilter>) => {

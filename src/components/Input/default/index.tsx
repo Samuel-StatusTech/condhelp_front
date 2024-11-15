@@ -1,3 +1,4 @@
+import { FormField } from "../../../utils/@types/components/FormFields"
 import * as S from "./styled"
 
 export type TInputDefault = {
@@ -9,6 +10,7 @@ export type TInputDefault = {
 
 type Props = TInputDefault & {
   onChange: (field: any, v: any) => void
+  gridSizes?: FormField["gridSizes"]
 }
 
 const InputDefault = (props: Props) => {
@@ -19,11 +21,11 @@ const InputDefault = (props: Props) => {
   }
 
   return (
-    <S.Wrapper>
+    <S.Wrapper $gridSizes={props.gridSizes}>
       <S.Area>
         {label && <S.Label>{label}</S.Label>}
         <S.Input
-          placeholder={placeholder ?? label}
+          placeholder={placeholder}
           value={value}
           onChange={handleChange}
         />

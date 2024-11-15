@@ -54,5 +54,8 @@ declare module "styled-components" {
     shadows: {
       default: string
     }
+    default: {
+      formLineGridColumns: number
+    }
   }
 }

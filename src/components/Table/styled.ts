@@ -221,6 +221,7 @@ export const TCol = styled.th<{
   width: ${({ $width }) => $width ?? "unset"};
   color: ${({ theme }) => theme.colors.neutral.main};
   font-weight: 400;
+  white-space: nowrap;
 `
 
 export const TableBody = styled.tbody<{ $noHover?: boolean }>`

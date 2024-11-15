@@ -15,7 +15,7 @@ type ISelect = { type: "select"; multiple?: boolean } & TInputSelect
 type ITextArea = { type: "textarea" } & TInputTextArea
 type IToggler = { type: "toggler" } & TInputToggler
 
-export type FormField =
+export type FormField = (
   | IDate
   | IDefault
   | IImage
@@ -24,3 +24,9 @@ export type FormField =
   | ISelect
   | ITextArea
   | IToggler
+) & {
+  gridSizes?: {
+    big: number
+    small?: number
+  }
+}

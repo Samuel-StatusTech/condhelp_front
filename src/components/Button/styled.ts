@@ -58,6 +58,16 @@ export const Element = styled.button<{
     text-decoration: ${({ $type }) =>
       $type === "quaternary" ? "underline" : "unset"};
   }
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    min-width: ${({ $type, $fit }) =>
+      $type !== "tertiary" || !$fit ? `100px` : "unset"};
+
+    svg {
+      min-width: 20px;
+      height: 20px;
+    }
+  }
 `
 
 export const Text = styled.span<{ $type: string }>`

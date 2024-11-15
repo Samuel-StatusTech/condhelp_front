@@ -62,7 +62,7 @@ const SideMenu = (props: Props) => {
         </S.MenuContainer>
       </S.MenuArea>
 
-      {(user?.profile === "franchise" || user?.profile === "manager") && (
+      {user?.profile !== "admin" && (
         <S.ButtonWrapper>
           <Button
             type="main"

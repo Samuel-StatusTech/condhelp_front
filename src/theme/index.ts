@@ -53,4 +53,7 @@ export const theme: DefaultTheme = {
   shadows: {
     default: "0 3px 32px -4px rgba(0, 0, 0, 0.08)",
   },
+  default: {
+    formLineGridColumns: 20
+  }
 }

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import Input from "../../components/Input/login"
 import initials from "../../utils/initials"
 import Button from "../../components/Button"
-import Feedback from "../../components/Feedback"
 import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
 import { TUser } from "../../utils/@types/data/user"
@@ -14,14 +13,62 @@ const fixedAuth = {
   pass: "123456",
 }
 
-const userData: TUser = {
+const userAdminData: TUser = {
   id: "user-1",
   status: "active",
   profile: "admin",
   name: "StatusTech",
   surname: "Top",
-  email: "email@email.com",
+  email: "admin@email.com",
   image: null,
+}
+
+const userBranchData: TUser = {
+  id: "user-1",
+  status: "active",
+  profile: "branch",
+  name: "StatusTech",
+  surname: "Top",
+  email: "branch@email.com",
+  image: null,
+}
+
+const userFranchiseData: TUser = {
+  id: "user-1",
+  status: "active",
+  profile: "franchise",
+  name: "StatusTech",
+  surname: "Top",
+  email: "franchise@email.com",
+  image: null,
+}
+
+const userManagerData: TUser = {
+  id: "user-1",
+  status: "active",
+  profile: "manager",
+  name: "StatusTech",
+  surname: "Top",
+  email: "manager@email.com",
+  image: null,
+}
+
+const userProviderData: TUser = {
+  id: "user-1",
+  status: "active",
+  profile: "provider",
+  name: "StatusTech",
+  surname: "Top",
+  email: "provider@email.com",
+  image: null,
+}
+
+const userData = {
+  admin: userAdminData,
+  branch: userBranchData,
+  franchise: userFranchiseData,
+  manager: userManagerData,
+  provider: userProviderData,
 }
 
 const Login = () => {
@@ -35,26 +82,9 @@ const Login = () => {
   const [content, setContent] = useState<
     "normal" | "passmail" | "passmailSent"
   >("normal")
-  const [feedback, setFeedback] = useState<any>({
-    type: "failure",
-    text: "Houve um erro. Tente novamente mais tarde.",
-    state: false,
-  })
 
   const handleForm = (field: keyof typeof form, v: string) => {
     setForm({ ...form, [field]: v })
-  }
-
-  const login = async (): Promise<{ ok: boolean }> => {
-    return new Promise((resolve) => {
-      let ok = true
-
-      if (!form.email || !form.pass) ok = false
-      else if (form.email !== fixedAuth.email || form.pass !== fixedAuth.pass)
-        ok = false
-
-      resolve({ ok })
-    })
   }
 
   const handleSubmit = async () => {
@@ -63,20 +93,32 @@ const Login = () => {
     // ...
     setTimeout(async () => {
       setSubmitting(false)
+      const emailrole = form.email.split("@")[0] as any
 
-      const credentials = await login() // Api.login({ ... })
+      // @ts-ignore
+      const info = userData[emailrole]
 
-      if (!credentials.ok) {
-        setFeedback({ ...feedback, state: true })
-
-        setTimeout(() => {
-          setFeedback({ ...feedback, state: false })
-        }, 3000)
-      } else {
+      if (info) {
         // ... store data
-        controllers.user.setData(userData)
+        // @ts-ignore
 
-        navigate("/dashboard")
+        if (form.pass === fixedAuth.pass) {
+          controllers.user.setData(info)
+          navigate("/dashboard")
+        } else {
+          controllers.feedback.setData({
+            state: "error",
+            message: "Verifique os dados e tente novamente.",
+            visible: true,
+          })
+        }
+      } else {
+        controllers.feedback.setData({
+          state: "error",
+          message:
+            "Usuário não encontrado. Verifique os dados e tente novamente.",
+          visible: true,
+        })
       }
     }, 1000)
   }
@@ -179,7 +221,6 @@ const Login = () => {
 
   return (
     <S.Page>
-      <Feedback data={feedback} />
       <Logo />
       <S.FormContainer>
         <span>ACESSO AO SISTEMA</span>

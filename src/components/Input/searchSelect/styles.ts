@@ -5,7 +5,7 @@ export const SelectArea = styled.div`
   position: relative;
   flex-direction: column;
   gap: 8px;
-  width: 180px;
+  width: 220px;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     flex: 1;

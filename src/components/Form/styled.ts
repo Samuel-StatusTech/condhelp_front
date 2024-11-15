@@ -3,13 +3,16 @@ import styled from "styled-components"
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  /* padding: 32px 16px; */
   gap: 32px;
 `
 
 export const BlocksArea = styled.div`
   display: flex;
   gap: 32px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    flex-direction: column;
+  }
 `
 
 export const BlockCols = styled.div`
@@ -62,9 +65,11 @@ export const FormArea = styled.div`
 `
 
 export const FormLine = styled.div<{ $k: number; $length: number }>`
-  display: flex;
-  gap: 32px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 10px;
   align-items: center;
+  max-width: 100%;
   z-index: ${({ $length, $k }) => ($length - $k > -1 ? $length - $k : 0)};
 
   opacity: 0;

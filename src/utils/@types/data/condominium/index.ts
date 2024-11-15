@@ -1,6 +1,19 @@
 import { TCondominiumAddress } from "../address"
 import { TUser } from "../user"
 
+export type TNewCondominium = {
+  name: string
+  units: number
+  cnpj: string
+  image: null | string
+
+  address: TCondominiumAddress
+  managerId: string
+  managerElection: string
+
+  electionFile: null | any
+}
+
 export type TCondominium = {
   id: string
   name: string

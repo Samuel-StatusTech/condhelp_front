@@ -26,7 +26,6 @@ export const BlockArea = styled.div<{ $k?: number }>`
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     border-radius: 8px;
-    padding: 0px;
   }
 `
 
@@ -66,6 +65,11 @@ export const ManagerBudgetsResumeArea = styled.div`
   align-items: center;
   gap: 32px;
   width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `
 
 export const MBRMessage = styled.div`

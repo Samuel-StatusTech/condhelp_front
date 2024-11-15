@@ -21,6 +21,7 @@ import FaqsPage from "../pages/Faqs"
 
 import FPcategory from "../pages/Forms/Category"
 import FPsubcategory from "../pages/Forms/SubCategory"
+import FPcondo from "../pages/Forms/Condo"
 
 const Router = () => {
   return (
@@ -36,7 +37,8 @@ const Router = () => {
             </Route>
             <Route path="condos">
               <Route path="" element={<CondosPage />} />
-              {/* <Route path="single" element={<PersonPage />} /> */}
+              <Route path="single" element={<FPcondo />} />
+              <Route path="single/:id" element={<FPcondo />} />
             </Route>
             <Route path="categories">
               <Route path="" element={<CategoriesPage />} />

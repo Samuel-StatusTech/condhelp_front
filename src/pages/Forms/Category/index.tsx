@@ -75,9 +75,10 @@ const FPcategory = () => {
                 fields: [
                   {
                     type: "input",
-                    label: "Digite aqui o nome da nova categoria",
+                    placeholder: "Digite aqui o nome da nova categoria",
                     field: "name",
                     value: form.name,
+                    gridSizes: { big: 12 },
                   },
                 ],
               },

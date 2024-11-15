@@ -46,6 +46,7 @@ export const Label = styled.span`
 export const SelectedInfo = styled.span`
   font-size: 14px;
   font-weight: 300;
+  font-weight: 600;
 `
 
 export const OptionsArea = styled.div<{ $reverse: boolean }>`

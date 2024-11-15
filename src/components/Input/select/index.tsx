@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import * as C from "../styled"
 import * as S from "./styles"
 import { Icons } from "../../../assets/icons/icons"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 export type TInputSelect = {
   label?: string
@@ -10,6 +11,7 @@ export type TInputSelect = {
   options: TOption[]
   value: string | null
   disabled?: boolean
+  byKey?: boolean
 }
 
 export type TOption = {
@@ -19,6 +21,7 @@ export type TOption = {
 
 type Props = TInputSelect & {
   onChange: (field: string, v: any) => void
+  gridSizes?: FormField["gridSizes"]
 }
 
 const SelectDefault = ({
@@ -29,6 +32,8 @@ const SelectDefault = ({
   options,
   disabled,
   onChange,
+  gridSizes,
+  byKey,
 }: Props) => {
   // use ref ...
 
@@ -53,7 +58,7 @@ const SelectDefault = ({
   }, [options, value, selected, options.length])
 
   return (
-    <C.Wrapper>
+    <C.Wrapper $gridSizes={gridSizes}>
       <C.Area>
         <S.SelectArea>
           {label && <S.Label>{label}</S.Label>}
@@ -65,7 +70,9 @@ const SelectDefault = ({
             <S.Left>
               <S.SelectedInfo>
                 {selected && selected.value
-                  ? selected?.value
+                  ? byKey
+                    ? selected.key
+                    : selected?.value
                   : `${placeholder ?? label}`}
               </S.SelectedInfo>
             </S.Left>

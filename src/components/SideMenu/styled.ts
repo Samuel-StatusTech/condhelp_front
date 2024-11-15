@@ -15,10 +15,13 @@ export const Wrapper = styled.aside<{ $opened: boolean }>`
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     position: fixed;
     z-index: 10;
+    top: 16px;
     height: calc(100vh + 30px);
-    min-height: 100vh;
-    margin: -20px;
+    min-height: calc(100svh - 40px);
+    padding: 20px;
     margin-left: ${({ $opened }) => ($opened ? 0 : -264)}px;
+    background-color: ${({ theme }) => theme.colors.neutral.white};
+    border-radius: 8px;
   }
 `
 
@@ -40,6 +43,9 @@ export const MenuArea = styled.div`
       theme.animations.types.fade +
       theme.animations.durations.slow +
       theme.animations.delays.main(6)}
+  }
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    padding: 0;
   }
 `
 
