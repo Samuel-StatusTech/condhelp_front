@@ -6,6 +6,7 @@ import { TBreadCrumFrom } from "../.."
 import { Icons } from "../../../../assets/icons/icons"
 import Button from "../../../Button"
 import { useNavigate } from "react-router-dom"
+import { breadcrumbs } from "../../../../utils/system/breadcrumbs"
 
 type Props = {
   from: TBreadCrumFrom
@@ -21,34 +22,7 @@ const BreadcrumbPageHeader = ({ from, forForm }: Props) => {
   }
 
   const getPaths = () => {
-    let pts: PPath[] = []
-
-    switch (from) {
-      case "users":
-        pts = [
-          { title: "Pessoas", to: "/dashboard/users" },
-          { title: "Detalhes", to: "/dashboard/users/single" },
-        ]
-        break
-      case "categories":
-        pts = [
-          { title: "Categorias", to: "/dashboard/categories" },
-          {
-            title: "Detalhes da categoria",
-            to: "/dashboard/categories/single",
-          },
-        ]
-        break
-      case "condos":
-        pts = [
-          { title: "Condomínios", to: "/dashboard/condos" },
-          { title: "Detalhes", to: "/dashboard/condos/single" },
-        ]
-        break
-
-      default:
-        break
-    }
+    let pts: PPath[] = breadcrumbs[from]
 
     return pts
   }

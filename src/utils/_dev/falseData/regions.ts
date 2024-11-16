@@ -9,29 +9,24 @@ export const FDregions: TRegion[] = [
     cities: [
       {
         id: "1",
-        acronym: "Flo",
         name: "Florianópolis",
       },
       {
         id: "2",
-        acronym: "Sjs",
         name: "São José",
       },
       {
         id: "3",
-        acronym: "Big",
         name: "Biguaçu",
       },
       {
         id: "4",
-        acronym: "Tij",
         name: "Tijuquinhas",
       },
       {
         id: "5",
-        acronym: "Sam",
         name: "Santo Amaro",
       },
-    ]
+    ],
   },
 ]

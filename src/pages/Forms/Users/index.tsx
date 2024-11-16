@@ -6,7 +6,6 @@ import Form from "../../../components/Form"
 import { useNavigate } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 import Divider from "../../../components/_minimals/Divider"
-import { List } from "../../../components/List"
 
 const FPpeople = () => {
   const navigate = useNavigate()

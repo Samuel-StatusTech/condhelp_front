@@ -11,15 +11,16 @@ export const Block = styled.div<{ $k: number }>`
   align-items: center;
   gap: 6px;
 
-  a {
+  a,
+  span {
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
     color: ${({ theme }) => theme.colors.neutral.dark};
+  }
 
-    &:hover {
-      text-decoration: underline;
-    }
+  a:hover {
+    text-decoration: underline;
   }
 
   div {

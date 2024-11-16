@@ -5,7 +5,7 @@ import { ReactComponent as Divider } from "../../assets/icons/dropdown.svg"
 
 export type PPath = {
   title: string
-  to: string
+  to?: string
   action?: () => void
 }
 
@@ -21,7 +21,7 @@ const BreadCrumb = ({ paths }: Props) => {
     path: PPath
   ) => {
     e.preventDefault()
-    path.action ? path.action() : navigate(path.to)
+    path.action ? path.action() : path.to && navigate(path.to)
   }
 
   const renderLinks = () => {
@@ -36,6 +36,8 @@ const BreadCrumb = ({ paths }: Props) => {
             {path.title}
           </Link>
         )
+      else block.push(<span key={k}>{path.title}</span>)
+
       if (k < paths.length - 1)
         block.push(
           <div>

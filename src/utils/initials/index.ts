@@ -3,6 +3,7 @@ import { personForm } from "./forms/person"
 import { categoryForm } from "./forms/category"
 import { subcategoryForm } from "./forms/subcategory"
 import { condoForm } from "./forms/condo"
+import { regionForm } from "./forms/region"
 
 // Modal
 
@@ -17,6 +18,7 @@ const initials = {
     category: categoryForm,
     subcategory: subcategoryForm,
     condo: condoForm,
+    region: regionForm,
   },
   modals: {
     goalFill: goalFill,

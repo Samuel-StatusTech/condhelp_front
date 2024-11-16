@@ -22,6 +22,7 @@ import FaqsPage from "../pages/Faqs"
 import FPcategory from "../pages/Forms/Category"
 import FPsubcategory from "../pages/Forms/SubCategory"
 import FPcondo from "../pages/Forms/Condo"
+import FPregion from "../pages/Forms/Region"
 
 const Router = () => {
   return (
@@ -52,7 +53,8 @@ const Router = () => {
             </Route>
             <Route path="regions">
               <Route path="" element={<RegionsPage />} />
-              {/* <Route path="single" element={<PersonPage />} /> */}
+              <Route path="single" element={<FPregion />} />
+              <Route path="single/:id" element={<FPregion />} />
             </Route>
             <Route path="errands">
               <Route path="" element={<ErrandsPage />} />

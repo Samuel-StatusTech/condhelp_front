@@ -18,6 +18,7 @@
     "@types/react-dom": "^18.3.0",
     "apexcharts": "^3.49.2",
     "axios": "^1.7.2",
+    "csvtojson": "^2.0.10",
     "dayjs": "^1.11.12",
     "google-api-javascript-client": "^0.1.0",
     "googleapis": "^142.0.0",
@@ -56,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@types/csvtojson": "^2.0.3",
     "@types/gapi": "^0.0.47"
   }
 }

@@ -1,3 +1,10 @@
+export type TNewRegion = {
+  name: string
+  country: string
+  state: string
+  cities: TCity[]
+}
+
 export type TRegion = {
   id: string
   name: string
@@ -8,6 +15,5 @@ export type TRegion = {
 
 type TCity = {
   id: string
-  acronym: string
   name: string
 }
