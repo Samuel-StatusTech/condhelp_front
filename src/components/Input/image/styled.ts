@@ -1,26 +1,33 @@
 import styled from "styled-components"
 
-export const Box = styled.div<{ $hasContent: boolean }>`
-  background-color: ${({ $hasContent, theme }) =>
-    $hasContent ? "transparent" : theme.colors.neutral.medium};
-  width: 100%;
-  height: 100px;
+export const Box = styled.div<{
+  $height: number
+}>`
+  min-width: 100%;
+  height: fit-content;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
   position: relative;
-  cursor: pointer;
 `
 
-export const ImageWrapper = styled.div`
+export const ImageWrapper = styled.div<{
+  $hasContent: boolean
+  $height: number
+}>`
+  background-color: ${({ $hasContent, theme }) =>
+    $hasContent ? "transparent" : theme.colors.neutral.medium};
   width: 100%;
-  height: 100%;
+  height: ${({ $height }) => $height}px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
+  border-radius: 4px;
+  overflow: hidden;
 `
 
 export const Image = styled.img`

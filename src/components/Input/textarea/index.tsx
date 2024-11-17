@@ -1,3 +1,5 @@
+import { FormField } from "../../../utils/@types/components/FormFields"
+import * as C from "../styled"
 import * as S from "./styled"
 
 export type TInputTextArea = {
@@ -5,32 +7,42 @@ export type TInputTextArea = {
   field: string
   value: string
   placeholder?: string
+  limit?: number
 }
 
 type Props = TInputTextArea & {
   onChange: (field: any, v: any) => void
+  gridSizes?: FormField["gridSizes"]
 }
 
 const InputTextArea = (props: Props) => {
-  const { label, field, value, placeholder, onChange } = props
+  const { limit, gridSizes, label, field, value, placeholder, onChange } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.currentTarget.style.height = `auto`
     e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`
-    onChange(field, e.target.value)
+
+    const v = limit ? e.target.value.slice(0, limit) : e.target.value
+    onChange(field, v)
   }
 
   return (
-    <S.Wrapper>
+    <C.Wrapper $gridSizes={gridSizes}>
       <S.Area>
-        <S.Label>{label}</S.Label>
+        {label && <S.Label>{label}</S.Label>}
         <S.Textarea
-          placeholder={placeholder ?? label}
+          placeholder={placeholder}
           value={value}
           onChange={handleChange}
         />
+
+        {limit && (
+          <C.Limit
+            $filled={value.length === limit}
+          >{`${value.length}/${limit}`}</C.Limit>
+        )}
       </S.Area>
-    </S.Wrapper>
+    </C.Wrapper>
   )
 }
 

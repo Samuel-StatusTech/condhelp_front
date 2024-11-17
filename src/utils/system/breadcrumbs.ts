@@ -10,22 +10,27 @@ export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
     { title: "Categorias", to: "/dashboard/categories" },
     {
       title: "Detalhes da categoria",
-      to: "/dashboard/categories/single",
     },
   ],
   condos: [
     { title: "Condomínios", to: "/dashboard/condos" },
-    { title: "Detalhes", to: "/dashboard/condos/single" },
+    { title: "Detalhes" },
   ],
-  errands: [],
-  faqs: [],
+  errands: [
+    { title: "Recados", to: "/dashboard/errands" },
+    { title: "Detalhes do recado" },
+  ],
+  faqs: [
+    { title: "Gerenciar FAQ's", to: "/dashboard/regions" },
+    { title: "Detalhes do FAQ" },
+  ],
   regions: [
     { title: "Regiões", to: "/dashboard/regions" },
     { title: "Detalhes da região" },
   ],
-  subcategories: [],
-  users: [
-    { title: "Pessoas", to: "/dashboard/users" },
-    { title: "Detalhes", to: "/dashboard/users/single" },
+  subcategories: [
+    { title: "Subcategorias", to: "/dashboard/subcategories" },
+    { title: "Detalhes da subcategoria" },
   ],
+  users: [{ title: "Pessoas", to: "/dashboard/users" }, { title: "Detalhes" }],
 }

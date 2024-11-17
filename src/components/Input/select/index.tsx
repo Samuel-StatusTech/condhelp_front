@@ -22,6 +22,7 @@ export type TOption = {
 type Props = TInputSelect & {
   onChange: (field: string, v: any) => void
   gridSizes?: FormField["gridSizes"]
+  alignBottom?: boolean
 }
 
 const SelectDefault = ({
@@ -34,6 +35,7 @@ const SelectDefault = ({
   onChange,
   gridSizes,
   byKey,
+  alignBottom
 }: Props) => {
   // use ref ...
 
@@ -58,7 +60,7 @@ const SelectDefault = ({
   }, [options, value, selected, options.length])
 
   return (
-    <C.Wrapper $gridSizes={gridSizes}>
+    <C.Wrapper $gridSizes={gridSizes} $alignBottom={alignBottom}>
       <C.Area>
         <S.SelectArea>
           {label && <S.Label>{label}</S.Label>}

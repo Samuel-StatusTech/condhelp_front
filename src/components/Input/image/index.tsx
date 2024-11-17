@@ -3,21 +3,25 @@ import * as S from "./styled"
 
 import { Icons } from "../../../assets/icons/icons"
 import { useRef } from "react"
+import Button from "../../Button"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
-export type TInputImageProfile = {
-  label: string
+export type TInputImage = {
+  height?: number
+  label?: string
   field: string
   value: string | File | null
 }
 
-type Props = TInputImageProfile & {
+type Props = TInputImage & {
   onChange: (field: any, v: any) => void
+  gridSizes?: FormField["gridSizes"]
 }
 
 const InputImage = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { label, field, value, onChange } = props
+  const { height, label, field, value, onChange } = props
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -43,28 +47,25 @@ const InputImage = (props: Props) => {
   }
 
   return (
-    <C.Wrapper>
+    <C.Wrapper $gridSizes={props.gridSizes}>
       <C.Area>
-        <C.Label>{label}</C.Label>
-        <S.Box $hasContent={!!value}>
-          {value ? (
-            <S.ImageWrapper>
+        {label && <C.Label>{label}</C.Label>}
+        <S.Box $height={height ?? 140}>
+          <S.ImageWrapper $hasContent={!!value} $height={height ?? 140}>
+            {value ? (
               <S.Image src={getImageUrl()} alt="" />
-              <S.OptionsArea>
-                <S.Button onClick={handleClick}>
-                  <span>Trocar Imagem</span>
-                </S.Button>
-                <S.Button onClick={handleRemove}>
-                  <span>Remover Imagem</span>
-                </S.Button>
-              </S.OptionsArea>
-            </S.ImageWrapper>
-          ) : (
-            <S.Button onClick={handleClick}>
-              <Icons.Upload />
-              <span>Enviar imagem</span>
-            </S.Button>
-          )}
+            ) : (
+              <span>Nenhuma imagem selecionada</span>
+            )}
+          </S.ImageWrapper>
+          <Button
+            type="quaternary"
+            text={`${value ? "Remover" : "Adicionar"} imagem`}
+            fit={true}
+            icon={value ? <Icons.Trash /> : <Icons.PlusCircle />}
+            iconLeft={true}
+            action={value ? handleRemove : handleClick}
+          />
         </S.Box>
         <input
           type="file"

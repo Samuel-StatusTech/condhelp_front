@@ -26,4 +26,5 @@ export const Textarea = styled.textarea`
   border: none;
   outline: none;
   resize: vertical;
+  border-radius: 4px;
 `
