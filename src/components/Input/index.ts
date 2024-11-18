@@ -1,6 +1,7 @@
 import Date from "./date"
 import Default from "./default"
 import Image from "./image"
+import Multiple from "./multiple"
 import Points from "./points"
 import Profile from "./profile"
 import Select from "./select"
@@ -13,6 +14,7 @@ const Input = {
   Date,
   Default,
   Image,
+  Multiple,
   Points,
   Profile,
   Select,

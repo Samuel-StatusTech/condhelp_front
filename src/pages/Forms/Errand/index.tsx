@@ -95,11 +95,6 @@ const FPerrand = () => {
     loadData()
   }, [loadData])
 
-  useEffect(() => {
-    // ...
-    console.log(form)
-  }, [form])
-
   return (
     <C.Content>
       <PageHeader type={"breadcrumb"} from={"errands"} forForm={true} />

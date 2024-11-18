@@ -24,6 +24,13 @@ export const DataArea = styled.div<{ $disabled?: boolean }>`
     transition: transform 0.3s;
     fill: ${({ theme }) => theme.colors.neutral.dark};
     transform: rotate(0deg);
+    width: 18px;
+    height: 18px;
+
+    path {
+      fill: ${({ theme }) => theme.colors.neutral.dark};
+      stroke: ${({ theme }) => theme.colors.neutral.dark};
+    }
   }
 
   &.turnedIcon svg {

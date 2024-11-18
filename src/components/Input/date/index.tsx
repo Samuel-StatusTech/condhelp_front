@@ -4,6 +4,7 @@ import * as S from "./styles"
 import { Icons } from "../../../assets/icons/icons"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 export type TInputDate = {
   label: string
@@ -14,9 +15,17 @@ export type TInputDate = {
 
 type Props = TInputDate & {
   onChange: (field: any, v: any) => void
+  gridSizes?: FormField["gridSizes"]
 }
 
-const InputDate = ({ label, value, field, disabled, onChange }: Props) => {
+const InputDate = ({
+  gridSizes,
+  label,
+  value,
+  field,
+  disabled,
+  onChange,
+}: Props) => {
   const pickerRef = useRef<any>(null)
 
   const toggleCalendar = () => {
@@ -45,7 +54,7 @@ const InputDate = ({ label, value, field, disabled, onChange }: Props) => {
     <>
       {/* Calendar */}
 
-      <C.Wrapper>
+      <C.Wrapper $gridSizes={gridSizes}>
         <S.DatePickerWrapper>
           <DatePicker
             ref={pickerRef}
@@ -65,7 +74,7 @@ const InputDate = ({ label, value, field, disabled, onChange }: Props) => {
               <S.Left>
                 <S.SelectedInfo>{renderDate() ?? "DD/MM/AAAA"}</S.SelectedInfo>
               </S.Left>
-              <Icons.Calendar width={16} height={16} />
+              <Icons.Calendar />
             </S.DataArea>
           </S.SelectArea>
         </C.Area>

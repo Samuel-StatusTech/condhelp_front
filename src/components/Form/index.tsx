@@ -21,10 +21,12 @@ const getElement = (
       return <Input.Image {...field} onChange={handleField} key={key} />
     case "input":
       return <Input.Default {...field} onChange={handleField} key={key} />
+    case "multiple":
+      return <Input.Multiple {...field} onChange={handleField} key={key} />
     case "points":
       return <Input.Points {...field} onChange={handleField} key={key} />
-    case "profile":
-      return <Input.Profile {...field} onChange={handleField} key={key} />
+    // case "profile":
+    //   return <Input.Profile {...field} onChange={handleField} key={key} />
     case "select":
       return <Input.Select {...field} onChange={handleField} key={key} />
     case "textarea":

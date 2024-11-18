@@ -12,7 +12,8 @@ export const faqTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    profile: (item: TFaq) => relations.roles[item.profile],
+    profile: (item: TFaq) =>
+      `${item.profile.map((i) => relations.roles[i]).join(", ")}`,
     size: (item: TFaq) => item.questions.length,
     actions: (item: TFaq, { callbacks }) => (
       <TableActions

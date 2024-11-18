@@ -4,7 +4,7 @@ export const FDfaqs: TFaq[] = [
   {
     id: "1",
     title: "Primeira pergunta frequente",
-    profile: "manager",
+    profile: ["manager"],
     questions: [
       {
         id: 1,

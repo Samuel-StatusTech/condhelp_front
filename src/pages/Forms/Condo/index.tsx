@@ -16,6 +16,7 @@ import {
 } from "../../../utils/@types/data/condominium"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import { systemOptions } from "../../../utils/system/options"
+import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -41,7 +42,21 @@ const FPcondo = () => {
   }
 
   const handleField = async (field: string, value: any) => {
-    if (Object.keys(form.address).includes(field))
+    if (field === "managerId") {
+      // find manager..
+      const m = fdata.people.filter(
+        (p) => p.profile === "manager" && p.id === value
+      )
+
+      if (m) setForm((f) => ({ ...f, manager: { ...f.manager, id: value } }))
+      else
+        setForm((f) => ({
+          ...f,
+          manager: { ...f.manager, since: f.manager.since },
+        }))
+    } else if (field === "since")
+      setForm((f: any) => ({ ...f, manager: { ...f.manager, since: value } }))
+    else if (Object.keys(form.address).includes(field))
       setForm((f: any) => ({ ...f, address: { ...f.address, [field]: value } }))
     else setForm((f: any) => ({ ...f, [field]: value }))
   }
@@ -53,6 +68,11 @@ const FPcondo = () => {
       setTimeout(() => {
         setOptions((opts) => ({
           ...opts,
+          managers: parseOptionList(
+            fdata.people.filter((p) => p.profile === "manager"),
+            "id",
+            "name"
+          ),
           state: systemOptions.states,
         }))
 
@@ -60,11 +80,7 @@ const FPcondo = () => {
           const info = fdata.condos.find((i) => i.id === params.id)
 
           if (info) {
-            setForm({
-              ...info,
-              managerId: info.manager.id,
-              managerElection: info.manager.since,
-            })
+            setForm(info)
           } else {
             throw new Error()
           }
@@ -130,8 +146,14 @@ const FPcondo = () => {
                     value: formatCNPJ(form.cnpj),
                     gridSizes: {
                       big: 12,
-                      // small: 20
                     },
+                  },
+                  {
+                    type: "image",
+                    field: "image",
+                    value: form.image,
+                    gridSizes: { big: 12 },
+                    height: 140,
                   },
                 ],
               },
@@ -194,6 +216,23 @@ const FPcondo = () => {
                       gridSizes: { big: 2, small: 6 },
                       options: options.state,
                       byKey: true,
+                    },
+                  ],
+                  [
+                    {
+                      type: "select",
+                      label: "Síndico",
+                      field: "managerId",
+                      value: form.manager.id,
+                      gridSizes: { big: 9, small: 6 },
+                      options: options.managers,
+                    },
+                    {
+                      type: "date",
+                      label: "Data da eleição",
+                      field: "since",
+                      value: form.manager.since,
+                      gridSizes: { big: 3, small: 6 },
                     },
                   ],
                 ],

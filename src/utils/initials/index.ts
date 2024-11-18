@@ -5,6 +5,7 @@ import { subcategoryForm } from "./forms/subcategory"
 import { condoForm } from "./forms/condo"
 import { regionForm } from "./forms/region"
 import { errandForm } from "./forms/errand"
+import { faqForm } from "./forms/faq"
 
 // Modal
 
@@ -21,6 +22,7 @@ const initials = {
     condo: condoForm,
     region: regionForm,
     errand: errandForm,
+    faq: faqForm,
   },
   modals: {
     goalFill: goalFill,

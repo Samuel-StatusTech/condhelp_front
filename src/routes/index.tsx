@@ -24,6 +24,7 @@ import FPsubcategory from "../pages/Forms/SubCategory"
 import FPcondo from "../pages/Forms/Condo"
 import FPregion from "../pages/Forms/Region"
 import FPerrand from "../pages/Forms/Errand"
+import FPfaq from "../pages/Forms/Faq"
 
 const Router = () => {
   return (
@@ -64,7 +65,8 @@ const Router = () => {
             </Route>
             <Route path="managefaq">
               <Route path="" element={<FaqsPage />} />
-              {/* <Route path="single" element={<PersonPage />} /> */}
+              <Route path="single" element={<FPfaq />} />
+              <Route path="single/:id" element={<FPfaq />} />
             </Route>
           </Route>
         </Route>

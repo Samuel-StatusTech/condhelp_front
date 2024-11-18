@@ -15,7 +15,6 @@ function App() {
         }, 500)
       }, 4000)
     }
-    console.log(feedback)
   }, [feedback, controllers.feedback])
 
   return (

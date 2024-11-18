@@ -8,8 +8,10 @@ export type TNewCondominium = {
   image: null | string
 
   address: TCondominiumAddress
-  managerId: string
-  managerElection: string
+  manager: {
+    id: string
+    since: string
+  }
 
   electionFile: null | any
 }
