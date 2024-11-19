@@ -21,14 +21,18 @@ const getElement = (
       return <Input.Image {...field} onChange={handleField} key={key} />
     case "input":
       return <Input.Default {...field} onChange={handleField} key={key} />
+    case "logo":
+      return <Input.Logo {...field} onChange={handleField} key={key} />
     case "multiple":
       return <Input.Multiple {...field} onChange={handleField} key={key} />
     case "points":
       return <Input.Points {...field} onChange={handleField} key={key} />
-    // case "profile":
-    //   return <Input.Profile {...field} onChange={handleField} key={key} />
+    case "profile":
+      return <Input.Profile {...field} onChange={handleField} key={key} />
     case "select":
       return <Input.Select {...field} onChange={handleField} key={key} />
+    case "radio":
+      return <Input.Radio {...field} onChange={handleField} key={key} />
     case "textarea":
       return <Input.TextArea {...field} onChange={handleField} key={key} />
     case "toggler":
@@ -53,6 +57,7 @@ const Form = ({ handleField, blocks }: Props) => {
             {block.groups.map((group, gKey) => (
               <>
                 <Divider />
+                <S.BlockTitle>{group.title}</S.BlockTitle>
                 <S.GroupArea key={gKey}>
                   <S.FormArea>
                     {group.type === "custom"

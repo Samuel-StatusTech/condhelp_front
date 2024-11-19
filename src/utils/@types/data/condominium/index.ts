@@ -1,5 +1,5 @@
 import { TCondominiumAddress } from "../address"
-import { TUser } from "../user"
+import { TUserTypes } from "../user"
 
 export type TNewCondominium = {
   name: string
@@ -24,9 +24,7 @@ export type TCondominium = {
   image: null | string
 
   address: TCondominiumAddress
-  manager: TUser & {
-    since: string
-  }
+  manager: TUserTypes["manager"]
 
   electionFile: null | any
 }

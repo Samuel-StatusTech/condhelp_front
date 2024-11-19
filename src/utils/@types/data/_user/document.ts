@@ -2,11 +2,11 @@ export type TDocument = {
   cpf: {
     type: "cpf"
     register: string
-    birthdate: string
+    date: string
   }
   cnpj: {
     type: "cnpj"
     register: string
-    opening: string
+    date: string
   }
 }

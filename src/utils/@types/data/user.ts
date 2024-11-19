@@ -1,12 +1,148 @@
-export type TUser = {
-  id: string
-  status: TUserStatus
-  profile: TUserProfile
+import { TDocument } from "./_user/document"
+import { TAddress } from "./address"
+import { TCondominium } from "./condominium"
+import { TExperience } from "./managerExperience"
 
+type TUDefault = {
+  id: string
+  active: boolean
+  image: null | string
+}
+
+export type TNewUserDefault = {
+  active: boolean
+  image: null | string
+}
+
+export type TUserTypes = {
+  admin: TUDefault & TUAdmin
+  branch: TUDefault & TUBranch
+  franchise: TUDefault & TUFranchise
+  manager: TUDefault & TUManager
+  provider: TUDefault & TUProvider
+}
+
+/*
+ *  Type definition
+ */
+
+export type TUser = TUDefault &
+  (TUAdmin | TUBranch | TUFranchise | TUProvider | TUManager)
+
+export type TNewUser = {
+  active: boolean
+  image: null | string
+} & (TUAdmin | TUBranch | TUFranchise | TUProvider | TUManager)
+
+export type TUAdmin = {
+  profile: "admin"
+  active: boolean
   name: string
   surname: string
   email: string
-  image: null | string
+
+  // Profile info
+  document: TDocument["cpf"] | TDocument["cnpj"]
+}
+
+export type TUBranch = {
+  profile: "branch"
+  name: string
+  address: TAddress
+  phone1: string
+  phone2: string
+  email: string
+
+  // Responsable
+  responsable: TResponsableTypes["cpf"] | TResponsableTypes["cnpj"]
+}
+
+type TResponsableTypes = {
+  cpf: {
+    type: "cpf"
+    name: string
+    register: string
+  }
+  cnpj: {
+    type: "cnpj"
+    name: string
+    fantasyName: string
+    register: string
+    inscriptionState: string
+    inscriptionCity: string
+  }
+}
+
+export type TUFranchise = {
+  profile: "franchise"
+  name: string
+}
+
+export type TUProvider = {
+  profile: "provider"
+  name: string
+  franchises: string[]
+  fantasyName: string
+  address: TAddress
+
+  responsable: string
+  website: string
+  email: string
+  phone1: string
+  phone2: string
+  phone3: string
+
+  // Comercial info
+  socialRole: string
+  document: TDocument["cnpj"]
+  cnpjCard: any
+
+  // Documentation
+  federalCnd: string
+  federalCndStart: string
+  federalCndEnd: string
+  federalCndFree: boolean
+
+  stateCnd: string
+  stateCndStart: string
+  stateCndEnd: string
+  stateCndFree: boolean
+
+  cityCnd: string
+  cityCndStart: string
+  cityCndEnd: string
+  cityCndFree: boolean
+
+  fgtsCnd: string
+  fgtsCndStart: string
+  fgtsCndEnd: string
+  fgtsCndFree: boolean
+
+  pendencies: {
+    federalCnd: TPendency
+    stateCnd: TPendency
+    cityCnd: TPendency
+    fgts: TPendency
+  }
+}
+
+type TPendency = "none" | "free" | "has"
+
+export type TUManager = {
+  profile: "manager"
+  active: boolean
+  name: string
+  surname: string
+  email: string
+
+  // Profile info
+  phone1: string
+  phone2: string
+  document: TDocument["cpf"] | TDocument["cnpj"]
+  since: string
+  experience: TExperience
+
+  condos: TCondominium[]
 }
 
 export type TUserStatus = "active" | "disabled" | "awaiting"

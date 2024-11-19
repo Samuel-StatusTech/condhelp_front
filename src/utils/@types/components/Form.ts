@@ -19,9 +19,11 @@ type TGroup =
   | {
       type: "custom"
       element: JSX.Element
+      title?: string
     }
   | {
       type: "fields"
+      title?: string
       fields: TContent[]
       hasFieldControl?: boolean
     }

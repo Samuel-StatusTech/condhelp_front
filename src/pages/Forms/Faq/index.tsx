@@ -103,7 +103,7 @@ const FPfaq = () => {
   }, [loadData])
 
   return (
-    <C.Content>
+    <C.Content className="falseSubContentWrapper">
       <PageHeader type={"breadcrumb"} from={"faqs"} forForm={true} />
 
       <Form

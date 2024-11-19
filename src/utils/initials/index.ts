@@ -12,6 +12,7 @@ import { faqForm } from "./forms/faq"
 import { goalFill } from "./modals/goalFill"
 import { goalApprove } from "./modals/goalApprove"
 import { goalPoints } from "./modals/goalPoints"
+import { newBudget } from "./modals/newBudget"
 
 const initials = {
   forms: {
@@ -28,6 +29,7 @@ const initials = {
     goalFill: goalFill,
     goalApprove: goalApprove,
     goalPoints: goalPoints,
+    newBudget: newBudget,
   },
 }
 

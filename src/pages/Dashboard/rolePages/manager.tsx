@@ -17,9 +17,12 @@ import { TFilter } from "../../../utils/@types/components/SearchBlock"
 import Input from "../../../components/Input"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../../components/Input/points"
+import { TUserTypes } from "../../../utils/@types/data/user"
 
 const DashboardManager = () => {
-  const { user } = getStore()
+  const { user } = getStore((store) => ({
+    user: store.user as TUserTypes["manager"],
+  }))
 
   /*
    *  Search control

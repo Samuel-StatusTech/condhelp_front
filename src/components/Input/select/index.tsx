@@ -12,6 +12,7 @@ export type TInputSelect = {
   value: string | null
   disabled?: boolean
   byKey?: boolean
+  elevation?: number
 }
 
 export type TOption = {
@@ -26,6 +27,7 @@ type Props = TInputSelect & {
 }
 
 const SelectDefault = ({
+  elevation,
   label,
   placeholder,
   value,
@@ -35,7 +37,7 @@ const SelectDefault = ({
   onChange,
   gridSizes,
   byKey,
-  alignBottom
+  alignBottom,
 }: Props) => {
   // use ref ...
 
@@ -80,7 +82,11 @@ const SelectDefault = ({
             </S.Left>
             <Icons.Dropdown width={16} height={16} />
           </S.DataArea>
-          <S.OptionsArea className={showing ? "visible" : ""} $reverse={false}>
+          <S.OptionsArea
+            className={showing ? "visible" : ""}
+            $reverse={false}
+            $elevation={elevation}
+          >
             {options.map((o, k) => (
               <S.Option key={k} onClick={() => handlePick(o)}>
                 <span>{o.value}</span>

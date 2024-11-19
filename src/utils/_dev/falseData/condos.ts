@@ -1,4 +1,10 @@
+import { FDpeople } from "./people"
 import { TCondominium } from "../../@types/data/condominium"
+import { TUserTypes } from "../../@types/data/user"
+
+const managers = FDpeople.filter(
+  (i) => i.profile === "manager"
+) as TUserTypes["manager"][]
 
 export const FDcondos: TCondominium[] = [
   {
@@ -15,16 +21,7 @@ export const FDcondos: TCondominium[] = [
       city: "Florianópolis",
       state: "SC",
     },
-    manager: {
-      id: "9",
-      email: "sindico@legal.com",
-      image: null,
-      name: "Síndico",
-      profile: "manager",
-      since: "'2024-01-15T03:00:00.000Z'",
-      status: "active",
-      surname: "Legal",
-    },
+    manager: managers[0],
     electionFile: undefined,
   },
   {
@@ -41,16 +38,7 @@ export const FDcondos: TCondominium[] = [
       city: "Florianópolis",
       state: "SC",
     },
-    manager: {
-      id: "9",
-      email: "sindico@legal.com",
-      image: null,
-      name: "Síndico",
-      profile: "manager",
-      since: "'2024-01-15T03:00:00.000Z'",
-      status: "active",
-      surname: "Legal",
-    },
+    manager: managers[0],
     electionFile: undefined,
   },
 ]

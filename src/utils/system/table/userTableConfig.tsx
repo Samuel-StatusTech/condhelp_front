@@ -18,9 +18,11 @@ export const userTableConfig: TConfig = {
     image: (item: TUser, props) => (
       <UserImageItem userImage={item.image} size={props.data?.size as number} />
     ),
-    name: (item: TUser) => item.name + " " + item.surname,
+    name: (item: TUser) =>
+      item.profile === "admin" ? item.name + " " + item.surname : item.name,
     profile: (item: TUser) => relations.roles[item.profile],
-    status: (item: TUser) => relations.status[item.status],
+    status: (item: TUser) =>
+      relations.status[item.active ? "active" : "disabled"],
     actions: (item: TUser, { callbacks }) => (
       <TableActions
         id={item.id}

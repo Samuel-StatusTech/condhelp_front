@@ -5,6 +5,7 @@ import {
   budgetsStatusOptions,
 } from "./status"
 import { statesOptions as states } from "./states"
+import { managerTimeOptions } from "./managerTime"
 
 export const systemOptions = {
   profiles,
@@ -12,4 +13,5 @@ export const systemOptions = {
   userStatus: userStatusOptions,
   errandStatus: errandStatusOptions,
   budgetsStatus: budgetsStatusOptions,
+  managerTime: managerTimeOptions,
 }

@@ -1,12 +1,14 @@
+import CondoSelect from "./condosSelect"
 import Date from "./date"
 import Default from "./default"
 import Image from "./image"
+import Logo from "./logo"
 import Multiple from "./multiple"
 import Points from "./points"
 import Profile from "./profile"
-import Select from "./select"
-import CondoSelect from "./condosSelect"
+import Radio from "./radio"
 import SearchSelect from "./searchSelect"
+import Select from "./select"
 import TextArea from "./textarea"
 import Toggler from "./toggler"
 
@@ -14,9 +16,11 @@ const Input = {
   Date,
   Default,
   Image,
+  Logo,
   Multiple,
   Points,
   Profile,
+  Radio,
   Select,
   CondoSelect,
   SearchSelect,

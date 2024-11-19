@@ -8,7 +8,7 @@ type Props = {
   handleOp?: (op: string) => void
   children?: JSX.Element | JSX.Element[]
   role: TModals
-  data: any
+  data?: any
 }
 
 type TModals = "newBudget"

@@ -49,7 +49,10 @@ export const SelectedInfo = styled.span`
   font-weight: 600;
 `
 
-export const OptionsArea = styled.div<{ $reverse: boolean }>`
+export const OptionsArea = styled.div<{
+  $reverse: boolean
+  $elevation?: number
+}>`
   display: none;
   position: absolute;
   ${({ $reverse }) => ($reverse ? `bottom` : `top`)}: calc(100% + 4px);
@@ -60,7 +63,7 @@ export const OptionsArea = styled.div<{ $reverse: boolean }>`
   border-radius: 8px;
   max-height: 180px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: ${({ $elevation }) => $elevation ?? 2};
 
   &.visible {
     display: block;
@@ -74,7 +77,6 @@ export const Option = styled.div`
   font-size: 14px;
   font-weight: 300;
   cursor: pointer;
-  z-index: 2;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.yellow.light};

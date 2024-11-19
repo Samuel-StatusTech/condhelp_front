@@ -1,4 +1,3 @@
-import { memo } from "react"
 import * as S from "./styled"
 
 export type TInputToggler = {
@@ -31,4 +30,4 @@ const InputToggler = (props: Props) => {
   )
 }
 
-export default memo(InputToggler)
+export default InputToggler

@@ -3,7 +3,7 @@ import styled from "styled-components"
 export const Wrapper = styled.div<{ $hasTopSpace?: boolean }>`
   flex: 1;
   display: flex;
-  margin-top: ${({ $hasTopSpace }) => ($hasTopSpace ? "20px" : "unset")};
+  margin-top: ${({ $hasTopSpace }) => ($hasTopSpace ? "24px" : "unset")};
 `
 
 export const Area = styled.div`

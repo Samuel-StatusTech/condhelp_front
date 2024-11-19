@@ -6,27 +6,19 @@ import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 import Input from "../../../Input"
 import { useState } from "react"
 import initials from "../../../../utils/initials"
-import { Icons } from "../../../../assets/icons/icons"
+
 import Button from "../../../Button"
-import { Divider } from "@mui/material"
+import { TNewBudget } from "../../../../utils/@types/data/budget"
 
 type Props = {
-  data: {
-    id: string
-    title: string
-    points: number
-    concluded: string | boolean
-
-    user: any
-  }
+  data?: any
   onClose: () => void
   handleOp?: (op: string) => void
 }
 
 const NewBudget = ({ data, onClose, handleOp }: Props) => {
-  const [update, setUpdate] = useState({
-    ...data,
-    ...initials.modals.goalApprove,
+  const [form, setForm] = useState<TNewBudget>({
+    ...initials.modals.newBudget,
   })
 
   const handleClose = () => {
@@ -35,8 +27,8 @@ const NewBudget = ({ data, onClose, handleOp }: Props) => {
 
   const handleField = (field: string, value: boolean | string) => {
     if (field === "points") {
-      setUpdate((u) => ({ ...u, points: u.points + +value }))
-    } else setUpdate((u) => ({ ...u, [field]: value }))
+      // setForm((f) => ({ ...f, points: f.points + +value }))
+    } else setForm((f) => ({ ...f, [field]: value }))
   }
 
   return (
@@ -44,47 +36,22 @@ const NewBudget = ({ data, onClose, handleOp }: Props) => {
       <C.Header>
         <C.HeaderDefault>
           <C.HeaderMain>
-            <C.ModalTitle>{data.title}</C.ModalTitle>
+            <C.ModalTitle>Novo Orçamento</C.ModalTitle>
             <C.CloseBtn onClick={handleClose}>
               <CloseIcon />
             </C.CloseBtn>
           </C.HeaderMain>
-          <S.UserArea>
-            {data.user.profile ? (
-              <img src={data.user.profile} alt={""} />
-            ) : (
-              <Icons.Users />
-            )}
-            <S.UserNameArea>
-              <S.UserName>{data.user.name}</S.UserName>
-              <S.UserPoints>
-                {data.user.points} ponto{data.user.points > 0 ? "s" : ""}
-              </S.UserPoints>
-            </S.UserNameArea>
-          </S.UserArea>
         </C.HeaderDefault>
       </C.Header>
-      <Divider />
+
       <S.Content>
-        <span>{update.progress}</span>
-        <S.PointsArea>
-          <span>Defina a pontuação</span>
-          <S.PointsControl>
-            <S.PointsButton onClick={() => handleField("points", "-5")}>
-              <Icons.Minus />
-            </S.PointsButton>
-            <S.PointsNumber>{update.points}</S.PointsNumber>
-            <S.PointsButton onClick={() => handleField("points", "+5")}>
-              <Icons.Plus />
-            </S.PointsButton>
-          </S.PointsControl>
-        </S.PointsArea>
         <Input.Default
-          field="comment"
-          label="Informe o motivo da alteração na pontuação"
+          field={"title"}
           onChange={handleField}
-          value={update.comment}
-          placeholder="Motivo escrito aqui"
+          value={form.title}
+          gridSizes={{ big: 12 }}
+          label="Título"
+          placeholder="Digite aqui"
         />
         <S.Bottom>
           <Button type="main" text="Salvar alterações" action={onClose} />

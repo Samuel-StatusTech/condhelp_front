@@ -4,17 +4,17 @@ export const Box = styled.div<{ $hasContent: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 `
 
 export const ImageWrapper = styled.div`
   position: relative;
-  flex: 1;
+  width: fit-content;
 `
 
 export const ImageContent = styled.div`
-  width: 100%;
-  max-width: 120px;
-  height: 120px;
+  width: 75px;
+  height: 75px;
   border-radius: 120px;
   border: 2px solid #fff;
   display: flex;
@@ -22,6 +22,7 @@ export const ImageContent = styled.div`
   justify-content: center;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.neutral.medium};
+  cursor: pointer;
 `
 
 export const Image = styled.img`
@@ -33,7 +34,7 @@ export const Image = styled.img`
 
 export const ButtonsArea = styled.div`
   position: relative;
-  flex: 1;
+  width: fit-content;
   display: flex;
   align-items: center;
   gap: 10px;

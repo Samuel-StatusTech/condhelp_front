@@ -27,7 +27,7 @@ export const Block = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
   background-color: ${({ theme }) => theme.colors.neutral.soft};
   box-shadow: 0 0 4px 6px rgba(0, 0, 0, 0.03);
   padding: 20px;
@@ -55,7 +55,7 @@ export const GroupArea = styled.div`
 export const FormArea = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 16px;
   min-width: 100%;
   max-width: 520px;
 
@@ -71,6 +71,7 @@ export const FormLine = styled.div<{ $k: number; $length: number }>`
   align-items: center;
   max-width: 100%;
   z-index: ${({ $length, $k }) => ($length - $k > -1 ? $length - $k : 0)};
+  /* z-index: ${({ $length, $k }) => ($length - 1 - $k) * -1}; */
 
   opacity: 0;
   ${({ $k, theme }) =>

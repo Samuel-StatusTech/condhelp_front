@@ -3,25 +3,24 @@ import * as S from "./styled"
 
 import { Icons } from "../../../assets/icons/icons"
 import { useRef } from "react"
-import { FormField } from "../../../utils/@types/components/FormFields"
 import Button from "../../Button"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
-export type TInputProfile = {
+export type TInputLogo = {
   height?: number
-  label?: string
   field: string
   value: string | File | null
 }
 
-type Props = TInputProfile & {
+type Props = TInputLogo & {
   onChange: (field: any, v: any) => void
   gridSizes?: FormField["gridSizes"]
 }
 
-const InputProfile = (props: Props) => {
+const InputLogo = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { gridSizes, label, field, value, onChange } = props
+  const { height, field, value, onChange } = props
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -47,25 +46,24 @@ const InputProfile = (props: Props) => {
   }
 
   return (
-    <C.Wrapper $gridSizes={gridSizes}>
+    <C.Wrapper $gridSizes={props.gridSizes}>
       <C.Area>
-        <C.Label>{label}</C.Label>
-        <S.Box $hasContent={!!value}>
-          <S.ImageWrapper>
-            <S.ImageContent onClick={handleClick}>
-              {value && <S.Image src={getImageUrl()} alt="" />}
-            </S.ImageContent>
+        <S.Box $height={height ?? 140}>
+          <S.ImageWrapper $hasContent={!!value} $height={height ?? 140}>
+            {value ? (
+              <S.Image src={getImageUrl()} alt="" />
+            ) : (
+              <span>Nenhuma logo selecionada</span>
+            )}
           </S.ImageWrapper>
-
-          <S.ButtonsArea>
-            <Button
-              type="quaternary"
-              text="Remover foto"
-              iconLeft={true}
-              icon={<Icons.Trash />}
-              action={handleRemove}
-            />
-          </S.ButtonsArea>
+          <Button
+            type="quaternary"
+            text={`${value ? "Remover" : "Adicionar"} logo`}
+            fit={true}
+            icon={value ? <Icons.Trash /> : <Icons.PlusCircle />}
+            iconLeft={true}
+            action={value ? handleRemove : handleClick}
+          />
         </S.Box>
         <input
           type="file"
@@ -80,4 +78,4 @@ const InputProfile = (props: Props) => {
   )
 }
 
-export default InputProfile
+export default InputLogo

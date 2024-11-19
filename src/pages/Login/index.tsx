@@ -6,14 +6,13 @@ import initials from "../../utils/initials"
 import Button from "../../components/Button"
 import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
-import { TUser } from "../../utils/@types/data/user"
 
 const fixedAuth = {
   email: "email@email.com",
   pass: "123456",
 }
 
-const userAdminData: TUser = {
+const userAdminData: any = {
   id: "user-1",
   status: "active",
   profile: "admin",
@@ -23,7 +22,7 @@ const userAdminData: TUser = {
   image: null,
 }
 
-const userBranchData: TUser = {
+const userBranchData: any = {
   id: "user-1",
   status: "active",
   profile: "branch",
@@ -33,7 +32,7 @@ const userBranchData: TUser = {
   image: null,
 }
 
-const userFranchiseData: TUser = {
+const userFranchiseData: any = {
   id: "user-1",
   status: "active",
   profile: "franchise",
@@ -43,7 +42,7 @@ const userFranchiseData: TUser = {
   image: null,
 }
 
-const userManagerData: TUser = {
+const userManagerData: any = {
   id: "user-1",
   status: "active",
   profile: "manager",
@@ -53,7 +52,7 @@ const userManagerData: TUser = {
   image: null,
 }
 
-const userProviderData: TUser = {
+const userProviderData: any = {
   id: "user-1",
   status: "active",
   profile: "provider",

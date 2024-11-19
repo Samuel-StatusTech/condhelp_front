@@ -14,11 +14,12 @@ export const Wrapper = styled.div<{
   }
 `
 
-export const Area = styled.div`
+export const Area = styled.div<{ $elevation?: number }>`
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex: 1;
+  z-index: ${({ $elevation }) => $elevation ?? "unset"};
 `
 
 export const Label = styled.label`

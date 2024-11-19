@@ -51,7 +51,7 @@ export const CloseBtn = styled.button`
   cursor: pointer;
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
   }
 `
