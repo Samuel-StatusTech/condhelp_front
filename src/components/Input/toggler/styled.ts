@@ -1,9 +1,17 @@
 import styled from "styled-components"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
-export const Wrapper = styled.div<{ $hasTopSpace?: boolean }>`
-  flex: 1;
+export const Wrapper = styled.div<{
+  $hasTopSpace?: boolean
+  $gridSizes?: FormField["gridSizes"]
+}>`
+  grid-column: span ${({ $gridSizes }) => $gridSizes?.big ?? "unset"};
   display: flex;
   margin-top: ${({ $hasTopSpace }) => ($hasTopSpace ? "24px" : "unset")};
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    grid-column: span ${({ $gridSizes }) => $gridSizes?.small ?? "unset"};
+  }
 `
 
 export const Area = styled.div`

@@ -5,12 +5,16 @@ export type TForm = {
   handleCancel: (params?: any) => void
   handleSave: (form: any) => Promise<void>
   handleDelete?: () => Promise<void>
+  columns: TColumn[]
+}
+
+type TColumn = {
   blocks: TBlock[]
 }
 
 type TContent = FormField | FormField[]
 
-type TBlock = {
+export type TBlock = {
   title: string
   groups: TGroup[]
 }

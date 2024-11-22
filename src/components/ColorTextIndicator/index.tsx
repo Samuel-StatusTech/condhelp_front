@@ -13,6 +13,10 @@ type Props = {
       role: "profile"
       data: keyof typeof relations.roles
     }
+  | {
+      role: "pendencies"
+      data: keyof typeof relations.pendencies
+    }
 )
 
 const ColorTextIndicator = (props: Props) => {
@@ -26,7 +30,11 @@ const ColorTextIndicator = (props: Props) => {
       <S.Dot $color={relations.colors[role][data]} />
       <S.Text>
         {text ??
-          (role === "status" ? relations.status[data] : relations.roles[data])}
+          (role === "status"
+            ? relations.status[data]
+            : role === "profile"
+            ? relations.roles[data]
+            : relations.pendencies[data])}
       </S.Text>
     </S.Element>
   )

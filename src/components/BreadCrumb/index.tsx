@@ -32,15 +32,15 @@ const BreadCrumb = ({ paths }: Props) => {
 
       if (path.to)
         block.push(
-          <Link key={k} to={path.to} onClick={(e) => handleClick(e, path)}>
+          <Link key={`path-${k}`} to={path.to} onClick={(e) => handleClick(e, path)}>
             {path.title}
           </Link>
         )
-      else block.push(<span key={k}>{path.title}</span>)
+      else block.push(<span key={`title-${k}`}>{path.title}</span>)
 
       if (k < paths.length - 1)
         block.push(
-          <div>
+          <div key={`divider-${k}`}>
             <Divider />
           </div>
         )

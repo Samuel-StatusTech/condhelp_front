@@ -1,5 +1,6 @@
 import { TInputDate } from "../../../components/Input/date"
 import { TInputDefault } from "../../../components/Input/default"
+import { TInputFile } from "../../../components/Input/file"
 import { TInputImage } from "../../../components/Input/image"
 import { TInputLogo } from "../../../components/Input/logo"
 import { TInputMultiple } from "../../../components/Input/multiple"
@@ -10,6 +11,7 @@ import { TInputTextArea } from "../../../components/Input/textarea"
 import { TInputToggler } from "../../../components/Input/toggler"
 
 type IDate = { type: "date" } & TInputDate
+type IFile = { type: "file" } & TInputFile
 type IDefault = { type: "input" } & TInputDefault
 type IImage = { type: "image" } & TInputImage
 type IMultiple = { type: "multiple" } & TInputMultiple
@@ -22,6 +24,7 @@ type ITextArea = { type: "textarea" } & TInputTextArea
 type IToggler = { type: "toggler" } & TInputToggler
 
 export type FormField = (
+  | IFile
   | IDate
   | IDefault
   | IImage

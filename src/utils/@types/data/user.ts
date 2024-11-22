@@ -29,10 +29,12 @@ export type TUserTypes = {
 export type TUser = TUDefault &
   (TUAdmin | TUBranch | TUFranchise | TUProvider | TUManager)
 
-export type TNewUser = {
-  active: boolean
-  image: null | string
-} & (TUAdmin | TUBranch | TUFranchise | TUProvider | TUManager)
+export type TNewUser =
+  | (TNewUserDefault & TUAdmin)
+  | (TNewUserDefault & TUBranch)
+  | (TNewUserDefault & TUFranchise)
+  | (TNewUserDefault & TUManager)
+  | (TNewUserDefault & TUProvider)
 
 export type TUAdmin = {
   profile: "admin"
@@ -76,6 +78,13 @@ type TResponsableTypes = {
 export type TUFranchise = {
   profile: "franchise"
   name: string
+  address: TAddress
+
+  phone1: string
+  phone2: string
+  email: string
+
+  responsable: TResponsableTypes["cpf"] | TResponsableTypes["cnpj"]
 }
 
 export type TUProvider = {
@@ -96,27 +105,32 @@ export type TUProvider = {
   socialRole: string
   document: TDocument["cnpj"]
   cnpjCard: any
+  category: string
 
   // Documentation
   federalCnd: string
   federalCndStart: string
   federalCndEnd: string
   federalCndFree: boolean
+  federalCndDocument: null | File
 
   stateCnd: string
   stateCndStart: string
   stateCndEnd: string
   stateCndFree: boolean
+  stateCndDocument: null | File
 
   cityCnd: string
   cityCndStart: string
   cityCndEnd: string
   cityCndFree: boolean
+  cityCndDocument: null | File
 
   fgtsCnd: string
   fgtsCndStart: string
   fgtsCndEnd: string
   fgtsCndFree: boolean
+  fgtsCndDocument: null | File
 
   pendencies: {
     federalCnd: TPendency
@@ -126,7 +140,7 @@ export type TUProvider = {
   }
 }
 
-type TPendency = "none" | "free" | "has"
+export type TPendency = "none" | "free" | "has"
 
 export type TUManager = {
   profile: "manager"

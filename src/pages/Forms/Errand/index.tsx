@@ -103,93 +103,101 @@ const FPerrand = () => {
         handleField={handleField}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        blocks={[
+        columns={[
           {
-            title: "Informações Básicas",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Informações Básicas",
+                groups: [
                   {
-                    type: "input",
-                    label: "Título do recado",
-                    placeholder: "Digite aqui...",
-                    field: "title",
-                    value: form.title as string,
-                    gridSizes: { big: 12 },
-                    limit: 50,
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "input",
+                        label: "Título do recado",
+                        placeholder: "Digite aqui...",
+                        field: "title",
+                        value: form.title as string,
+                        gridSizes: { big: 12 },
+                        limit: 50,
+                      },
+                    ],
+                  },
+                  {
+                    type: "fields",
+                    fields: [
+                      [
+                        {
+                          type: "select",
+                          label: "Perfis de destino",
+                          placeholder: "País",
+                          field: "branch",
+                          value: form.target.branch as string,
+                          options: options.branch,
+                          gridSizes: { big: 6, small: 12 },
+                        },
+                        {
+                          type: "select",
+                          field: "franchise",
+                          placeholder: "Franquia",
+                          value: form.target.franchise as string,
+                          options: options.franchise,
+                          gridSizes: { big: 6, small: 12 },
+                          alignBottom: true,
+                        },
+                      ],
+                    ],
+                  },
+                  {
+                    type: "custom",
+                    element: (
+                      <ErrandStatusIndicador
+                        status={form.status}
+                        action={handleSend}
+                      />
+                    ),
                   },
                 ],
-              },
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "select",
-                      label: "Perfis de destino",
-                      placeholder: "País",
-                      field: "branch",
-                      value: form.target.branch as string,
-                      options: options.branch,
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                    {
-                      type: "select",
-                      field: "franchise",
-                      placeholder: "Franquia",
-                      value: form.target.franchise as string,
-                      options: options.franchise,
-                      gridSizes: { big: 6, small: 12 },
-                      alignBottom: true,
-                    },
-                  ],
-                ],
-              },
-              {
-                type: "custom",
-                element: (
-                  <ErrandStatusIndicador
-                    status={form.status}
-                    action={handleSend}
-                  />
-                ),
               },
             ],
           },
           {
-            title: "Conteúdo do recado",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Conteúdo do recado",
+                groups: [
                   {
-                    type: "image",
-                    field: "image",
-                    value: form.content.image,
-                    gridSizes: { big: 12 },
-                    height: 140,
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "image",
+                        field: "image",
+                        value: form.content.image,
+                        gridSizes: { big: 12 },
+                        height: 140,
+                      },
+                      {
+                        type: "textarea",
+                        field: "message",
+                        value: form.content.message,
+                        label: "Mensagem",
+                        placeholder: "Digite aqui a sua mensagem",
+                        limit: 600,
+                        gridSizes: { big: 12 },
+                      },
+                    ],
                   },
                   {
-                    type: "textarea",
-                    field: "message",
-                    value: form.content.message,
-                    label: "Mensagem",
-                    placeholder: "Digite aqui a sua mensagem",
-                    limit: 600,
-                    gridSizes: { big: 12 },
+                    type: "custom",
+                    element: (
+                      <FormDefaultButtons
+                        handleDelete={() => {}}
+                        handleCancel={() => {}}
+                        handleSave={() => {}}
+                      />
+                    ),
                   },
                 ],
-              },
-              {
-                type: "custom",
-                element: (
-                  <FormDefaultButtons
-                    handleDelete={() => {}}
-                    handleCancel={() => {}}
-                    handleSave={() => {}}
-                  />
-                ),
               },
             ],
           },

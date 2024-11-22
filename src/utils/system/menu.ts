@@ -90,7 +90,7 @@ export const menu: {
     },
     {
       text: "Monitoramento",
-      link: "/overviewing",
+      link: "/monitoring",
       access: ["admin"],
     },
     {

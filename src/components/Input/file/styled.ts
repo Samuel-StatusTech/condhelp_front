@@ -6,69 +6,35 @@ export const Box = styled.div<{
   min-width: 100%;
   height: fit-content;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   transition: background-color 0.3s;
   position: relative;
-`
 
-export const ImageWrapper = styled.div<{
-  $hasContent: boolean
-  $height: number
-}>`
-  background-color: ${({ $hasContent, theme }) =>
-    $hasContent ? "transparent" : theme.colors.neutral.medium};
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1.4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-`
+  a,
+  div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-export const Image = styled.img`
-  width: 100%;
-  height: auto;
-`
+    span {
+      color: ${({ theme }) => theme.colors.neutral.main};
+    }
+  }
 
-export const OptionsArea = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(255, 255, 255, 0.18);
-  filter: blur(0);
-  opacity: 0;
-  transition: opacity 0.3s, filter 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  a {
+    text-decoration: none;
+    cursor: pointer;
 
-  &:hover {
-    backdrop-filter: blur(6px);
-    opacity: 1;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `
 
-export const Button = styled.button`
-  padding: 6px 10px;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: none;
-  outline: none;
-
-  span {
-    font-weight: 500;
-  }
+export const Label = styled.label`
+  font-size: 12px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.neutral.main};
+  width: fit-content;
 `

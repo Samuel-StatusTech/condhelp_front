@@ -6,8 +6,6 @@ export const Element = styled.div`
   gap: 16px;
   border-radius: 6px;
   padding: 6px 8px;
-  top: 64px;
-  left: 50%;
   transition: transform 0.3s, opacity 0.3s;
 `
 

@@ -9,8 +9,13 @@ declare module "styled-components" {
         light: string
         soft: string
       }
+      blue: {
+        cyan: string
+        purple: string
+      }
       red: {
         main: string
+        dark: string
       }
       yellow: {
         dark: string

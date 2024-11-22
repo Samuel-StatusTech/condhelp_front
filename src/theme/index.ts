@@ -8,8 +8,13 @@ export const theme: DefaultTheme = {
       light: "#4E7C3C",
       soft: "#90CC61",
     },
+    blue: {
+      cyan: "#1E788C",
+      purple: "#7D37B4",
+    },
     red: {
       main: "#D8484A",
+      dark: "#B13335",
     },
     yellow: {
       dark: "#EDC32E",
@@ -54,6 +59,6 @@ export const theme: DefaultTheme = {
     default: "0 3px 32px -4px rgba(0, 0, 0, 0.08)",
   },
   default: {
-    formLineGridColumns: 20
-  }
+    formLineGridColumns: 20,
+  },
 }

@@ -6,7 +6,7 @@ import { TForm } from "../../../utils/@types/components/Form"
 
 export type TInputRadio = {
   field: string
-  label: string
+  label?: string
   value: string
   options: TOption[]
 }
@@ -26,7 +26,7 @@ const InputRadio = (props: Props) => {
   return (
     <S.Wrapper $gridSizes={gridSizes}>
       <S.Area>
-        <S.Label>{label}</S.Label>
+        {label && <S.Label>{label}</S.Label>}
         <S.Main>
           {options.map((o, k) => (
             <S.Option

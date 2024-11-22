@@ -13,7 +13,10 @@ export const getTime = (date: string | Date, withSeconds?: boolean) => {
   return str
 }
 
-export const getDateStr = (date: string | Date, format: "dmy" | "pureDate") => {
+export const getDateStr = (
+  date: string | Date,
+  format: "dmy" | "pureDate" | "time"
+) => {
   let str = ""
 
   switch (format) {
@@ -22,6 +25,9 @@ export const getDateStr = (date: string | Date, format: "dmy" | "pureDate") => {
       break
     case "pureDate":
       str = getPureDateStr(date as Date)
+      break
+    case "time":
+      str = getTimeStr(new Date(date))
       break
     default:
       break
@@ -47,6 +53,15 @@ const getPureDateStr = (date: Date) => {
   str = String(date.getDate()).padStart(2, "0")
   str += `/${String(date.getMonth() + 1).padStart(2, "0")}`
   str += `/${String(date.getFullYear())}`
+
+  return str
+}
+
+const getTimeStr = (date: Date) => {
+  let str = ""
+
+  str = String(date.getHours()).padStart(2, "0")
+  str += `:${String(date.getMinutes()).padStart(2, "0")}`
 
   return str
 }

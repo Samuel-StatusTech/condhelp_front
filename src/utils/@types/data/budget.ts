@@ -1,5 +1,6 @@
 import { TCondominium } from "./condominium"
 import { TDefaultStatus } from "./status"
+import { TUserTypes } from "./user"
 
 export type TNewBudget = {
   condominium: string
@@ -10,7 +11,8 @@ export type TNewBudget = {
   description: string
   start: string
   end: string
-  attached: Attached[]
+  attached: TUserTypes["provider"][]
+  file?: File
 }
 
 export type TBudget = {
@@ -25,11 +27,28 @@ export type TBudget = {
   end: string
   date: string
   status: TDefaultStatus
-  attached: Attached[]
+  attached: TUserTypes["provider"][]
+  file?: {
+    url: string
+    name: string
+  }
+
+  contacts: TContact[]
+}
+
+export type TContact = {
+  id: string
+  date: string
+  category: {
+    id: string
+    name: string
+  }
+  provider: {
+    id: string
+    name: string
+  }
 }
 
 export type TFranchiseBudget = TBudget & {
   franchise: string
 }
-
-type Attached = any

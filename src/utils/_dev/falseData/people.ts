@@ -53,4 +53,71 @@ export const FDpeople: TUser[] = [
     since: "",
     condos: [],
   },
+  {
+    id: "4",
+    name: "Alexandre",
+    active: true,
+    image: null,
+    profile: "provider",
+    franchises: [],
+    fantasyName: "",
+    address: {
+      cep: "",
+      country: "",
+      state: "",
+      city: "",
+      street: "",
+      number: "",
+      complement: "",
+    },
+
+    responsable: "",
+    website: "",
+    email: "alexandre@grande.com",
+    phone1: "",
+    phone2: "",
+    phone3: "",
+
+    // Comercial info
+    socialRole: "",
+    document: {
+      type: "cnpj",
+      register: "",
+      date: new Date().toISOString(),
+    },
+    cnpjCard: "",
+    category: "",
+
+    // Documentation
+    federalCnd: "",
+    federalCndStart: "",
+    federalCndEnd: "",
+    federalCndFree: false,
+    federalCndDocument: null,
+
+    stateCnd: "",
+    stateCndStart: "",
+    stateCndEnd: "",
+    stateCndFree: false,
+    stateCndDocument: null,
+
+    cityCnd: "",
+    cityCndStart: "",
+    cityCndEnd: "",
+    cityCndFree: false,
+    cityCndDocument: null,
+
+    fgtsCnd: "",
+    fgtsCndStart: "",
+    fgtsCndEnd: "",
+    fgtsCndFree: false,
+    fgtsCndDocument: null,
+
+    pendencies: {
+      federalCnd: "free",
+      stateCnd: "free",
+      cityCnd: "free",
+      fgts: "free",
+    },
+  },
 ]

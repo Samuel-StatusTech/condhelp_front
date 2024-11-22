@@ -16,6 +16,12 @@ import ErrandsPage from "../pages/Errands"
 import FaqsPage from "../pages/Faqs"
 
 /*
+ *  Head menu pages
+ */
+
+import Monitoring from "../pages/Head/Monitoring"
+
+/*
  *  Forms pages
  */
 
@@ -32,6 +38,9 @@ const Router = () => {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route element={<AuthRoute />}>
+          <Route path="/monitoring" element={<DashTemplate withoutSidebar={true} />}>
+            <Route path="" element={<Monitoring />} />
+          </Route>
           <Route path="/dashboard" element={<DashTemplate />}>
             <Route path="" element={<Dashboard />} />
             <Route path="users">

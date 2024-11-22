@@ -1,4 +1,6 @@
 import { TBudget } from "../../@types/data/budget"
+import { FDcategories } from "./categories"
+import { FDpeople } from "./people"
 
 export const FDmanagerBudgets: TBudget[] = [
   {
@@ -28,6 +30,7 @@ export const FDmanagerBudgets: TBudget[] = [
     date: "2024-11-10",
     attached: [],
     status: "approved",
+    contacts: [],
   },
   {
     id: "2",
@@ -56,6 +59,20 @@ export const FDmanagerBudgets: TBudget[] = [
     date: "2024-11-10",
     attached: [],
     status: "awaiting",
+    contacts: [
+      {
+        id: "1",
+        category: {
+          id: FDcategories[0].id,
+          name: FDcategories[0].name,
+        },
+        provider: {
+          id: FDpeople.filter((p) => p.profile === "provider")[0]?.id,
+          name: FDpeople.filter((p) => p.profile === "provider")[0]?.name,
+        },
+        date: new Date().toISOString(),
+      },
+    ],
   },
   {
     id: "3",
@@ -84,6 +101,7 @@ export const FDmanagerBudgets: TBudget[] = [
     date: "2024-11-10",
     attached: [],
     status: "approved",
+    contacts: [],
   },
   {
     id: "4",
@@ -112,5 +130,6 @@ export const FDmanagerBudgets: TBudget[] = [
     date: "2024-11-10",
     attached: [],
     status: "awaiting",
+    contacts: [],
   },
 ]

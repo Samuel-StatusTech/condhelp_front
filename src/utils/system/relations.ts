@@ -13,6 +13,11 @@ export const relations = {
     sketch: "Rascunho",
     send: "Enviado",
   },
+  pendencies: {
+    has: "Pendente",
+    free: "Isento",
+    none: "Sem pendência",
+  },
   colors: {
     status: {
       active: "#90CC61",
@@ -28,6 +33,11 @@ export const relations = {
       franchise: "#45D0EE",
       manager: "#7D37B4",
       provider: "",
+    },
+    pendencies: {
+      none: "#90CC61",
+      free: "#45D0EE",
+      has: "#D8484A",
     },
   },
 }

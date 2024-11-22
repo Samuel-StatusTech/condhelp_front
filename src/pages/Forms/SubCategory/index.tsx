@@ -88,49 +88,57 @@ const FPsubcategory = () => {
         handleField={handleField}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        blocks={[
+        columns={[
           {
-            title: "Categoria pai",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Categoria pai",
+                groups: [
                   {
-                    type: "select",
-                    placeholder: "Categoria pai",
-                    field: "parent",
-                    value: form.parent as string,
-                    options: options.category,
-                    gridSizes: { big: 12 },
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "select",
+                        placeholder: "Categoria pai",
+                        field: "parent",
+                        value: form.parent as string,
+                        options: options.category,
+                        gridSizes: { big: 12 },
+                      },
+                    ],
                   },
                 ],
               },
             ],
           },
           {
-            title: "Nome da subcategoria",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Nome da subcategoria",
+                groups: [
                   {
-                    type: "input",
-                    placeholder: "Digite aqui o nome da nova categoria",
-                    field: "name",
-                    value: form.name,
-                    gridSizes: { big: 12 },
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "input",
+                        placeholder: "Digite aqui o nome da nova categoria",
+                        field: "name",
+                        value: form.name,
+                        gridSizes: { big: 12 },
+                      },
+                    ],
+                  },
+                  {
+                    type: "custom",
+                    element: (
+                      <FormDefaultButtons
+                        handleDelete={() => {}}
+                        handleCancel={() => {}}
+                        handleSave={() => {}}
+                      />
+                    ),
                   },
                 ],
-              },
-              {
-                type: "custom",
-                element: (
-                  <FormDefaultButtons
-                    handleDelete={() => {}}
-                    handleCancel={() => {}}
-                    handleSave={() => {}}
-                  />
-                ),
               },
             ],
           },

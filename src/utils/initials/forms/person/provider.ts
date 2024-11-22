@@ -34,27 +34,32 @@ export const providerInitial: TNewUserDefault & TUProvider = {
     date: new Date().toISOString(),
   },
   cnpjCard: null,
+  category: "",
 
   // Documentation
   federalCnd: "",
   federalCndStart: "",
   federalCndEnd: "",
   federalCndFree: false,
+  federalCndDocument: null,
 
   stateCnd: "",
   stateCndStart: "",
   stateCndEnd: "",
   stateCndFree: false,
+  stateCndDocument: null,
 
   cityCnd: "",
   cityCndStart: "",
   cityCndEnd: "",
   cityCndFree: false,
+  cityCndDocument: null,
 
   fgtsCnd: "",
   fgtsCndStart: "",
   fgtsCndEnd: "",
   fgtsCndFree: false,
+  fgtsCndDocument: null,
 
   pendencies: {
     federalCnd: "none",

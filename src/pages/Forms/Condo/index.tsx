@@ -108,144 +108,152 @@ const FPcondo = () => {
         handleField={handleField}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        blocks={[
+        columns={[
           {
-            title: "Informações Básicas",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      label: "Nome do condomínio",
-                      field: "name",
-                      placeholder: "Digite aqui",
-                      value: form.name,
-                      gridSizes: {
-                        big: 10,
-                        small: 9,
-                      },
-                    },
-                    {
-                      type: "input",
-                      label: "Unidades",
-                      field: "units",
-                      value: String(form.units),
-                      gridSizes: {
-                        big: 2,
-                        small: 3,
-                      },
-                    },
-                  ],
+                title: "Informações Básicas",
+                groups: [
                   {
-                    type: "input",
-                    label: "CNPJ",
-                    field: "cnpj",
-                    placeholder: "Digite aqui",
-                    value: formatCNPJ(form.cnpj),
-                    gridSizes: {
-                      big: 12,
-                    },
-                  },
-                  {
-                    type: "image",
-                    field: "image",
-                    value: form.image,
-                    gridSizes: { big: 12 },
-                    height: 140,
+                    type: "fields",
+                    fields: [
+                      [
+                        {
+                          type: "input",
+                          label: "Nome do condomínio",
+                          field: "name",
+                          placeholder: "Digite aqui",
+                          value: form.name,
+                          gridSizes: {
+                            big: 10,
+                            small: 9,
+                          },
+                        },
+                        {
+                          type: "input",
+                          label: "Unidades",
+                          field: "units",
+                          value: String(form.units),
+                          gridSizes: {
+                            big: 2,
+                            small: 3,
+                          },
+                        },
+                      ],
+                      {
+                        type: "input",
+                        label: "CNPJ",
+                        field: "cnpj",
+                        placeholder: "Digite aqui",
+                        value: formatCNPJ(form.cnpj),
+                        gridSizes: {
+                          big: 12,
+                        },
+                      },
+                      {
+                        type: "image",
+                        field: "image",
+                        value: form.image,
+                        gridSizes: { big: 12 },
+                        height: 140,
+                      },
+                    ],
                   },
                 ],
               },
             ],
           },
           {
-            title: "Informações Complementares",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      label: "Endereço",
-                      field: "street",
-                      placeholder: "Digite aqui",
-                      value: form.address.street,
-                      gridSizes: { big: 8, small: 12 },
-                    },
-                    {
-                      type: "input",
-                      label: "Nº",
-                      field: "number",
-                      placeholder: "Digite aqui",
-                      value: form.address.number,
-                      gridSizes: { big: 2, small: 6 },
-                    },
-                    {
-                      type: "input",
-                      label: "CEP",
-                      field: "cep",
-                      placeholder: "Digite aqui",
-                      value: form.address.cep,
-                      gridSizes: { big: 2, small: 6 },
-                    },
-                  ],
-                  [
-                    {
-                      type: "input",
-                      label: "Bairro",
-                      field: "neighborhood",
-                      placeholder: "Digite aqui",
-                      value: form.address.neighborhood,
-                      gridSizes: { big: 5, small: 12 },
-                    },
-                    {
-                      type: "input",
-                      label: "Cidade",
-                      field: "city",
-                      placeholder: "Digite aqui",
-                      value: form.address.city,
-                      gridSizes: { big: 5, small: 6 },
-                    },
-                    {
-                      type: "select",
-                      label: "UF",
-                      field: "state",
-                      value: form.address.state,
-                      gridSizes: { big: 2, small: 6 },
-                      options: options.state,
-                      byKey: true,
-                    },
-                  ],
-                  [
-                    {
-                      type: "select",
-                      label: "Síndico",
-                      field: "managerId",
-                      value: form.manager.id,
-                      gridSizes: { big: 9, small: 6 },
-                      options: options.managers,
-                    },
-                    {
-                      type: "date",
-                      label: "Data da eleição",
-                      field: "since",
-                      value: form.manager.since,
-                      gridSizes: { big: 3, small: 6 },
-                    },
-                  ],
+                title: "Informações Complementares",
+                groups: [
+                  {
+                    type: "fields",
+                    fields: [
+                      [
+                        {
+                          type: "input",
+                          label: "Endereço",
+                          field: "street",
+                          placeholder: "Digite aqui",
+                          value: form.address.street,
+                          gridSizes: { big: 8, small: 12 },
+                        },
+                        {
+                          type: "input",
+                          label: "Nº",
+                          field: "number",
+                          placeholder: "Digite aqui",
+                          value: form.address.number,
+                          gridSizes: { big: 2, small: 6 },
+                        },
+                        {
+                          type: "input",
+                          label: "CEP",
+                          field: "cep",
+                          placeholder: "Digite aqui",
+                          value: form.address.cep,
+                          gridSizes: { big: 2, small: 6 },
+                        },
+                      ],
+                      [
+                        {
+                          type: "input",
+                          label: "Bairro",
+                          field: "neighborhood",
+                          placeholder: "Digite aqui",
+                          value: form.address.neighborhood,
+                          gridSizes: { big: 5, small: 12 },
+                        },
+                        {
+                          type: "input",
+                          label: "Cidade",
+                          field: "city",
+                          placeholder: "Digite aqui",
+                          value: form.address.city,
+                          gridSizes: { big: 5, small: 6 },
+                        },
+                        {
+                          type: "select",
+                          label: "UF",
+                          field: "state",
+                          value: form.address.state,
+                          gridSizes: { big: 2, small: 6 },
+                          options: options.state,
+                          byKey: true,
+                        },
+                      ],
+                      [
+                        {
+                          type: "select",
+                          label: "Síndico",
+                          field: "managerId",
+                          value: form.manager.id,
+                          gridSizes: { big: 9, small: 6 },
+                          options: options.managers,
+                        },
+                        {
+                          type: "date",
+                          label: "Data da eleição",
+                          field: "since",
+                          value: form.manager.since,
+                          gridSizes: { big: 3, small: 6 },
+                        },
+                      ],
+                    ],
+                  },
+                  {
+                    type: "custom",
+                    element: (
+                      <FormDefaultButtons
+                        handleDelete={() => {}}
+                        handleCancel={() => {}}
+                        handleSave={() => {}}
+                      />
+                    ),
+                  },
                 ],
-              },
-              {
-                type: "custom",
-                element: (
-                  <FormDefaultButtons
-                    handleDelete={() => {}}
-                    handleCancel={() => {}}
-                    handleSave={() => {}}
-                  />
-                ),
               },
             ],
           },

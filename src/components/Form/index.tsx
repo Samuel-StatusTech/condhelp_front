@@ -17,6 +17,8 @@ const getElement = (
   switch (field.type) {
     case "date":
       return <Input.Date {...field} onChange={handleField} key={key} />
+    case "file":
+      return <Input.File {...field} onChange={handleField} key={key} />
     case "image":
       return <Input.Image {...field} onChange={handleField} key={key} />
     case "input":
@@ -42,7 +44,7 @@ const getElement = (
   }
 }
 
-const Form = ({ handleField, blocks }: Props) => {
+const Form = ({ handleField, columns }: Props) => {
   const renderInput = (field: FormField, key: number) => {
     return getElement(field, handleField, key) ?? null
   }
@@ -50,41 +52,53 @@ const Form = ({ handleField, blocks }: Props) => {
   return (
     <S.Content>
       <S.BlocksArea>
-        {blocks.map((block, blockKey) => (
-          <S.Block key={blockKey}>
-            <S.BlockTitle>{block.title}</S.BlockTitle>
+        {columns.map((column, columnKey) => (
+          <S.BlockCols key={columnKey}>
+            {column.blocks.map((block, blockKey) => (
+              <S.Block key={blockKey}>
+                <S.BlockTitle>{block.title}</S.BlockTitle>
 
-            {block.groups.map((group, gKey) => (
-              <>
-                <Divider />
-                <S.BlockTitle>{group.title}</S.BlockTitle>
-                <S.GroupArea key={gKey}>
-                  <S.FormArea>
-                    {group.type === "custom"
-                      ? group.element
-                      : group.fields.map((line, k) =>
-                          Array.isArray(line) ? (
-                            <S.FormLine
-                              $k={gKey + (k + 1)}
-                              $length={group.fields.length + 2}
-                            >
-                              {line.map((f, fKey) => renderInput(f, fKey))}
-                            </S.FormLine>
-                          ) : (
-                            <S.FormLine
-                              $k={gKey + (k + 1)}
-                              key={k}
-                              $length={group.fields.length}
-                            >
-                              {renderInput(line, k)}
-                            </S.FormLine>
-                          )
-                        )}
-                  </S.FormArea>
-                </S.GroupArea>
-              </>
+                {block.groups.map((group, gKey) => (
+                  <div
+                    key={gKey}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                    }}
+                  >
+                    <Divider />
+                    <S.BlockTitle>{group.title}</S.BlockTitle>
+                    <S.GroupArea>
+                      <S.FormArea>
+                        {group.type === "custom"
+                          ? group.element
+                          : group.fields.map((line, k) =>
+                              Array.isArray(line) ? (
+                                <S.FormLine
+                                  key={k}
+                                  $k={gKey + (k + 1)}
+                                  $length={group.fields.length + 2}
+                                >
+                                  {line.map((f, fKey) => renderInput(f, fKey))}
+                                </S.FormLine>
+                              ) : (
+                                <S.FormLine
+                                  $k={gKey + (k + 1)}
+                                  key={k}
+                                  $length={group.fields.length}
+                                >
+                                  {renderInput(line, k)}
+                                </S.FormLine>
+                              )
+                            )}
+                      </S.FormArea>
+                    </S.GroupArea>
+                  </div>
+                ))}
+              </S.Block>
             ))}
-          </S.Block>
+          </S.BlockCols>
         ))}
       </S.BlocksArea>
     </S.Content>

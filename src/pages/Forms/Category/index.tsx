@@ -66,36 +66,44 @@ const FPcategory = () => {
         handleField={handleField}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        blocks={[
+        columns={[
           {
-            title: "Nome da categoria",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Nome da categoria",
+                groups: [
                   {
-                    type: "input",
-                    placeholder: "Digite aqui o nome da nova categoria",
-                    field: "name",
-                    value: form.name,
-                    gridSizes: { big: 12 },
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "input",
+                        placeholder: "Digite aqui o nome da nova categoria",
+                        field: "name",
+                        value: form.name,
+                        gridSizes: { big: 12 },
+                      },
+                    ],
                   },
                 ],
               },
             ],
           },
           {
-            title: "Subcategorias",
-            groups: [
+            blocks: [
               {
-                type: "custom",
-                element: (
-                  <List.Subcategories
-                    list={subcategories}
-                    categoryId={params.id}
-                    handleDelete={() => {}}
-                  />
-                ),
+                title: "Subcategorias",
+                groups: [
+                  {
+                    type: "custom",
+                    element: (
+                      <List.Subcategories
+                        list={subcategories}
+                        categoryId={params.id}
+                        handleDelete={() => {}}
+                      />
+                    ),
+                  },
+                ],
               },
             ],
           },

@@ -110,66 +110,74 @@ const FPfaq = () => {
         handleField={handleField}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        blocks={[
+        columns={[
           {
-            title: "Informações Básicas",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Informações Básicas",
+                groups: [
                   {
-                    type: "input",
-                    label: "Título do FAQ",
-                    placeholder: "Digite aqui...",
-                    field: "title",
-                    value: form.title as string,
-                    gridSizes: { big: 12 },
-                    limit: 50,
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "input",
+                        label: "Título do FAQ",
+                        placeholder: "Digite aqui...",
+                        field: "title",
+                        value: form.title as string,
+                        gridSizes: { big: 12 },
+                        limit: 50,
+                      },
+                    ],
                   },
-                ],
-              },
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "multiple",
-                      label: "Perfis de acesso ao FAQ",
-                      field: "profile",
-                      value: form.profile,
-                      options: systemOptions.profiles.filter(
-                        (i) => i.key !== "admin"
-                      ),
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                  ],
+                  {
+                    type: "fields",
+                    fields: [
+                      [
+                        {
+                          type: "multiple",
+                          label: "Perfis de acesso ao FAQ",
+                          field: "profile",
+                          value: form.profile,
+                          options: systemOptions.profiles.filter(
+                            (i) => i.key !== "admin"
+                          ),
+                          gridSizes: { big: 6, small: 12 },
+                        },
+                      ],
+                    ],
+                  },
                 ],
               },
             ],
           },
           {
-            title: "Perguntas e respostas",
-            groups: [
+            blocks: [
               {
-                type: "custom",
-                element: (
-                  <List.Faq
-                    handleAddQuestion={handleAddQuestion}
-                    handleQuestion={handleQuestion}
-                    handleRemoveQuestion={handleRemoveQuestion}
-                    list={form.questions}
-                  />
-                ),
-              },
-              {
-                type: "custom",
-                element: (
-                  <FormDefaultButtons
-                    handleDelete={() => {}}
-                    handleCancel={() => {}}
-                    handleSave={() => {}}
-                  />
-                ),
+                title: "Perguntas e respostas",
+                groups: [
+                  {
+                    type: "custom",
+                    element: (
+                      <List.Faq
+                        handleAddQuestion={handleAddQuestion}
+                        handleQuestion={handleQuestion}
+                        handleRemoveQuestion={handleRemoveQuestion}
+                        list={form.questions}
+                      />
+                    ),
+                  },
+                  {
+                    type: "custom",
+                    element: (
+                      <FormDefaultButtons
+                        handleDelete={() => {}}
+                        handleCancel={() => {}}
+                        handleSave={() => {}}
+                      />
+                    ),
+                  },
+                ],
               },
             ],
           },

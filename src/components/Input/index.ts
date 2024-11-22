@@ -1,6 +1,7 @@
 import CondoSelect from "./condosSelect"
 import Date from "./date"
 import Default from "./default"
+import File from "./file"
 import Image from "./image"
 import Logo from "./logo"
 import Multiple from "./multiple"
@@ -15,6 +16,7 @@ import Toggler from "./toggler"
 const Input = {
   Date,
   Default,
+  File,
   Image,
   Logo,
   Multiple,

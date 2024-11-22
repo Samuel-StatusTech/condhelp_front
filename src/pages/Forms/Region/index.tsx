@@ -89,71 +89,79 @@ const FPregion = () => {
         handleField={handleField}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        blocks={[
+        columns={[
           {
-            title: "Informações Básicas",
-            groups: [
+            blocks: [
               {
-                type: "fields",
-                fields: [
+                title: "Informações Básicas",
+                groups: [
                   {
-                    type: "input",
-                    label: "Nome da região",
-                    placeholder: "Digite aqui...",
-                    field: "name",
-                    value: form.name as string,
-                    gridSizes: { big: 12 },
+                    type: "fields",
+                    fields: [
+                      {
+                        type: "input",
+                        label: "Nome da região",
+                        placeholder: "Digite aqui...",
+                        field: "name",
+                        value: form.name as string,
+                        gridSizes: { big: 12 },
+                      },
+                      [
+                        {
+                          type: "select",
+                          label: "País",
+                          placeholder: "País",
+                          field: "country",
+                          value: form.country as string,
+                          options: options.country,
+                          gridSizes: { big: 6, small: 12 },
+                        },
+                        {
+                          type: "select",
+                          label: "Estado",
+                          placeholder: "Estado",
+                          field: "state",
+                          value: form.state as string,
+                          options: options.state,
+                          gridSizes: { big: 6, small: 12 },
+                        },
+                      ],
+                    ],
                   },
-                  [
-                    {
-                      type: "select",
-                      label: "País",
-                      placeholder: "País",
-                      field: "country",
-                      value: form.country as string,
-                      options: options.country,
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                    {
-                      type: "select",
-                      label: "Estado",
-                      placeholder: "Estado",
-                      field: "state",
-                      value: form.state as string,
-                      options: options.state,
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                  ],
+                  {
+                    type: "custom",
+                    element: <ImportCsvArea onLoadList={handleLoadCsv} />,
+                  },
                 ],
-              },
-              {
-                type: "custom",
-                element: <ImportCsvArea onLoadList={handleLoadCsv} />,
               },
             ],
           },
           {
-            title: "Cidades",
-            groups: [
+            blocks: [
               {
-                type: "custom",
-                element: (
-                  <List.Cities
-                    list={form.cities}
-                    categoryId={params.id}
-                    handleDelete={() => {}}
-                  />
-                ),
-              },
-              {
-                type: "custom",
-                element: (
-                  <FormDefaultButtons
-                    handleDelete={() => {}}
-                    handleCancel={() => {}}
-                    handleSave={() => {}}
-                  />
-                ),
+                title: "Cidades",
+                groups: [
+                  {
+                    type: "custom",
+                    element: (
+                      <List.Cities
+                        list={form.cities}
+                        categoryId={params.id}
+                        handleDelete={() => {}}
+                      />
+                    ),
+                  },
+                  {
+                    type: "custom",
+                    element: (
+                      <FormDefaultButtons
+                        handleDelete={() => {}}
+                        handleCancel={() => {}}
+                        handleSave={() => {}}
+                      />
+                    ),
+                  },
+                ],
               },
             ],
           },
