@@ -2,11 +2,12 @@ import * as S from "./styled"
 import { getStore } from "../../store"
 
 import { DashboardPages } from "./rolePages"
+import { useCallback } from "react"
 
 const Dashboard = () => {
   const { user } = getStore()
 
-  const PageContent = () => {
+  const PageContent = useCallback(() => {
     switch (user?.profile) {
       case "admin":
         return <DashboardPages.Admin />
@@ -21,7 +22,7 @@ const Dashboard = () => {
       default:
         return null
     }
-  }
+  }, [user?.profile])
 
   return (
     <S.Content>

@@ -59,6 +59,13 @@ export const Element = styled.button<{
       $type === "quaternary" ? "underline" : "unset"};
   }
 
+  transition: background-color 0.3s;
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.neutral.medium};
+    cursor: unset;
+  }
+
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     min-width: ${({ $type, $fit }) =>
       $type !== "tertiary" || !$fit ? `100px` : "unset"};
@@ -70,7 +77,9 @@ export const Element = styled.button<{
   }
 `
 
-export const Text = styled.span<{ $type: string }>`
+export const Text = styled.span<{ $type: string; $greenText?: boolean }>`
   font-size: 14px;
   font-weight: ${({ $type }) => ($type === "quaternary" ? 400 : 600)};
+  color: ${({ $greenText, theme }) =>
+    $greenText ? theme.colors.green.medium : "currentColor"};
 `

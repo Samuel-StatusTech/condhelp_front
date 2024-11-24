@@ -9,6 +9,8 @@ type Props =
       action: (v?: any) => void
       fit?: boolean
       k?: number
+      greenText?: boolean
+      disabled?: boolean
     }
   | {
       type: "tertiary"
@@ -16,6 +18,7 @@ type Props =
       action: (v?: any) => void
       fit?: boolean
       k?: number
+      disabled?: boolean
     }
 
 const Button = (props: Props) => {
@@ -25,14 +28,17 @@ const Button = (props: Props) => {
       $outlined={props.type === "outlined"}
       $fit={props.fit}
       $k={props.k}
-      onClick={props.action}
+      onClick={props.disabled ? undefined : props.action}
+      disabled={props.disabled}
     >
       {
         // @ts-ignore
         props.icon && props.iconLeft ? props.icon : null
       }
       {props.type !== "tertiary" && (
-        <S.Text $type={props.type}>{props.text}</S.Text>
+        <S.Text $type={props.type} $greenText={props.greenText}>
+          {props.text}
+        </S.Text>
       )}
       {
         // @ts-ignore

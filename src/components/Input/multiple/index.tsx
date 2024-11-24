@@ -6,7 +6,7 @@ import { Icons } from "../../../assets/icons/icons"
 
 export type TInputMultiple = {
   field: string
-  label: string
+  label?: string
   value: string[]
   options: TOption[]
 }
@@ -26,7 +26,7 @@ const InputMultiple = (props: Props) => {
   return (
     <S.Wrapper>
       <S.Area>
-        <S.Label>{label}</S.Label>
+        {label && <S.Label>{label}</S.Label>}
         <S.Main $fromForm={false}>
           {options.map((o, k) => (
             <S.Option

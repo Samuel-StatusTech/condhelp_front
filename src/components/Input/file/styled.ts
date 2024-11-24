@@ -2,27 +2,25 @@ import styled from "styled-components"
 
 export const Box = styled.div<{
   $height: number
+  $centerContent?: boolean
 }>`
   min-width: 100%;
   height: fit-content;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ $centerContent }) =>
+    $centerContent ? "center" : "space-between"};
   transition: background-color 0.3s;
   position: relative;
 
-  a,
-  div {
+  & > a,
+  & > div {
     display: flex;
     align-items: center;
     gap: 8px;
-
-    span {
-      color: ${({ theme }) => theme.colors.neutral.main};
-    }
   }
 
-  a {
+  & > a {
     text-decoration: none;
     cursor: pointer;
 

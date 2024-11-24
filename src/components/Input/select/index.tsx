@@ -72,13 +72,13 @@ const SelectDefault = ({
             $disabled={disabled}
           >
             <S.Left>
-              <S.SelectedInfo>
-                {selected && selected.value
-                  ? byKey
-                    ? selected.key
-                    : selected?.value
-                  : `${placeholder ?? label}`}
-              </S.SelectedInfo>
+              {selected && selected.value ? (
+                <S.SelectedInfo>
+                  {byKey ? selected.key : selected?.value}
+                </S.SelectedInfo>
+              ) : (
+                <S.Placeholder>{placeholder ?? label}</S.Placeholder>
+              )}
             </S.Left>
             <Icons.Dropdown width={16} height={16} />
           </S.DataArea>

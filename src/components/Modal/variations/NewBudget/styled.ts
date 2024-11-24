@@ -54,11 +54,21 @@ export const UserPoints = styled.span`
 `
 
 export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 20px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+
   width: 100%;
+  gap: 16px;
+  /* padding-top: 20px; */
+`
+
+export const Row = styled.div`
+  grid-column: span 12;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
 `
 
 export const HeaderLeft = styled.div`
@@ -76,8 +86,10 @@ export const GoalPoints = styled.span`
 `
 
 export const Bottom = styled.div`
+  grid-column: span 12;
   padding-top: 48px;
-  margin: auto;
+  display: flex;
+  justify-content: stretch;
 `
 
 export const PointsArea = styled.div`

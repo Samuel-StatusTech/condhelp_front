@@ -1,8 +1,11 @@
 import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
-import { userShelf, feedbackShelf } from "./shelfs"
-import controls from "./controllers"
+
 import { TStore } from "../utils/@types/store"
+
+import { userShelf, feedbackShelf, modalShelf } from "./shelfs"
+
+import controls from "./controllers"
 
 export const getStore = create<TStore>()(
   devtools(
@@ -10,6 +13,7 @@ export const getStore = create<TStore>()(
       (set) => ({
         user: userShelf(),
         feedback: feedbackShelf(),
+        modal: modalShelf(),
         controllers: controls(set),
       }),
       {

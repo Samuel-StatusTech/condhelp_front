@@ -6,7 +6,7 @@ export type TNewErrand = {
   }
   status: "sketch" | "send"
   content: {
-    image: null | string
+    image: null | string | File
     message: string
   }
 }

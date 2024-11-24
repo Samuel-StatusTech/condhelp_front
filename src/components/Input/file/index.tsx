@@ -11,6 +11,7 @@ export type TInputFile = {
   label?: string
   field: string
   value: string | File | null
+  singleComponent?: boolean
 }
 
 type Props = TInputFile & {
@@ -21,7 +22,7 @@ type Props = TInputFile & {
 const InputFile = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { height, label, field, value, onChange } = props
+  const { singleComponent, height, label, field, value, onChange } = props
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -47,27 +48,49 @@ const InputFile = (props: Props) => {
     <C.Wrapper $gridSizes={props.gridSizes}>
       <C.Area>
         {label && <C.Label>{label}</C.Label>}
-        <S.Box $height={height ?? 140}>
-          {value && value instanceof File ? (
-            <a href={getUrl(value)} download={value}>
-              <Icons.Clip />
-              <span>{value.name}</span>
-            </a>
-          ) : (
+        <S.Box $centerContent={singleComponent} $height={height ?? 140}>
+          {singleComponent ? (
             <div>
-              <Icons.Clip />
-              <span>Nenhum arquivo selecionado</span>
+              <Button
+                type="quaternary"
+                text={value ? (value as File).name : "Anexar um arquivo"}
+                fit={true}
+                icon={<Icons.Clip />}
+                iconLeft={true}
+                action={
+                  singleComponent
+                    ? handleClick
+                    : value
+                    ? handleRemove
+                    : handleClick
+                }
+                greenText={true}
+              />
             </div>
-          )}
+          ) : (
+            <>
+              {value && value instanceof File ? (
+                <a href={getUrl(value)} download={value}>
+                  <Icons.Clip />
+                  <span>{value.name}</span>
+                </a>
+              ) : (
+                <div>
+                  <Icons.Clip />
+                  <span>Nenhum arquivo selecionado</span>
+                </div>
+              )}
 
-          <Button
-            type="quaternary"
-            text={`${value ? "Remover" : "Adicionar"} arquivo`}
-            fit={true}
-            icon={value ? <Icons.Trash /> : <Icons.PlusCircle />}
-            iconLeft={true}
-            action={value ? handleRemove : handleClick}
-          />
+              <Button
+                type="quaternary"
+                text={`${value ? "Remover" : "Adicionar"} arquivo`}
+                fit={true}
+                icon={value ? <Icons.Trash /> : <Icons.PlusCircle />}
+                iconLeft={true}
+                action={value ? handleRemove : handleClick}
+              />
+            </>
+          )}
         </S.Box>
 
         <input

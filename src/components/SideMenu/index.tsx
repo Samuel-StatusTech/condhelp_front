@@ -4,7 +4,7 @@ import { system } from "../../utils/system"
 import SideMenuItem from "../SideMenuItem"
 
 import { Icons } from "../../assets/icons/icons"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { getStore } from "../../store"
 import { relations } from "../../utils/system/relations"
 import Button from "../Button"
@@ -16,15 +16,22 @@ type Props = {
 const SideMenu = (props: Props) => {
   // use ref ...
 
-  const { user } = getStore()
+  const { page } = props
+
+  const { user, controllers } = getStore()
 
   const [sideOpened, setSideOpened] = useState(false)
-
-  const { page } = props
 
   const toggleSideMenu = () => {
     setSideOpened(!sideOpened)
   }
+
+  const toggleNewBudgetModal = useCallback(() => {
+    controllers.modal.open({
+      role: "newBudget",
+      visible: true,
+    })
+  }, [controllers.modal])
 
   return (
     <S.Wrapper $opened={sideOpened}>
@@ -67,7 +74,7 @@ const SideMenu = (props: Props) => {
           <Button
             type="main"
             text="Novo orçamento"
-            action={() => {}}
+            action={toggleNewBudgetModal}
             icon={<Icons.PlusCircle />}
             iconLeft={true}
           />

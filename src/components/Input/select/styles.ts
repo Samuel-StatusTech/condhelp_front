@@ -43,6 +43,13 @@ export const Label = styled.span`
   white-space: nowrap;
 `
 
+
+export const Placeholder = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.neutral.lightMain};
+`
+
 export const SelectedInfo = styled.span`
   font-size: 14px;
   font-weight: 300;

@@ -13,10 +13,6 @@ const DashTemplate = ({ withoutSidebar }: Props) => {
   const location = useLocation()
 
   const [page, setPage] = useState("dash")
-  const [modal, setModal] = useState({
-    role: "newBudget",
-    showing: false,
-  })
 
   useEffect(() => {
     if (location.pathname.includes("dashboard")) {
@@ -35,11 +31,7 @@ const DashTemplate = ({ withoutSidebar }: Props) => {
 
   return (
     <S.Page>
-      <Modal
-        role="newBudget"
-        visible={modal.showing}
-        onClose={() => setModal((md) => ({ ...md, showing: false }))}
-      />
+      <Modal />
 
       <Header />
 

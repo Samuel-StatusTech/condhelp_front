@@ -1,3 +1,4 @@
+import { ModalProps } from "../../../components/Modal"
 import { TFeedback } from "../components/feedback"
 import { TUser } from "../data/user"
 
@@ -5,6 +6,7 @@ import { TUser } from "../data/user"
 
 export type TUserShelf = TUser | null
 export type TFeedbackShelf = TFeedback
+export type TModalShelf = ModalProps
 
 // Controls
 
@@ -19,14 +21,21 @@ export type TFeedbackControls = {
   fade: () => void
 }
 
+export type TModalControls = {
+  open: (data: ModalProps) => void
+  close: () => void
+}
+
 // Data
 
 export type TStore = {
   user: TUserShelf
   feedback: TFeedbackShelf
+  modal: TModalShelf
   controllers: {
     user: TUserControls
     feedback: TFeedbackControls
+    modal: TModalControls
   }
 }
 

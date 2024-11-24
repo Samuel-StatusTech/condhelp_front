@@ -36,8 +36,17 @@ const FPerrand = () => {
     // ...
   }
 
-  const handleSend = (list: any[]) => {
+  const sendMessage = async () => {
     // ...
+  }
+
+  const handleSend = () => {
+    controllers.modal.open({
+      role: "newErrand",
+      visible: true,
+      data: form,
+      handleOp: sendMessage,
+    })
   }
 
   const handleField = async (field: string, value: any) => {
@@ -130,7 +139,7 @@ const FPerrand = () => {
                         {
                           type: "select",
                           label: "Perfis de destino",
-                          placeholder: "País",
+                          placeholder: "Filiais",
                           field: "branch",
                           value: form.target.branch as string,
                           options: options.branch,

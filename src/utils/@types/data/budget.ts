@@ -3,6 +3,7 @@ import { TDefaultStatus } from "./status"
 import { TUserTypes } from "./user"
 
 export type TNewBudget = {
+  franchise?: string
   condominium: string
   urgent: boolean
   category: string
