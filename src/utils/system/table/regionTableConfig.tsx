@@ -11,6 +11,8 @@ export const regionTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
+    country: (item: TRegion) => item.country.name,
+    state: (item: TRegion) => item.state.name,
     actions: (item: TRegion, { callbacks }) => (
       <TableActions
         id={item.id}

@@ -4,6 +4,7 @@ import Default from "./default"
 import File from "./file"
 import Image from "./image"
 import Logo from "./logo"
+import ListInput from "./ListInput"
 import Multiple from "./multiple"
 import Points from "./points"
 import Profile from "./profile"
@@ -19,6 +20,7 @@ const Input = {
   File,
   Image,
   Logo,
+  ListInput,
   Multiple,
   Points,
   Profile,
