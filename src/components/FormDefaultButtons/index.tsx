@@ -7,12 +7,14 @@ type Props = {
   handleDelete: (params: any) => void
   handleCancel: (params: any) => void
   handleSave: (params: any) => void
+  disabled?: boolean
 }
 
 const FormDefaultButtons = ({
   handleDelete,
   handleCancel,
   handleSave,
+  disabled,
 }: Props) => {
   return (
     <S.Buttons className="buttonsArea">
@@ -27,17 +29,18 @@ const FormDefaultButtons = ({
       <S.BtnArea>
         <Button
           type="outlined"
-          action={handleDelete}
+          action={handleCancel}
           text="Cancelar"
           icon={<Icons.Edit />}
           iconLeft={true}
         />
         <Button
           type="main"
-          action={handleDelete}
+          action={handleSave}
           text="Salvar"
           icon={<Icons.CheckCircle />}
           iconLeft={true}
+          disabled={disabled}
         />
       </S.BtnArea>
     </S.Buttons>

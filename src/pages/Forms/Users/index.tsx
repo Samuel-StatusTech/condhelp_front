@@ -934,7 +934,7 @@ const FPpeople = () => {
                     label: "Categorias de serviço prestado",
                     field: "category",
                     value: form.category,
-                    options: parseOptionList(fdata.categories, "id", "name"),
+                    options: parseOptionList([], "id", "name"),
                     gridSizes: { big: 12 },
                   },
                 ],

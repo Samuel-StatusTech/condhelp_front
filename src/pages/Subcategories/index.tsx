@@ -1,18 +1,26 @@
-import { useCallback, useState } from "react"
-import Divider from "../../components/_minimals/Divider"
+import { useCallback, useEffect, useState } from "react"
 import * as S from "./styled"
-import Table from "../../components/Table"
-import { fdata } from "../../utils/_dev/falseData"
-import PageHeader from "../../components/PageHeader"
+import { getStore } from "../../store"
+import { Api } from "../../api"
+
 import { useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/system/table"
 import { TFilter } from "../../utils/@types/components/SearchBlock"
+import { TSubCategory } from "../../utils/@types/data/category/subcategories"
+
+import Divider from "../../components/_minimals/Divider"
+import Table from "../../components/Table"
+import PageHeader from "../../components/PageHeader"
 import SearchBlock from "../../components/SearchBlock"
+import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
+import { TOption } from "../../utils/@types/data/option"
 
 const SubcategoriesPage = () => {
   const navigate = useNavigate()
 
-  const [subcategories] = useState(fdata.subcategories)
+  const { user, controllers } = getStore()
+
+  const [subcategories, setSubcategories] = useState<TSubCategory[]>([])
 
   /*
    *  Search control
@@ -23,11 +31,8 @@ const SubcategoriesPage = () => {
     category: "",
     creator: "",
   })
-  const [options] = useState({
-    category: [
-      { key: "1", value: "Categoria 1" },
-      { key: "2", value: "Categoria 2" },
-    ],
+  const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
+    category: [],
     creator: [
       { key: "1", value: "Fulano Silva" },
       { key: "2", value: "Ambrosio Vasconcelos" },
@@ -53,6 +58,39 @@ const SubcategoriesPage = () => {
   const handleEdit = (id: string) => {
     navigate(`single/${id}`)
   }
+
+  // Start component
+
+  const loadData = useCallback(async () => {
+    try {
+      const catReq = await Api.categories.listAll({})
+
+      if (catReq.ok) {
+        setOptions((opts) => ({
+          ...opts,
+          category: parseOptionList(catReq.data.content, "id", "name"),
+        }))
+      }
+
+      const req = await Api.subcategories.listAll({})
+
+      if (req.ok) {
+        setSubcategories(req.data.content)
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: req.error,
+        })
+      }
+    } catch (error) {
+      // ...
+    }
+  }, [controllers.feedback])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   return (
     <S.Content>
@@ -87,7 +125,14 @@ const SubcategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.subcategories}
-        data={subcategories}
+        data={subcategories.map((i) => ({
+          ...i,
+          creator: {
+            id: user?.id,
+            name: user?.name,
+            role: user?.profile,
+          },
+        }))}
         actions={{
           edit: handleEdit,
         }}

@@ -29,7 +29,7 @@ const FPcategory = () => {
     return checkErrors.categories(form)
   }
 
-  const [subcategories, setSubcategories] = useState<TSubCategory[]>([])
+  const [subcategories] = useState<TSubCategory[]>([])
 
   const handleCancel = () => {
     navigate(-1)

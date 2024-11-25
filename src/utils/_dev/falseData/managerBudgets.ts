@@ -1,5 +1,4 @@
 import { TBudget } from "../../@types/data/budget"
-import { FDcategories } from "./categories"
 import { FDpeople } from "./people"
 
 export const FDmanagerBudgets: TBudget[] = [
@@ -63,8 +62,8 @@ export const FDmanagerBudgets: TBudget[] = [
       {
         id: 1,
         category: {
-          id: FDcategories[0].id,
-          name: FDcategories[0].name,
+          id: 0,
+          name: "",
         },
         provider: {
           id: FDpeople.filter((p) => p.profile === "provider")[0]?.id,

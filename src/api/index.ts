@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode"
 
 import { apiAuth } from "./api/api/auth"
 import { apiCategories } from "./api/api/categories"
+import { apiSubcategories } from "./api/api/subcategories"
 
 axios.defaults.baseURL = "https://api.oitickets.com.br/api/v1"
 
@@ -58,4 +59,5 @@ export const service = axios
 export const Api: TApi = {
   auth: apiAuth,
   categories: apiCategories,
+  subcategories: apiSubcategories,
 }

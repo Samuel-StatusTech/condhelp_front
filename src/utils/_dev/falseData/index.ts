@@ -1,7 +1,6 @@
 import { TUser } from "../../@types/data/user"
 import { TCondominium } from "../../@types/data/condominium"
 import { TCategory } from "../../@types/data/category"
-import { TSubCategory } from "../../@types/data/category/subcategories"
 import { TRegion } from "../../@types/data/region"
 import { TErrand } from "../../@types/data/errand"
 import { TFaq } from "../../@types/data/faq"
@@ -10,8 +9,6 @@ import { TBudget } from "../../@types/data/budget"
 import { FDcards } from "./cards"
 import { FDpeople } from "./people"
 import { FDcondos } from "./condos"
-import { FDcategories } from "./categories"
-import { FDsubcategories } from "./subcategories"
 import { FDregions } from "./regions"
 import { FDerrands } from "./errands"
 import { FDfaqs } from "./faqs"
@@ -23,8 +20,7 @@ export const fdata: _TFalseData = {
   cards: FDcards,
   people: FDpeople,
   condos: FDcondos,
-  categories: FDcategories,
-  subcategories: FDsubcategories,
+  categories: [],
   regions: FDregions,
   errands: FDerrands,
   faqs: FDfaqs,
@@ -35,7 +31,6 @@ type _TFalseData = {
   people: TUser[]
   condos: TCondominium[]
   categories: TCategory[]
-  subcategories: TSubCategory[]
   regions: TRegion[]
   errands: TErrand[]
   faqs: TFaq[]

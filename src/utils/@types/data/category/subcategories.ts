@@ -3,12 +3,12 @@ import { TCreator } from "../creator"
 
 export type TNewSubCategory = {
   name: string
-  parent: number
+  serviceCategory: number
 }
 
 export type TSubCategory = {
   id: string
   name: string
-  parent: Partial<TCategory>
+  serviceCategory: TCategory
   creator: TCreator
 }

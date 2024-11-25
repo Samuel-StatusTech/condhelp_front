@@ -25,7 +25,7 @@ const MonitoringPage = () => {
   >([])
 
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
-    category: parseOptionList(fdata.categories, "id", "name"),
+    category: parseOptionList([], "id", "name"),
     provider: [],
   })
   const [newContact, setNewContact] = useState({

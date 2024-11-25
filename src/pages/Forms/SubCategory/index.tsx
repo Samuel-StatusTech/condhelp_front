@@ -7,14 +7,16 @@ import { useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 
 import { getStore } from "../../../store"
-import { fdata } from "../../../utils/_dev/falseData"
 import { TOption } from "../../../utils/@types/data/option"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
+
 import {
   TNewSubCategory,
   TSubCategory,
 } from "../../../utils/@types/data/category/subcategories"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
+import { Api } from "../../../api"
+import { checkErrors } from "../../../utils/tb/checkErrors"
 
 const FPsubcategory = () => {
   const navigate = useNavigate()
@@ -26,16 +28,76 @@ const FPsubcategory = () => {
   const [form, setForm] = useState<TNewSubCategory | TSubCategory>(
     initials.forms.subcategory
   )
+
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
-    category: [],
+    serviceCategory: [],
   })
+
+  const errors = () => {
+    return checkErrors.subcategories(form)
+  }
 
   const handleCancel = () => {
     navigate(-1)
   }
 
+  const handleDelete = async () => {
+    try {
+      const req = await Api.subcategories.delete({ id: Number(params.id) })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Categoria excluida",
+        })
+
+        navigate("/dashboard/subcategories")
+      }
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleUpdate = async () => {
+    const req = await Api.subcategories.update({
+      subcategory: form as TSubCategory,
+    })
+
+    if (req.ok) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "success",
+        message: "Subcategoria atualizada com sucesso",
+      })
+
+      navigate("/dashboard/subcategories")
+    }
+  }
+
+  const handleCreate = async () => {
+    const req = await Api.subcategories.create({
+      newSubcategory: form as TNewSubCategory,
+    })
+
+    if (req.ok) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "success",
+        message: "Subcategoria criada com sucesso",
+      })
+
+      navigate("/dashboard/subcategories")
+    }
+  }
+
   const handleSave = async () => {
-    // ...
+    try {
+      if (params.id) handleUpdate()
+      else handleCreate()
+    } catch (error) {
+      // ...
+    }
   }
 
   const handleField = async (field: string, value: any) => {
@@ -44,31 +106,36 @@ const FPsubcategory = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const cats = parseOptionList(fdata.categories, "id", "name")
+      const catReq = await Api.categories.listAll({})
 
-      setTimeout(() => {
+      if (catReq.ok) {
         setOptions((opts) => ({
           ...opts,
-          category: cats,
+          serviceCategory: parseOptionList(catReq.data.content, "id", "name"),
         }))
+      }
 
-        if (params.id) {
-          const subData = fdata.subcategories.find((i) => i.id === params.id)
+      if (params.id) {
+        const req = await Api.subcategories.getSingle({ id: Number(params.id) })
 
-          if (subData) {
-            setForm({
-              id: params.id,
-              name: subData.name,
-              parent: subData.parent.id as number,
-            })
-          } else {
-            throw new Error()
-          }
+        if (req.ok) {
+          console.log({
+            ...req.data,
+            serviceCategory: req.data.serviceCategory.id,
+          })
+
+          setForm({ ...req.data, serviceCategory: req.data.serviceCategory.id })
+        } else {
+          controllers.feedback.setData({
+            message: req.error,
+            state: "error",
+            visible: true,
+          })
         }
-      }, 1000)
+      }
     } catch (error) {
       controllers.feedback.setData({
-        message: "Não foi possível carregar as categorias.",
+        message: "Não foi possível carregar as informações da categoria.",
         state: "error",
         visible: true,
       })
@@ -78,11 +145,11 @@ const FPsubcategory = () => {
   useEffect(() => {
     // ...
     loadData()
-  }, [loadData])
+  }, [loadData, params.id])
 
   return (
     <C.Content>
-      <PageHeader type={"breadcrumb"} from={"categories"} forForm={true} />
+      <PageHeader type={"breadcrumb"} from={"subcategories"} forForm={true} />
 
       <Form
         handleField={handleField}
@@ -100,9 +167,9 @@ const FPsubcategory = () => {
                       {
                         type: "select",
                         placeholder: "Categoria pai",
-                        field: "parent",
-                        value: form.parent as string,
-                        options: options.category,
+                        field: "serviceCategory",
+                        value: form.serviceCategory as unknown as string,
+                        options: options.serviceCategory,
                         gridSizes: { big: 12 },
                       },
                     ],
@@ -121,7 +188,7 @@ const FPsubcategory = () => {
                     fields: [
                       {
                         type: "input",
-                        placeholder: "Digite aqui o nome da nova categoria",
+                        placeholder: "Digite aqui o nome da nova subcategoria",
                         field: "name",
                         value: form.name,
                         gridSizes: { big: 12 },
@@ -132,9 +199,10 @@ const FPsubcategory = () => {
                     type: "custom",
                     element: (
                       <FormDefaultButtons
-                        handleDelete={() => {}}
-                        handleCancel={() => {}}
-                        handleSave={() => {}}
+                        handleDelete={handleDelete}
+                        handleCancel={handleCancel}
+                        handleSave={handleSave}
+                        disabled={errors().has}
                       />
                     ),
                   },

@@ -6,13 +6,13 @@ import { TSubCategory } from "../../@types/data/category/subcategories"
 
 export const subcategoryTableConfig: TConfig = {
   columns: [
-    { title: "Categoria pai", field: "parent" },
+    { title: "Categoria pai", field: "serviceCategory" },
     { title: "Subcategoria", field: "name" },
     { title: "Criada por", field: "creator" },
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    parent: (item: TSubCategory) => item.parent.name,
+    serviceCategory: (item: TSubCategory) => item.serviceCategory?.name,
     name: (item: TSubCategory) => item.name,
     creator: (item: TSubCategory) => (
       <ColorTextIndicator

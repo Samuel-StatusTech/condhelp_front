@@ -19,7 +19,7 @@ export const Box = styled.div<{
   border-radius: 24px;
   background-color: ${({ $color, theme }) =>
     $color === "green"
-      ? theme.colors.green.medium
+      ? theme.colors.green.light
       : $color === "orange"
       ? theme.colors.orange.main
       : "#D8484A"};

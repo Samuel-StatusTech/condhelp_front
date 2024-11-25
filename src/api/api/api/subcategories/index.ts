@@ -5,12 +5,12 @@
 import { TApi } from "../../../types"
 import { service } from "../../.."
 import { AxiosError } from "axios"
-import { TApi_Params_Categories } from "./params"
-import { TApi_Responses_Categories } from "./responses"
+import { TApi_Params_Subcategories as TParams } from "./params"
+import { TApi_Responses_Subcategories as TResponses } from "./responses"
 
-const baseURL = "/service-categories"
+const baseURL = "/service-subcategories"
 
-const listAll: TApi["categories"]["listAll"] = async (data) => {
+const listAll: TApi["subcategories"]["listAll"] = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -47,11 +47,14 @@ const listAll: TApi["categories"]["listAll"] = async (data) => {
   })
 }
 
-const create: TApi["categories"]["create"] = async ({ newCategory }) => {
+const create: TApi["subcategories"]["create"] = async ({ newSubcategory }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .post(`${baseURL}`, newCategory)
+        .post(`${baseURL}`, {
+          ...newSubcategory,
+          serviceCategoryId: newSubcategory.serviceCategory,
+        })
         .then((res) => {
           const info = res.data
 
@@ -84,11 +87,15 @@ const create: TApi["categories"]["create"] = async ({ newCategory }) => {
   })
 }
 
-const update: TApi["categories"]["update"] = async ({ category }) => {
+const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .put(`${baseURL}/${category.id}`, category)
+        .put(`${baseURL}/${subcategory.id}`, {
+          id: subcategory.id,
+          name: subcategory.name,
+          serviceCategoryId: subcategory.id,
+        })
         .then((res) => {
           const info = res.data
 
@@ -121,7 +128,7 @@ const update: TApi["categories"]["update"] = async ({ category }) => {
   })
 }
 
-const deleteCategory: TApi["categories"]["delete"] = async ({ id }) => {
+const deleteItem: TApi["subcategories"]["delete"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -129,7 +136,7 @@ const deleteCategory: TApi["categories"]["delete"] = async ({ id }) => {
         .then((res) => {
           const info = res.data
 
-          if (info) {
+          if (res.status === 204) {
             resolve({
               ok: true,
               data: info,
@@ -158,7 +165,7 @@ const deleteCategory: TApi["categories"]["delete"] = async ({ id }) => {
   })
 }
 
-const getSingle: TApi["categories"]["getSingle"] = async ({ id }) => {
+const getSingle: TApi["subcategories"]["getSingle"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -195,28 +202,28 @@ const getSingle: TApi["categories"]["getSingle"] = async ({ id }) => {
   })
 }
 
-export type TApi_Categories = {
+export type TApi_Subcategories = {
   listAll: (
-    p: TApi_Params_Categories["categories"]["listAll"]
-  ) => TApi_Responses_Categories["categories"]["listAll"]
+    p: TParams["subcategories"]["listAll"]
+  ) => TResponses["subcategories"]["listAll"]
   create: (
-    p: TApi_Params_Categories["categories"]["create"]
-  ) => TApi_Responses_Categories["categories"]["create"]
+    p: TParams["subcategories"]["create"]
+  ) => TResponses["subcategories"]["create"]
   getSingle: (
-    p: TApi_Params_Categories["categories"]["getSingle"]
-  ) => TApi_Responses_Categories["categories"]["getSingle"]
+    p: TParams["subcategories"]["getSingle"]
+  ) => TResponses["subcategories"]["getSingle"]
   update: (
-    p: TApi_Params_Categories["categories"]["update"]
-  ) => TApi_Responses_Categories["categories"]["update"]
+    p: TParams["subcategories"]["update"]
+  ) => TResponses["subcategories"]["update"]
   delete: (
-    p: TApi_Params_Categories["categories"]["delete"]
-  ) => TApi_Responses_Categories["categories"]["delete"]
+    p: TParams["subcategories"]["delete"]
+  ) => TResponses["subcategories"]["delete"]
 }
 
-export const apiCategories: TApi["categories"] = {
+export const apiSubcategories: TApi["subcategories"] = {
   listAll: listAll,
   create: create,
   getSingle: getSingle,
   update: update,
-  delete: deleteCategory,
+  delete: deleteItem,
 }
