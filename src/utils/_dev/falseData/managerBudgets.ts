@@ -61,7 +61,7 @@ export const FDmanagerBudgets: TBudget[] = [
     status: "awaiting",
     contacts: [
       {
-        id: "1",
+        id: 1,
         category: {
           id: FDcategories[0].id,
           name: FDcategories[0].name,

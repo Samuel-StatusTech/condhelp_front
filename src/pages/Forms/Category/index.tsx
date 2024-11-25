@@ -9,7 +9,10 @@ import Divider from "../../../components/_minimals/Divider"
 import { List } from "../../../components/List"
 import { TSubCategory } from "../../../utils/@types/data/category/subcategories"
 import { getStore } from "../../../store"
-import { fdata } from "../../../utils/_dev/falseData"
+
+import { Api } from "../../../api"
+import { TCategory, TNewCategory } from "../../../utils/@types/data/category"
+import { checkErrors } from "../../../utils/tb/checkErrors"
 
 const FPcategory = () => {
   const navigate = useNavigate()
@@ -18,15 +21,73 @@ const FPcategory = () => {
 
   const { controllers } = getStore()
 
-  const [form, setForm] = useState(initials.forms.category)
+  const [form, setForm] = useState<TNewCategory | TCategory>(
+    initials.forms.category
+  )
+
+  const errors = () => {
+    return checkErrors.categories(form)
+  }
+
   const [subcategories, setSubcategories] = useState<TSubCategory[]>([])
 
   const handleCancel = () => {
     navigate(-1)
   }
 
+  const handleDelete = async () => {
+    try {
+      const req = await Api.categories.delete({ id: Number(params.id) })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Categoria excluida",
+        })
+
+        navigate("/dashboard/categories")
+      }
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleUpdate = async () => {
+    const req = await Api.categories.update({ category: form as TCategory })
+
+    if (req.ok) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "success",
+        message: "Categoria atualizada com sucesso",
+      })
+
+      navigate("/dashboard/categories")
+    }
+  }
+
+  const handleCreate = async () => {
+    const req = await Api.categories.create({ newCategory: form })
+
+    if (req.ok) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "success",
+        message: "Categoria criada com sucesso",
+      })
+
+      navigate("/dashboard/categories")
+    }
+  }
+
   const handleSave = async () => {
-    // ...
+    try {
+      if (params.id) handleUpdate()
+      else handleCreate()
+    } catch (error) {
+      // ...
+    }
   }
 
   const handleField = async (field: string, value: any) => {
@@ -35,11 +96,17 @@ const FPcategory = () => {
 
   const loadCategoryData = useCallback(async () => {
     try {
-      setTimeout(() => {
-        setSubcategories(
-          fdata.subcategories.filter((sc) => sc.parent.id === params.id)
-        )
-      }, 1000)
+      const req = await Api.categories.getSingle({ id: Number(params.id) })
+
+      if (req.ok) {
+        setForm(req.data)
+      } else {
+        controllers.feedback.setData({
+          message: req.error,
+          state: "error",
+          visible: true,
+        })
+      }
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações da categoria.",
@@ -99,7 +166,10 @@ const FPcategory = () => {
                       <List.Subcategories
                         list={subcategories}
                         categoryId={params.id}
-                        handleDelete={() => {}}
+                        handleDelete={handleDelete}
+                        handleCancel={handleCancel}
+                        handleSave={handleSave}
+                        disabled={errors().has}
                       />
                     ),
                   },

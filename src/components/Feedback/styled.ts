@@ -19,9 +19,9 @@ export const Box = styled.div<{
   border-radius: 24px;
   background-color: ${({ $color, theme }) =>
     $color === "green"
-      ? theme.colors.green
+      ? theme.colors.green.medium
       : $color === "orange"
-      ? theme.colors.yellow
+      ? theme.colors.orange.main
       : "#D8484A"};
   box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
 

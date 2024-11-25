@@ -38,10 +38,10 @@ export type TBudget = {
 }
 
 export type TContact = {
-  id: string
+  id: number
   date: string
   category: {
-    id: string
+    id: number
     name: string
   }
   provider: {

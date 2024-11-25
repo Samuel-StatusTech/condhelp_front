@@ -5,7 +5,7 @@ export const FDsubcategories: TSubCategory[] = [
     id: "1",
     name: "Subcategoria 1 - A",
     parent: {
-      id: "1",
+      id: 1,
       name: "Categoria 1",
     },
     creator: {
@@ -18,7 +18,7 @@ export const FDsubcategories: TSubCategory[] = [
     id: "2",
     name: "Subcategoria 1 - B",
     parent: {
-      id: "1",
+      id: 1,
       name: "Categoria 1",
     },
     creator: {
@@ -31,7 +31,7 @@ export const FDsubcategories: TSubCategory[] = [
     id: "3",
     name: "Subcategoria 1 - C",
     parent: {
-      id: "1",
+      id: 1,
       name: "Categoria 1",
     },
     creator: {
@@ -44,7 +44,7 @@ export const FDsubcategories: TSubCategory[] = [
     id: "4",
     name: "Subcategoria 2 - A",
     parent: {
-      id: "2",
+      id: 2,
       name: "Categoria 2",
     },
     creator: {
@@ -57,7 +57,7 @@ export const FDsubcategories: TSubCategory[] = [
     id: "5",
     name: "Subcategoria 2 - B",
     parent: {
-      id: "2",
+      id: 2,
       name: "Categoria 2",
     },
     creator: {

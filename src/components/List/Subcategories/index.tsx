@@ -9,9 +9,19 @@ type Props = {
   list: TSubCategory[]
   categoryId?: string
   handleDelete: (id: string) => void
+  handleCancel: () => void
+  handleSave: () => void
+  disabled: boolean
 }
 
-const SubcategoriesList = ({ list, categoryId, handleDelete }: Props) => {
+const SubcategoriesList = ({
+  list,
+  categoryId,
+  handleDelete,
+  handleCancel,
+  handleSave,
+  disabled,
+}: Props) => {
   const navigate = useNavigate()
 
   const handleClick = (id: string) => {
@@ -61,7 +71,7 @@ const SubcategoriesList = ({ list, categoryId, handleDelete }: Props) => {
         <S.BtnArea>
           <Button
             type="outlined"
-            action={handleDelete}
+            action={handleCancel}
             text="Cancelar"
             icon={<Icons.Edit />}
             iconLeft={true}
@@ -69,11 +79,12 @@ const SubcategoriesList = ({ list, categoryId, handleDelete }: Props) => {
           />
           <Button
             type="main"
-            action={handleDelete}
+            action={handleSave}
             text="Salvar"
             icon={<Icons.CheckCircle />}
             iconLeft={true}
             fit={true}
+            disabled={disabled}
           />
         </S.BtnArea>
       </S.Buttons>

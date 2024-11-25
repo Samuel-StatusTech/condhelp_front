@@ -9,7 +9,7 @@ type Props = {
 }
 
 const BudgetContactsList = ({ list }: Props) => {
-  const handleClick = (id: string) => {
+  const handleClick = (id: number) => {
     // TODO: show modal
   }
 

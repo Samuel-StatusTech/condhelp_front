@@ -59,7 +59,7 @@ const FPsubcategory = () => {
             setForm({
               id: params.id,
               name: subData.name,
-              parent: subData.parent.id as string,
+              parent: subData.parent.id as number,
             })
           } else {
             throw new Error()

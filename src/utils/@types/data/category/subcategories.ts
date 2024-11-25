@@ -3,7 +3,7 @@ import { TCreator } from "../creator"
 
 export type TNewSubCategory = {
   name: string
-  parent: string
+  parent: number
 }
 
 export type TSubCategory = {

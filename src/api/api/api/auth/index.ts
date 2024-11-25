@@ -100,7 +100,7 @@ const authLogin: TApi["auth"]["login"] = async (data) => {
 
           if (info) {
             // Store token
-            sessionStorage.setItem("token", info.token)
+            localStorage.setItem("token", info.token)
 
             resolve({
               ok: true,

@@ -1,18 +1,25 @@
-import { useCallback, useState } from "react"
-import Divider from "../../components/_minimals/Divider"
+import { useCallback, useEffect, useState } from "react"
 import * as S from "./styled"
-import Table from "../../components/Table"
-import { fdata } from "../../utils/_dev/falseData"
-import PageHeader from "../../components/PageHeader"
-import { useNavigate } from "react-router-dom"
+import { getStore } from "../../store"
+import { Api } from "../../api"
+
 import { tableConfig } from "../../utils/system/table"
-import SearchBlock from "../../components/SearchBlock"
+import { TCategory } from "../../utils/@types/data/category"
 import { TFilter } from "../../utils/@types/components/SearchBlock"
+
+import { useNavigate } from "react-router-dom"
+
+import Divider from "../../components/_minimals/Divider"
+import Table from "../../components/Table"
+import PageHeader from "../../components/PageHeader"
+import SearchBlock from "../../components/SearchBlock"
 
 const CategoriesPage = () => {
   const navigate = useNavigate()
 
-  const [categories] = useState(fdata.categories)
+  const { user, controllers } = getStore()
+
+  const [categories, setCategories] = useState<TCategory[]>([])
 
   /*
    *  Search control
@@ -49,6 +56,30 @@ const CategoriesPage = () => {
     navigate(`single/${id}`)
   }
 
+  // Start component
+
+  const loadData = useCallback(async () => {
+    try {
+      const req = await Api.categories.listAll({})
+
+      if (req.ok) {
+        setCategories(req.data.content)
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: req.error,
+        })
+      }
+    } catch (error) {
+      // ...
+    }
+  }, [controllers.feedback])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
+
   return (
     <S.Content>
       <PageHeader type={"table"} from={"categories"} action={handleNew} />
@@ -76,7 +107,15 @@ const CategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.categories}
-        data={categories}
+        data={categories.map((i) => ({
+          ...i,
+          subcategories: [],
+          creator: {
+            id: user?.id,
+            name: user?.name,
+            role: user?.profile,
+          },
+        }))}
         actions={{
           edit: handleEdit,
         }}

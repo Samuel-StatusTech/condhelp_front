@@ -1,4 +1,4 @@
 export const subcategoryForm = {
-  parent: "",
+  parent: 0,
   name: "",
 }
