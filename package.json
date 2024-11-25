@@ -22,6 +22,7 @@
     "dayjs": "^1.11.12",
     "google-api-javascript-client": "^0.1.0",
     "googleapis": "^142.0.0",
+    "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.3.1",

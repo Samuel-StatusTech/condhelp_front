@@ -3,7 +3,7 @@ import * as C from "../styled"
 
 import initials from "../../../utils/initials"
 import Form from "../../../components/Form"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 import { systemOptions } from "../../../utils/system/options"
 
@@ -27,7 +27,7 @@ import {
 
 const FPpeople = () => {
   const navigate = useNavigate()
-  const params = useParams()
+  // const params = useParams()
 
   const [personType, setPersonType] = useState<TAccess>("admin")
 

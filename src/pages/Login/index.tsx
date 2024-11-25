@@ -6,11 +6,8 @@ import initials from "../../utils/initials"
 import Button from "../../components/Button"
 import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
-
-const fixedAuth = {
-  email: "email@email.com",
-  pass: "123456",
-}
+import { checkErrors } from "../../utils/tb/checkErrors"
+import { Api } from "../../api"
 
 const userAdminData: any = {
   id: "user-1",
@@ -20,54 +17,6 @@ const userAdminData: any = {
   surname: "Top",
   email: "admin@email.com",
   image: null,
-}
-
-const userBranchData: any = {
-  id: "user-1",
-  status: "active",
-  profile: "branch",
-  name: "StatusTech",
-  surname: "Top",
-  email: "branch@email.com",
-  image: null,
-}
-
-const userFranchiseData: any = {
-  id: "user-1",
-  status: "active",
-  profile: "franchise",
-  name: "StatusTech",
-  surname: "Top",
-  email: "franchise@email.com",
-  image: null,
-}
-
-const userManagerData: any = {
-  id: "user-1",
-  status: "active",
-  profile: "manager",
-  name: "StatusTech",
-  surname: "Top",
-  email: "manager@email.com",
-  image: null,
-}
-
-const userProviderData: any = {
-  id: "user-1",
-  status: "active",
-  profile: "provider",
-  name: "StatusTech",
-  surname: "Top",
-  email: "provider@email.com",
-  image: null,
-}
-
-const userData = {
-  admin: userAdminData,
-  branch: userBranchData,
-  franchise: userFranchiseData,
-  manager: userManagerData,
-  provider: userProviderData,
 }
 
 const Login = () => {
@@ -89,37 +38,33 @@ const Login = () => {
   const handleSubmit = async () => {
     setSubmitting(true)
 
-    // ...
-    setTimeout(async () => {
-      setSubmitting(false)
-      const emailrole = form.email.split("@")[0] as any
+    const errors = checkErrors.login(form)
 
-      // @ts-ignore
-      const info = userData[emailrole]
+    if (!errors.has) {
+      const auth = await Api.auth.login({
+        usuario: form.email,
+        senha: form.pass,
+      })
 
-      if (info) {
-        // ... store data
-        // @ts-ignore
-
-        if (form.pass === fixedAuth.pass) {
-          controllers.user.setData(info)
-          navigate("/dashboard")
-        } else {
-          controllers.feedback.setData({
-            state: "error",
-            message: "Verifique os dados e tente novamente.",
-            visible: true,
-          })
-        }
+      if (auth.ok) {
+        controllers.user.setData(userAdminData)
+        navigate("/dashboard")
       } else {
         controllers.feedback.setData({
           state: "error",
-          message:
-            "Usuário não encontrado. Verifique os dados e tente novamente.",
+          message: auth.error,
           visible: true,
         })
       }
-    }, 1000)
+    } else {
+      controllers.feedback.setData({
+        state: "error",
+        message: "Verifique os dados e tente novamente.",
+        visible: true,
+      })
+    }
+
+    setSubmitting(false)
   }
 
   const handleRecoveryMail = () => {
