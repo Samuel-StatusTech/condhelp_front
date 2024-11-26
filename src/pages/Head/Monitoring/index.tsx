@@ -19,14 +19,14 @@ const MonitoringPage = () => {
   const [contacting, setContacting] = useState(false)
 
   const [budget, setBudget] = useState<TBudget | null>(null)
-  const [provider, setProvider] = useState<TUserTypes["provider"] | null>(null)
+  const [provider, setProvider] = useState<TUserTypes["PRESTADOR"] | null>(null)
   const [actualProviders, setActualProviders] = useState<
-    TUserTypes["provider"][]
+    TUserTypes["PRESTADOR"][]
   >([])
 
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     category: parseOptionList([], "id", "name"),
-    provider: [],
+    PRESTADOR: [],
   })
   const [newContact, setNewContact] = useState({
     category: "",
@@ -53,7 +53,7 @@ const MonitoringPage = () => {
   }
 
   useEffect(() => {
-    const pv = actualProviders.find((p) => p.id === newContact.provider)
+    const pv = actualProviders.find((p) => p.id === Number(newContact.provider))
 
     if (pv) {
       setProvider(pv)
@@ -66,8 +66,8 @@ const MonitoringPage = () => {
     setNewContact((nct) => ({ ...nct, provider: "" }))
 
     const providersList = fdata.people.filter(
-      (p) => p.profile === "provider" && p.category === newContact.category
-    ) as TUserTypes["provider"][]
+      (p) => p.profile === "PRESTADOR" && p.category === newContact.category
+    ) as TUserTypes["PRESTADOR"][]
 
     setActualProviders(providersList)
 

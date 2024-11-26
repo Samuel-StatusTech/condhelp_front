@@ -28,7 +28,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
   })
 
   const [options, setOptions] = useState<any>({
-    franchise: [],
+    FRANQUEADO: [],
     condo: [],
     category: [],
     subcategory: [],
@@ -91,12 +91,12 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
       <S.Content>
         {/* For Branches */}
-        {user?.profile === "branch" && (
+        {user?.profile === "FILIAL" && (
           <Input.Select
-            field={"franchise"}
+            field={"FRANQUEADO"}
             onChange={handleField}
-            value={form.franchise as string}
-            options={options.franchise}
+            value={form.FRANQUEADO as string}
+            options={options.FRANQUEADO}
             gridSizes={{ big: 12 }}
             placeholder="Franquia"
           />

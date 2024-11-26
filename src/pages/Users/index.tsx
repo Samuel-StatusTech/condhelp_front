@@ -1,19 +1,24 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Divider from "../../components/_minimals/Divider"
 import * as S from "./styled"
 import Table from "../../components/Table"
-import { fdata } from "../../utils/_dev/falseData"
+
 import PageHeader from "../../components/PageHeader"
 import { useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/system/table"
 import SearchBlock from "../../components/SearchBlock"
 import { systemOptions } from "../../utils/system/options"
 import { TFilter } from "../../utils/@types/components/SearchBlock"
+import { Api } from "../../api"
+import { getStore } from "../../store"
+import { TUser } from "../../utils/@types/data/user"
 
 const UsersPage = () => {
   const navigate = useNavigate()
 
-  const [people] = useState(fdata.people)
+  const { controllers } = getStore()
+
+  const [people, setPeople] = useState<TUser[]>([])
 
   /*
    *  Search control
@@ -44,9 +49,33 @@ const UsersPage = () => {
     navigate("single")
   }, [navigate])
 
-  const handleEditUser = () => {
-    navigate("single")
+  const handleEditUser = (id: number) => {
+    navigate(`single/${id}`)
   }
+
+  // Start component
+
+  const loadData = useCallback(async () => {
+    try {
+      const req = await Api.persons.listAll({})
+
+      if (req.ok) {
+        setPeople(req.data.content)
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: req.error,
+        })
+      }
+    } catch (error) {
+      // ...
+    }
+  }, [controllers.feedback])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   return (
     <S.Content>

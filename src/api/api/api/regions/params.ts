@@ -1,4 +1,4 @@
-import { TNewRegion, TRegion } from "../../../../utils/@types/data/region"
+import { TNewRegion } from "../../../../utils/@types/data/region"
 
 export type TApi_Params_Regions = {
   regions: {

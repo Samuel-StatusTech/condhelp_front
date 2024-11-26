@@ -1,25 +1,28 @@
 import { TDocument } from "./_user/document"
+import { TAccess } from "./access"
 import { TAddress } from "./address"
 import { TCondominium } from "./condominium"
 import { TExperience } from "./managerExperience"
 
 type TUDefault = {
-  id: string
-  active: boolean
-  image: null | string
+  id: number
+  userId: number
+  status: "ATIVO" | "INATIVO" | "AGUARDANDO"
+  photo: null | string
 }
 
 export type TNewUserDefault = {
-  active: boolean
-  image: null | string
+  userId: number
+  status: "ATIVO" | "INATIVO" | "AGUARDANDO"
+  photo: null | string
 }
 
 export type TUserTypes = {
-  admin: TUDefault & TUAdmin
-  branch: TUDefault & TUBranch
-  franchise: TUDefault & TUFranchise
-  manager: TUDefault & TUManager
-  provider: TUDefault & TUProvider
+  ADMIN: TUDefault & TUAdmin
+  FILIAL: TUDefault & TUBranch
+  FRANQUEADO: TUDefault & TUFranchise
+  SINDICO: TUDefault & TUManager
+  PRESTADOR: TUDefault & TUProvider
 }
 
 /*
@@ -37,8 +40,7 @@ export type TNewUser =
   | (TNewUserDefault & TUProvider)
 
 export type TUAdmin = {
-  profile: "admin"
-  active: boolean
+  profile: "ADMIN"
   name: string
   surname: string
   email: string
@@ -48,7 +50,7 @@ export type TUAdmin = {
 }
 
 export type TUBranch = {
-  profile: "branch"
+  profile: "FILIAL"
   name: string
   address: TAddress
   phone1: string
@@ -76,7 +78,7 @@ type TResponsableTypes = {
 }
 
 export type TUFranchise = {
-  profile: "franchise"
+  profile: "FRANQUEADO"
   name: string
   address: TAddress
 
@@ -88,7 +90,7 @@ export type TUFranchise = {
 }
 
 export type TUProvider = {
-  profile: "provider"
+  profile: "PRESTADOR"
   name: string
   franchises: string[]
   fantasyName: string
@@ -143,8 +145,7 @@ export type TUProvider = {
 export type TPendency = "none" | "free" | "has"
 
 export type TUManager = {
-  profile: "manager"
-  active: boolean
+  profile: "SINDICO"
   name: string
   surname: string
   email: string
@@ -161,17 +162,16 @@ export type TUManager = {
 
 export type TUserStatus = "active" | "disabled" | "awaiting"
 
-export type TUserProfile =
-  | "admin"
-  | "franchise"
-  | "branch"
-  | "provider"
-  | "manager"
+export type TUserProfile = TAccess
 
 export const profileRelation: { [key in TUserProfile]: string } = {
-  admin: "Admin",
-  franchise: "Franqueado",
-  branch: "Filial",
-  provider: "Provedor",
-  manager: "Síndico",
+  ADMIN: "Admin",
+  FILIAL: "Filial",
+  FRANQUEADO: "Franqueado",
+  SINDICO: "Síndico",
+  PRESTADOR: "Prestador",
+  CONDOMINIO: "Condomínio",
+  MATRIZ: "Matriz",
+  MONITOR: "Monitor",
+  USUARIO: "Usuário",
 }

@@ -14,7 +14,7 @@ export const condoTableConfig: TConfig = {
   specialFields: {
     name: (item: TCondominium) => item.name,
     manager: (item: TCondominium) =>
-      `${item.manager.name} ${item.manager.surname}`,
+      `${item.manager.name} ${item.manager.surname ?? ""}`,
     city: (item: TCondominium) => item.address.city,
     state: (item: TCondominium) => item.address.state,
     actions: (item: TCondominium, { callbacks }) => (

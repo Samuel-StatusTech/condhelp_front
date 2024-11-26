@@ -21,7 +21,7 @@ import { TUserTypes } from "../../../utils/@types/data/user"
 
 const DashboardManager = () => {
   const { user } = getStore((store) => ({
-    user: store.user as TUserTypes["manager"],
+    user: store.user as TUserTypes["SINDICO"],
   }))
 
   /*

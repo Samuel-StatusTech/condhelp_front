@@ -24,8 +24,8 @@ const FPerrand = () => {
 
   const [form, setForm] = useState<TNewErrand | TErrand>(initials.forms.errand)
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
-    branch: [],
-    franchise: [],
+    FILIAL: [],
+    FRANQUEADO: [],
   })
 
   const handleCancel = () => {
@@ -62,7 +62,7 @@ const FPerrand = () => {
       setTimeout(() => {
         setOptions((opts) => ({
           ...opts,
-          branch: parseOptionList(
+          FILIAL: parseOptionList(
             [
               { id: "1", name: "K1" },
               { id: "2", name: "K2" },
@@ -70,7 +70,7 @@ const FPerrand = () => {
             "id",
             "name"
           ),
-          franchise: parseOptionList(
+          FRANQUEADO: parseOptionList(
             [
               { id: "1", name: "K1" },
               { id: "2", name: "K2" },
@@ -140,17 +140,17 @@ const FPerrand = () => {
                           type: "select",
                           label: "Perfis de destino",
                           placeholder: "Filiais",
-                          field: "branch",
-                          value: form.target.branch as string,
-                          options: options.branch,
+                          field: "FILIAL",
+                          value: form.target.FILIAL as string,
+                          options: options.FILIAL,
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "select",
-                          field: "franchise",
+                          field: "FRANQUEADO",
                           placeholder: "Franquia",
-                          value: form.target.franchise as string,
-                          options: options.franchise,
+                          value: form.target.FRANQUEADO as string,
+                          options: options.FRANQUEADO,
                           gridSizes: { big: 6, small: 12 },
                           alignBottom: true,
                         },

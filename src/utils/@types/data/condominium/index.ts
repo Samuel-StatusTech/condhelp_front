@@ -24,7 +24,7 @@ export type TCondominium = {
   image: null | string
 
   address: TCondominiumAddress
-  manager: TUserTypes["manager"]
+  manager: TUserTypes["SINDICO"]
 
   electionFile: null | any
 }

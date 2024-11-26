@@ -1,7 +1,9 @@
 import { TNewUser, TUBranch } from "../../../@types/data/user"
 
 export const branchInitial: TNewUser & TUBranch = {
-  active: true,
+  userId: 0,
+  status: "ATIVO",
+  photo: null,
   address: {
     cep: "",
     city: "",
@@ -12,11 +14,10 @@ export const branchInitial: TNewUser & TUBranch = {
     street: "",
   },
   email: "",
-  image: null,
   name: "",
   phone1: "",
   phone2: "",
-  profile: "branch",
+  profile: "FILIAL",
   responsable: {
     type: "cnpj",
     fantasyName: "",

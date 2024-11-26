@@ -16,13 +16,15 @@ export const userTableConfig: TConfig = {
   ],
   specialFields: {
     image: (item: TUser, props) => (
-      <UserImageItem userImage={item.image} size={props.data?.size as number} />
+      <UserImageItem userImage={item.photo} size={props.data?.size as number} />
     ),
     name: (item: TUser) =>
-      item.profile === "admin" ? item.name + " " + item.surname : item.name,
+      item.profile === "ADMIN"
+        ? item.name + " " + (item.surname ?? "")
+        : item.name,
     profile: (item: TUser) => relations.roles[item.profile],
     status: (item: TUser) =>
-      relations.status[item.active ? "active" : "disabled"],
+      relations.status[item.status === "ATIVO" ? "active" : "disabled"],
     actions: (item: TUser, { callbacks }) => (
       <TableActions
         id={item.id}

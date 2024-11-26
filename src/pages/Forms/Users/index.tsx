@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import * as C from "../styled"
 
 import initials from "../../../utils/initials"
 import Form from "../../../components/Form"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 import { systemOptions } from "../../../utils/system/options"
 
@@ -24,15 +24,21 @@ import {
   formatCityInscription,
   formatStateInscription,
 } from "../../../utils/tb/format/inscription"
+import { Api } from "../../../api"
+import { TNewUser } from "../../../utils/@types/data/user"
+import { getStore } from "../../../store"
+import { TOption } from "../../../utils/@types/data/option"
 
 const FPpeople = () => {
   const navigate = useNavigate()
-  // const params = useParams()
+  const params = useParams()
 
-  const [personType, setPersonType] = useState<TAccess>("admin")
+  const { controllers } = getStore()
 
-  const [form, setForm] = useState(initials.forms.person[personType])
-  const [options, setOptions] = useState<any>({
+  const [personType, setPersonType] = useState<TAccess>("ADMIN")
+
+  const [form, setForm] = useState<any>(initials.forms.person[personType])
+  const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     company: [],
     department: [],
     level: [],
@@ -46,10 +52,6 @@ const FPpeople = () => {
 
   const handleCancel = () => {
     navigate(-1)
-  }
-
-  const handleSave = async () => {
-    // ...
   }
 
   const handleField = async (field: string, value: any) => {
@@ -67,24 +69,24 @@ const FPpeople = () => {
         "cep",
       ].includes(field)
     ) {
-      setForm((p) => ({
+      setForm((p: any) => ({
         ...p,
         // @ts-ignore
         address: { ...p.address, [field]: value },
       }))
     } else {
       switch (form.profile) {
-        case "admin":
+        case "ADMIN":
           switch (field) {
             case "documentRegister":
-              setForm((p) => ({
+              setForm((p: any) => ({
                 ...p,
                 // @ts-ignore
                 document: { ...p.document, register: value },
               }))
               break
             case "documentDate":
-              setForm((p) => ({
+              setForm((p: any) => ({
                 ...p,
                 // @ts-ignore
                 document: { ...p.document, date: value },
@@ -92,7 +94,7 @@ const FPpeople = () => {
               break
 
             default:
-              setForm((p) => ({ ...p, [field]: value }))
+              setForm((p: any) => ({ ...p, [field]: value }))
               break
           }
 
@@ -100,7 +102,7 @@ const FPpeople = () => {
           }
           break
 
-        case "branch":
+        case "FILIAL":
           const responsableKeys = [
             "responsableType",
             "responsableName",
@@ -128,27 +130,27 @@ const FPpeople = () => {
                   },
                 }))
               } else {
-                setForm((p) => ({
+                setForm((p: any) => ({
                   ...p,
                   // @ts-ignore
                   responsable: { ...p.responsable, [fieldName]: value },
                 }))
               }
             } else {
-              setForm((p) => ({
+              setForm((p: any) => ({
                 ...p,
                 // @ts-ignore
                 responsable: { ...p.responsable, [fieldName]: value },
               }))
             }
-          } else setForm((p) => ({ ...p, [field]: value }))
+          } else setForm((p: any) => ({ ...p, [field]: value }))
           break
 
-        case "manager":
-        case "provider":
+        case "SINDICO":
+        case "PRESTADOR":
           switch (field) {
             case "documentRegister":
-              setForm((p) => ({
+              setForm((p: any) => ({
                 ...p,
                 // @ts-ignore
                 document: { ...p.document, register: value },
@@ -164,7 +166,7 @@ const FPpeople = () => {
             // TODO: condos insert case
 
             default:
-              setForm((p) => ({ ...p, [field]: value }))
+              setForm((p: any) => ({ ...p, [field]: value }))
               break
           }
 
@@ -174,9 +176,151 @@ const FPpeople = () => {
           break
       }
 
-      setForm((p) => ({ ...p, [field]: value }))
+      setForm((p: any) => ({ ...p, [field]: value }))
     }
   }
+
+  const handleCreate = async () => {
+    try {
+      // await userAccountCreate()
+
+      const req = await Api.persons.create({
+        newPerson: form as TNewUser,
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Região criada com sucesso",
+        })
+
+        navigate("/dashboard/regions")
+      }
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleSave = async () => {
+    try {
+      if (params.id) handleUpdate()
+      else handleCreate()
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleDelete = async () => {
+    try {
+      const req = await Api.regions.delete({ id: Number(params.id) })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Categoria excluida",
+        })
+
+        navigate("/dashboard/regions")
+      }
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      const req = await Api.persons.update({
+        person: { ...form, id: params.id as string },
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Região atualizada com sucesso",
+        })
+
+        navigate("/dashboard/regions")
+      }
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const loadData = useCallback(async () => {
+    try {
+      const countriesReq = await Api.countries.listAll({}).then((res) => {
+        if (res.ok) {
+          setOptions((opts) => ({
+            ...opts,
+            country: parseOptionList(res.data.content, "id", "name"),
+          }))
+        } else {
+          controllers.feedback.setData({
+            message:
+              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+            state: "error",
+            visible: true,
+          })
+          navigate(-1)
+        }
+      })
+      const statesReq = await Api.states.listAll({}).then((res) => {
+        if (res.ok) {
+          setOptions((opts) => ({
+            ...opts,
+            state: parseOptionList(res.data.content, "id", "name"),
+          }))
+        } else {
+          controllers.feedback.setData({
+            message:
+              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+            state: "error",
+            visible: true,
+          })
+          navigate(-1)
+        }
+      })
+
+      await Promise.all([countriesReq, statesReq]).catch((err) => {
+        controllers.feedback.setData({
+          message:
+            "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+          state: "error",
+          visible: true,
+        })
+        navigate(-1)
+      })
+
+      if (params.id) {
+        const req = await Api.persons.getSingle({ id: Number(params.id) })
+
+        if (req.ok) {
+          console.log(req.data)
+          setForm(req.data)
+        } else {
+          controllers.feedback.setData({
+            message: req.error,
+            state: "error",
+            visible: true,
+          })
+        }
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        message: "Não foi possível carregar as informações da região.",
+        state: "error",
+        visible: true,
+      })
+    }
+  }, [controllers.feedback, navigate, params.id])
+
+  useEffect(() => {
+    // ...
+    loadData()
+  }, [loadData])
 
   useEffect(() => {
     setOptions((opts: any) => ({
@@ -195,9 +339,9 @@ const FPpeople = () => {
     type: "custom",
     element: (
       <FormDefaultButtons
-        handleCancel={() => {}}
-        handleDelete={() => {}}
-        handleSave={() => {}}
+        handleDelete={handleDelete}
+        handleCancel={handleCancel}
+        handleSave={handleSave}
       />
     ),
   }
@@ -206,8 +350,8 @@ const FPpeople = () => {
     let content: TBlock["groups"] = []
 
     switch (form.profile) {
-      case "admin":
-      case "manager":
+      case "ADMIN":
+      case "SINDICO":
         content = [
           {
             type: "fields",
@@ -260,7 +404,7 @@ const FPpeople = () => {
         ]
         break
 
-      case "branch":
+      case "FILIAL":
         content = [
           {
             type: "fields",
@@ -393,7 +537,7 @@ const FPpeople = () => {
         ]
         break
 
-      case "provider":
+      case "PRESTADOR":
         content = [
           {
             type: "custom",
@@ -430,9 +574,9 @@ const FPpeople = () => {
           {
             type: "custom",
             element: (() => {
-              const content = form.franchises.map((f) => {
+              const content = form.franchises.map((f: any) => {
                 const franchiseData = fdata.people
-                  .filter((i) => i.profile === "franchise")
+                  .filter((i) => i.profile === "FRANQUEADO")
                   .find((i) => i.id === f)
 
                 return (
@@ -629,7 +773,7 @@ const FPpeople = () => {
     let content: TBlock[] = []
 
     switch (form.profile) {
-      case "admin":
+      case "ADMIN":
         content = [
           {
             title: "Informações do perfil",
@@ -671,7 +815,7 @@ const FPpeople = () => {
         ]
         break
 
-      case "branch":
+      case "FILIAL":
         content = [
           {
             title: "Informações do perfil",
@@ -771,7 +915,7 @@ const FPpeople = () => {
         ]
         break
 
-      case "franchise":
+      case "FRANQUEADO":
         content = [
           {
             title: "Informações do responsável",
@@ -795,7 +939,7 @@ const FPpeople = () => {
         ]
         break
 
-      case "manager":
+      case "SINDICO":
         content = [
           {
             title: "Informações do perfil",
@@ -884,7 +1028,7 @@ const FPpeople = () => {
         ]
         break
 
-      case "provider":
+      case "PRESTADOR":
         content = [
           {
             title: "Informações Comerciais",

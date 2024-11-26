@@ -9,7 +9,7 @@ import Button from "../../../components/Button"
 import Input from "../../../components/Input"
 
 type Props = {
-  provider: TUserTypes["provider"] | null
+  provider: TUserTypes["PRESTADOR"] | null
   newContact: {
     category: string
     provider: string

@@ -1,7 +1,7 @@
 export const profilesOptions = [
-  { key: "admin", value: "Admin" },
-  { key: "branch", value: "Filial" },
-  { key: "franchise", value: "Franquia" },
-  { key: "manager", value: "Síndico" },
-  { key: "provider", value: "Prestador" },
+  { key: "ADMIN", value: "Admin" },
+  { key: "FILIAL", value: "Filial" },
+  { key: "FRANQUEADO", value: "Franquia" },
+  { key: "SINDICO", value: "Síndico" },
+  { key: "PRESTADOR", value: "Prestador" },
 ]

@@ -1,10 +1,15 @@
 export const relations = {
   roles: {
-    admin: "Admin",
-    branch: "Filial",
-    franchise: "Franquia",
-    manager: "Síndico",
-    provider: "Prestador",
+    ADMIN: "Admin",
+    FILIAL: "Filial",
+    FRANQUEADO: "Franquia",
+    SINDICO: "Síndico",
+    PRESTADOR: "Prestador",
+
+    USUARIO: "",
+    MATRIZ: "",
+    CONDOMINIO: "",
+    MONITOR: "",
   },
   status: {
     active: "Ativo",
@@ -13,6 +18,7 @@ export const relations = {
     sketch: "Rascunho",
     send: "Enviado",
   },
+
   pendencies: {
     has: "Pendente",
     free: "Isento",
@@ -28,11 +34,16 @@ export const relations = {
       send: "#90CC61",
     },
     profile: {
-      admin: "#90CC61",
-      branch: "#45D0EE",
-      franchise: "#45D0EE",
-      manager: "#7D37B4",
-      provider: "",
+      ADMIN: "#90CC61",
+      FILIAL: "#45D0EE",
+      FRANQUEADO: "#45D0EE",
+      SINDICO: "#7D37B4",
+      PRESTADOR: "",
+
+      USUARIO: "",
+      MATRIZ: "",
+      CONDOMINIO: "",
+      MONITOR: "",
     },
     pendencies: {
       none: "#90CC61",

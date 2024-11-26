@@ -46,6 +46,7 @@ const Router = () => {
             <Route path="users">
               <Route path="" element={<UsersPage />} />
               <Route path="single" element={<PersonPage />} />
+              <Route path="single/:id" element={<PersonPage />} />
             </Route>
             <Route path="condos">
               <Route path="" element={<CondosPage />} />

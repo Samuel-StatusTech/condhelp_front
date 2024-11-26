@@ -2,7 +2,7 @@ import DashboardAdmin from "./admin"
 import DashboardBranch from "./branch"
 import DashboardFranchise from "./franchise"
 import DashboardManager from "./manager"
-import DashboardProvider from "./franchise"
+import DashboardProvider from "./manager"
 
 export const DashboardPages = {
   Admin: DashboardAdmin,

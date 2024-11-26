@@ -3,8 +3,8 @@ import { TCondominium } from "../../@types/data/condominium"
 import { TUserTypes } from "../../@types/data/user"
 
 const managers = FDpeople.filter(
-  (i) => i.profile === "manager"
-) as TUserTypes["manager"][]
+  (i) => i.profile === "SINDICO"
+) as TUserTypes["SINDICO"][]
 
 export const FDcondos: TCondominium[] = [
   {

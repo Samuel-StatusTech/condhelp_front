@@ -45,15 +45,20 @@ const FPcondo = () => {
     if (field === "managerId") {
       // find manager..
       const m = fdata.people.filter(
-        (p) => p.profile === "manager" && p.id === value
+        (p) => p.profile === "SINDICO" && p.id === value
       )
 
       if (m) setForm((f) => ({ ...f, manager: { ...f.manager, id: value } }))
-      else
+      else {
         setForm((f) => ({
           ...f,
-          manager: { ...f.manager, since: f.manager.since },
+          manager: {
+            ...f.manager,
+            id: String(f.manager.id),
+            since: f.manager.since,
+          },
         }))
+      }
     } else if (field === "since")
       setForm((f: any) => ({ ...f, manager: { ...f.manager, since: value } }))
     else if (Object.keys(form.address).includes(field))
@@ -69,7 +74,7 @@ const FPcondo = () => {
         setOptions((opts) => ({
           ...opts,
           managers: parseOptionList(
-            fdata.people.filter((p) => p.profile === "manager"),
+            fdata.people.filter((p) => p.profile === "SINDICO"),
             "id",
             "name"
           ),
@@ -229,7 +234,7 @@ const FPcondo = () => {
                           type: "select",
                           label: "Síndico",
                           field: "managerId",
-                          value: form.manager.id,
+                          value: String(form.manager.id),
                           gridSizes: { big: 9, small: 6 },
                           options: options.managers,
                         },

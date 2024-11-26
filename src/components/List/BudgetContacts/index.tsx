@@ -20,7 +20,7 @@ const BudgetContactsList = ({ list }: Props) => {
           <S.ItemData>{getDateStr(item.date, "dmy")}</S.ItemData>
           <S.ItemData>{getDateStr(item.date, "time")}</S.ItemData>
           <S.ItemData>{item.category.name}</S.ItemData>
-          <S.ItemData>{item.provider.name}</S.ItemData>
+          <S.ItemData>{item.PRESTADOR.name}</S.ItemData>
           <Icons.Expand />
         </S.Item>
       ))}

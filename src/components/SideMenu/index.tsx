@@ -42,8 +42,8 @@ const SideMenu = (props: Props) => {
 
         <S.LoggedUserArea>
           <S.UserProfile>
-            {user?.image ? (
-              <img src={user?.image} alt="" width={"100%"} />
+            {user?.photo ? (
+              <img src={user?.photo} alt="" width={"100%"} />
             ) : (
               <Icons.User />
             )}
@@ -69,7 +69,7 @@ const SideMenu = (props: Props) => {
         </S.MenuContainer>
       </S.MenuArea>
 
-      {user?.profile !== "admin" && (
+      {user?.profile !== "ADMIN" && (
         <S.ButtonWrapper>
           <Button
             type="main"

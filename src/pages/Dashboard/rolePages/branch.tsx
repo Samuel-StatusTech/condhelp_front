@@ -60,7 +60,7 @@ const DashboardFranchise = () => {
   const renderGridContent = () => {
     let content: any[] = []
 
-    dashboardShortcuts.branch.forEach((s, sk) => {
+    dashboardShortcuts.FILIAL.forEach((s, sk) => {
       content.push(
         <Card.DashboardShortcut
           k={5 + (sk + 1) / 2}
@@ -73,7 +73,7 @@ const DashboardFranchise = () => {
     })
     content.push(
       <Card.DashboardShortcut
-        k={5 + dashboardShortcuts.branch.length / 2}
+        k={5 + dashboardShortcuts.FILIAL.length / 2}
         title={"Configurações"}
         icon={"settings"}
         link={"/settings"}

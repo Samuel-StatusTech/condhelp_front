@@ -3,8 +3,8 @@ import { TNewErrand } from "../../@types/data/errand"
 export const errandForm: TNewErrand = {
   title: "",
   target: {
-    branch: "",
-    franchise: "",
+    FILIAL: "",
+    FRANQUEADO: "",
   },
   status: "sketch",
   content: {

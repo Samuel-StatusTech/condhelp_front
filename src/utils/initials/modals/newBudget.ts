@@ -1,7 +1,7 @@
 import { TNewBudget } from "../../@types/data/budget"
 
 export const newBudget: TNewBudget = {
-  franchise: "",
+  FRANQUEADO: "",
   title: "",
   condominium: "",
   urgent: false,

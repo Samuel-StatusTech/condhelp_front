@@ -3,7 +3,7 @@ import { TDefaultStatus } from "./status"
 import { TUserTypes } from "./user"
 
 export type TNewBudget = {
-  franchise?: string
+  FRANQUEADO?: string
   condominium: string
   urgent: boolean
   category: string
@@ -12,7 +12,7 @@ export type TNewBudget = {
   description: string
   start: string
   end: string
-  attached: TUserTypes["provider"][]
+  attached: TUserTypes["PRESTADOR"][]
   file?: File
 }
 
@@ -28,7 +28,7 @@ export type TBudget = {
   end: string
   date: string
   status: TDefaultStatus
-  attached: TUserTypes["provider"][]
+  attached: TUserTypes["PRESTADOR"][]
   file?: {
     url: string
     name: string
@@ -44,12 +44,12 @@ export type TContact = {
     id: number
     name: string
   }
-  provider: {
+  PRESTADOR: {
     id: string
     name: string
   }
 }
 
 export type TFranchiseBudget = TBudget & {
-  franchise: string
+  FRANQUEADO: string
 }

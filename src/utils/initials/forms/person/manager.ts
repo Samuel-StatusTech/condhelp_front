@@ -1,12 +1,13 @@
 import { TNewUser, TUManager } from "../../../@types/data/user"
 
 export const managerInitial: TNewUser & TUManager = {
-  profile: "manager",
-  active: true,
+  userId: 0,
+  status: "ATIVO",
+  photo: null,
+  profile: "SINDICO",
   name: "",
   surname: "",
   email: "",
-  image: null,
   phone1: "",
   phone2: "",
   document: {

@@ -140,7 +140,7 @@ const FPfaq = () => {
                           field: "profile",
                           value: form.profile,
                           options: systemOptions.profiles.filter(
-                            (i) => i.key !== "admin"
+                            (i) => i.key !== "ADMIN"
                           ),
                           gridSizes: { big: 6, small: 12 },
                         },

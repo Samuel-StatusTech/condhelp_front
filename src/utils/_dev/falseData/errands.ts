@@ -6,8 +6,8 @@ export const FDerrands: TErrand[] = [
     date: new Date(),
     title: "Primeiro recado",
     target: {
-      branch: "",
-      franchise: "",
+      FILIAL: "",
+      FRANQUEADO: "",
     },
     status: "sketch",
     content: {
@@ -20,8 +20,8 @@ export const FDerrands: TErrand[] = [
     date: new Date(),
     title: "Primeiro recado",
     target: {
-      branch: "",
-      franchise: "",
+      FILIAL: "",
+      FRANQUEADO: "",
     },
     status: "send",
     content: {
@@ -34,8 +34,8 @@ export const FDerrands: TErrand[] = [
     date: new Date(),
     title: "Primeiro recado",
     target: {
-      branch: "",
-      franchise: "",
+      FILIAL: "",
+      FRANQUEADO: "",
     },
     status: "send",
     content: {

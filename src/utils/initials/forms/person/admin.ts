@@ -1,8 +1,10 @@
 import { TNewUser, TUAdmin } from "../../../@types/data/user"
 
-export const adminInitial: TNewUser & TUAdmin = {
-  profile: "admin",
-  active: true,
+export const ADMINInitial: TNewUser & TUAdmin = {
+  userId: 0,
+  status: "ATIVO",
+  photo: null,
+  profile: "ADMIN",
   name: "",
   surname: "",
   email: "",
@@ -11,5 +13,4 @@ export const adminInitial: TNewUser & TUAdmin = {
     register: "",
     date: "",
   },
-  image: null,
 }

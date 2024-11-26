@@ -1,8 +1,8 @@
 export type TNewErrand = {
   title: string
   target: {
-    branch: string | null
-    franchise: string | null
+    FILIAL: string | null
+    FRANQUEADO: string | null
   }
   status: "sketch" | "send"
   content: {
@@ -15,8 +15,8 @@ export type TErrand = {
   id: string
   title: string
   target: {
-    branch: string | null
-    franchise: string | null
+    FILIAL: string | null
+    FRANQUEADO: string | null
   }
   status: "sketch" | "send"
   content: {

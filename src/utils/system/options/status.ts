@@ -1,5 +1,5 @@
 export const userStatusOptions = [
-  { key: "admin", value: "Ativo" },
+  { key: "ADMIN", value: "Ativo" },
   { key: "inactive", value: "Inativo" },
   { key: "awaiting", value: "Aguardando" },
 ]

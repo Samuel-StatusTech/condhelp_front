@@ -12,10 +12,10 @@ import { Api } from "../../api"
 const userAdminData: any = {
   id: "user-1",
   status: "active",
-  profile: "admin",
+  profile: "ADMIN",
   name: "StatusTech",
   surname: "Top",
-  email: "admin@email.com",
+  email: "ADMIN@email.com",
   image: null,
 }
 
@@ -24,12 +24,17 @@ const Login = () => {
 
   const { controllers } = getStore()
 
+  const [content, setContent] = useState<
+    "normal" | "passmail" | "passmailSent" | "createAccount"
+  >("normal")
+
   const [form, setForm] = useState(initials.forms.login)
   const [submitting, setSubmitting] = useState(false)
   const [recoveryEmail, setRecoveryEmail] = useState("")
-  const [content, setContent] = useState<
-    "normal" | "passmail" | "passmailSent"
-  >("normal")
+
+  // create account
+  const [user, setUser] = useState("")
+  const [pass, setPass] = useState("")
 
   const handleForm = (field: keyof typeof form, v: string) => {
     setForm({ ...form, [field]: v })
@@ -74,6 +79,7 @@ const Login = () => {
 
   const handleNewAccount = () => {
     // ...
+    setContent("createAccount")
   }
 
   const renderContent = () => {
@@ -152,6 +158,36 @@ const Login = () => {
                 setContent("normal")
               }}
             />
+          </>
+        )
+      case "createAccount":
+        return (
+          <>
+            <S.StepTitle>Criar conta</S.StepTitle>
+            <S.StepDescription>
+              Escolha um nome de usuário e uma senha para fazer crescer com a
+              CONDHELP.
+            </S.StepDescription>
+            <Input
+              type={"mail"}
+              placeholder={"Usuario"}
+              value={user}
+              onChange={(v: any) => setUser(v)}
+            />
+            <Input
+              type={"mail"}
+              placeholder={"Senha"}
+              value={pass}
+              onChange={(v: any) => setPass(v)}
+            />
+            <Button
+              type={"main"}
+              text={"Criar minha conta"}
+              action={handleRecoveryMail}
+            />
+            <S.Subaction onClick={() => setContent("normal")}>
+              Voltar para a tela de login
+            </S.Subaction>
           </>
         )
       default:

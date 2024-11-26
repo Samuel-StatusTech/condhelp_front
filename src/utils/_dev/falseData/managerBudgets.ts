@@ -65,9 +65,9 @@ export const FDmanagerBudgets: TBudget[] = [
           id: 0,
           name: "",
         },
-        provider: {
-          id: FDpeople.filter((p) => p.profile === "provider")[0]?.id,
-          name: FDpeople.filter((p) => p.profile === "provider")[0]?.name,
+        PRESTADOR: {
+          id: FDpeople.filter((p) => p.profile === "PRESTADOR")[0]?.id,
+          name: FDpeople.filter((p) => p.profile === "PRESTADOR")[0]?.name,
         },
         date: new Date().toISOString(),
       },

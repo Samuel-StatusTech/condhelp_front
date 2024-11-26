@@ -1,7 +1,9 @@
 import { TNewUserDefault, TUFranchise } from "../../../@types/data/user"
 
 export const franchiseInitial: TNewUserDefault & TUFranchise = {
-  active: true,
+  userId: 0,
+  status: "ATIVO",
+  photo: null,
   address: {
     cep: "",
     city: "",
@@ -12,11 +14,10 @@ export const franchiseInitial: TNewUserDefault & TUFranchise = {
     street: "",
   },
   email: "",
-  image: null,
   name: "",
   phone1: "",
   phone2: "",
-  profile: "franchise",
+  profile: "FRANQUEADO",
   responsable: {
     type: "cnpj",
     fantasyName: "",

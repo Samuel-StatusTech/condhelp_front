@@ -9,15 +9,15 @@ const Dashboard = () => {
 
   const PageContent = useCallback(() => {
     switch (user?.profile) {
-      case "admin":
+      case "ADMIN":
         return <DashboardPages.Admin />
-      case "branch":
+      case "FILIAL":
         return <DashboardPages.Branch />
-      case "franchise":
+      case "FRANQUEADO":
         return <DashboardPages.Franchise />
-      case "manager":
+      case "SINDICO":
         return <DashboardPages.Manager />
-      case "provider":
+      case "PRESTADOR":
         return <DashboardPages.Provider />
       default:
         return null

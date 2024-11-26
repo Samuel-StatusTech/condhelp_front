@@ -10,11 +10,11 @@ export type PDashboardShortcut = {
 }
 
 export const iconsRelations = {
-  branch: <Icons.Branch />,
-  franchise: <Icons.Franchise />,
+  FILIAL: <Icons.Branch />,
+  FRANQUEADO: <Icons.Franchise />,
   region: <Icons.Location />,
-  provider: <Icons.Provider />,
-  manager: <Icons.Manager />,
+  PRESTADOR: <Icons.Provider />,
+  SINDICO: <Icons.Manager />,
   condo: <Icons.Conds />,
   chat: <Icons.Chat />,
   faq: <Icons.Faq />,
@@ -28,13 +28,13 @@ const shortsFranchise: PDashboardShortcut[] = [
   {
     title: "Cadastrar Prestador",
     registers: 3216,
-    icon: "provider",
+    icon: "PRESTADOR",
     link: "/dashboard/providers/single",
   },
   {
     title: "Cadastrar Sídico",
     registers: 889,
-    icon: "manager",
+    icon: "SINDICO",
     link: "/dashboard/managers/single",
   },
   {
@@ -79,8 +79,8 @@ const shortsBranch: PDashboardShortcut[] = [
   {
     title: "Cadastrar Franquia",
     registers: 132,
-    icon: "franchise",
-    link: "/dashboard/franchise/single",
+    icon: "FRANQUEADO",
+    link: "/dashboard/FRANQUEADO/single",
   },
   ...shortsFranchise,
 ]
@@ -89,8 +89,8 @@ const shortsAdmin: PDashboardShortcut[] = [
   {
     title: "Cadastrar Filial",
     registers: 65,
-    icon: "branch",
-    link: "/dashboard/branch/single",
+    icon: "FILIAL",
+    link: "/dashboard/FILIAL/single",
   },
   {
     title: "Cadastrar Região",
@@ -102,9 +102,13 @@ const shortsAdmin: PDashboardShortcut[] = [
 ]
 
 export const dashboardShortcuts: { [key in TAccess]: PDashboardShortcut[] } = {
-  admin: shortsAdmin,
-  branch: shortsBranch,
-  franchise: shortsFranchise,
-  provider: [],
-  manager: [],
+  ADMIN: shortsAdmin,
+  FILIAL: shortsBranch,
+  FRANQUEADO: shortsFranchise,
+  PRESTADOR: [],
+  SINDICO: [],
+  CONDOMINIO: [],
+  MATRIZ: [],
+  MONITOR: [],
+  USUARIO: [],
 }

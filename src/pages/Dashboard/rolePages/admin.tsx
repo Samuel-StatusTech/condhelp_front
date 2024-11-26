@@ -60,7 +60,7 @@ const DashboardAdmin = () => {
   const renderGridContent = () => {
     let content: any[] = []
 
-    dashboardShortcuts.admin.forEach((s, sk) => {
+    dashboardShortcuts.ADMIN.forEach((s, sk) => {
       content.push(
         <Card.DashboardShortcut
           k={5 + (sk + 1) / 2}
@@ -73,7 +73,7 @@ const DashboardAdmin = () => {
     })
     content.push(
       <Card.DashboardShortcut
-        k={5 + dashboardShortcuts.admin.length / 2}
+        k={5 + dashboardShortcuts.ADMIN.length / 2}
         title={"Configurações"}
         icon={"settings"}
         link={"/settings"}

@@ -1,1 +1,10 @@
-export type TAccess = "admin" | "branch" | "franchise" | "manager" | "provider"
+export type TAccess =
+  | "ADMIN"
+  | "USUARIO"
+  | "SINDICO"
+  | "MATRIZ"
+  | "PRESTADOR"
+  | "FILIAL"
+  | "MONITOR"
+  | "FRANQUEADO"
+  | "CONDOMINIO"

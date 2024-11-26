@@ -1,6 +1,6 @@
 import { TUser } from "../../@types/data/user"
 
-export const FDpeople: TUser[] = [
+export const FDpeople: any[] = [
   {
     id: "1",
     name: "StatusTech",
@@ -12,7 +12,7 @@ export const FDpeople: TUser[] = [
       register: "",
       date: new Date().toISOString(),
     },
-    profile: "admin",
+    profile: "ADMIN",
     image: null,
   },
   {
@@ -26,7 +26,7 @@ export const FDpeople: TUser[] = [
       register: "",
       date: new Date().toISOString(),
     },
-    profile: "manager",
+    profile: "SINDICO",
     image: null,
     phone1: "",
     phone2: "",
@@ -45,7 +45,7 @@ export const FDpeople: TUser[] = [
       register: "",
       date: new Date().toISOString(),
     },
-    profile: "manager",
+    profile: "SINDICO",
     image: null,
     phone1: "",
     phone2: "",
@@ -58,7 +58,7 @@ export const FDpeople: TUser[] = [
     name: "Alexandre",
     active: true,
     image: null,
-    profile: "provider",
+    profile: "PRESTADOR",
     franchises: [],
     fantasyName: "",
     address: {
