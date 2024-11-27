@@ -298,7 +298,6 @@ const FPpeople = () => {
         const req = await Api.persons.getSingle({ id: Number(params.id) })
 
         if (req.ok) {
-          console.log(req.data)
           setForm(req.data)
         } else {
           controllers.feedback.setData({

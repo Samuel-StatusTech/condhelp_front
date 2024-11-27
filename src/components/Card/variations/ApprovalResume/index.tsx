@@ -1,3 +1,4 @@
+import { TBudget } from "../../../../utils/@types/data/budget"
 import * as C from "../../styled"
 import * as S from "./styled"
 
@@ -47,7 +48,8 @@ export const DataResumeItem = ({
   role,
 }: PDataResumeItem) => {
   const renderType = () => {
-    const percentage = Math.round((number / total) * 100)
+    const pNumber = Math.round((number / total) * 100)
+    const percentage = !Number.isNaN(pNumber) ? pNumber : 0
 
     let str = ""
 
@@ -82,7 +84,7 @@ export const DataResumeItem = ({
  */
 
 type PGraphData = {
-  type: "approved" | "awaiting" | "rejected"
+  type: TBudget["status"]
   size: number
 }
 
@@ -147,20 +149,26 @@ const ApprovalResume = ({
       <C.MainWrapper $expanded={isOpened}>
         <C.ContentWrapper>
           <C.Content>
-            <S.Graph>
-              <GraphData
-                type={"approved"}
-                size={(data.approved / total) * 100}
-              />
-              <GraphData
-                type={"awaiting"}
-                size={(data.awaiting / total) * 100}
-              />
-              <GraphData
-                type={"rejected"}
-                size={(data.rejected / total) * 100}
-              />
-            </S.Graph>
+            {total === 0 ? (
+              <S.Graph>
+                <S.NullishBudgets>Nenhum orçamento realizado</S.NullishBudgets>
+              </S.Graph>
+            ) : (
+              <S.Graph>
+                <GraphData
+                  type={"approved"}
+                  size={(data.approved / total) * 100}
+                />
+                <GraphData
+                  type={"awaiting"}
+                  size={(data.awaiting / total) * 100}
+                />
+                <GraphData
+                  type={"rejected"}
+                  size={(data.rejected / total) * 100}
+                />
+              </S.Graph>
+            )}
           </C.Content>
         </C.ContentWrapper>
       </C.MainWrapper>

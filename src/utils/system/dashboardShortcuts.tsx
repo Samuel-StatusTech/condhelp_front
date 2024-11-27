@@ -27,49 +27,49 @@ export const iconsRelations = {
 const shortsFranchise: PDashboardShortcut[] = [
   {
     title: "Cadastrar Prestador",
-    registers: 3216,
+    registers: 0,
     icon: "PRESTADOR",
     link: "/dashboard/providers/single",
   },
   {
     title: "Cadastrar Sídico",
-    registers: 889,
+    registers: 0,
     icon: "SINDICO",
     link: "/dashboard/managers/single",
   },
   {
     title: "Cadastrar Condomínio",
-    registers: 213,
+    registers: 0,
     icon: "condo",
     link: "/dashboard/condos/single",
   },
   {
     title: "Cadastrar Recado",
-    registers: 78987,
+    registers: 0,
     icon: "chat",
     link: "/dashboard/errands/single",
   },
   {
     title: "Cadastrar FAQ",
-    registers: 65,
+    registers: 0,
     icon: "faq",
     link: "/dashboard/faqs/single",
   },
   {
     title: "Cadastrar Categoria",
-    registers: 889,
+    registers: 0,
     icon: "category",
     link: "/dashboard/categories/single",
   },
   {
     title: "Cadastrar Subcategoria",
-    registers: 213,
+    registers: 0,
     icon: "subcategory",
     link: "/dashboard/subcategories/single",
   },
   {
     title: "Cadastrar Usuário",
-    registers: 78987,
+    registers: 0,
     icon: "user",
     link: "/dashboard/users/single",
   },
@@ -78,7 +78,7 @@ const shortsFranchise: PDashboardShortcut[] = [
 const shortsBranch: PDashboardShortcut[] = [
   {
     title: "Cadastrar Franquia",
-    registers: 132,
+    registers: 0,
     icon: "FRANQUEADO",
     link: "/dashboard/FRANQUEADO/single",
   },
@@ -88,13 +88,13 @@ const shortsBranch: PDashboardShortcut[] = [
 const shortsAdmin: PDashboardShortcut[] = [
   {
     title: "Cadastrar Filial",
-    registers: 65,
+    registers: 0,
     icon: "FILIAL",
     link: "/dashboard/FILIAL/single",
   },
   {
     title: "Cadastrar Região",
-    registers: 215,
+    registers: 0,
     icon: "region",
     link: "/dashboard/regions/single",
   },

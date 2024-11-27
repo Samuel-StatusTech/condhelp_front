@@ -1,8 +1,6 @@
 import * as S from "./styled"
 
-import { Icons } from "../../../../assets/icons/icons"
 import { ReactComponent as SuperavitGraph } from "../../../../assets/icons/superavitGraph.svg"
-import { ReactComponent as DeficitGraph } from "../../../../assets/icons/deficitGraph.svg"
 
 type Props = {
   k: number
@@ -10,8 +8,8 @@ type Props = {
   data: {
     role: "superavit" | "deficit"
     mainValue: number | string
-    percentage: number
-    indicatorText: string
+    percentage?: number
+    indicatorText?: string
   }
 }
 
@@ -22,7 +20,7 @@ const DashboardCard = ({ k, title, data }: Props) => {
         <S.CardTitle>{title}</S.CardTitle>
         <S.CardInfo>
           <S.CardNumber>{data.mainValue}</S.CardNumber>
-          <S.RelativeData $state={data.role}>
+          {/* <S.RelativeData $state={data.role}>
             <Icons.CircleIndicator />
             <S.RDPercentage>
               <span>
@@ -31,11 +29,12 @@ const DashboardCard = ({ k, title, data }: Props) => {
               </span>
               <span>{data.indicatorText}</span>
             </S.RDPercentage>
-          </S.RelativeData>
+          </S.RelativeData> */}
         </S.CardInfo>
       </S.CardMain>
       <S.GraphArea>
-        {data.role === "superavit" ? <SuperavitGraph /> : <DeficitGraph />}
+        <SuperavitGraph />
+        {/* {data.role === "superavit" ? <SuperavitGraph /> : <DeficitGraph />} */}
       </S.GraphArea>
     </S.Element>
   )

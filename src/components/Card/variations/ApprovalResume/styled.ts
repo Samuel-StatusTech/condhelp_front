@@ -71,6 +71,15 @@ export const Graph = styled.div`
   border-radius: 4px;
   height: 30px;
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.neutral.soft};
+`
+
+export const NullishBudgets = styled.span`
+  width: 100%;
+  text-align: center;
+  align-self: center;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.neutral.main};
 `
 
 export const GraphData = styled.div<{
