@@ -6,6 +6,7 @@ import { regionTableConfig } from "./regionTableConfig"
 import { errandTableConfig } from "./errandTableConfig"
 import { faqTableConfig } from "./faqTableConfig"
 import { finishedBudgetsTableConfig } from "./finishedBudgetsTableConfig"
+import { callsTableConfig } from "./callsHistoryTableConfig"
 
 type TTableConfigs =
   | "users"
@@ -16,6 +17,7 @@ type TTableConfigs =
   | "errands"
   | "faqs"
   | "finishedBudgets"
+  | "calls"
 
 export const tableConfig: {
   [key in TTableConfigs]: TConfig
@@ -28,6 +30,7 @@ export const tableConfig: {
   errands: errandTableConfig,
   faqs: faqTableConfig,
   finishedBudgets: finishedBudgetsTableConfig,
+  calls: callsTableConfig,
 }
 
 type TColumn = {
@@ -46,7 +49,7 @@ export type TConfig = {
       props: {
         // eslint-disable-next-line no-empty-pattern
         data?: {
-          [key: string]: string | number
+          [key: string]: any
         }
         callbacks?: {
           [key: string]: (...props: any) => void

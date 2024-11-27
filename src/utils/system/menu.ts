@@ -95,7 +95,7 @@ export const menu: {
     },
     {
       text: "Histórico de Chamados",
-      link: "/callsHistory",
+      link: "/callshistory",
       access: ["ADMIN"],
     },
     {

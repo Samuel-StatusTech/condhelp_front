@@ -20,6 +20,7 @@ import FaqsPage from "../pages/Faqs"
  */
 
 import Monitoring from "../pages/Head/Monitoring"
+import CallsHistory from "../pages/Head/CallsHistory"
 
 /*
  *  Forms pages
@@ -38,8 +39,17 @@ const Router = () => {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route element={<AuthRoute />}>
-          <Route path="/monitoring" element={<DashTemplate withoutSidebar={true} />}>
+          <Route
+            path="/monitoring"
+            element={<DashTemplate withoutSidebar={true} />}
+          >
             <Route path="" element={<Monitoring />} />
+          </Route>
+          <Route
+            path="/callshistory"
+            element={<DashTemplate withoutSidebar={true} />}
+          >
+            <Route path="" element={<CallsHistory />} />
           </Route>
           <Route path="/dashboard" element={<DashTemplate />}>
             <Route path="" element={<Dashboard />} />
