@@ -34,6 +34,9 @@ export const DataResumeArea = styled.div<{ $selfLine?: boolean }>`
     flex: 2;
     margin-top: 16px;
     justify-content: space-between;
+
+    flex-wrap: wrap;
+    flex-direction: column;
   }
 `
 
