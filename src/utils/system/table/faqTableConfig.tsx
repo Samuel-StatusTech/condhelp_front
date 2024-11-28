@@ -7,14 +7,14 @@ import TableActions from "../../../components/TableActions"
 export const faqTableConfig: TConfig = {
   columns: [
     { title: "Título do FAQ", field: "title" },
-    { title: "Perfil de acesso", field: "profile" },
+    { title: "Perfil de acesso", field: "accessProfiles" },
     { title: "Qt de perguntas", field: "size" },
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    profile: (item: TFaq) =>
-      `${item.profile.map((i) => relations.roles[i]).join(", ")}`,
-    size: (item: TFaq) => item.questions.length,
+    accessProfiles: (item: TFaq) =>
+      `${item.accessProfiles.map((i) => relations.roles[i]).join(", ")}`,
+    size: (item: TFaq) => item.items.length,
     actions: (item: TFaq, { callbacks }) => (
       <TableActions
         id={item.id}

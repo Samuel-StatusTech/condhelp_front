@@ -8,6 +8,7 @@ import { statesOptions as states } from "./states"
 import { managerTimeOptions } from "./managerTime"
 
 export const systemOptions = {
+  accessProfiles: profiles,
   profiles,
   states,
   userStatus: userStatusOptions,

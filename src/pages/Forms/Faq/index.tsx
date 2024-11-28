@@ -7,12 +7,13 @@ import { useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 
 import { getStore } from "../../../store"
-import { fdata } from "../../../utils/_dev/falseData"
 
 import { TNewFaq, TFaq } from "../../../utils/@types/data/faq"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import { List } from "../../../components/List"
 import { systemOptions } from "../../../utils/system/options"
+import { Api } from "../../../api"
+import { TAccess } from "../../../utils/@types/data/access"
 
 const FPfaq = () => {
   const navigate = useNavigate()
@@ -27,27 +28,138 @@ const FPfaq = () => {
     navigate(-1)
   }
 
+  const getObj = () => {
+    return {
+      ...form,
+      accessProfiles: form.accessProfiles.filter((i: string) => i !== "all"),
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      // check errors
+
+      const obj = getObj()
+
+      const req = await Api.faqs.update({ faq: obj as TFaq })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Faq atualizada com sucesso.",
+          state: "success",
+          visible: true,
+        })
+        navigate("/dashboard/managefaq")
+      } else throw new Error()
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Não foi possível atualizar a FAQ. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
+  }
+
+  const handleCreate = async () => {
+    try {
+      // check errors
+
+      const obj = getObj()
+
+      const req = await Api.faqs.create({ newFaq: obj as TNewFaq })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Faq criada com sucesso.",
+          state: "success",
+          visible: true,
+        })
+        navigate("/dashboard/managefaq")
+      } else throw new Error()
+    } catch (error) {
+      controllers.feedback.setData({
+        message: "Não foi possível criar a FAQ. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
+  }
+
   const handleSave = async () => {
-    // ...
+    if (params.id) handleUpdate()
+    else handleCreate()
+  }
+
+  const handleDelete = async () => {
+    if (params.id) {
+      try {
+        if (Number.isNaN(params.id)) throw new Error()
+        else {
+          const req = await Api.faqs.delete({ id: Number(params.id) })
+
+          if (req.ok) {
+            controllers.feedback.setData({
+              message: "Faq excluida com sucesso.",
+              state: "success",
+              visible: true,
+            })
+            navigate("/dashboard/managefaq")
+          } else throw new Error()
+        }
+      } catch (error) {
+        controllers.feedback.setData({
+          message:
+            "Não foi possível excluir a FAQ. Tente novamente mais tarde.",
+          state: "error",
+          visible: true,
+        })
+      }
+    }
   }
 
   const handleField = async (field: string, value: any) => {
-    if (field === "profile") {
-      if (form.profile.includes(value)) {
-        setForm((f: any) => ({
-          ...f,
-          profile: f.profile.filter((i: any) => i !== value),
-        }))
+    if (field === "accessProfiles") {
+      let newList: (TAccess | "all")[] = []
+
+      if (value === "all") {
+        if (form.accessProfiles.length < 4)
+          newList = ["all", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"]
+        else if (form.accessProfiles.includes("all" as any)) newList = []
       } else {
-        setForm((f: any) => ({ ...f, profile: [...f.profile, value] }))
+        if (form.accessProfiles.includes(value)) {
+          if (form.accessProfiles.includes("all" as any))
+            newList = form.accessProfiles.filter(
+              (i: any) => i !== "all" && i !== value
+            )
+          else newList = form.accessProfiles.filter((i: any) => i !== value)
+        } else {
+          if (
+            !form.accessProfiles.includes("all" as any) &&
+            form.accessProfiles.length === 3
+          )
+            newList = [...form.accessProfiles, value, "all"]
+          else newList = [...form.accessProfiles, value]
+        }
       }
+
+      setForm((f) => ({ ...f, accessProfiles: newList as any }))
     } else {
-      setForm((f: any) => ({ ...f, [field]: value }))
+      setForm((f) => ({ ...f, [field]: value }))
     }
   }
 
   const handleAddQuestion = () => {
-    // ...
+    const newFaq: TFaq["items"][number] = {
+      // @ts-ignore
+      id: `new-${form.items.length}`,
+      name: "",
+      answer: "",
+      asking: "",
+      isNew: true,
+    }
+
+    setForm((frm) => ({ ...frm, items: [...frm.items, newFaq] }))
   }
 
   const handleQuestion: (id: any, field: string, value: string) => void = (
@@ -56,7 +168,7 @@ const FPfaq = () => {
     value
   ) => {
     // ...
-    const newList = form.questions.map((i) =>
+    const newList = form.items.map((i) =>
       i.id !== id
         ? i
         : {
@@ -67,27 +179,29 @@ const FPfaq = () => {
 
     setForm((f) => ({
       ...f,
-      questions: newList,
+      items: newList,
     }))
   }
 
-  const handleRemoveQuestion = () => {
-    // ...
+  const handleRemoveQuestion = (id: number) => {
+    setForm((frm) => ({
+      ...frm,
+      items: frm.items.filter((i) => i.id !== id),
+    }))
   }
 
   const loadData = useCallback(async () => {
     try {
-      setTimeout(() => {
-        if (params.id) {
-          const info = fdata.faqs.find((i) => i.id === params.id)
+      if (params.id) {
+        const req = await Api.faqs.getSingle({ id: Number(params.id) })
 
-          if (info) {
-            setForm(info)
-          } else {
-            throw new Error()
-          }
+        if (req.ok) {
+          const info = req.data
+
+          if (info) setForm(info)
+          else throw new Error()
         }
-      }, 1000)
+      }
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações.",
@@ -98,7 +212,6 @@ const FPfaq = () => {
   }, [controllers.feedback, params.id])
 
   useEffect(() => {
-    // ...
     loadData()
   }, [loadData])
 
@@ -137,9 +250,9 @@ const FPfaq = () => {
                         {
                           type: "multiple",
                           label: "Perfis de acesso ao FAQ",
-                          field: "profile",
-                          value: form.profile,
-                          options: systemOptions.profiles.filter(
+                          field: "accessProfiles",
+                          value: form.accessProfiles,
+                          options: systemOptions.accessProfiles.filter(
                             (i) => i.key !== "ADMIN"
                           ),
                           gridSizes: { big: 6, small: 12 },
@@ -163,7 +276,7 @@ const FPfaq = () => {
                         handleAddQuestion={handleAddQuestion}
                         handleQuestion={handleQuestion}
                         handleRemoveQuestion={handleRemoveQuestion}
-                        list={form.questions}
+                        list={form.items}
                       />
                     ),
                   },
@@ -171,9 +284,9 @@ const FPfaq = () => {
                     type: "custom",
                     element: (
                       <FormDefaultButtons
-                        handleDelete={() => {}}
-                        handleCancel={() => {}}
-                        handleSave={() => {}}
+                        handleDelete={handleDelete}
+                        handleCancel={handleCancel}
+                        handleSave={handleSave}
                       />
                     ),
                   },

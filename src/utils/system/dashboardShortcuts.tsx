@@ -43,12 +43,12 @@ const shortsFranchise: PDashboardShortcut[] = [
     icon: "condo",
     link: "/dashboard/condos/single",
   },
-  {
-    title: "Cadastrar Recado",
-    registers: 0,
-    icon: "chat",
-    link: "/dashboard/errands/single",
-  },
+  // {
+  //   title: "Cadastrar Recado",
+  //   registers: 0,
+  //   icon: "chat",
+  //   link: "/dashboard/errands/single",
+  // },
   {
     title: "Cadastrar FAQ",
     registers: 0,

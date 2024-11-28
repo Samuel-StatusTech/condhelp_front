@@ -2,19 +2,19 @@ import { TAccess } from "../access"
 
 export type TNewFaq = {
   title: string
-  profile: TAccess[]
-  questions: TQuestion[]
+  accessProfiles: TAccess[]
+  items: TQuestion[]
 }
 
 export type TFaq = {
-  id: string
+  id: number
   title: string
-  profile: TAccess[]
-  questions: TQuestion[]
+  accessProfiles: TAccess[]
+  items: TQuestion[]
 }
 
 type TQuestion = {
   id: number
-  asking: string
+  question: string
   answer: string
 }

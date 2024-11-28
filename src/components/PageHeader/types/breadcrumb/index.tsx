@@ -11,10 +11,11 @@ import { breadcrumbs } from "../../../../utils/system/breadcrumbs"
 type Props = {
   from: TBreadCrumFrom
   forForm?: boolean
+  noBack?: boolean
   handleAction?: () => void
 }
 
-const BreadcrumbPageHeader = ({ from, forForm }: Props) => {
+const BreadcrumbPageHeader = ({ from, forForm, noBack }: Props) => {
   const navigate = useNavigate()
 
   const handleAction = () => {
@@ -32,7 +33,7 @@ const BreadcrumbPageHeader = ({ from, forForm }: Props) => {
       <S.PageIndicator $k={1}>
         <BreadCrumb paths={getPaths()} />
       </S.PageIndicator>
-      {forForm && (
+      {forForm && !noBack && (
         <Button
           type="quaternary"
           action={handleAction}

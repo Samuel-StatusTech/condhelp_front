@@ -40,7 +40,7 @@ const CallsHistory = () => {
         } else {
           controllers.feedback.setData({
             message:
-              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+              "Houve um erro ao carregar informações. Tente novamente mais tarde.",
             state: "error",
             visible: true,
           })
@@ -49,7 +49,7 @@ const CallsHistory = () => {
       })
     } catch (error) {
       controllers.feedback.setData({
-        message: "Não foi possível carregar as informações da região.",
+        message: "Não foi possível carregar as informações.",
         state: "error",
         visible: true,
       })

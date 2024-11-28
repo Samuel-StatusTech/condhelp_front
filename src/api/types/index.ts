@@ -8,6 +8,7 @@ import { TApi_Subcategories } from "../api/api/subcategories"
 import { TApi_Persons } from "../api/api/persons"
 import { TApi_Budgets } from "../api/api/budget"
 import { TApi_Condos } from "../api/api/condos"
+import { TApi_Faqs } from "../api/api/faqs"
 
 export type TApi = {
   auth: TApi_Auth
@@ -20,4 +21,5 @@ export type TApi = {
   states: TApi_States
   countries: TApi_Countries
   persons: TApi_Persons
+  faqs: TApi_Faqs
 }

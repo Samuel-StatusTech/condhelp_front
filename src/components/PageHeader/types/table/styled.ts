@@ -50,5 +50,6 @@ export const Button = styled.button<{ $k: number }>`
 
   span {
     ${({ $k, theme }) => theme.animations.delays.main($k + 1.5)}
+    font-weight: 600;
   }
 `

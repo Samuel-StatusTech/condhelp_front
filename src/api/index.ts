@@ -14,6 +14,7 @@ import { apiCountries } from "./api/api/countries"
 import { apiPersons } from "./api/api/persons"
 import { apiBudgets } from "./api/api/budget"
 import { apiCondos } from "./api/api/condos"
+import { apiFaqs } from "./api/api/faqs"
 
 axios.defaults.baseURL = "https://api.oitickets.com.br/api/v1"
 
@@ -74,4 +75,5 @@ export const Api: TApi = {
   states: apiStates,
   countries: apiCountries,
   persons: apiPersons,
+  faqs: apiFaqs,
 }

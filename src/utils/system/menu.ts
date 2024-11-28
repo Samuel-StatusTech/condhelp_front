@@ -60,13 +60,13 @@ export const menu: {
       tag: "budgets",
       access: ["FILIAL", "FRANQUEADO"],
     },
-    {
-      icon: "chat",
-      text: "Recados",
-      link: "/errands",
-      tag: "errands",
-      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
-    },
+    // {
+    //   icon: "chat",
+    //   text: "Recados",
+    //   link: "/errands",
+    //   tag: "errands",
+    //   access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
+    // },
     {
       icon: "faq",
       text: "Gerenciar FAQ's",
@@ -74,13 +74,13 @@ export const menu: {
       tag: "managefaq",
       access: ["ADMIN"],
     },
-    {
-      icon: "reports",
-      text: "Relatórios",
-      link: "/reports",
-      tag: "reports",
-      access: ["ADMIN", "FILIAL", "FRANQUEADO"],
-    },
+    // {
+    //   icon: "reports",
+    //   text: "Relatórios",
+    //   link: "/reports",
+    //   tag: "reports",
+    //   access: ["ADMIN", "FILIAL", "FRANQUEADO"],
+    // },
   ],
   nav: [
     {
@@ -105,8 +105,8 @@ export const menu: {
     },
     {
       text: "FAQ",
-      link: "/faq",
-      access: ["ADMIN"],
+      link: "/faqs",
+      access: ["ADMIN", "SINDICO"],
     },
     {
       text: "Política de privacidade",

@@ -32,6 +32,7 @@ import FPcondo from "../pages/Forms/Condo"
 import FPregion from "../pages/Forms/Region"
 import FPerrand from "../pages/Forms/Errand"
 import FPfaq from "../pages/Forms/Faq"
+import FaqsView from "../pages/Head/Faq"
 
 const Router = () => {
   return (
@@ -50,6 +51,9 @@ const Router = () => {
             element={<DashTemplate withoutSidebar={true} />}
           >
             <Route path="" element={<CallsHistory />} />
+          </Route>
+          <Route path="/faqs" element={<DashTemplate />}>
+            <Route path="" element={<FaqsView />} />
           </Route>
           <Route path="/dashboard" element={<DashTemplate />}>
             <Route path="" element={<Dashboard />} />

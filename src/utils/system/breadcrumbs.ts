@@ -21,8 +21,11 @@ export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
     { title: "Detalhes do recado" },
   ],
   faqs: [
-    { title: "Gerenciar FAQ's", to: "/dashboard/regions" },
+    { title: "Gerenciar FAQ's", to: "/dashboard/managefaq" },
     { title: "Detalhes do FAQ" },
+  ],
+  faqView: [
+    { title: "FAQS" },
   ],
   regions: [
     { title: "Regiões", to: "/dashboard/regions" },

@@ -29,6 +29,7 @@ const CitiesList = ({ list, categoryId, handleDeleteCity, setList }: Props) => {
               state: "success",
               visible: true,
             })
+            setList(list.filter((i) => i.id !== id))
           } else {
             controllers.feedback.setData({
               message: res.error,
@@ -46,7 +47,6 @@ const CitiesList = ({ list, categoryId, handleDeleteCity, setList }: Props) => {
           })
         })
     }
-    setList(list.filter((i) => i.id !== id))
   }
 
   const handleCityName = async (id: number, value: string) => {

@@ -1,29 +1,38 @@
 import styled from "styled-components"
 
+export const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: ${({ theme }) => theme.colors.neutral.white};
+  padding: 20px;
+  border-radius: 8px;
+`
 
-  &:has(div:not(.buttonsArea):hover) {
-    & > div:not(.buttonsArea) {
-      /* background-color: ${({ theme }) => theme.colors.neutral.soft}; */
-      opacity: 0.4;
-    }
-    & > div:hover {
-      /* background-color: ${({ theme }) => theme.colors.neutral.white}; */
-      opacity: 1;
-      svg.delete {
-        fill: ${({ theme }) => theme.colors.neutral.white};
-      }
-    }
-  }
+export const FaqTitle = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.neutral.lightMain};
+`
+
+export const FaqBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
 `
 
 export const Item = styled.div<{ $k: number }>`
   display: flex;
   align-items: center;
   gap: 8px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.neutral.medium};
 
   transition: opacity 0.3s;
 
@@ -38,44 +47,38 @@ export const Item = styled.div<{ $k: number }>`
   }
 `
 
-export const Buttons = styled.div`
-  display: flex;
-  gap: 32px;
-  align-items: center;
-  justify-content: center;
-`
-
-export const BtnArea = styled.div`
-  width: fit-content;
-  display: flex;
-  gap: 10px;
-  cursor: pointer;
-  padding: 4px;
-`
-
 export const ItemId = styled.span`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.neutral.lightMain};
 `
 
-export const ItemContent = styled.div`
+export const ItemContent = styled.div<{ $opened: boolean }>`
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
+  background-color: ${({ $opened, theme }) =>
+    $opened ? theme.colors.neutral.soft : theme.colors.neutral.white};
   border-radius: 8px;
   overflow: hidden;
-  padding: 0 10px;
+  cursor: pointer;
+  padding: 10px;
+  transition: background-color 0.3s;
 `
 
-export const ItemHeader = styled.div`
+export const ItemHeader = styled.div<{ $opened: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 10px 0;
+
+  span {
+    font-weight: ${({ $opened, theme }) => ($opened ? 600 : 400)};
+    color: ${({ $opened, theme }) =>
+      $opened ? theme.colors.neutral.dark : theme.colors.neutral.main};
+  }
 `
 
 export const Input = styled.input`
@@ -98,11 +101,6 @@ export const ItemHeaderButtons = styled.div<{ $opened: boolean }>`
     width: 18px;
     height: 18px;
 
-    & div:has(svg.delete) {
-      transition: opacity 0.3s;
-      opacity: 0;
-    }
-
     &:nth-child(2) {
       transition: transform 0.3s;
       transform: rotate(${({ $opened }) => ($opened ? 180 : 0)}deg);
@@ -123,10 +121,9 @@ export const ItemAnswerArea = styled.div`
 
 export const ItemAnswerContent = styled.div`
   display: flex;
-  padding: 10px;
-  background-color: ${({ theme }) => theme.colors.neutral.soft};
-  border-radius: 4px;
+  padding: 10px 0;
   margin: 10px 0;
+  border-radius: 4px;
   gap: 8px;
 `
 

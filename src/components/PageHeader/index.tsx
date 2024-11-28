@@ -10,6 +10,7 @@ export type THeaderFrom =
   | "regions"
   | "errands"
   | "faqs"
+  | "faqView"
 
 export type TBreadCrumFrom = THeaderFrom
 
@@ -17,12 +18,13 @@ type Props =
   | {
       type: "table"
       from: THeaderFrom
-      action: (p?: any) => void
+      action?: (p?: any) => void
     }
   | {
       type: "breadcrumb"
       from: TBreadCrumFrom
       forForm?: boolean
+      noBack?: boolean
       action?: (p?: any) => void
     }
 
@@ -36,6 +38,7 @@ const PageHeader = (p: Props) => {
           <BreadcrumbPageHeader
             from={p.from}
             forForm={p.forForm}
+            noBack={p.noBack}
             handleAction={p.action}
           />
         )

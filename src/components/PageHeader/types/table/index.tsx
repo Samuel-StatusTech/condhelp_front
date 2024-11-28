@@ -7,7 +7,7 @@ import { memo } from "react"
 
 type Props = {
   from: THeaderFrom
-  action: (p?: any) => void
+  action?: (p?: any) => void
 }
 
 const titleRelations: { [key in THeaderFrom]: string } = {
@@ -18,11 +18,12 @@ const titleRelations: { [key in THeaderFrom]: string } = {
   regions: "Regiões",
   errands: "Recados",
   faqs: "Perguntas frequentes",
+  faqView: "Perguntas frequentes",
 }
 
 const TablePageHeader = ({ from, action }: Props) => {
   const handleAction = () => {
-    action()
+    action && action()
   }
 
   return (
@@ -30,10 +31,12 @@ const TablePageHeader = ({ from, action }: Props) => {
       <S.PageIndicator $k={1}>
         <span>{titleRelations[from]}</span>
       </S.PageIndicator>
-      <S.Button $k={2} onClick={handleAction}>
-        <PlusIcon />
-        <span>Novo</span>
-      </S.Button>
+      {action && (
+        <S.Button $k={2} onClick={handleAction}>
+          <PlusIcon />
+          <span>Novo</span>
+        </S.Button>
+      )}
     </C.Element>
   )
 }

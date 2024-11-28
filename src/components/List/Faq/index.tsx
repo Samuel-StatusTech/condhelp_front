@@ -8,7 +8,7 @@ import { useState } from "react"
 import Divider from "../../_minimals/Divider"
 
 type Props = {
-  list: TFaq["questions"][number][]
+  list: TFaq["items"][number][]
 
   handleAddQuestion: () => void
   handleQuestion: (id: any, field: string, value: string) => void
@@ -51,7 +51,7 @@ const FaqList = ({
 
 type ItemProps = {
   k: number
-  data: TFaq["questions"][number]
+  data: TFaq["items"][number]
   actions: {
     handleQuestion: Props["handleQuestion"]
     handleRemoveQuestion: Props["handleRemoveQuestion"]
@@ -73,9 +73,9 @@ const Item = ({ k, data, actions }: ItemProps) => {
       <S.ItemContent>
         <S.ItemHeader>
           <S.Input
-            value={data.asking}
+            value={data.question}
             onChange={({ target }) =>
-              handleQuestion(data.id, "asking", target.value)
+              handleQuestion(data.id, "question", target.value)
             }
             placeholder="Digite aqui o título do FAQ"
           />
