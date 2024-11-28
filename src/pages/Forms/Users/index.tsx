@@ -9,25 +9,14 @@ import { systemOptions } from "../../../utils/system/options"
 
 import { TBlock } from "../../../utils/@types/components/Form"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
-import { List } from "../../../components/List"
 import { TAccess } from "../../../utils/@types/data/access"
-import { formatPhone } from "../../../utils/tb/format/phone"
-import { formatCep } from "../../../utils/tb/format/cep"
-import { formatCNPJ } from "../../../utils/tb/format/cnpj"
-import { formatCpf } from "../../../utils/tb/format/cpf"
-import Input from "../../../components/Input"
-import Button from "../../../components/Button"
-import { Icons } from "../../../assets/icons/icons"
-import { fdata } from "../../../utils/_dev/falseData"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
-import {
-  formatCityInscription,
-  formatStateInscription,
-} from "../../../utils/tb/format/inscription"
+
 import { Api } from "../../../api"
-import { TNewUser } from "../../../utils/@types/data/user"
+import { TNewUser, TUser } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
+import { formPartials } from "./partials"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -55,7 +44,10 @@ const FPpeople = () => {
   }
 
   const handleField = async (field: string, value: any) => {
-    if (field === "profile") {
+    if (field === "status") {
+      console.log(value)
+      setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
+    } else if (field === "profile") {
       setForm(initials.forms.person[value as TAccess])
       setPersonType(value)
     } else if (
@@ -219,30 +211,40 @@ const FPpeople = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Categoria excluida",
+          message: "Usuário excluído",
         })
 
-        navigate("/dashboard/regions")
+        navigate("/dashboard/users")
       }
     } catch (error) {
       // ...
     }
   }
 
+  const getObj = () => {
+    return {
+      ...(form as TUser),
+      status: form.status ? "ATIVO" : "INATIVO",
+      id: params.id ?? "",
+    }
+  }
+
   const handleUpdate = async () => {
     try {
+      const obj = getObj()
+
       const req = await Api.persons.update({
-        person: { ...form, id: params.id as string },
+        person: obj as any,
       })
 
       if (req.ok) {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Região atualizada com sucesso",
+          message: "Usuário atualizado com sucesso",
         })
 
-        navigate("/dashboard/regions")
+        navigate("/dashboard/users")
       }
     } catch (error) {
       // ...
@@ -298,7 +300,21 @@ const FPpeople = () => {
         const req = await Api.persons.getSingle({ id: Number(params.id) })
 
         if (req.ok) {
-          setForm(req.data)
+          const hasInfo = req.data.profile && req.data.email
+
+          setForm((fm: any) => ({
+            ...fm,
+            ...(hasInfo
+              ? req.data
+              : {
+                  ...req.data,
+                  profile: "SINDICO",
+                  responsable: {
+                    type: "cpf",
+                    register: "",
+                  },
+                }),
+          }))
         } else {
           controllers.feedback.setData({
             message: req.error,
@@ -309,7 +325,7 @@ const FPpeople = () => {
       }
     } catch (error) {
       controllers.feedback.setData({
-        message: "Não foi possível carregar as informações da região.",
+        message: "Não foi possível carregar as informações do usuário.",
         state: "error",
         visible: true,
       })
@@ -350,415 +366,23 @@ const FPpeople = () => {
 
     switch (form.profile) {
       case "ADMIN":
-      case "SINDICO":
-        content = [
-          {
-            type: "fields",
-            fields: [
-              [
-                {
-                  type: "input",
-                  field: "name",
-                  label: "Nome",
-                  value: form.name,
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 6, small: 12 },
-                },
-                {
-                  type: "input",
-                  field: "surname",
-                  label: "Sobrenome",
-                  value: form.surname,
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 6, small: 12 },
-                },
-              ],
-            ],
-          },
-          {
-            type: "fields",
-            fields: [
-              {
-                type: "input",
-                field: "email",
-                label: "Email",
-                value: form.email,
-                placeholder: "Digite aqui",
-                gridSizes: { big: 12 },
-              },
-            ],
-          },
-          {
-            type: "fields",
-            fields: [
-              {
-                type: "profile",
-                label: "Imagem de perfil",
-                field: "image",
-                value: form.image,
-                gridSizes: { big: 12 },
-              },
-            ],
-          },
-        ]
+        content = formPartials.admin.basic({ form })
         break
 
       case "FILIAL":
-        content = [
-          {
-            type: "fields",
-            fields: [
-              [
-                {
-                  type: "input",
-                  field: "name",
-                  label: "Nome",
-                  value: form.name,
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 12 },
-                },
-              ],
-            ],
-          },
-          {
-            type: "fields",
-            fields: [
-              [
-                {
-                  type: "select",
-                  label: "País",
-                  placeholder: "País",
-                  field: "country",
-                  value: form.address?.country ?? "",
-                  options: options.country,
-                  gridSizes: { big: 3, small: 6 },
-                  elevation: 10,
-                },
-                {
-                  type: "select",
-                  label: "Estado",
-                  placeholder: "Estado",
-                  field: "state",
-                  value: form.address?.state ?? ("" as string),
-                  options: options.state,
-                  gridSizes: { big: 3, small: 6 },
-                },
-                {
-                  type: "input",
-                  field: "city",
-                  label: "Nome da cidade",
-                  value: form.address?.city ?? "",
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 6, small: 12 },
-                },
-              ],
-              [
-                {
-                  type: "input",
-                  field: "street",
-                  label: "Endereço",
-                  value: form.address?.street ?? "",
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 8, small: 7 },
-                },
-                {
-                  type: "input",
-                  field: "number",
-                  label: "Número",
-                  value: form.address?.number.replace(/\D/g, "") ?? "",
-                  placeholder: "0",
-                  gridSizes: { big: 4, small: 5 },
-                },
-              ],
-              [
-                {
-                  type: "input",
-                  field: "complement",
-                  label: "Complemento",
-                  value: form.address?.complement ?? "",
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 8, small: 7 },
-                },
-                {
-                  type: "input",
-                  field: "cep",
-                  label: "CEP",
-                  value: formatCep(form.address?.cep ?? ""),
-                  placeholder: "00000-000",
-                  gridSizes: { big: 4, small: 5 },
-                },
-              ],
-            ],
-          },
-          {
-            type: "fields",
-            fields: [
-              {
-                type: "input",
-                field: "email",
-                label: "Email",
-                value: form.email,
-                placeholder: "Digite aqui",
-                gridSizes: { big: 12 },
-              },
-            ],
-          },
-          {
-            type: "fields",
-            fields: [
-              [
-                {
-                  type: "input",
-                  label: "Telefone 1",
-                  field: "phone1",
-                  value: formatPhone(form.phone1),
-                  placeholder: "00 00000-0000",
-                  gridSizes: { big: 6, small: 6 },
-                },
-                {
-                  type: "input",
-                  label: "Telefone 2",
-                  field: "phone2",
-                  value: formatPhone(form.phone2),
-                  placeholder: "00 00000-0000",
-                  gridSizes: { big: 6, small: 6 },
-                },
-              ],
-              {
-                type: "profile",
-                label: "Imagem de perfil",
-                field: "image",
-                value: form.image,
-                gridSizes: { big: 12 },
-              },
-            ],
-          },
-        ]
+        content = formPartials.branch.basic({ form, options })
+        break
+
+      case "FRANQUEADO":
+        content = formPartials.franchise.basic({ form })
+        break
+
+      case "SINDICO":
+        content = formPartials.manager.basic({ form })
         break
 
       case "PRESTADOR":
-        content = [
-          {
-            type: "custom",
-            element: (() => (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(12, minmax(0, 1fr))",
-                  width: "100%",
-                  alignItems: "end",
-                  gap: 16,
-                }}
-              >
-                <Input.Select
-                  value={""}
-                  label="Selecione as franquias"
-                  options={options.franchises}
-                  field="franchises"
-                  onChange={handleField}
-                  gridSizes={{ big: 9, small: 12 }}
-                />
-                <div style={{ gridColumn: `span 3`, paddingBottom: 2 }}>
-                  <Button
-                    type="main"
-                    action={() => {}}
-                    text="Editar franquia"
-                    icon={<Icons.Edit />}
-                    iconLeft={true}
-                  />
-                </div>
-              </div>
-            ))(),
-          },
-          {
-            type: "custom",
-            element: (() => {
-              const content = form.franchises.map((f: any) => {
-                const franchiseData = fdata.people
-                  .filter((i) => i.profile === "FRANQUEADO")
-                  .find((i) => i.id === f)
-
-                return (
-                  <div
-                    style={{
-                      padding: 6,
-                      borderRadius: 18,
-                      backgroundColor: "white",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <span>{franchiseData?.name}</span>
-                    <Icons.Close width={8} height={8} />
-                  </div>
-                ) as JSX.Element
-              })
-
-              return (
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  {content}
-                </div>
-              )
-            })(),
-          },
-          {
-            type: "fields",
-            title: "Identidade do prestador",
-            fields: [
-              [
-                {
-                  type: "logo",
-                  field: "image",
-                  value: form.image,
-                  gridSizes: { big: 3, small: 12 },
-                },
-                {
-                  type: "input",
-                  label: "Nome fantasia",
-                  field: "fantasyName",
-                  value: form.fantasyName,
-                  placeholder: "Informe o nome fantasia",
-                  gridSizes: { big: 9, small: 12 },
-                },
-              ],
-            ],
-          },
-
-          // Address
-          {
-            type: "fields",
-            fields: [
-              [
-                {
-                  type: "select",
-                  label: "País",
-                  placeholder: "País",
-                  field: "country",
-                  value: form.address?.country ?? "",
-                  options: options.country,
-                  gridSizes: { big: 3, small: 6 },
-                  elevation: 10,
-                },
-                {
-                  type: "select",
-                  label: "Estado",
-                  placeholder: "Estado",
-                  field: "state",
-                  value: form.address?.state ?? ("" as string),
-                  options: options.state,
-                  gridSizes: { big: 3, small: 6 },
-                },
-                {
-                  type: "input",
-                  field: "city",
-                  label: "Nome da cidade",
-                  value: form.address?.city ?? "",
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 6, small: 12 },
-                },
-              ],
-              [
-                {
-                  type: "input",
-                  field: "street",
-                  label: "Endereço",
-                  value: form.address?.street ?? "",
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 8, small: 7 },
-                },
-                {
-                  type: "input",
-                  field: "number",
-                  label: "Número",
-                  value: form.address?.number.replace(/\D/g, "") ?? "",
-                  placeholder: "0",
-                  gridSizes: { big: 4, small: 5 },
-                },
-              ],
-              [
-                {
-                  type: "input",
-                  field: "complement",
-                  label: "Complemento",
-                  value: form.address?.complement ?? "",
-                  placeholder: "Digite aqui",
-                  gridSizes: { big: 8, small: 7 },
-                },
-                {
-                  type: "input",
-                  field: "cep",
-                  label: "CEP",
-                  value: formatCep(form.address?.cep ?? ""),
-                  placeholder: "00000-000",
-                  gridSizes: { big: 4, small: 5 },
-                },
-              ],
-            ],
-          },
-
-          // Responsable
-          {
-            type: "fields",
-            fields: [
-              [
-                {
-                  type: "input",
-                  field: "responsable",
-                  label: "Nome do responsável",
-                  value: form.responsable,
-                  placeholder: "Nome do responsável",
-                  gridSizes: { big: 6, small: 12 },
-                },
-                {
-                  type: "input",
-                  field: "website",
-                  label: "Website",
-                  value: form.website,
-                  placeholder: "Website",
-                  gridSizes: { big: 6, small: 12 },
-                },
-              ],
-              [
-                {
-                  type: "input",
-                  field: "phone1",
-                  label: "Telefone principal com DDD",
-                  value: formatPhone(form.phone1),
-                  placeholder: "00 00000-0000",
-                  gridSizes: { big: 6, small: 12 },
-                },
-                {
-                  type: "input",
-                  field: "email",
-                  label: "Email",
-                  value: form.email,
-                  placeholder: "00 00000-0000",
-                  gridSizes: { big: 6, small: 12 },
-                },
-              ],
-              [
-                {
-                  type: "input",
-                  field: "phone2",
-                  label: "Telefone 2",
-                  value: formatPhone(form.phone2),
-                  placeholder: "00 00000-0000",
-                  gridSizes: { big: 6, small: 12 },
-                },
-                {
-                  type: "input",
-                  field: "phone3",
-                  label: "Telefone 3",
-                  value: formatPhone(form.phone3),
-                  placeholder: "00 00000-0000",
-                  gridSizes: { big: 6, small: 12 },
-                },
-              ],
-            ],
-          },
-        ]
+        content = formPartials.provider.basic({ form, options, handleField })
         break
 
       default:
@@ -773,508 +397,23 @@ const FPpeople = () => {
 
     switch (form.profile) {
       case "ADMIN":
-        content = [
-          {
-            title: "Informações do perfil",
-            groups: [
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "select",
-                      label: "Documento",
-                      field: "documentType",
-                      value: "cpf",
-                      options: [{ key: "cpf", value: "CPF" }],
-                      gridSizes: { big: 3, small: 12 },
-                    },
-                    {
-                      type: "input",
-                      field: "documentRegister",
-                      label: "Nº do documento",
-                      value: formatCpf(form.document.register),
-                      placeholder: "000.000.000-00",
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "documentDate",
-                      label: "Data de nascimento",
-                      value: form.document.date,
-                      gridSizes: { big: 3, small: 12 },
-                    },
-                  ],
-                ],
-              },
-
-              formSubmitFields,
-            ],
-          },
-        ]
+        content = formPartials.admin.extra(form, formSubmitFields)
         break
 
       case "FILIAL":
-        content = [
-          {
-            title: "Informações do perfil",
-            groups: [
-              {
-                type: "fields",
-                // @ts-ignore
-                fields: form.responsable
-                  ? [
-                      {
-                        type: "radio",
-                        field: "responsableType",
-                        value: form.responsable.type,
-                        gridSizes: { big: 12 },
-                        options: [
-                          { key: "cnpj", value: "Pessoa Jurídica" },
-                          { key: "cpf", value: "Pessoa Física" },
-                        ],
-                      },
-                      ...(form.responsable.type === "cnpj"
-                        ? [
-                            {
-                              type: "input",
-                              field: "responsableName",
-                              label: "Pessoa Jurídica responsável",
-                              value: form.responsable.name,
-                              placeholder: "Informe a razão social",
-                              gridSizes: { big: 12 },
-                            },
-                            [
-                              {
-                                type: "input",
-                                field: "responsableFantasyName",
-                                label: "Nome fantasia",
-                                value: form.responsable.fantasyName,
-                                placeholder: "Informe o nome fantasia",
-                                gridSizes: { big: 6, small: 12 },
-                              },
-                              {
-                                type: "input",
-                                field: "responsableRegister",
-                                label: "CNPJ",
-                                value: formatCNPJ(form.responsable.register),
-                                placeholder: "00.000.000/0001-00",
-                                gridSizes: { big: 6, small: 12 },
-                              },
-                            ],
-                            [
-                              {
-                                type: "input",
-                                field: "responsableInscriptionState",
-                                label: "Inscrição estadual",
-                                value: formatStateInscription(
-                                  form.responsable.inscriptionState
-                                ),
-                                placeholder: "Apenas números",
-                                gridSizes: { big: 6, small: 12 },
-                              },
-                              {
-                                type: "input",
-                                field: "responsableInscriptionCity",
-                                label: "Inscrição municipal",
-                                value: formatCityInscription(
-                                  form.responsable.inscriptionCity
-                                ),
-                                placeholder: "Apenas números",
-                                gridSizes: { big: 6, small: 12 },
-                              },
-                            ],
-                          ]
-                        : [
-                            [
-                              {
-                                type: "input",
-                                field: "responsableName",
-                                label: "Pessoa responsável",
-                                value: form.responsable.name,
-                                placeholder: "Informe o nome da pessoa",
-                                gridSizes: { big: 6, small: 12 },
-                              },
-                              {
-                                type: "input",
-                                field: "responsableRegister",
-                                label: "CPF",
-                                value: formatCpf(form.responsable.register),
-                                gridSizes: { big: 6, small: 12 },
-                              },
-                            ],
-                          ]),
-                    ]
-                  : [],
-              },
-
-              formSubmitFields,
-            ],
-          },
-        ]
+        content = formPartials.branch.extra(form, formSubmitFields)
         break
 
       case "FRANQUEADO":
-        content = [
-          {
-            title: "Informações do responsável",
-            groups: [
-              {
-                type: "fields",
-                fields: [
-                  {
-                    field: "",
-                    value: form.responsable.type,
-                    type: "radio",
-                    options: [
-                      { key: "cnpj", value: "Pessoa Jurídica" },
-                      { key: "cpf", value: "Pessoa Física" },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ]
+        content = formPartials.franchise.extra(form, formSubmitFields)
         break
 
       case "SINDICO":
-        content = [
-          {
-            title: "Informações do perfil",
-            groups: [
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      label: "Telefone com DDD",
-                      field: "phone1",
-                      value: formatPhone(form.phone1),
-                      placeholder: "00 00000-0000",
-                      gridSizes: { big: 6, small: 6 },
-                    },
-                    {
-                      type: "input",
-                      label: "Celular com DDD",
-                      field: "phone2",
-                      value: formatPhone(form.phone2),
-                      placeholder: "00 00000-0000",
-                      gridSizes: { big: 6, small: 6 },
-                    },
-                  ],
-                ],
-              },
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "select",
-                      label: "Documento",
-                      field: "documentType",
-                      value: "cpf",
-                      options: [{ key: "cpf", value: "CPF" }],
-                      gridSizes: { big: 3, small: 12 },
-                    },
-                    {
-                      type: "input",
-                      field: "documentRegister",
-                      label: "Nº do documento",
-                      value: form.document.register,
-                      placeholder: "000.000.000-00",
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "documentDate",
-                      label: "Data de nascimento",
-                      value: form.document.date,
-                      gridSizes: { big: 3, small: 12 },
-                    },
-                  ],
-                ],
-              },
-              {
-                type: "fields",
-                fields: [
-                  {
-                    type: "select",
-                    label: "Tempo na função como síndico",
-                    field: "experience",
-                    value: form.experience,
-                    options: systemOptions.managerTime,
-                    gridSizes: { big: 12 },
-                  },
-                ],
-              },
-              {
-                type: "custom",
-                element: (
-                  <List.Condos
-                    title="Condomínios vinculados a este síndico"
-                    list={form.condos ?? []}
-                    handleAdd={() => {}}
-                    handleDelete={() => {}}
-                  />
-                ),
-              },
-
-              formSubmitFields,
-            ],
-          },
-        ]
+        content = formPartials.manager.extra(form, formSubmitFields)
         break
 
       case "PRESTADOR":
-        content = [
-          {
-            title: "Informações Comerciais",
-            groups: [
-              {
-                type: "fields",
-                fields: [
-                  {
-                    type: "input",
-                    field: "socialRole",
-                    label: "Razão social",
-                    value: form.socialRole,
-                    placeholder: "Informe a razão social",
-                    gridSizes: { big: 12 },
-                  },
-                  [
-                    {
-                      type: "input",
-                      field: "documentRegister",
-                      label: "CNPJ",
-                      value: formatCNPJ(form.document.register),
-                      placeholder: "00.000.000/0001-00",
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "documentDate",
-                      label: "Data de abertura da empresa",
-                      value: form.document.date,
-                      gridSizes: { big: 6, small: 12 },
-                    },
-                  ],
-                  {
-                    type: "file",
-                    field: "cnpjCard",
-                    label: "Cartão CNPJ",
-                    value: form.cnpjCard,
-                    gridSizes: { big: 12, small: 12 },
-                  },
-                ],
-              },
-              {
-                type: "fields",
-                fields: [
-                  {
-                    type: "select",
-                    label: "Categorias de serviço prestado",
-                    field: "category",
-                    value: form.category,
-                    options: parseOptionList([], "id", "name"),
-                    gridSizes: { big: 12 },
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            title: "Cadastrar documentações",
-            groups: [
-              // CND Federal
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      field: "federalCnd",
-                      label: "CND Federal",
-                      value: form.federalCnd,
-                      placeholder: "000000000000",
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "federalCndStart",
-                      label: "Início",
-                      value: form.federalCndStart,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "federalCndEnd",
-                      label: "Final",
-                      value: form.federalCndEnd,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                  ],
-                  [
-                    {
-                      type: "toggler",
-                      field: "federalCndFree",
-                      label: "Isento",
-                      value: form.federalCndFree,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "file",
-                      field: "federalCndDocument",
-                      value: form.federalCndDocument,
-                      gridSizes: { big: 8, small: 12 },
-                    },
-                  ],
-                ],
-              },
-
-              // CND Estadual
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      field: "stateCnd",
-                      label: "CND Estadual",
-                      value: form.stateCnd,
-                      placeholder: "000000000000",
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "stateCndStart",
-                      label: "Início",
-                      value: form.stateCndStart,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "stateCndEnd",
-                      label: "Final",
-                      value: form.stateCndEnd,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                  ],
-                  [
-                    {
-                      type: "toggler",
-                      field: "stateCndFree",
-                      label: "Isento",
-                      value: form.stateCndFree,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "file",
-                      field: "stateCndDocument",
-                      value: form.stateCndDocument,
-                      gridSizes: { big: 8, small: 12 },
-                    },
-                  ],
-                ],
-              },
-
-              // CND Municipal
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      field: "cityCnd",
-                      label: "CND Municipal",
-                      value: form.cityCnd,
-                      placeholder: "000000000000",
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "cityCndStart",
-                      label: "Início",
-                      value: form.cityCndStart,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "cityCndEnd",
-                      label: "Final",
-                      value: form.cityCndEnd,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                  ],
-                  [
-                    {
-                      type: "toggler",
-                      field: "cityCndFree",
-                      label: "Isento",
-                      value: form.cityCndFree,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "file",
-                      field: "cityCndDocument",
-                      value: form.cityCndDocument,
-                      gridSizes: { big: 8, small: 12 },
-                    },
-                  ],
-                ],
-              },
-
-              // FGTS
-              {
-                type: "fields",
-                fields: [
-                  [
-                    {
-                      type: "input",
-                      field: "fgts",
-                      label: "FGTS",
-                      value: form.fgtsCnd,
-                      placeholder: "000000000000",
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "fgtsStart",
-                      label: "Início",
-                      value: form.fgtsCndStart,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "date",
-                      field: "fgtsEnd",
-                      label: "Final",
-                      value: form.fgtsCndEnd,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                  ],
-                  [
-                    {
-                      type: "toggler",
-                      field: "fgtsFree",
-                      label: "Isento",
-                      value: form.fgtsCndFree,
-                      gridSizes: { big: 4, small: 12 },
-                    },
-                    {
-                      type: "file",
-                      field: "fgtsDocument",
-                      value: form.fgtsCndDocument,
-                      gridSizes: { big: 8, small: 12 },
-                    },
-                  ],
-                ],
-              },
-
-              formSubmitFields,
-            ],
-          },
-        ]
+        content = formPartials.provider.extra(form, formSubmitFields)
         break
 
       default:
@@ -1314,8 +453,8 @@ const FPpeople = () => {
                         {
                           type: "toggler",
                           label: "Ativo",
-                          field: "active",
-                          value: form.active,
+                          field: "status",
+                          value: form.status === "ATIVO",
                           hasTopSpace: true,
                         },
                       ],

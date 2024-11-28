@@ -110,7 +110,29 @@ const UsersPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.users}
-        data={people}
+        data={people.filter((i) => {
+          let ok = true
+
+          const searchOk = !!search
+            ? Object.values(i).some((val) =>
+                String(val).toLowerCase().includes(search.toLowerCase())
+              )
+            : true
+
+          const profileOk =
+            !!filters.profile && filters.profile !== "all"
+              ? i.profile === filters.profile
+              : true
+
+          const statusOk =
+            !!filters.status && filters.status !== "all"
+              ? i.status === filters.status
+              : true
+
+          ok = searchOk && profileOk && statusOk
+
+          return ok
+        })}
         actions={{
           edit: handleEditUser,
         }}

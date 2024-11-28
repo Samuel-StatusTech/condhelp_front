@@ -24,7 +24,7 @@ const listAll: TApi["persons"]["listAll"] = async (data) => {
             resolve({
               ok: false,
               error:
-                "Não foi possível listar as regiões. Tente novamente mais tarde.",
+                "Não foi possível listar os usuários. Tente novamente mais tarde.",
             })
           }
         })
@@ -32,13 +32,13 @@ const listAll: TApi["persons"]["listAll"] = async (data) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível listar as regiões. Tente novamente mais tarde.",
+              "Não foi possível listar os usuários. Tente novamente mais tarde.",
           })
         })
     } catch (error) {
       reject({
         error:
-          "Não foi possível listar as regiões. Tente novamente mais tarde.",
+          "Não foi possível listar os usuários. Tente novamente mais tarde.",
       })
     }
   })
@@ -47,12 +47,10 @@ const listAll: TApi["persons"]["listAll"] = async (data) => {
 const create: TApi["persons"]["create"] = async ({ newPerson }) => {
   return new Promise(async (resolve, reject) => {
     try {
-
-
       // Auth register
 
       // User data register
-      
+
       await service
         .post(`${baseURL}`, newPerson)
         .then((res) => {
@@ -67,7 +65,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
             resolve({
               ok: false,
               error:
-                "Não foi possível criar a região. Tente novamente mais tarde.",
+                "Não foi possível criar o usuário. Tente novamente mais tarde.",
             })
           }
         })
@@ -75,12 +73,12 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível criar a região. Tente novamente mais tarde.",
+              "Não foi possível criar o usuário. Tente novamente mais tarde.",
           })
         })
     } catch (error) {
       reject({
-        error: "Não foi possível criar a região. Tente novamente mais tarde.",
+        error: "Não foi possível criar o usuário. Tente novamente mais tarde.",
       })
     }
   })
@@ -103,7 +101,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
             resolve({
               ok: false,
               error:
-                "Não foi possível atualizar a região. Tente novamente mais tarde.",
+                "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
             })
           }
         })
@@ -111,13 +109,13 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível atualizar a região. Tente novamente mais tarde.",
+              "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
           })
         })
     } catch (error) {
       reject({
         error:
-          "Não foi possível atualizar a região. Tente novamente mais tarde.",
+          "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
       })
     }
   })
@@ -140,7 +138,7 @@ const deleteItem: TApi["persons"]["delete"] = async ({ id }) => {
             resolve({
               ok: false,
               error:
-                "Não foi possível excluir a região. Tente novamente mais tarde.",
+                "Não foi possível excluir o usuário. Tente novamente mais tarde.",
             })
           }
         })
@@ -148,12 +146,13 @@ const deleteItem: TApi["persons"]["delete"] = async ({ id }) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível excluir a região. Tente novamente mais tarde.",
+              "Não foi possível excluir o usuário. Tente novamente mais tarde.",
           })
         })
     } catch (error) {
       reject({
-        error: "Não foi possível excluir a região. Tente novamente mais tarde.",
+        error:
+          "Não foi possível excluir o usuário. Tente novamente mais tarde.",
       })
     }
   })

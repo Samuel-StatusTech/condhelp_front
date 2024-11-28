@@ -1,7 +1,8 @@
 export const userStatusOptions = [
-  { key: "ADMIN", value: "Ativo" },
-  { key: "inactive", value: "Inativo" },
-  { key: "awaiting", value: "Aguardando" },
+  { key: "all", value: "Todos" },
+  { key: "ATIVO", value: "Ativo" },
+  { key: "INATIVO", value: "Inativo" },
+  { key: "PENDENTE", value: "Aguardando" },
 ]
 
 export const errandStatusOptions = [
