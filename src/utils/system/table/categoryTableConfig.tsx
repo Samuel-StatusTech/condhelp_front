@@ -7,13 +7,13 @@ import { TCategory } from "../../@types/data/category"
 export const categoryTableConfig: TConfig = {
   columns: [
     { title: "Nome", field: "name" },
-    { title: "Subcategorias", field: "subcategories" },
+    { title: "Subcategorias", field: "serviceSubcategories" },
     { title: "Criada por", field: "creator" },
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
     name: (item: TCategory) => item.name,
-    subcategories: (item: TCategory) => item.subcategories.length,
+    serviceSubcategories: (item: TCategory) => item.serviceSubcategories.length,
     creator: (item: TCategory) => (
       <ColorTextIndicator
         role="profile"

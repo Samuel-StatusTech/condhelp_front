@@ -56,7 +56,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     setOptions((opts: any) => ({
       ...opts,
       subcategory: parseOptionList(
-        fdata.categories[0].subcategories,
+        fdata.categories[0].serviceSubcategories,
         "id",
         "name"
       ),
@@ -69,7 +69,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       condo: parseOptionList(fdata.condos, "id", "name"),
       category: parseOptionList(fdata.categories, "id", "name"),
       subcategory: parseOptionList(
-        fdata.categories[0].subcategories,
+        fdata.categories[0].serviceSubcategories,
         "id",
         "name"
       ),

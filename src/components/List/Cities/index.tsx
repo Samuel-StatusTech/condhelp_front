@@ -10,16 +10,14 @@ import { getStore } from "../../../store"
 
 type Props = {
   list: TRegion["cities"][number][]
-  categoryId?: string
-  handleDeleteCity?: (id: string) => void
   setList: (list: TRegion["cities"]) => void
 }
 
-const CitiesList = ({ list, categoryId, handleDeleteCity, setList }: Props) => {
+const CitiesList = ({ list, setList }: Props) => {
   const { controllers } = getStore()
 
   const handleDelete = (id: number) => {
-    if (!list[id].isNew) {
+    if (!list.find((i) => i.id === id)?.isNew) {
       Api.cities
         .delete({ id })
         .then((res) => {
@@ -46,6 +44,13 @@ const CitiesList = ({ list, categoryId, handleDeleteCity, setList }: Props) => {
             visible: true,
           })
         })
+    } else {
+      setList(list.filter((i) => i.id !== id))
+      controllers.feedback.setData({
+        message: "Cidade excluida com sucesso.",
+        state: "success",
+        visible: true,
+      })
     }
   }
 
@@ -72,7 +77,8 @@ const CitiesList = ({ list, categoryId, handleDeleteCity, setList }: Props) => {
     <S.Wrapper>
       {list.map((city, sk) => (
         <Input.ListInput
-          id={sk}
+          key={sk}
+          id={city.id}
           handleDelete={handleDelete}
           onChange={handleCityName}
           value={city.name}

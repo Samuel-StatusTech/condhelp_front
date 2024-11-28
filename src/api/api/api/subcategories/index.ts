@@ -50,6 +50,9 @@ const listAll: TApi["subcategories"]["listAll"] = async (data) => {
 const create: TApi["subcategories"]["create"] = async ({ newSubcategory }) => {
   return new Promise(async (resolve, reject) => {
     try {
+
+      console.log("newSubCategory", newSubcategory)
+
       await service
         .post(`${baseURL}`, {
           ...newSubcategory,
@@ -94,7 +97,7 @@ const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
         .put(`${baseURL}/${subcategory.id}`, {
           id: subcategory.id,
           name: subcategory.name,
-          serviceCategoryId: subcategory.id,
+          serviceCategoryId: subcategory.serviceCategory,
         })
         .then((res) => {
           const info = res.data

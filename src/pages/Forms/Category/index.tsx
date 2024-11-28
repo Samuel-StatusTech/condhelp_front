@@ -7,12 +7,16 @@ import { useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 import Divider from "../../../components/_minimals/Divider"
 import { List } from "../../../components/List"
-import { TSubCategory } from "../../../utils/@types/data/category/subcategories"
+import {
+  TNewSubCategory,
+  TSubCategory,
+} from "../../../utils/@types/data/category/subcategories"
 import { getStore } from "../../../store"
 
 import { Api } from "../../../api"
 import { TCategory, TNewCategory } from "../../../utils/@types/data/category"
 import { checkErrors } from "../../../utils/tb/checkErrors"
+import FormDefaultButtons from "../../../components/FormDefaultButtons"
 
 const FPcategory = () => {
   const navigate = useNavigate()
@@ -28,8 +32,6 @@ const FPcategory = () => {
   const errors = () => {
     return checkErrors.categories(form)
   }
-
-  const [subcategories] = useState<TSubCategory[]>([])
 
   const handleCancel = () => {
     navigate(-1)
@@ -53,38 +55,100 @@ const FPcategory = () => {
     }
   }
 
-  const handleUpdate = async () => {
-    const req = await Api.categories.update({ category: form as TCategory })
-
-    if (req.ok) {
-      controllers.feedback.setData({
-        visible: true,
-        state: "success",
-        message: "Categoria atualizada com sucesso",
-      })
-
-      navigate("/dashboard/categories")
-    }
-  }
-
-  const handleCreate = async () => {
-    const req = await Api.categories.create({ newCategory: form })
-
-    if (req.ok) {
-      controllers.feedback.setData({
-        visible: true,
-        state: "success",
-        message: "Categoria criada com sucesso",
-      })
-
-      navigate("/dashboard/categories")
-    }
-  }
-
   const handleSave = async () => {
     try {
       if (params.id) handleUpdate()
       else handleCreate()
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      const req = await Api.categories.update({ category: form as TCategory })
+
+      if (req.ok) {
+        await subcategoriesTreat(req.data.id)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Categoria atualizada com sucesso",
+        })
+
+        navigate("/dashboard/categories")
+      }
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const subcategoriesTreat = async (catId: number) => {
+    try {
+      let proms: Promise<any>[] = []
+
+      form.serviceSubcategories.forEach((item) => {
+        if (!!item.name?.trim()) {
+          if (item.isNew) {
+            const newSubCat: TNewSubCategory = {
+              name: item.name,
+              serviceCategory: catId,
+            }
+
+            proms.push(
+              Api.subcategories
+                .create({ newSubcategory: newSubCat })
+                .then((res) => {
+                  if (res.ok) {
+                    setForm((frm) => ({
+                      ...frm,
+                      serviceSubcategories: frm.serviceSubcategories.map(
+                        (i) => {
+                          return i.id !== item.id
+                            ? i
+                            : { ...i, id: res.data.id }
+                        }
+                      ),
+                    }))
+                  }
+                })
+            )
+          } else {
+            const subCatInfo: TSubCategory = item as TSubCategory
+
+            proms.push(
+              Api.subcategories.update({
+                subcategory: subCatInfo,
+              })
+            )
+          }
+        } else {
+          throw new Error()
+        }
+      })
+
+      await Promise.all(proms)
+    } catch (error) {
+      // ...
+    }
+  }
+
+  const handleCreate = async () => {
+    try {
+      const req = await Api.categories.create({ newCategory: form })
+
+      if (req.ok) {
+        await subcategoriesTreat(req.data.id)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Categoria criada com sucesso",
+        })
+
+        navigate("/dashboard/categories")
+      }
     } catch (error) {
       // ...
     }
@@ -164,8 +228,17 @@ const FPcategory = () => {
                     type: "custom",
                     element: (
                       <List.Subcategories
-                        list={subcategories}
-                        categoryId={params.id}
+                        list={form.serviceSubcategories}
+                        setList={(list) =>
+                          handleField("serviceSubcategories", list)
+                        }
+                      />
+                    ),
+                  },
+                  {
+                    type: "custom",
+                    element: (
+                      <FormDefaultButtons
                         handleDelete={handleDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}

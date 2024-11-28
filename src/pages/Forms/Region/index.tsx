@@ -102,24 +102,22 @@ const FPregion = () => {
       if (changedCountryState) {
         form.cities.forEach(async (item) => {
           if (item.isNew && !!item.name.trim()) {
+            const newCity = {
+              stateId: Number(form.stateId),
+              name: item.name,
+            }
+
             proms.push(
-              Api.cities
-                .create({
-                  newCity: {
-                    stateId: Number(form.stateId),
-                    name: item.name,
-                  },
-                })
-                .then((res) => {
-                  if (res.ok) {
-                    setForm((reg) => ({
-                      ...reg,
-                      cities: reg.cities.map((i) => {
-                        return i.id !== item.id ? i : { ...i, id: res.data.id }
-                      }),
-                    }))
-                  }
-                })
+              Api.cities.create({ newCity: newCity }).then((res) => {
+                if (res.ok) {
+                  setForm((reg) => ({
+                    ...reg,
+                    cities: reg.cities.map((i) => {
+                      return i.id !== item.id ? i : { ...i, id: res.data.id }
+                    }),
+                  }))
+                }
+              })
             )
           } else {
             proms.push(
@@ -136,24 +134,22 @@ const FPregion = () => {
       } else {
         form.cities.forEach(async (item) => {
           if (item.isNew && !!item.name.trim()) {
+            const newCity = {
+              stateId: Number(form.stateId),
+              name: item.name,
+            }
+
             proms.push(
-              Api.cities
-                .create({
-                  newCity: {
-                    stateId: Number(form.stateId),
-                    name: item.name,
-                  },
-                })
-                .then((res) => {
-                  if (res.ok) {
-                    setForm((reg) => ({
-                      ...reg,
-                      cities: reg.cities.map((i) => {
-                        return i.id !== item.id ? i : { ...i, id: res.data.id }
-                      }),
-                    }))
-                  }
-                })
+              Api.cities.create({ newCity: newCity }).then((res) => {
+                if (res.ok) {
+                  setForm((reg) => ({
+                    ...reg,
+                    cities: reg.cities.map((i) => {
+                      return i.id !== item.id ? i : { ...i, id: res.data.id }
+                    }),
+                  }))
+                }
+              })
             )
           } else if (item.isEdit) {
             proms.push(
@@ -349,7 +345,6 @@ const FPregion = () => {
                     element: (
                       <List.Cities
                         list={form.cities}
-                        categoryId={params.id}
                         setList={(list: any[]) =>
                           setForm((regionData) => ({
                             ...regionData,

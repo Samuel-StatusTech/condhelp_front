@@ -21,7 +21,10 @@ const listAll: TApi["categories"]["listAll"] = async (data) => {
           if (info) {
             resolve({
               ok: true,
-              data: info,
+              data: {
+                ...info,
+                content: info.content.filter((i: any) => i.active),
+              },
             })
           } else {
             resolve({
@@ -39,7 +42,8 @@ const listAll: TApi["categories"]["listAll"] = async (data) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error:
           "Não foi possível listar as categorias. Tente novamente mais tarde.",
       })
@@ -76,7 +80,8 @@ const create: TApi["categories"]["create"] = async ({ newCategory }) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error:
           "Não foi possível criar a categoria. Tente novamente mais tarde.",
       })
@@ -113,7 +118,8 @@ const update: TApi["categories"]["update"] = async ({ category }) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error:
           "Não foi possível atualizar a categoria. Tente novamente mais tarde.",
       })
@@ -125,7 +131,7 @@ const deleteCategory: TApi["categories"]["delete"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .delete(`${baseURL}/${id}`)
+        .put(`${baseURL}/inactivate/${id}`)
         .then((res) => {
           const info = res.data
 
@@ -150,7 +156,8 @@ const deleteCategory: TApi["categories"]["delete"] = async ({ id }) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error:
           "Não foi possível excluir a categoria. Tente novamente mais tarde.",
       })
@@ -187,7 +194,8 @@ const getSingle: TApi["categories"]["getSingle"] = async ({ id }) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error:
           "Não foi possível carregar as informações. Tente novamente mais tarde.",
       })

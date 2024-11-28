@@ -33,7 +33,7 @@ export type TApi_Responses_Subcategories = {
         empty: boolean
       }>
     >
-    create: Promise<TDefaultRes<{}>>
+    create: Promise<TDefaultRes<TSubCategory>>
     getSingle: Promise<TDefaultRes<TSubCategory>>
     update: Promise<TDefaultRes<TSubCategory>>
     delete: Promise<TDefaultRes<{}>>
