@@ -1,8 +1,18 @@
 import styled from "styled-components"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
-export const Wrapper = styled.div`
-  flex: 1;
+export const Wrapper = styled.div<{ $gridSizes?: FormField["gridSizes"] }>`
+  grid-column: span
+    ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.big : "unset")};
+  flex: ${({ $gridSizes }) => (!$gridSizes ? 1 : "unset")};
   display: flex;
+  min-width: unset;
+  overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    grid-column: span
+      ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.small : "unset")};
+  }
 `
 
 export const Area = styled.div`
@@ -19,14 +29,14 @@ export const Label = styled.label`
   width: fit-content;
 `
 
-export const Main = styled.div<{ $fromForm: boolean }>`
+export const Main = styled.div`
   padding: 10px;
-  background-color: ${({ $fromForm, theme }) =>
-    !$fromForm ? "transparent" : theme.colors.neutral.white};
   display: flex;
   align-items: center;
   width: 100%;
+  max-width: 100%;
   gap: 10px;
+  flex-wrap: wrap;
 `
 
 export const Option = styled.div<{ $checked: boolean }>`

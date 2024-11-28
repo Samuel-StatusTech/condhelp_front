@@ -29,13 +29,13 @@ const shortsFranchise: PDashboardShortcut[] = [
     title: "Cadastrar Prestador",
     registers: 0,
     icon: "PRESTADOR",
-    link: "/dashboard/providers/single",
+    link: "/dashboard/users/single",
   },
   {
     title: "Cadastrar Sídico",
     registers: 0,
     icon: "SINDICO",
-    link: "/dashboard/managers/single",
+    link: "/dashboard/users/single",
   },
   {
     title: "Cadastrar Condomínio",
@@ -53,7 +53,7 @@ const shortsFranchise: PDashboardShortcut[] = [
     title: "Cadastrar FAQ",
     registers: 0,
     icon: "faq",
-    link: "/dashboard/faqs/single",
+    link: "/dashboard/managefaq/single",
   },
   {
     title: "Cadastrar Categoria",
@@ -80,7 +80,7 @@ const shortsBranch: PDashboardShortcut[] = [
     title: "Cadastrar Franquia",
     registers: 0,
     icon: "FRANQUEADO",
-    link: "/dashboard/FRANQUEADO/single",
+    link: "/dashboard/users/single",
   },
   ...shortsFranchise,
 ]
@@ -90,7 +90,7 @@ const shortsAdmin: PDashboardShortcut[] = [
     title: "Cadastrar Filial",
     registers: 0,
     icon: "FILIAL",
-    link: "/dashboard/FILIAL/single",
+    link: "/dashboard/users/single",
   },
   {
     title: "Cadastrar Região",

@@ -255,7 +255,7 @@ const FPfaq = () => {
                           options: systemOptions.accessProfiles.filter(
                             (i) => i.key !== "ADMIN"
                           ),
-                          gridSizes: { big: 6, small: 12 },
+                          gridSizes: { big: 12 },
                         },
                       ],
                     ],

@@ -61,7 +61,7 @@ type ItemProps = {
 const Item = ({ k, data, actions }: ItemProps) => {
   const { handleQuestion, handleRemoveQuestion } = actions
 
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(true)
 
   const toggleOpened = () => {
     setOpened(!opened)

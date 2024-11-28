@@ -24,10 +24,10 @@ const InputMultiple = (props: Props) => {
   }
 
   return (
-    <S.Wrapper>
+    <S.Wrapper $gridSizes={props.gridSizes}>
       <S.Area>
         {label && <S.Label>{label}</S.Label>}
-        <S.Main $fromForm={false}>
+        <S.Main>
           {options.map((o, k) => (
             <S.Option
               key={k}
