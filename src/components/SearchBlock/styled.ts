@@ -50,6 +50,7 @@ export const FiltersArea = styled.div`
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     min-width: 100%;
+    flex-direction: column;
   }
 `
 

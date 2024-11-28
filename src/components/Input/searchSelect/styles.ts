@@ -10,6 +10,7 @@ export const SelectArea = styled.div`
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     flex: 1;
     max-width: unset;
+    width: 100%;
   }
 `
 

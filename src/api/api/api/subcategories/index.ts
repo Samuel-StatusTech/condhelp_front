@@ -21,7 +21,12 @@ const listAll: TApi["subcategories"]["listAll"] = async (data) => {
           if (info) {
             resolve({
               ok: true,
-              data: info,
+              data: {
+                ...info,
+                content: info.content.filter(
+                  (i: any) => i.serviceCategory.active
+                ),
+              },
             })
           } else {
             resolve({
@@ -50,7 +55,6 @@ const listAll: TApi["subcategories"]["listAll"] = async (data) => {
 const create: TApi["subcategories"]["create"] = async ({ newSubcategory }) => {
   return new Promise(async (resolve, reject) => {
     try {
-
       console.log("newSubCategory", newSubcategory)
 
       await service
