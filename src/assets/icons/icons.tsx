@@ -1,4 +1,5 @@
 import { ReactComponent as Alert } from "./alert.svg"
+import { ReactComponent as AlertThin } from "./alert_thin.svg"
 import { ReactComponent as Back } from "./back.svg"
 import { ReactComponent as Banner } from "./banner.svg"
 import { ReactComponent as Bell } from "./bell.svg"
@@ -76,6 +77,7 @@ import { ReactComponent as Web } from "./web.svg"
 
 export const Icons = {
   Alert,
+  AlertThin,
   Back,
   Banner,
   Bell,

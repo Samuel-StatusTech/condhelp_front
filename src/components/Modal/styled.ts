@@ -39,6 +39,7 @@ export const ModalTitle = styled.span`
   font-size: 18px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.neutral.dark};
+  text-transform: uppercase;
 `
 
 export const CloseBtn = styled.button`

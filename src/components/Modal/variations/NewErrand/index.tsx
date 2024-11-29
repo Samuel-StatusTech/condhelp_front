@@ -95,7 +95,6 @@ const NewErrand = ({ data, onClose, handleOp }: Props) => {
         <S.Bottom>
           <Input.Multiple
             field="canSave"
-            // label="As informações estão corretas"
             value={form.canSave ? ["canSave"] : []}
             onChange={() => setForm({ canSave: !form.canSave })}
             options={[

@@ -3,7 +3,7 @@ import * as C from "../styled"
 import * as S from "./styled"
 
 export type TInputTextArea = {
-  label: string
+  label?: string
   field: string
   value: string
   placeholder?: string
@@ -34,6 +34,7 @@ const InputTextArea = (props: Props) => {
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
+          rows={4}
         />
 
         {limit && (
