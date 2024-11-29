@@ -13,7 +13,7 @@ export type TNewCondominium = {
   neighborhood: string
   city: string
   federateUnit: string
-  subsidiaryId: number
+  subsidiaryId?: number
   manager: TUserTypes["SINDICO"]
   managerId?: number
 
@@ -21,7 +21,7 @@ export type TNewCondominium = {
 }
 
 export type TCondominium = {
-  id: string
+  id: number
   name: string
   unities: number
   cnpj: string
@@ -34,7 +34,7 @@ export type TCondominium = {
   neighborhood: string
   city: string
   federateUnit: string
-  subsidiaryId: number
+  subsidiaryId?: number
   manager: TUserTypes["SINDICO"]
 
   electionFile: null | any

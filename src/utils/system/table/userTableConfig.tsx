@@ -27,7 +27,7 @@ export const userTableConfig: TConfig = {
       relations.status[item.status === "ATIVO" ? "active" : "disabled"],
     actions: (item: TUser, { callbacks }) => (
       <TableActions
-        id={item.id}
+        id={item.userId}
         content={[
           {
             role: "edit",

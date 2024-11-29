@@ -29,6 +29,8 @@ const FPpeople = () => {
 
   const { user, controllers } = getStore()
 
+  const [originalPersonType, setOriginalPersonType] = useState<TAccess>("ADMIN")
+
   const [personType, setPersonType] = useState<TAccess>("ADMIN")
   const [regions, setRegions] = useState<TRegion[]>([])
 
@@ -151,6 +153,7 @@ const FPpeople = () => {
         case "SINDICO":
           setForm((p: any) => ({ ...p, [field]: value }))
           break
+
         case "PRESTADOR":
           switch (field) {
             case "documentNumber":
@@ -177,10 +180,9 @@ const FPpeople = () => {
           break
 
         default:
+          setForm((p: any) => ({ ...p, [field]: value }))
           break
       }
-
-      setForm((p: any) => ({ ...p, [field]: value }))
     }
   }
 
@@ -192,7 +194,6 @@ const FPpeople = () => {
         let data: TNewUser & TUManager = form
 
         info = {
-          id: userId,
           userId: userId,
           photo: data.photo,
           name: data.name,
@@ -204,10 +205,8 @@ const FPpeople = () => {
           phone2: data.phone2,
           documentType: data.documentType,
           documentNumber: data.documentNumber,
-          condominiumIds: data.condos.map((c) => c.id),
-          managerSince: +(new Date(data.managerSince).getTime() / 1000).toFixed(
-            0
-          ),
+          condominiumIds: data.condominiums.map((c) => c.id),
+          managerSince: +new Date(data.managerSince).getTime(),
           birthDate: getDateStr(data.birthDate, "javaDateTime"),
         }
         break
@@ -216,16 +215,19 @@ const FPpeople = () => {
         break
     }
 
-    return info
+    return params.id && !Number.isNaN(params.id)
+      ? { ...info, id: Number(params.id), originalPersonType }
+      : info
   }
 
   const handleUpdate = async () => {
     try {
       if (params.id && !Number.isNaN(params.id)) {
-        const obj = getObj(Number(params.id))
+        const obj = getObj(Number(form.userId))
 
         const req = await Api.persons.update({
           person: obj as any,
+          originalPersonType,
         })
 
         if (req.ok) {
@@ -352,6 +354,7 @@ const FPpeople = () => {
           navigate(-1)
         }
       })
+
       const statesReq = await Api.states.listAll({}).then((res) => {
         if (res.ok) {
           setOptions((opts) => ({
@@ -379,11 +382,15 @@ const FPpeople = () => {
         navigate(-1)
       })
 
+      // user info
+
       if (params.id) {
         const req = await Api.persons.getSingle({ id: Number(params.id) })
 
         if (req.ok) {
           const hasInfo = req.data.profile && req.data.email
+
+          setOriginalPersonType(req.data.profile)
 
           setForm((fm: any) => ({
             ...fm,

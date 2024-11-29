@@ -9,6 +9,7 @@ export type TApi_Params_Persons = {
     }
     update: {
       person: TUser
+      originalPersonType: TAccess
     }
     delete: {
       person: TUser

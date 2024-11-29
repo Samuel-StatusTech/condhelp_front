@@ -7,10 +7,10 @@ import { TUManager } from "../../../utils/@types/data/user"
 
 type Props = {
   title: string
-  list: TUManager["condos"]
+  list: TUManager["condominiums"]
 
   handleAdd: () => void
-  handleDelete: (id: string) => void
+  handleDelete: (id: number) => void
 }
 
 const CondosList = ({ title, list, handleAdd, handleDelete }: Props) => {

@@ -34,7 +34,7 @@ export const condoForm: TNewCondominium = {
 
     managerSince: new Date().getTime(),
 
-    condos: [],
+    condominiums: [],
   },
   electionFile: undefined,
 }

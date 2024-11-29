@@ -164,7 +164,7 @@ export type TUManager = {
   managerSince: number
   experience?: TExperience
 
-  condos: TCondominium[]
+  condominiums: TCondominium[]
 }
 
 export type TUserStatus = "active" | "disabled" | "awaiting"

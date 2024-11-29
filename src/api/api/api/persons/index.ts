@@ -96,10 +96,13 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
   })
 }
 
-const update: TApi["persons"]["update"] = async ({ person }) => {
-  return new Promise(async (resolve, reject) => {
+const update: TApi["persons"]["update"] = async ({
+  person,
+  originalPersonType,
+}) => {
+  return new Promise(async (resolve) => {
     try {
-      const roleUrl = rolesUrlRelations[person.profile]
+      const roleUrl = rolesUrlRelations[originalPersonType]
 
       await service
         .put(`${roleUrl}/${person.id}`, person)
@@ -127,7 +130,9 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
           })
         })
     } catch (error) {
-      reject({
+      console.log(error)
+      resolve({
+        ok: false,
         error:
           "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
       })

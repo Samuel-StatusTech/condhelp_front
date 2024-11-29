@@ -13,10 +13,23 @@ export const condosCheck = (data: Params): TErrorsCheck => {
   if (!data.name.trim()) state = getInvalidCheck(state, "name")
   if (!String(Number(data.unities)).trim())
     state = getInvalidCheck(state, "units")
+  if (
+    !String(data.unities).trim() ||
+    Number.isNaN(data.unities) ||
+    (!Number.isNaN(data.unities) && Number(data.unities) < 1)
+  )
+    state = getInvalidCheck(state, "unities")
   if (!data.cnpj.trim()) state = getInvalidCheck(state, "cnpj")
   if (!data.address.trim()) state = getInvalidCheck(state, "address")
-  if (!data.addressNumber.trim()) state = getInvalidCheck(state, "addressNumber")
-  if (!data.zipCode.trim()) state = getInvalidCheck(state, "zipCode")
+
+  if (
+    !String(data.addressNumber).trim() ||
+    Number.isNaN(data.addressNumber) ||
+    (!Number.isNaN(data.addressNumber) && Number(data.addressNumber) < 1)
+  )
+    state = getInvalidCheck(state, "unities")
+  if (!data.zipCode.trim() || data.zipCode.trim().replace(/\D/g, "").length < 8)
+    state = getInvalidCheck(state, "zipCode")
   if (!data.neighborhood.trim()) state = getInvalidCheck(state, "neighborhood")
   if (!data.city.trim()) state = getInvalidCheck(state, "city")
   if (!data.federateUnit.trim()) state = getInvalidCheck(state, "federateUnit")

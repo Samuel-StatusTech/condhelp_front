@@ -16,5 +16,5 @@ export const managerInitial: TNewUser & TUManager = {
   birthDate: new Date().getTime(),
   managerSince: new Date().getTime(),
   experience: "01",
-  condos: [],
+  condominiums: [],
 }

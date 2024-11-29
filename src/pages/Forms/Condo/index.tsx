@@ -21,6 +21,7 @@ import { checkErrors } from "../../../utils/tb/checkErrors"
 import { formatCep } from "../../../utils/tb/format/cep"
 import { Api } from "../../../api"
 import { TUserTypes } from "../../../utils/@types/data/user"
+import { getDateStr } from "../../../utils/tb/format/date"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -43,7 +44,6 @@ const FPcondo = () => {
   }
 
   const getObj = (): TNewCondominium | TCondominium => {
-
     const obj: any = {
       name: form.name,
       unities: Number(form.unities),
@@ -54,34 +54,13 @@ const FPcondo = () => {
       neighborhood: form.neighborhood,
       city: form.city,
       federateUnit: form.federateUnit,
-      subsidiaryId: form.subsidiaryId,
-      electionDate: new Date(form.manager.managerSince).toISOString(),
+      electionDate: getDateStr(form.manager.managerSince, "javaDateTime"),
       managerId: form.manager.userId,
     }
 
-    /*
-        {
-          "id": 0,
-          "name": "string",
-          "unities": 0,
-          "cnpj": "string",
-          "address": "string",
-          "addressNumber": 0,
-          "zipCode": "string",
-          "neighborhood": "string",
-          "city": "string",
-          "federateUnit": "string",
-          "subsidiaryId": 0,
-          "managerId": 0,
-          "electionDate": "2024-11-29T12:16:37.262Z"
-        }
-       */
-
-    // return params.id && !Number.isNaN(params.id)
-    //   ? { ...obj, id: params.id }
-    //   : obj
-
-    return obj
+    return params.id && !Number.isNaN(params.id)
+      ? { ...obj, id: params.id }
+      : obj
   }
 
   const handleUpdate = async () => {
@@ -90,7 +69,9 @@ const FPcondo = () => {
 
       const obj = getObj()
 
-      const req = await Api.condos.update({ condo: obj as unknown as TCondominium })
+      const req = await Api.condos.update({
+        condo: obj as TCondominium,
+      })
 
       if (req.ok) {
         controllers.feedback.setData({
@@ -172,16 +153,14 @@ const FPcondo = () => {
     if (field === "managerId") {
       const m = managers.find((i) => i.userId === value)
 
-      console.log("Manager", m)
-
       setForm((f: any) => ({ ...f, manager: m }))
     } else if (field === "managerSince") {
       setForm((f: any) => ({
         ...f,
         manager: { ...f.manager, managerSince: value },
       }))
-    } else if (field === "units")
-      setForm((f: any) => ({ ...f, units: String(value).replace(/\D/g, "") }))
+    } else if (field === "unities")
+      setForm((f: any) => ({ ...f, unities: String(value).replace(/\D/g, "") }))
     else if (Object.keys(form.address).includes(field))
       setForm((f: any) => ({ ...f, address: { ...f.address, [field]: value } }))
     else setForm((f: any) => ({ ...f, [field]: value }))
@@ -203,6 +182,8 @@ const FPcondo = () => {
           const infoReq = await Api.condos.getSingle({ id: Number(params.id) })
 
           if (infoReq.ok) {
+            console.log(infoReq.data)
+            
             setForm(infoReq.data)
           } else {
             throw new Error()
@@ -260,7 +241,7 @@ const FPcondo = () => {
                         {
                           type: "input",
                           label: "Unidades",
-                          field: "units",
+                          field: "unities",
                           value: String(form.unities),
                           gridSizes: {
                             big: 2,

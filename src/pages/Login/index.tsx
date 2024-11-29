@@ -35,7 +35,7 @@ const userManagerData: TUser = {
   birthDate: new Date().toISOString(),
   managerSince: new Date().getTime(),
   experience: "13",
-  condos: [],
+  condominiums: [],
 }
 
 const Login = () => {

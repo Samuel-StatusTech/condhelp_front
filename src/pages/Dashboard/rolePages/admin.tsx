@@ -201,11 +201,6 @@ const DashboardAdmin = () => {
 
           if (req.ok) {
             condoCount = req.data.totalElements
-            budgetsInfo = {
-              approved: 0,
-              awaiting: 0,
-              rejected: 0,
-            }
           }
 
           resolve(true)

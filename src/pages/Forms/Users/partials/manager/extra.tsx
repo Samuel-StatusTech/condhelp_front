@@ -84,7 +84,7 @@ export const extraManager = (
           element: (
             <List.Condos
               title="Condomínios vinculados a este síndico"
-              list={form.condos ?? []}
+              list={form.condominiums ?? []}
               handleAdd={() => {}}
               handleDelete={() => {}}
             />
