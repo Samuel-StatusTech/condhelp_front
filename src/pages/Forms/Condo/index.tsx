@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 
 import { getStore } from "../../../store"
-import { fdata } from "../../../utils/_dev/falseData"
+
 import { TOption } from "../../../utils/@types/data/option"
 import { formatCNPJ } from "../../../utils/tb/format/cnpj"
 import {
@@ -20,6 +20,7 @@ import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import { formatCep } from "../../../utils/tb/format/cep"
 import { Api } from "../../../api"
+import { TUserTypes } from "../../../utils/@types/data/user"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -28,6 +29,7 @@ const FPcondo = () => {
 
   const { controllers } = getStore()
 
+  const [managers, setManagers] = useState<TUserTypes["SINDICO"][]>([])
   const [form, setForm] = useState<TNewCondominium | TCondominium>(
     initials.forms.condo
   )
@@ -40,42 +42,46 @@ const FPcondo = () => {
     navigate(-1)
   }
 
-  const getObj = () => {
-    let fd = new FormData()
+  const getObj = (): TNewCondominium | TCondominium => {
 
-    // if (params.id) fd.append("id", params.id)
+    const obj: any = {
+      name: form.name,
+      unities: Number(form.unities),
+      cnpj: form.cnpj,
+      address: form.address,
+      addressNumber: form.addressNumber,
+      zipCode: form.zipCode,
+      neighborhood: form.neighborhood,
+      city: form.city,
+      federateUnit: form.federateUnit,
+      subsidiaryId: form.subsidiaryId,
+      electionDate: new Date(form.manager.managerSince).toISOString(),
+      managerId: form.manager.userId,
+    }
 
-    fd.append(
-      "condominium",
-      JSON.stringify({
-        name: form.name,
-        unities: form.units,
-        cnpj: form.cnpj,
-        address: form.address.street,
-        addressNumber: form.address.number,
-        zipCode: form.address.cep,
-        neighborhood: form.address.neighborhood,
-        city: form.address.city,
-        federateUnit: form.address.state,
-        filialId: "3",
-      })
-    )
+    /*
+        {
+          "id": 0,
+          "name": "string",
+          "unities": 0,
+          "cnpj": "string",
+          "address": "string",
+          "addressNumber": 0,
+          "zipCode": "string",
+          "neighborhood": "string",
+          "city": "string",
+          "federateUnit": "string",
+          "subsidiaryId": 0,
+          "managerId": 0,
+          "electionDate": "2024-11-29T12:16:37.262Z"
+        }
+       */
 
-    // fd.append("photo", "")
-    // fd.append("minutesElectionPathFile", "")
+    // return params.id && !Number.isNaN(params.id)
+    //   ? { ...obj, id: params.id }
+    //   : obj
 
-    // fd.append("name", form.name)
-    // fd.append("unities", String(form.units))
-    // fd.append("cnpj", form.cnpj)
-    // fd.append("address", form.address.street)
-    // fd.append("addressNumber", form.address.number)
-    // fd.append("zipCode", String(form.address.cep))
-    // fd.append("neighborhood", form.address.neighborhood)
-    // fd.append("city", form.address.city)
-    // fd.append("federateUnit", form.address.state)
-    // fd.append("filialId", "3")
-
-    return fd
+    return obj
   }
 
   const handleUpdate = async () => {
@@ -84,7 +90,7 @@ const FPcondo = () => {
 
       const obj = getObj()
 
-      const req = await Api.condos.update({ condo: obj })
+      const req = await Api.condos.update({ condo: obj as unknown as TCondominium })
 
       if (req.ok) {
         controllers.feedback.setData({
@@ -164,23 +170,11 @@ const FPcondo = () => {
 
   const handleField = async (field: string, value: any) => {
     if (field === "managerId") {
-      // find manager..
-      const m = fdata.people.filter(
-        (p) => p.profile === "SINDICO" && p.id === value
-      )
+      const m = managers.find((i) => i.userId === value)
 
-      if (m)
-        setForm((f: any) => ({ ...f, manager: { ...f.manager, id: value } }))
-      else {
-        setForm((f: any) => ({
-          ...f,
-          manager: {
-            ...f.manager,
-            id: String(f.manager.id),
-            managerSince: f.manager.managerSince,
-          },
-        }))
-      }
+      console.log("Manager", m)
+
+      setForm((f: any) => ({ ...f, manager: m }))
     } else if (field === "managerSince") {
       setForm((f: any) => ({
         ...f,
@@ -195,30 +189,30 @@ const FPcondo = () => {
 
   const loadData = useCallback(async () => {
     try {
-      setTimeout(() => {
+      const managersReq = await Api.persons.getByRole({ role: "SINDICO" })
+
+      if (managersReq.ok) {
+        setManagers(managersReq.data.content as TUserTypes["SINDICO"][])
         setOptions((opts) => ({
           ...opts,
-          managers: parseOptionList(
-            fdata.people.filter((p) => p.profile === "SINDICO"),
-            "id",
-            "name"
-          ),
+          managers: parseOptionList(managersReq.data.content, "userId", "name"),
           state: systemOptions.states,
         }))
 
-        if (params.id) {
-          const info = fdata.condos.find((i) => i.id === params.id)
+        if (params.id && !Number.isNaN(params.id)) {
+          const infoReq = await Api.condos.getSingle({ id: Number(params.id) })
 
-          if (info) {
-            setForm(info)
+          if (infoReq.ok) {
+            setForm(infoReq.data)
           } else {
             throw new Error()
           }
         }
-      }, 1000)
+      } else throw new Error()
     } catch (error) {
       controllers.feedback.setData({
-        message: "Não foi possível carregar as categorias.",
+        message:
+          "Não foi possível carregar as informações. Tente novamente mais tarde",
         state: "error",
         visible: true,
       })
@@ -267,7 +261,7 @@ const FPcondo = () => {
                           type: "input",
                           label: "Unidades",
                           field: "units",
-                          value: String(form.units),
+                          value: String(form.unities),
                           gridSizes: {
                             big: 2,
                             small: 3,
@@ -309,25 +303,25 @@ const FPcondo = () => {
                         {
                           type: "input",
                           label: "Endereço",
-                          field: "street",
+                          field: "address",
                           placeholder: "Digite aqui",
-                          value: form.address.street,
+                          value: form.address,
                           gridSizes: { big: 8, small: 12 },
                         },
                         {
                           type: "input",
                           label: "Nº",
-                          field: "number",
+                          field: "addressNumber",
                           placeholder: "Digite aqui",
-                          value: form.address.number,
+                          value: form.addressNumber,
                           gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "input",
                           label: "CEP",
-                          field: "cep",
+                          field: "zipCode",
                           placeholder: "Digite aqui",
-                          value: formatCep(form.address.cep),
+                          value: formatCep(form.zipCode),
                           gridSizes: { big: 2, small: 6 },
                         },
                       ],
@@ -337,7 +331,7 @@ const FPcondo = () => {
                           label: "Bairro",
                           field: "neighborhood",
                           placeholder: "Digite aqui",
-                          value: form.address.neighborhood,
+                          value: form.neighborhood,
                           gridSizes: { big: 5, small: 12 },
                         },
                         {
@@ -345,14 +339,14 @@ const FPcondo = () => {
                           label: "Cidade",
                           field: "city",
                           placeholder: "Digite aqui",
-                          value: form.address.city,
+                          value: form.city,
                           gridSizes: { big: 5, small: 6 },
                         },
                         {
                           type: "select",
                           label: "UF",
-                          field: "state",
-                          value: form.address.state,
+                          field: "federateUnit",
+                          value: form.federateUnit,
                           gridSizes: { big: 2, small: 6 },
                           options: options.state,
                           byKey: true,
@@ -363,7 +357,8 @@ const FPcondo = () => {
                           type: "select",
                           label: "Síndico",
                           field: "managerId",
-                          value: String(form.manager.id),
+                          // @ts-ignore
+                          value: form.manager.userId,
                           gridSizes: { big: 9, small: 6 },
                           options: options.managers,
                         },

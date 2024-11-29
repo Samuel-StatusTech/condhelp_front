@@ -1,6 +1,7 @@
 import { TNewUserDefault, TUFranchise } from "../../../@types/data/user"
 
 export const franchiseInitial: TNewUserDefault & TUFranchise = {
+  branchId: 0,
   userId: 0,
   status: "ATIVO",
   photo: null,

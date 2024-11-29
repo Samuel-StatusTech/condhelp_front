@@ -1,17 +1,21 @@
-import { TCondominiumAddress } from "../address"
 import { TUserTypes } from "../user"
 
 export type TNewCondominium = {
   name: string
-  units: number
+  unities: number
   cnpj: string
   image: null | string
 
-  address: TCondominiumAddress
-  manager: {
-    id: string
-    managerSince: string
-  }
+  
+  address: string
+  addressNumber: string
+  zipCode: string
+  neighborhood: string
+  city: string
+  federateUnit: string
+  subsidiaryId: number
+  manager: TUserTypes["SINDICO"]
+  managerId?: number
 
   electionFile: null | any
 }
@@ -19,11 +23,18 @@ export type TNewCondominium = {
 export type TCondominium = {
   id: string
   name: string
-  units: number
+  unities: number
   cnpj: string
   image: null | string
 
-  address: TCondominiumAddress
+  
+  address: string
+  addressNumber: string
+  zipCode: string
+  neighborhood: string
+  city: string
+  federateUnit: string
+  subsidiaryId: number
   manager: TUserTypes["SINDICO"]
 
   electionFile: null | any

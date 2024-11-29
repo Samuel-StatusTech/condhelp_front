@@ -8,15 +8,13 @@ export const condoTableConfig: TConfig = {
     { title: "Nome", field: "name" },
     { title: "Sìndico", field: "manager" },
     { title: "City", field: "city" },
-    { title: "Estado", field: "state" },
+    { title: "Estado", field: "federateUnit" },
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
     name: (item: TCondominium) => item.name,
     manager: (item: TCondominium) =>
       `${item.manager.name} ${item.manager.surname ?? ""}`,
-    city: (item: TCondominium) => item.address.city,
-    state: (item: TCondominium) => item.address.state,
     actions: (item: TCondominium, { callbacks }) => (
       <TableActions
         id={item.id}

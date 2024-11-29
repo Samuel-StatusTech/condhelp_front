@@ -11,15 +11,19 @@ export const condosCheck = (data: Params): TErrorsCheck => {
   }
 
   if (!data.name.trim()) state = getInvalidCheck(state, "name")
-  if (!String(Number(data.units)).trim())
+  if (!String(Number(data.unities)).trim())
     state = getInvalidCheck(state, "units")
   if (!data.cnpj.trim()) state = getInvalidCheck(state, "cnpj")
-  if (Object.values(data.address).some((v) => !v.trim()))
-    state = getInvalidCheck(state, "address")
+  if (!data.address.trim()) state = getInvalidCheck(state, "address")
+  if (!data.addressNumber.trim()) state = getInvalidCheck(state, "addressNumber")
+  if (!data.zipCode.trim()) state = getInvalidCheck(state, "zipCode")
+  if (!data.neighborhood.trim()) state = getInvalidCheck(state, "neighborhood")
+  if (!data.city.trim()) state = getInvalidCheck(state, "city")
+  if (!data.federateUnit.trim()) state = getInvalidCheck(state, "federateUnit")
   if (
-    !String(data.manager.id).trim() ||
-    Number.isNaN(data.manager.id) ||
-    (!Number.isNaN(data.manager.id) && Number(data.manager.id) < 1)
+    !String(data.manager.userId).trim() ||
+    Number.isNaN(data.manager.userId) ||
+    (!Number.isNaN(data.manager.userId) && Number(data.manager.userId) < 1)
   )
     state = getInvalidCheck(state, "manager")
   if (!data.manager.managerSince) state = getInvalidCheck(state, "managerSince")

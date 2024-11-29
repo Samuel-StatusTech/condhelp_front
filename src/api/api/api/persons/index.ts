@@ -219,6 +219,76 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
   })
 }
 
+const getByRole: TApi["persons"]["getByRole"] = async ({ role }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const roleUrl = rolesUrlRelations[role]
+
+      if (roleUrl) {
+        await service
+          .get(`${roleUrl}`)
+          .then(async (res) => {
+            const info = res.data
+
+            if (info) {
+              resolve({
+                ok: true,
+                data: info,
+              })
+            } else {
+              resolve({
+                ok: false,
+                error:
+                  "Não foi possível carregar as informações. Tente novamente mais tarde.",
+              })
+            }
+          })
+          .catch((err: AxiosError) => {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          })
+      } else {
+        await service
+          .get(`${baseURL}`)
+          .then(async (res) => {
+            const info = res.data
+
+            if (info) {
+              resolve({
+                ok: true,
+                data: {
+                  ...info,
+                  content: info.content.filter((i: any) => i.profile === role),
+                },
+              })
+            } else {
+              resolve({
+                ok: false,
+                error:
+                  "Não foi possível carregar as informações. Tente novamente mais tarde.",
+              })
+            }
+          })
+          .catch((err: AxiosError) => {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          })
+      }
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export type TApi_Persons = {
   listAll: (
     p: TParams["persons"]["listAll"]
@@ -229,6 +299,9 @@ export type TApi_Persons = {
   ) => TResponses["persons"]["getSingle"]
   update: (p: TParams["persons"]["update"]) => TResponses["persons"]["update"]
   delete: (p: TParams["persons"]["delete"]) => TResponses["persons"]["delete"]
+  getByRole: (
+    p: TParams["persons"]["getByRole"]
+  ) => TResponses["persons"]["getByRole"]
 }
 
 export const apiPersons: TApi["persons"] = {
@@ -237,4 +310,5 @@ export const apiPersons: TApi["persons"] = {
   getSingle: getSingle,
   update: update,
   delete: deleteItem,
+  getByRole: getByRole,
 }

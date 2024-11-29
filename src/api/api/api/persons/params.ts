@@ -1,3 +1,4 @@
+import { TAccess } from "../../../../utils/@types/data/access"
 import { TNewUser, TUser } from "../../../../utils/@types/data/user"
 
 export type TApi_Params_Persons = {
@@ -14,6 +15,9 @@ export type TApi_Params_Persons = {
     }
     getSingle: {
       id: number
+    }
+    getByRole: {
+      role: TAccess
     }
   }
 }

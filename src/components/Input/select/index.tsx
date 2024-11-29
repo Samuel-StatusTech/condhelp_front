@@ -63,7 +63,7 @@ const SelectDefault = ({
 
   return (
     <C.Wrapper $gridSizes={gridSizes} $alignBottom={alignBottom}>
-      <C.Area>
+      <C.Area $elevation={elevation}>
         <S.SelectArea>
           {label && <S.Label>{label}</S.Label>}
           <S.DataArea

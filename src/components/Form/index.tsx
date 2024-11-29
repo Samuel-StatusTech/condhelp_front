@@ -65,6 +65,7 @@ const Form = ({ handleField, columns }: Props) => {
                       display: "flex",
                       flexDirection: "column",
                       gap: 8,
+                      zIndex: 100 - (gKey + 1),
                     }}
                   >
                     <Divider />
@@ -75,19 +76,11 @@ const Form = ({ handleField, columns }: Props) => {
                           ? group.element
                           : group.fields.map((line, k) =>
                               Array.isArray(line) ? (
-                                <S.FormLine
-                                  key={k}
-                                  $k={gKey + (k + 1)}
-                                  $length={group.fields.length + 2}
-                                >
+                                <S.FormLine key={k} $k={k}>
                                   {line.map((f, fKey) => renderInput(f, fKey))}
                                 </S.FormLine>
                               ) : (
-                                <S.FormLine
-                                  $k={gKey + (k + 1)}
-                                  key={k}
-                                  $length={group.fields.length}
-                                >
+                                <S.FormLine $k={k} key={k}>
                                   {renderInput(line, k)}
                                 </S.FormLine>
                               )

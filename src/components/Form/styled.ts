@@ -64,14 +64,13 @@ export const FormArea = styled.div`
   }
 `
 
-export const FormLine = styled.div<{ $k: number; $length: number }>`
+export const FormLine = styled.div<{ $k: number }>`
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 10px;
   align-items: center;
   max-width: 100%;
-  z-index: ${({ $length, $k }) => ($length - $k > -1 ? $length - $k : 0)};
-  /* z-index: ${({ $length, $k }) => ($length - 1 - $k) * -1}; */
+  z-index: ${({ $k }) => 10 - ($k + 1)};
 
   opacity: 0;
   ${({ $k, theme }) =>

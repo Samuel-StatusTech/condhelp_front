@@ -1,11 +1,13 @@
+import { TCondominium, TNewCondominium } from "../../../../utils/@types/data/condominium"
+
 export type TApi_Params_Condos = {
   condos: {
     listAll: {}
     create: {
-      newCondo: FormData
+      newCondo: TNewCondominium
     }
     update: {
-      condo: FormData
+      condo: TCondominium
     }
     delete: {
       id: number

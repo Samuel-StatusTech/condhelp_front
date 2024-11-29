@@ -19,7 +19,7 @@ export const Area = styled.div<{ $elevation?: number }>`
   flex-direction: column;
   gap: 8px;
   flex: 1;
-  z-index: ${({ $elevation }) => $elevation ?? "unset"};
+  z-index: ${({ $elevation }) => 100 - ($elevation ?? 90)};
 `
 
 export const Label = styled.label`

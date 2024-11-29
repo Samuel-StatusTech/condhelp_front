@@ -20,13 +20,14 @@ import { formPartials } from "./partials"
 import { TRegion } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import { getDateStr } from "../../../utils/tb/format/date"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 const FPpeople = () => {
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
 
-  const { controllers } = getStore()
+  const { user, controllers } = getStore()
 
   const [personType, setPersonType] = useState<TAccess>("ADMIN")
   const [regions, setRegions] = useState<TRegion[]>([])
@@ -38,6 +39,7 @@ const FPpeople = () => {
     level: [],
     leader: [],
     profile: [],
+    franchise: [],
     status: [],
     country: [],
     state: [],
@@ -307,6 +309,15 @@ const FPpeople = () => {
 
   const loadData = useCallback(async () => {
     try {
+      const franchisesReq = await Api.persons.getByRole({ role: "FRANQUEADO" })
+
+      if (franchisesReq.ok) {
+        setOptions((opts) => ({
+          ...opts,
+          franchise: parseOptionList(franchisesReq.data.content, "id", "name"),
+        }))
+      } else throw new Error()
+
       const regionsReq = await Api.regions.listAll({}).then((res) => {
         if (res.ok) {
           setRegions(res.data.content)
@@ -548,6 +559,21 @@ const FPpeople = () => {
                           hasTopSpace: true,
                         },
                       ],
+                      ...(personType === "SINDICO" &&
+                      (["ADMIN", "FILIAL"] as TAccess[]).includes(
+                        user?.profile as TAccess
+                      )
+                        ? [
+                            {
+                              type: "select",
+                              label: "Franquia",
+                              field: "franchiseId",
+                              options: options.franchise,
+                              value: form.franchiseId,
+                              gridSizes: { big: 12 },
+                            } as FormField,
+                          ]
+                        : []),
                     ],
                   },
                   ...renderBasicFields(),

@@ -46,14 +46,8 @@ const listAll: TApi["condos"]["listAll"] = async () => {
 const create: TApi["condos"]["create"] = async ({ newCondo }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(newCondo)
-      
       await service
-        .post(`${baseURL}`, newCondo, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(`${baseURL}`, newCondo)
         .then((res) => {
           const info = res.data
 
@@ -90,7 +84,7 @@ const update: TApi["condos"]["update"] = async ({ condo }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .put(`${baseURL}/${condo.get("id")}`, condo)
+        .put(`${baseURL}/${condo.id}`, condo)
         .then((res) => {
           const info = res.data
 

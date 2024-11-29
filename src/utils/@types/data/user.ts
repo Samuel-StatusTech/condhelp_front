@@ -78,6 +78,8 @@ type TResponsableTypes = {
 }
 
 export type TUFranchise = {
+  branchId: number
+
   profile: "FRANQUEADO"
   name: string
   address: TAddress
@@ -145,6 +147,7 @@ export type TUProvider = {
 export type TPendency = "none" | "free" | "has"
 
 export type TUManager = {
+  franchiseId: number
   profile: "SINDICO"
   name: string
   surname: string

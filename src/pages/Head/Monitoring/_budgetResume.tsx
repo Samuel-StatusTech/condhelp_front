@@ -34,7 +34,7 @@ const BudgetResumeBlock = ({ budget }: Props) => {
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Unidades</S.DITitle>
-          <S.DIValue>{budget.condominium.units}</S.DIValue>
+          <S.DIValue>{budget.condominium.unities}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Subcategoria</S.DITitle>

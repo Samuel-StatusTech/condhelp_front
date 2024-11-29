@@ -70,7 +70,8 @@ export const OptionsArea = styled.div<{
   border-radius: 8px;
   max-height: 180px;
   overflow-y: auto;
-  z-index: ${({ $elevation }) => $elevation ?? 2};
+  /* z-index: ${({ $elevation }) => $elevation ?? 2}; */
+  z-index: 2;
 
   &.visible {
     display: block;
