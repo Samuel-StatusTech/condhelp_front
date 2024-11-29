@@ -10,7 +10,7 @@ export type TApi_Params_Persons = {
       person: TUser
     }
     delete: {
-      id: number
+      person: TUser
     }
     getSingle: {
       id: number

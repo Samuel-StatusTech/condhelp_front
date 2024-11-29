@@ -13,7 +13,7 @@ import { TAccess } from "../../../utils/@types/data/access"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 import { Api } from "../../../api"
-import { TNewUser, TUManager, TUser } from "../../../utils/@types/data/user"
+import { TNewUser, TUManager } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
@@ -289,7 +289,7 @@ const FPpeople = () => {
 
   const handleDelete = async () => {
     try {
-      const req = await Api.regions.delete({ id: Number(params.id) })
+      const req = await Api.persons.delete({ person: form })
 
       if (req.ok) {
         controllers.feedback.setData({

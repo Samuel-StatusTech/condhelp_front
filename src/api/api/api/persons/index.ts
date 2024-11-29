@@ -99,18 +99,10 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
 const update: TApi["persons"]["update"] = async ({ person }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let roleUrl = ""
-
-      switch (person.profile) {
-        case "SINDICO":
-          roleUrl = "/managers"
-          break
-        default:
-          break
-      }
+      const roleUrl = rolesUrlRelations[person.profile]
 
       await service
-        .put(`${baseURL}${roleUrl}/${person.id}`, person)
+        .put(`${roleUrl}/${person.id}`, person)
         .then((res) => {
           const info = res.data
 
@@ -143,11 +135,13 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
   })
 }
 
-const deleteItem: TApi["persons"]["delete"] = async ({ id }) => {
+const deleteItem: TApi["persons"]["delete"] = async ({ person }) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const roleUrl = rolesUrlRelations[person.profile]
+
       await service
-        .delete(`${baseURL}/${id}`)
+        .delete(`${roleUrl}/${person.id}`)
         .then((res) => {
           const info = res.data
 
