@@ -10,7 +10,7 @@ export type TNewCondominium = {
   address: TCondominiumAddress
   manager: {
     id: string
-    since: string
+    managerSince: string
   }
 
   electionFile: null | any

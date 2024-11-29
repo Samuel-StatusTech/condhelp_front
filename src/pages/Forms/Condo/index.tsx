@@ -63,7 +63,7 @@ const FPcondo = () => {
 
     // fd.append("photo", "")
     // fd.append("minutesElectionPathFile", "")
-    
+
     // fd.append("name", form.name)
     // fd.append("unities", String(form.units))
     // fd.append("cnpj", form.cnpj)
@@ -169,19 +169,23 @@ const FPcondo = () => {
         (p) => p.profile === "SINDICO" && p.id === value
       )
 
-      if (m) setForm((f) => ({ ...f, manager: { ...f.manager, id: value } }))
+      if (m)
+        setForm((f: any) => ({ ...f, manager: { ...f.manager, id: value } }))
       else {
-        setForm((f) => ({
+        setForm((f: any) => ({
           ...f,
           manager: {
             ...f.manager,
             id: String(f.manager.id),
-            since: f.manager.since,
+            managerSince: f.manager.managerSince,
           },
         }))
       }
-    } else if (field === "since") {
-      setForm((f: any) => ({ ...f, manager: { ...f.manager, since: value } }))
+    } else if (field === "managerSince") {
+      setForm((f: any) => ({
+        ...f,
+        manager: { ...f.manager, managerSince: value },
+      }))
     } else if (field === "units")
       setForm((f: any) => ({ ...f, units: String(value).replace(/\D/g, "") }))
     else if (Object.keys(form.address).includes(field))
@@ -366,8 +370,8 @@ const FPcondo = () => {
                         {
                           type: "date",
                           label: "Data da eleição",
-                          field: "since",
-                          value: form.manager.since,
+                          field: "managerSince",
+                          value: new Date(form.manager.managerSince),
                           gridSizes: { big: 3, small: 6 },
                         },
                       ],

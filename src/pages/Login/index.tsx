@@ -30,12 +30,10 @@ const userManagerData: TUser = {
   surname: "Company",
   email: "MANAGER@email.com",
   photo: null,
-  document: {
-    type: "cpf",
-    register: "111.111.111-11",
-    date: new Date().toISOString(),
-  },
-  since: new Date().toISOString(),
+  documentType: "cpf",
+  documentNumber: "111.111.111-11",
+  birthDate: new Date().toISOString(),
+  managerSince: new Date().getTime(),
   experience: "13",
   condos: [],
 }

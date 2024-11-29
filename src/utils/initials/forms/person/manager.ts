@@ -10,12 +10,10 @@ export const managerInitial: TNewUser & TUManager = {
   email: "",
   phone1: "",
   phone2: "",
-  document: {
-    type: "cpf",
-    register: "",
-    date: "",
-  },
-  since: "",
+  documentType: "cpf",
+  documentNumber: "",
+  birthDate: new Date().getTime(),
+  managerSince: new Date().getTime(),
   experience: "01",
   condos: [],
 }

@@ -15,7 +15,7 @@ export const condoForm: TNewCondominium = {
   },
   manager: {
     id: "",
-    since: "",
+    managerSince: "",
   },
   electionFile: undefined,
 }

@@ -8,7 +8,8 @@ export const Element = styled.header`
   background-color: ${({ theme }) => theme.colors.green.dark};
   border-radius: 8px;
   overflow: auto;
-  max-width: 100%;
+  width: 100%;
+  max-width: 1920px;
 
   & > svg {
     opacity: 0;

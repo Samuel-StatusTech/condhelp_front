@@ -5,6 +5,7 @@ export const Page = styled.main`
   background-color: ${({ theme }) => theme.colors.neutral.medium};
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   padding: 20px;
 
@@ -17,6 +18,8 @@ export const Page = styled.main`
 export const Main = styled.div`
   display: flex;
   gap: 20px;
+  max-width: 1920px;
+  width: 100%;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     gap: 16px;

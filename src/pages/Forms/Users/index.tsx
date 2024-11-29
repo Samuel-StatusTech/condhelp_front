@@ -120,8 +120,8 @@ const FPpeople = () => {
                     fantasyName: "",
                     inscriptionCity: "",
                     inscriptionState: "",
-                    name: p.responsable.name,
-                    register: p.responsable.register,
+                    name: p.responsable.name ?? "",
+                    register: p.responsable.register ?? "",
                   },
                 }))
               } else {
@@ -146,9 +146,11 @@ const FPpeople = () => {
           break
 
         case "SINDICO":
+          setForm((p: any) => ({ ...p, [field]: value }))
+          break
         case "PRESTADOR":
           switch (field) {
-            case "documentRegister":
+            case "documentNumber":
               setForm((p: any) => ({
                 ...p,
                 // @ts-ignore
@@ -179,28 +181,29 @@ const FPpeople = () => {
     }
   }
 
-  const getObj = () => {
+  const getObj = (userId: number) => {
     let info: any = {}
-
-    let data: TNewUser & TUManager = form
 
     switch ((form as TNewUser).profile) {
       case "SINDICO":
+        let data: TNewUser & TUManager = form
+
         info = {
-          userId: 0,
+          id: userId,
+          userId: userId,
           photo: data.photo,
           name: data.name,
           email: data.email,
           profile: data.profile,
-          status: data.status,
+          status: data.status ? "ATIVO" : "INATIVO",
           surname: data.surname,
           phone1: data.phone1,
           phone2: data.phone2,
-          documentType: "string",
-          managerSince: 0,
+          documentType: data.documentType,
+          documentNumber: data.documentNumber,
           condominiumIds: data.condos.map((c) => c.id),
-          documentNumber: "string",
-          birthDate: "2024-11-29T01:02:05.418Z",
+          managerSince: new Date(data.managerSince).toISOString(),
+          birthDate: new Date(data.birthDate).toISOString(),
         }
         break
 
@@ -208,31 +211,27 @@ const FPpeople = () => {
         break
     }
 
-    return {
-      ...(form as TUser),
-      status: form.status ? "ATIVO" : "INATIVO",
-      id: params.id ?? "",
-    }
-
     return info
   }
 
   const handleUpdate = async () => {
     try {
-      const obj = getObj()
+      if (params.id && !Number.isNaN(params.id)) {
+        const obj = getObj(Number(params.id))
 
-      const req = await Api.persons.update({
-        person: obj as any,
-      })
-
-      if (req.ok) {
-        controllers.feedback.setData({
-          visible: true,
-          state: "success",
-          message: "Usuário atualizado com sucesso",
+        const req = await Api.persons.update({
+          person: obj as any,
         })
 
-        navigate("/dashboard/users")
+        if (req.ok) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "success",
+            message: "Usuário atualizado com sucesso",
+          })
+
+          navigate("/dashboard/users")
+        }
       }
     } catch (error) {
       // ...
@@ -248,8 +247,11 @@ const FPpeople = () => {
       })
 
       if (accountRegister.ok) {
+        // @ts-ignore
+        const obj = getObj(accountRegister.data.id ?? 4)
+
         const req = await Api.persons.create({
-          newPerson: form as TNewUser,
+          newPerson: obj as TNewUser,
         })
 
         if (req.ok) {
@@ -375,10 +377,6 @@ const FPpeople = () => {
               : {
                   ...req.data,
                   profile: "SINDICO",
-                  responsable: {
-                    type: "cpf",
-                    register: "",
-                  },
                 }),
           }))
         } else {

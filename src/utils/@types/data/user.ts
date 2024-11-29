@@ -153,9 +153,13 @@ export type TUManager = {
   // Profile info
   phone1: string
   phone2: string
-  document: TDocument["cpf"] | TDocument["cnpj"]
-  since: string
-  experience: TExperience
+  documentType: "cpf" | "cnpj"
+  documentNumber: string
+  
+  birthDate: string | number
+  
+  managerSince: number
+  experience?: TExperience
 
   condos: TCondominium[]
 }

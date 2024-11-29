@@ -1,11 +1,12 @@
 import { List } from "../../../../../components/List"
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { TUManager } from "../../../../../utils/@types/data/user"
 import { systemOptions } from "../../../../../utils/system/options"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
 export const extraManager = (
-  form: any,
+  form: TUManager,
   formSubmitFields: TBlock["groups"][number]
 ): TBlock[] => {
   const content: TBlock[] = [
@@ -49,17 +50,17 @@ export const extraManager = (
               },
               {
                 type: "input",
-                field: "documentRegister",
+                field: "documentNumber",
                 label: "Nº do documento",
-                value: formatCpf(form.document.register),
+                value: formatCpf(form.documentNumber ?? ""),
                 placeholder: "000.000.000-00",
                 gridSizes: { big: 6, small: 12 },
               },
               {
                 type: "date",
-                field: "documentDate",
+                field: "birthDate",
                 label: "Data de nascimento",
-                value: form.document.date,
+                value: new Date(form.birthDate),
                 gridSizes: { big: 3, small: 12 },
               },
             ],
@@ -72,7 +73,7 @@ export const extraManager = (
               type: "select",
               label: "Tempo na função como síndico",
               field: "experience",
-              value: form.experience,
+              value: form.experience as string,
               options: systemOptions.managerTime,
               gridSizes: { big: 12 },
             },
