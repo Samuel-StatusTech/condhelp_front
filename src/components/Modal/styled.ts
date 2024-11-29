@@ -36,7 +36,7 @@ export const HeaderMain = styled.div`
 `
 
 export const ModalTitle = styled.span`
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.neutral.dark};
   text-transform: uppercase;

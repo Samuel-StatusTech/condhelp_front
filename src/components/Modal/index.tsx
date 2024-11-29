@@ -32,16 +32,7 @@ export type TModals =
 const Modal = () => {
   const { modal, controllers } = getStore()
 
-  // const { role, visible, onClose, handleOp, children } = modal
-  const { data, role, visible, onClose, handleOp, children } = {
-    role: "contactInfo",
-    visible: true,
-    onClose: modal.onClose,
-    handleOp: modal.handleOp,
-    data: {
-      title: "Excluir usuário",
-    },
-  } as ModalProps
+  const { width, role, visible, data, onClose, handleOp, children } = modal
 
   const handleClose = () => {
     onClose && onClose()
@@ -93,7 +84,7 @@ const Modal = () => {
     <div id={"modal"}>
       <Dialog
         open={visible}
-        maxWidth={"xs"}
+        maxWidth={width}
         sx={{
           "& .MuiPaper-root": {
             backgroundColor: "#F4F5F7",
