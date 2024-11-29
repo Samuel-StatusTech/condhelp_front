@@ -1,6 +1,6 @@
 import * as S from "./styled"
 
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {
   iconsRelations,
   PDashboardShortcut,
@@ -18,9 +18,24 @@ const DashboardShortcutCard = ({
   text,
   link,
 }: Props) => {
+  const navigate = useNavigate()
+
   return (
     <S.Element $k={k}>
-      <Link to={link}>
+      <Link
+        to={link}
+        onClick={(e) => {
+          e.preventDefault()
+          navigate(link, {
+            state: {
+              role: icon,
+            },
+          })
+        }}
+        state={{
+          role: icon,
+        }}
+      >
         {iconsRelations[icon]}
         <S.CardMain>
           <S.CardTitle>{title}</S.CardTitle>

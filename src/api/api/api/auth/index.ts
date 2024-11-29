@@ -20,20 +20,19 @@ export type TApi_Auth = {
 }
 
 const authRegister: TApi["auth"]["register"] = async (data) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       await service
         .post(`/auth/register`, data)
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.status === 200) {
             resolve({
               ok: true,
-              data: info.data,
+              data: {},
             })
           } else {
-            reject({
+            resolve({
+              ok: false,
               error:
                 "Não foi possível fazer o cadastro. Tente novamente mais tarde.",
             })
@@ -47,7 +46,8 @@ const authRegister: TApi["auth"]["register"] = async (data) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error: "Não foi possível fazer o cadastro. Tente novamente mais tarde.",
       })
     }
@@ -55,7 +55,7 @@ const authRegister: TApi["auth"]["register"] = async (data) => {
 }
 
 const authResetPassword: TApi["auth"]["resetPassword"] = async (data) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       await service
         .post(`/auth/reset-password`, data)
@@ -68,7 +68,8 @@ const authResetPassword: TApi["auth"]["resetPassword"] = async (data) => {
               data: info.data,
             })
           } else {
-            reject({
+            resolve({
+              ok: false,
               error:
                 "Não foi possível alterar sua senha. Tente novamente mais tarde.",
             })
@@ -82,7 +83,8 @@ const authResetPassword: TApi["auth"]["resetPassword"] = async (data) => {
           })
         })
     } catch (error) {
-      reject({
+      resolve({
+        ok: false,
         error:
           "Não foi possível alterar sua senha. Tente novamente mais tarde.",
       })

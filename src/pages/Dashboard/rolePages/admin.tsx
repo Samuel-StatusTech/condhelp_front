@@ -100,16 +100,6 @@ const DashboardAdmin = () => {
       )
     })
 
-    // content.push(
-    //   <Card.DashboardShortcut
-    //     k={5 + dashboardShortcuts.ADMIN.length / 2}
-    //     title={"Configurações"}
-    //     icon={"settings"}
-    //     link={"/settings"}
-    //     text={"Avançado"}
-    //   />
-    // )
-
     return content
   }, [gridData])
 

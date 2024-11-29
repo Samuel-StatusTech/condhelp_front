@@ -4,7 +4,7 @@ import { AxiosError } from "axios"
 import { TApi_Params_Condos as TParams } from "./params"
 import { TApi_Responses_Condos as TResponses } from "./responses"
 
-const baseURL = "/condominios"
+const baseURL = "/condominiums"
 
 const listAll: TApi["condos"]["listAll"] = async () => {
   return new Promise(async (resolve, reject) => {
@@ -46,8 +46,14 @@ const listAll: TApi["condos"]["listAll"] = async () => {
 const create: TApi["condos"]["create"] = async ({ newCondo }) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(newCondo)
+      
       await service
-        .post(`${baseURL}`, newCondo)
+        .post(`${baseURL}`, newCondo, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((res) => {
           const info = res.data
 
@@ -84,7 +90,7 @@ const update: TApi["condos"]["update"] = async ({ condo }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .put(`${baseURL}/${condo.id}`, condo)
+        .put(`${baseURL}/${condo.get("id")}`, condo)
         .then((res) => {
           const info = res.data
 

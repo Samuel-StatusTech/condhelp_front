@@ -3,7 +3,7 @@ import * as C from "../styled"
 
 import initials from "../../../utils/initials"
 import Form from "../../../components/Form"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 import { systemOptions } from "../../../utils/system/options"
 
@@ -13,18 +13,22 @@ import { TAccess } from "../../../utils/@types/data/access"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 import { Api } from "../../../api"
-import { TNewUser, TUser } from "../../../utils/@types/data/user"
+import { TNewUser, TUManager, TUser } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
+import { TRegion } from "../../../utils/@types/data/region"
+import { checkErrors } from "../../../utils/tb/checkErrors"
 
 const FPpeople = () => {
   const navigate = useNavigate()
   const params = useParams()
+  const location = useLocation()
 
   const { controllers } = getStore()
 
   const [personType, setPersonType] = useState<TAccess>("ADMIN")
+  const [region, setRegion] = useState<TRegion | null>(null)
 
   const [form, setForm] = useState<any>(initials.forms.person[personType])
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
@@ -45,7 +49,6 @@ const FPpeople = () => {
 
   const handleField = async (field: string, value: any) => {
     if (field === "status") {
-      console.log(value)
       setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
     } else if (field === "profile") {
       setForm(initials.forms.person[value as TAccess])
@@ -138,6 +141,10 @@ const FPpeople = () => {
           } else setForm((p: any) => ({ ...p, [field]: value }))
           break
 
+        case "FRANQUEADO":
+          setForm((p: any) => ({ ...p, [field]: value }))
+          break
+
         case "SINDICO":
         case "PRESTADOR":
           switch (field) {
@@ -172,25 +179,97 @@ const FPpeople = () => {
     }
   }
 
-  const handleCreate = async () => {
-    try {
-      // await userAccountCreate()
+  const getObj = () => {
+    let info: any = {}
 
-      const req = await Api.persons.create({
-        newPerson: form as TNewUser,
+    let data: TNewUser & TUManager = form
+
+    switch ((form as TNewUser).profile) {
+      case "SINDICO":
+        info = {
+          userId: 0,
+          photo: data.photo,
+          name: data.name,
+          email: data.email,
+          profile: data.profile,
+          status: data.status,
+          surname: data.surname,
+          phone1: data.phone1,
+          phone2: data.phone2,
+          documentType: "string",
+          managerSince: 0,
+          condominiumIds: data.condos.map((c) => c.id),
+          documentNumber: "string",
+          birthDate: "2024-11-29T01:02:05.418Z",
+        }
+        break
+
+      default:
+        break
+    }
+
+    return {
+      ...(form as TUser),
+      status: form.status ? "ATIVO" : "INATIVO",
+      id: params.id ?? "",
+    }
+
+    return info
+  }
+
+  const handleUpdate = async () => {
+    try {
+      const obj = getObj()
+
+      const req = await Api.persons.update({
+        person: obj as any,
       })
 
       if (req.ok) {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Região criada com sucesso",
+          message: "Usuário atualizado com sucesso",
         })
 
-        navigate("/dashboard/regions")
+        navigate("/dashboard/users")
       }
     } catch (error) {
       // ...
+    }
+  }
+
+  const handleCreate = async () => {
+    try {
+      const accountRegister = await Api.auth.register({
+        tipo: personType,
+        senha: "123456",
+        usuario: form.email,
+      })
+
+      if (accountRegister.ok) {
+        const req = await Api.persons.create({
+          newPerson: form as TNewUser,
+        })
+
+        if (req.ok) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "success",
+            message: "Usuário criado com sucesso",
+          })
+
+          navigate("/dashboard/users")
+        } else throw new Error()
+      } else throw new Error()
+    } catch (error) {
+      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message:
+          "Não foi possível registrar o usuário. Verifique as informações e tente novamente.",
+      })
     }
   }
 
@@ -221,38 +300,25 @@ const FPpeople = () => {
     }
   }
 
-  const getObj = () => {
-    return {
-      ...(form as TUser),
-      status: form.status ? "ATIVO" : "INATIVO",
-      id: params.id ?? "",
-    }
-  }
-
-  const handleUpdate = async () => {
-    try {
-      const obj = getObj()
-
-      const req = await Api.persons.update({
-        person: obj as any,
-      })
-
-      if (req.ok) {
-        controllers.feedback.setData({
-          visible: true,
-          state: "success",
-          message: "Usuário atualizado com sucesso",
-        })
-
-        navigate("/dashboard/users")
-      }
-    } catch (error) {
-      // ...
-    }
-  }
-
   const loadData = useCallback(async () => {
     try {
+      const regionsReq = await Api.regions.listAll({}).then((res) => {
+        if (res.ok) {
+          setOptions((opts) => ({
+            ...opts,
+            region: parseOptionList(res.data.content, "id", "name"),
+          }))
+        } else {
+          controllers.feedback.setData({
+            message:
+              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+            state: "error",
+            visible: true,
+          })
+          navigate(-1)
+        }
+      })
+
       const countriesReq = await Api.countries.listAll({}).then((res) => {
         if (res.ok) {
           setOptions((opts) => ({
@@ -286,7 +352,7 @@ const FPpeople = () => {
         }
       })
 
-      await Promise.all([countriesReq, statesReq]).catch((err) => {
+      await Promise.all([regionsReq, countriesReq, statesReq]).catch((err) => {
         controllers.feedback.setData({
           message:
             "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
@@ -334,17 +400,32 @@ const FPpeople = () => {
 
   useEffect(() => {
     // ...
+    if (location.state && location.state.role) {
+      const hasForm = initials.forms.person[location.state.role as TAccess]
+
+      if (hasForm) {
+        setPersonType(location.state.role)
+        setForm(initials.forms.person[location.state.role as TAccess])
+      }
+
+      location.state = undefined
+    }
+
     loadData()
-  }, [loadData])
+  }, [loadData, location])
 
   useEffect(() => {
     setOptions((opts: any) => ({
       ...opts,
-      profile: systemOptions.profiles,
+      profile: systemOptions.profiles.filter((i) => i.key !== "all"),
       country: [{ key: "br", value: "Brasil" }],
       state: systemOptions.states,
     }))
   }, [])
+
+  const errors = () => {
+    return checkErrors.users(form)
+  }
 
   /*
    *  Fields render
@@ -357,6 +438,7 @@ const FPpeople = () => {
         handleDelete={handleDelete}
         handleCancel={handleCancel}
         handleSave={handleSave}
+        disabled={errors().has}
       />
     ),
   }
@@ -374,7 +456,7 @@ const FPpeople = () => {
         break
 
       case "FRANQUEADO":
-        content = formPartials.franchise.basic({ form })
+        content = formPartials.franchise.basic({ form, options })
         break
 
       case "SINDICO":
@@ -405,7 +487,13 @@ const FPpeople = () => {
         break
 
       case "FRANQUEADO":
-        content = formPartials.franchise.extra(form, formSubmitFields)
+        content = formPartials.franchise.extra(
+          form,
+          region,
+          options,
+          handleField,
+          formSubmitFields
+        )
         break
 
       case "SINDICO":
