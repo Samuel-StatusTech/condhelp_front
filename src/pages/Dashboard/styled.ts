@@ -86,7 +86,7 @@ export const MBRDataArea = styled.div`
   align-items: center;
   gap: 8px;
 
-  @media (max-width: ${({theme}) => theme.bp.small}px) {
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
     flex-direction: column;
     align-items: flex-start;
   }
