@@ -293,7 +293,7 @@ const FPpeople = () => {
 
   const handleDelete = async () => {
     try {
-      const req = await Api.persons.delete({ person: form })
+      const req = await Api.persons.delete({ person: form.userId })
 
       if (req.ok) {
         controllers.feedback.setData({
