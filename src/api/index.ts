@@ -16,9 +16,7 @@ import { apiBudgets } from "./api/api/budget"
 import { apiCondos } from "./api/api/condos"
 import { apiFaqs } from "./api/api/faqs"
 
-axios.defaults.baseURL = "https://api.oitickets.com.br/api/v1"
-
-const backUrl = "http://localhost:8080"
+const backUrl = process.env.REACT_APP_API_BASE_URL
 
 axios.defaults.baseURL = backUrl
 

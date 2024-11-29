@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
 import { checkErrors } from "../../utils/tb/checkErrors"
 import { Api } from "../../api"
+import { TUser } from "../../utils/@types/data/user"
 
 const userAdminData: any = {
   id: "user-1",
@@ -17,6 +18,26 @@ const userAdminData: any = {
   surname: "Top",
   email: "ADMIN@email.com",
   image: null,
+}
+
+// @ts-ignore
+const userManagerData: TUser = {
+  id: 111,
+  userId: 111,
+  status: "ATIVO",
+  profile: "SINDICO",
+  name: "StatusTech",
+  surname: "Company",
+  email: "MANAGER@email.com",
+  photo: null,
+  document: {
+    type: "cpf",
+    register: "111.111.111-11",
+    date: new Date().toISOString(),
+  },
+  since: new Date().toISOString(),
+  experience: "13",
+  condos: [],
 }
 
 const Login = () => {
@@ -46,20 +67,29 @@ const Login = () => {
     const errors = checkErrors.login(form)
 
     if (!errors.has) {
-      const auth = await Api.auth.login({
-        usuario: form.email,
-        senha: form.pass,
-      })
-
-      if (auth.ok) {
-        controllers.user.setData(userAdminData)
+      if (form.email === "MANAGER@email.com") {
+        localStorage.setItem(
+          "token",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb25kaGVscCIsInN1YiI6Im5hcG9sZWFvQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiUk9MRV9BRE1JTiIsImV4cCI6MTczMjg1NTY2OX0.2ANV9Fa2QpMGEPS_H55wGe6q7gjUR2yrFz0jhCdGHqI"
+        )
+        controllers.user.setData(userManagerData)
         navigate("/dashboard")
       } else {
-        controllers.feedback.setData({
-          state: "error",
-          message: auth.error,
-          visible: true,
+        const auth = await Api.auth.login({
+          usuario: form.email,
+          senha: form.pass,
         })
+
+        if (auth.ok) {
+          controllers.user.setData(userAdminData)
+          navigate("/dashboard")
+        } else {
+          controllers.feedback.setData({
+            state: "error",
+            message: auth.error,
+            visible: true,
+          })
+        }
       }
     } else {
       controllers.feedback.setData({
@@ -197,6 +227,7 @@ const Login = () => {
 
   useEffect(() => {
     controllers.user.clear()
+    localStorage.removeItem("token")
   }, [controllers])
 
   return (
