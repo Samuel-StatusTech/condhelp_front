@@ -19,6 +19,7 @@ import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
 import { TRegion } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
+import { getDateStr } from "../../../utils/tb/format/date"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -28,7 +29,7 @@ const FPpeople = () => {
   const { controllers } = getStore()
 
   const [personType, setPersonType] = useState<TAccess>("ADMIN")
-  const [region, setRegion] = useState<TRegion | null>(null)
+  const [regions, setRegions] = useState<TRegion[]>([])
 
   const [form, setForm] = useState<any>(initials.forms.person[personType])
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
@@ -202,8 +203,10 @@ const FPpeople = () => {
           documentType: data.documentType,
           documentNumber: data.documentNumber,
           condominiumIds: data.condos.map((c) => c.id),
-          managerSince: new Date(data.managerSince).toISOString(),
-          birthDate: new Date(data.birthDate).toISOString(),
+          managerSince: +(new Date(data.managerSince).getTime() / 1000).toFixed(
+            0
+          ),
+          birthDate: getDateStr(data.birthDate, "javaDateTime"),
         }
         break
 
@@ -248,7 +251,7 @@ const FPpeople = () => {
 
       if (accountRegister.ok) {
         // @ts-ignore
-        const obj = getObj(accountRegister.data.id ?? 4)
+        const obj = getObj(accountRegister.data.id)
 
         const req = await Api.persons.create({
           newPerson: obj as TNewUser,
@@ -306,6 +309,7 @@ const FPpeople = () => {
     try {
       const regionsReq = await Api.regions.listAll({}).then((res) => {
         if (res.ok) {
+          setRegions(res.data.content)
           setOptions((opts) => ({
             ...opts,
             region: parseOptionList(res.data.content, "id", "name"),
@@ -487,7 +491,7 @@ const FPpeople = () => {
       case "FRANQUEADO":
         content = formPartials.franchise.extra(
           form,
-          region,
+          regions,
           options,
           handleField,
           formSubmitFields

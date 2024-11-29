@@ -5,6 +5,7 @@ export const Box = styled.div<{
   $color: "green" | "orange" | "red"
 }>`
   position: fixed;
+  z-index: 1000;
   top: 100px;
   left: 50%;
   transform: translate(-50%, ${({ $visible }) => ($visible ? "50" : "0")}%);

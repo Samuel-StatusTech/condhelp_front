@@ -25,10 +25,12 @@ const authRegister: TApi["auth"]["register"] = async (data) => {
       await service
         .post(`/auth/register`, data)
         .then((res) => {
-          if (res.status === 200) {
+          const info = res.data
+
+          if (info) {
             resolve({
               ok: true,
-              data: {},
+              data: info,
             })
           } else {
             resolve({
@@ -65,7 +67,7 @@ const authResetPassword: TApi["auth"]["resetPassword"] = async (data) => {
           if (info) {
             resolve({
               ok: true,
-              data: info.data,
+              data: info,
             })
           } else {
             resolve({

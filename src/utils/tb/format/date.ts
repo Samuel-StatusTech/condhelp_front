@@ -14,8 +14,8 @@ export const getTime = (date: string | Date, withSeconds?: boolean) => {
 }
 
 export const getDateStr = (
-  date: string | Date,
-  format: "dmy" | "pureDate" | "time"
+  date: string | Date | number,
+  format: "dmy" | "pureDate" | "time" | "javaTime" | "javaDateTime"
 ) => {
   let str = ""
 
@@ -29,6 +29,12 @@ export const getDateStr = (
     case "time":
       str = getTimeStr(new Date(date))
       break
+    case "javaTime":
+      str = getJavaTimeStr(new Date(date))
+      break
+    case "javaDateTime":
+      str = getJavaDateTimeStr(new Date(date))
+      break
     default:
       break
   }
@@ -36,7 +42,7 @@ export const getDateStr = (
   return str
 }
 
-const getDMY = (date: string | Date) => {
+const getDMY = (date: string | Date | number) => {
   let str = ""
   const d = new Date(date)
 
@@ -62,6 +68,31 @@ const getTimeStr = (date: Date) => {
 
   str = String(date.getHours()).padStart(2, "0")
   str += `:${String(date.getMinutes()).padStart(2, "0")}`
+
+  return str
+}
+
+const getJavaTimeStr = (date: Date) => {
+  let str = ""
+  const iso = date.toISOString()
+
+  str = iso.slice(0, iso.length - 1)
+
+  return str
+}
+
+const getJavaDateTimeStr = (date: Date) => {
+  let str = ""
+
+  const day = String(date.getDate()).padStart(2, "0")
+  const month = String(date.getMonth() - 1).padStart(2, "0")
+  const year = date.getFullYear()
+
+  const hour = String(date.getHours()).padStart(2, "0")
+  const minutes = String(date.getMinutes()).padStart(2, "0")
+  const seconds = String(date.getSeconds()).padStart(2, "0")
+
+  str = `${day}-${month}-${year} ${hour}:${minutes}:${seconds}`
 
   return str
 }

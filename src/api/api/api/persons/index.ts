@@ -59,12 +59,12 @@ const listAll: TApi["persons"]["listAll"] = async (data) => {
 const create: TApi["persons"]["create"] = async ({ newPerson }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // Auth register
-
       // User data register
 
+      const roleUrl = rolesUrlRelations[newPerson.profile]
+
       await service
-        .post(`${baseURL}`, newPerson)
+        .post(`${roleUrl}`, newPerson)
         .then((res) => {
           const info = res.data
 
@@ -185,14 +185,22 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
     try {
       await service
         .get(`${baseURL}/${id}`)
-        .then((res) => {
+        .then(async (res) => {
           const info = res.data
 
           if (info) {
-            resolve({
-              ok: true,
-              data: info,
-            })
+            const userProfile = info.profile as TAccess
+
+            const extraDataReq = await service.get(
+              `${rolesUrlRelations[userProfile]}/${info.id}`
+            )
+
+            if (extraDataReq.data) {
+              resolve({
+                ok: true,
+                data: extraDataReq.data,
+              })
+            } else throw new Error()
           } else {
             resolve({
               ok: false,

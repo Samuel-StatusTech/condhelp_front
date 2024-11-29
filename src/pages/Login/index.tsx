@@ -54,6 +54,7 @@ const Login = () => {
   // create account
   const [user, setUser] = useState("")
   const [pass, setPass] = useState("")
+  const [pass2, setPass2] = useState("")
 
   const handleForm = (field: keyof typeof form, v: string) => {
     setForm({ ...form, [field]: v })
@@ -108,6 +109,30 @@ const Login = () => {
   const handleNewAccount = () => {
     // ...
     setContent("createAccount")
+  }
+
+  const handleSignUp = async () => {
+    // ...
+
+    if (!!user && !!pass && !!pass2 &&  pass === pass2) {
+      // ...
+        const auth = await Api.auth.login({
+          usuario: form.email,
+          senha: form.pass,
+        })
+
+        if (auth.ok) {
+          controllers.user.setData(userAdminData)
+          navigate("/dashboard")
+        } else {
+          controllers.feedback.setData({
+            state: "error",
+            message: auth.error,
+            visible: true,
+          })
+        }
+      setContent("createAccount")
+    }
   }
 
   const renderContent = () => {
@@ -203,15 +228,21 @@ const Login = () => {
               onChange={(v: any) => setUser(v)}
             />
             <Input
-              type={"mail"}
+              type={"pass"}
               placeholder={"Senha"}
               value={pass}
               onChange={(v: any) => setPass(v)}
             />
+            <Input
+              type={"pass"}
+              placeholder={"Confirmar senha"}
+              value={pass2}
+              onChange={(v: any) => setPass2(v)}
+            />
             <Button
               type={"main"}
               text={"Criar minha conta"}
-              action={handleRecoveryMail}
+              action={handleSignUp}
             />
             <S.Subaction onClick={() => setContent("normal")}>
               Voltar para a tela de login

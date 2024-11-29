@@ -13,7 +13,7 @@ import {
 
 export const extraFranchise = (
   form: any,
-  region: TRegion | null,
+  regions: TRegion[],
   options: { [key: string]: TOption[] },
   handleField: (field: string, value: any) => void,
   formSubmitFields: TBlock["groups"][number]
@@ -57,8 +57,8 @@ export const extraFranchise = (
         {
           type: "custom",
           element: (() => {
-            if (region) {
-            }
+            const region = regions.find((i) => i.id === form.region)
+
             const content = !region
               ? []
               : region.cities.map((city: TRegion["cities"][number]) => {
