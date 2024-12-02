@@ -12,8 +12,10 @@ import SearchBlock from "../../components/SearchBlock"
 import { getStore } from "../../store"
 import { Api } from "../../api"
 
+import Card from "../../components/Card"
+
 const CondosPage = () => {
-  const { controllers } = getStore()
+  const { user, controllers } = getStore()
 
   const navigate = useNavigate()
 
@@ -31,7 +33,7 @@ const CondosPage = () => {
     navigate("single")
   }, [navigate])
 
-  const handleEdit = (id: string) => {
+  const handleEdit = (id: number) => {
     navigate(`single/${id}`)
   }
 
@@ -68,39 +70,60 @@ const CondosPage = () => {
     loadData()
   }, [loadData])
 
+  const renderContent = () => {
+    return user?.profile === "SINDICO" ? (
+      <S.CardsWrapper>
+        {user.condominiums.map((c, ck) => (
+          <Card.Condominium
+            k={ck}
+            key={ck}
+            onPick={() => handleEdit(c.id)}
+            data={c}
+          />
+        ))}
+      </S.CardsWrapper>
+    ) : (
+      <>
+        <SearchBlock
+          search={search}
+          searchPlaceholder={
+            "Pesquisar condomínios por nome, cidade, síndico..."
+          }
+          onSearchChange={setSearch}
+          onFilterChange={handleFilters}
+          onSearch={handleSearch}
+          filters={[
+            {
+              label: "Estado",
+              name: "states",
+              options: options.states,
+              value: filters.states,
+              byKey: true,
+            },
+          ]}
+        />
+
+        <Divider />
+
+        {/* Table content */}
+        <Table
+          config={tableConfig.condos}
+          data={condos}
+          actions={{
+            edit: handleEdit,
+          }}
+        />
+      </>
+    )
+  }
+
   return (
     <S.Content>
       <PageHeader type={"table"} from={"condos"} action={handleNew} />
 
       <Divider />
 
-      <SearchBlock
-        search={search}
-        searchPlaceholder={"Pesquisar condomínios por nome, cidade, síndico..."}
-        onSearchChange={setSearch}
-        onFilterChange={handleFilters}
-        onSearch={handleSearch}
-        filters={[
-          {
-            label: "Estado",
-            name: "states",
-            options: options.states,
-            value: filters.states,
-            byKey: true,
-          },
-        ]}
-      />
-
-      <Divider />
-
-      {/* Table content */}
-      <Table
-        config={tableConfig.condos}
-        data={condos}
-        actions={{
-          edit: handleEdit,
-        }}
-      />
+      {renderContent()}
     </S.Content>
   )
 }

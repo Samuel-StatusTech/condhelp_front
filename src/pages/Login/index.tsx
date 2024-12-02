@@ -8,35 +8,6 @@ import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
 import { checkErrors } from "../../utils/tb/checkErrors"
 import { Api } from "../../api"
-import { TUser } from "../../utils/@types/data/user"
-
-const userAdminData: any = {
-  id: "user-1",
-  status: "active",
-  profile: "ADMIN",
-  name: "StatusTech",
-  surname: "Top",
-  email: "ADMIN@email.com",
-  image: null,
-}
-
-// @ts-ignore
-const userManagerData: TUser = {
-  id: 111,
-  userId: 111,
-  status: "ATIVO",
-  profile: "SINDICO",
-  name: "StatusTech",
-  surname: "Company",
-  email: "MANAGER@email.com",
-  photo: null,
-  documentType: "cpf",
-  documentNumber: "111.111.111-11",
-  birthDate: new Date().toISOString(),
-  managerSince: new Date().getTime(),
-  experience: "13",
-  condominiums: [],
-}
 
 const Login = () => {
   const navigate = useNavigate()
@@ -66,29 +37,26 @@ const Login = () => {
     const errors = checkErrors.login(form)
 
     if (!errors.has) {
-      if (form.email === "MANAGER@email.com") {
-        localStorage.setItem(
-          "token",
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb25kaGVscCIsInN1YiI6Im5hcG9sZWFvQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiUk9MRV9BRE1JTiIsImV4cCI6MTczMjg1NTY2OX0.2ANV9Fa2QpMGEPS_H55wGe6q7gjUR2yrFz0jhCdGHqI"
-        )
-        controllers.user.setData(userManagerData)
-        navigate("/dashboard")
-      } else {
-        const auth = await Api.auth.login({
-          usuario: form.email,
-          senha: form.pass,
+      const auth = await Api.auth.login({
+        usuario: form.email,
+        senha: form.pass,
+      })
+
+      if (auth.ok) {
+        const userDataReq = await Api.persons.getSingle({
+          id: auth.data.userId,
         })
 
-        if (auth.ok) {
-          controllers.user.setData(userAdminData)
+        if (userDataReq.ok) {
+          controllers.user.setData(userDataReq.data)
           navigate("/dashboard")
-        } else {
-          controllers.feedback.setData({
-            state: "error",
-            message: auth.error,
-            visible: true,
-          })
-        }
+        } else throw new Error()
+      } else {
+        controllers.feedback.setData({
+          state: "error",
+          message: auth.error,
+          visible: true,
+        })
       }
     } else {
       controllers.feedback.setData({
@@ -114,23 +82,27 @@ const Login = () => {
   const handleSignUp = async () => {
     // ...
 
-    if (!!user && !!pass && !!pass2 &&  pass === pass2) {
+    if (!!user && !!pass && !!pass2 && pass === pass2) {
       // ...
-        const auth = await Api.auth.login({
-          usuario: form.email,
-          senha: form.pass,
-        })
+      const auth = await Api.auth.login({
+        usuario: form.email,
+        senha: form.pass,
+      })
 
-        if (auth.ok) {
-          controllers.user.setData(userAdminData)
+      if (auth.ok) {
+        const userData = await Api.persons.getSingle({ id: auth.data.userId })
+
+        if (userData.ok) {
+          controllers.user.setData(userData.data)
           navigate("/dashboard")
-        } else {
-          controllers.feedback.setData({
-            state: "error",
-            message: auth.error,
-            visible: true,
-          })
-        }
+        } else throw new Error()
+      } else {
+        controllers.feedback.setData({
+          state: "error",
+          message: auth.error,
+          visible: true,
+        })
+      }
       setContent("createAccount")
     }
   }

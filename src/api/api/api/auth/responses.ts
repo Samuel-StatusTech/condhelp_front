@@ -4,6 +4,11 @@ export type TApi_Responses_Auth = {
   auth: {
     register: Promise<TDefaultRes<{}>>
     resetPassword: Promise<TDefaultRes<{ token: string }>>
-    login: Promise<TDefaultRes<{ success: boolean }>>
+    login: Promise<
+      TDefaultRes<{
+        token: string
+        userId: number
+      }>
+    >
   }
 }
