@@ -37,8 +37,8 @@ export const extraFranchise = (
               <Input.Select
                 value={form.region}
                 label="Selecione a região"
-                options={options.franchises}
-                field="franchises"
+                options={options.region}
+                field="region"
                 onChange={handleField}
                 gridSizes={{ big: 9, small: 12 }}
               />

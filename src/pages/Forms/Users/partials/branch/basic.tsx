@@ -19,7 +19,7 @@ export const basicBranch = ({ form, options }: Props): TBlock["groups"] => {
           {
             type: "input",
             field: "name",
-            label: "Nome",
+            label: "Nome da Filial",
             value: form.name,
             placeholder: "Digite aqui",
             gridSizes: { big: 12 },

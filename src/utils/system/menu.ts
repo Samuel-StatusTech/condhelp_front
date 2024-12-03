@@ -93,11 +93,11 @@ export const menu: {
       link: "/monitoring",
       access: ["ADMIN"],
     },
-    {
-      text: "Histórico de Chamados",
-      link: "/callshistory",
-      access: ["ADMIN"],
-    },
+    // {
+    //   text: "Histórico de Chamados",
+    //   link: "/callshistory",
+    //   access: ["ADMIN"],
+    // },
     {
       text: "Sobre",
       link: "/about",

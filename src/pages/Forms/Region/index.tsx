@@ -9,7 +9,7 @@ import PageHeader from "../../../components/PageHeader"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 
-import { TNewRegion } from "../../../utils/@types/data/region"
+import { TCity, TNewRegion } from "../../../utils/@types/data/region"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import { List } from "../../../components/List"
 import ImportCsvArea from "../../../components/ImportCsvArea"
@@ -98,6 +98,7 @@ const FPregion = () => {
   const citiesTreat = async () => {
     try {
       let proms: Promise<any>[] = []
+      let newCitiesList: TCity[] = []
 
       if (changedCountryState) {
         form.cities.forEach(async (item) => {
@@ -110,12 +111,9 @@ const FPregion = () => {
             proms.push(
               Api.cities.create({ newCity: newCity }).then((res) => {
                 if (res.ok) {
-                  setForm((reg) => ({
-                    ...reg,
-                    cities: reg.cities.map((i) => {
-                      return i.id !== item.id ? i : { ...i, id: res.data.id }
-                    }),
-                  }))
+                  newCitiesList = form.cities.map((i) => {
+                    return i.id !== item.id ? i : { ...i, id: res.data.id }
+                  })
                 }
               })
             )
@@ -142,12 +140,9 @@ const FPregion = () => {
             proms.push(
               Api.cities.create({ newCity: newCity }).then((res) => {
                 if (res.ok) {
-                  setForm((reg) => ({
-                    ...reg,
-                    cities: reg.cities.map((i) => {
-                      return i.id !== item.id ? i : { ...i, id: res.data.id }
-                    }),
-                  }))
+                  newCitiesList = form.cities.map((i) => {
+                    return i.id !== item.id ? i : { ...i, id: res.data.id }
+                  })
                 }
               })
             )
@@ -166,17 +161,27 @@ const FPregion = () => {
       }
 
       await Promise.all(proms)
+
+      setForm((reg) => ({
+        ...reg,
+        cities: newCitiesList,
+      }))
+
+      return newCitiesList
     } catch (error) {
-      // ...
+      return form.cities
     }
   }
 
   const handleCreate = async () => {
     try {
-      await citiesTreat()
+      const cities = await citiesTreat()
 
       const req = await Api.regions.create({
-        newRegion: form as TNewRegion,
+        newRegion: {
+          ...(form as TNewRegion),
+          cities,
+        },
       })
 
       if (req.ok) {
@@ -187,9 +192,14 @@ const FPregion = () => {
         })
 
         navigate("/dashboard/regions")
-      }
+      } else throw new Error()
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        message:
+          "Houve um erro ao cadastrar a região. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
     }
   }
 
@@ -251,7 +261,6 @@ const FPregion = () => {
         const req = await Api.regions.getSingle({ id: Number(params.id) })
 
         if (req.ok) {
-          console.log(req.data)
           setForm({
             name: req.data.name,
             countryId: req.data.country.id as any,

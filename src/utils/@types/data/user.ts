@@ -52,15 +52,35 @@ export type TUAdmin = {
 }
 
 export type TUBranch = {
+  userAccountId: number
   profile: "FILIAL"
   name: string
   address: TAddress
+  addressId: number
   phone1: string
   phone2: string
   email: string
 
+  providerIds: number[]
+  condominiumIds: number[]
+  budgetIds: number[]
+  franqueadoIds: number[]
+
   // Responsable
-  responsable: TResponsableTypes["cpf"] | TResponsableTypes["cnpj"]
+  responsible: {
+    type?: "cnpj" | "cpf" 
+    id: number
+    responsibleType: string
+    companyName: string
+    fantasyName: string
+    cnpj: string
+    stateRegistration: string
+    municipalRegistration: string
+    personName: string
+    cpf: string
+    responsibleStatus: string
+  }
+  responsibleId: number
 }
 
 type TResponsableTypes = {
@@ -160,9 +180,9 @@ export type TUManager = {
   phone2: string
   documentType: "cpf" | "cnpj"
   documentNumber: string
-  
+
   birthDate: string | number
-  
+
   managerSince: number
   experience?: TExperience
 

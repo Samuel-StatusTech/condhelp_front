@@ -4,7 +4,7 @@ import { AxiosError } from "axios"
 import { TApi_Params_Budgets as TParams } from "./params"
 import { TApi_Responses_Budgets as TResponses } from "./responses"
 
-const baseURL = "/orcamentos"
+const baseURL = "/budgets"
 
 const listAll: TApi["budgets"]["listAll"] = async () => {
   return new Promise(async (resolve, reject) => {

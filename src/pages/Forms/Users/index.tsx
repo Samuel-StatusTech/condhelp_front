@@ -16,7 +16,10 @@ import { Api } from "../../../api"
 import {
   TNewUser,
   TNewUserDefault,
+  TUBranch,
+  TUFranchise,
   TUManager,
+  TUProvider,
 } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
@@ -45,6 +48,7 @@ const FPpeople = () => {
     level: [],
     leader: [],
     profile: [],
+    branch: [],
     franchise: [],
     status: [],
     country: [],
@@ -108,45 +112,25 @@ const FPpeople = () => {
 
         case "FILIAL":
           const responsableKeys = [
+            "responsablePersonName",
             "responsableType",
-            "responsableName",
             "responsableFantasyName",
-            "responsableRegister",
-            "responsableInscriptionState",
-            "responsableInscriptionCity",
+            "responsableCnpj",
+            "responsableStateRegistration",
+            "responsableMunicipalRegistration",
+            "responsableCpf",
           ]
+
           if (responsableKeys.includes(field)) {
             const fieldKey = field.split("responsable")[1]
+
             const fieldName =
               fieldKey.charAt(0).toLowerCase() + fieldKey.slice(1)
 
-            if (fieldName === "type") {
-              if (value === "cpf") {
-                setForm((p: any) => ({
-                  ...p,
-                  responsable: {
-                    type: value,
-                    fantasyName: "",
-                    inscriptionCity: "",
-                    inscriptionState: "",
-                    name: p.responsable.name ?? "",
-                    register: p.responsable.register ?? "",
-                  },
-                }))
-              } else {
-                setForm((p: any) => ({
-                  ...p,
-                  // @ts-ignore
-                  responsable: { ...p.responsable, [fieldName]: value },
-                }))
-              }
-            } else {
-              setForm((p: any) => ({
-                ...p,
-                // @ts-ignore
-                responsable: { ...p.responsable, [fieldName]: value },
-              }))
-            }
+            setForm((p: any) => ({
+              ...p,
+              responsible: { ...p.responsible, [fieldName]: value },
+            }))
           } else setForm((p: any) => ({ ...p, [field]: value }))
           break
 
@@ -195,32 +179,89 @@ const FPpeople = () => {
 
     const baseInfo: TNewUserDefault = {
       id: userId,
-      userId: 0,
       status: "ATIVO",
+      userId: userId,
       photo: null,
     }
 
     switch ((form as TNewUser).profile) {
-      case "SINDICO":
-        let data: TNewUser & TUManager = form
+      case "PRESTADOR":
+        let dataProvider: TNewUser & TUProvider = form
 
         info = {
           ...baseInfo,
-          id: userId,
-          userId: userId,
-          photo: data.photo,
-          name: data.name,
-          email: data.email,
-          profile: data.profile,
-          status: data.status ? "ATIVO" : "INATIVO",
-          surname: data.surname,
-          phone1: data.phone1,
-          phone2: data.phone2,
-          documentType: data.documentType,
-          documentNumber: data.documentNumber,
-          condominiumIds: data.condominiums.map((c) => c.id),
-          managerSince: +new Date(data.managerSince).getTime(),
-          birthDate: getDateStr(data.birthDate, "javaDateTime"),
+          ...dataProvider,
+        }
+        break
+
+      case "FILIAL":
+        let dataBranch: TNewUser & TUBranch = form
+
+        info = {
+          ...baseInfo,
+          name: dataBranch.name,
+          address: {
+            // id: 0,
+            street: dataBranch.address.street,
+            number: dataBranch.address.number,
+            complement: dataBranch.address.complement,
+            zipCode: dataBranch.address.cep,
+            city: dataBranch.address.city,
+            state: dataBranch.address.state,
+            country: dataBranch.address.country,
+          },
+
+          // addressId: 0,
+          userAccountId: userId,
+          providerIds: dataBranch.providerIds,
+          condominiumIds: dataBranch.condominiumIds,
+          budgetIds: dataBranch.budgetIds,
+          franqueadoIds: dataBranch.franqueadoIds,
+          responsible: {
+            // id: 0,
+            responsibleType: dataBranch.responsible.responsibleType,
+            companyName: dataBranch.responsible.companyName,
+            fantasyName: dataBranch.responsible.fantasyName,
+            cnpj: dataBranch.responsible.cnpj,
+            stateRegistration: dataBranch.responsible.stateRegistration,
+            municipalRegistration: dataBranch.responsible.municipalRegistration,
+            personName: dataBranch.responsible.personName,
+            cpf: dataBranch.responsible.cpf,
+            responsibleStatus: dataBranch.responsible.responsibleStatus,
+          },
+          phone1: dataBranch.phone1,
+          phone2: dataBranch.phone2,
+          // responsibleId: 0,
+        }
+
+        break
+
+      case "FRANQUEADO":
+        let dataFranchise: TNewUser & TUFranchise = form
+
+        info = {
+          ...baseInfo,
+          ...dataFranchise,
+        }
+        break
+
+      case "SINDICO":
+        let dataManager: TNewUser & TUManager = form
+
+        info = {
+          ...baseInfo,
+          name: dataManager.name,
+          email: dataManager.email,
+          profile: dataManager.profile,
+          status: dataManager.status ? "ATIVO" : "INATIVO",
+          surname: dataManager.surname,
+          phone1: dataManager.phone1,
+          phone2: dataManager.phone2,
+          documentType: dataManager.documentType,
+          documentNumber: dataManager.documentNumber,
+          condominiumIds: dataManager.condominiums.map((c) => c.id),
+          managerSince: +new Date(dataManager.managerSince).getTime(),
+          birthDate: getDateStr(dataManager.birthDate, "javaDateTime"),
         }
         break
 

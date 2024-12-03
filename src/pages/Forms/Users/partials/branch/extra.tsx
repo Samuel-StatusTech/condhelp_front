@@ -1,4 +1,6 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { TNewUser, TUBranch } from "../../../../../utils/@types/data/user"
+import initials from "../../../../../utils/initials"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import {
@@ -6,8 +8,10 @@ import {
   formatStateInscription,
 } from "../../../../../utils/tb/format/inscription"
 
+const inData = initials.forms.person.FILIAL as TNewUser & TUBranch
+
 export const extraBranch = (
-  form: any,
+  form: typeof inData,
   formSubmitFields: TBlock["groups"][number]
 ): TBlock[] => {
   const content: TBlock[] = [
@@ -17,25 +21,25 @@ export const extraBranch = (
         {
           type: "fields",
           // @ts-ignore
-          fields: form.responsable
+          fields: form.responsible
             ? [
                 {
                   type: "radio",
                   field: "responsableType",
-                  value: form.responsable.type,
+                  value: form.responsible.type,
                   gridSizes: { big: 12 },
                   options: [
                     { key: "cnpj", value: "Pessoa Jurídica" },
                     { key: "cpf", value: "Pessoa Física" },
                   ],
                 },
-                ...(form.responsable.type === "cnpj"
+                ...(form.responsible.type === "cnpj"
                   ? [
                       {
                         type: "input",
-                        field: "responsableName",
+                        field: "responsablePersonName",
                         label: "Pessoa Jurídica responsável",
-                        value: form.responsable.name,
+                        value: form.responsible.personName,
                         placeholder: "Informe a razão social",
                         gridSizes: { big: 12 },
                       },
@@ -44,15 +48,15 @@ export const extraBranch = (
                           type: "input",
                           field: "responsableFantasyName",
                           label: "Nome fantasia",
-                          value: form.responsable.fantasyName,
+                          value: form.responsible.fantasyName,
                           placeholder: "Informe o nome fantasia",
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "input",
-                          field: "responsableRegister",
+                          field: "responsableCnpj",
                           label: "CNPJ",
-                          value: formatCNPJ(form.responsable.register),
+                          value: formatCNPJ(form.responsible.cnpj),
                           placeholder: "00.000.000/0001-00",
                           gridSizes: { big: 6, small: 12 },
                         },
@@ -60,20 +64,20 @@ export const extraBranch = (
                       [
                         {
                           type: "input",
-                          field: "responsableInscriptionState",
+                          field: "responsableStateRegistration",
                           label: "Inscrição estadual",
                           value: formatStateInscription(
-                            form.responsable.inscriptionState
+                            form.responsible.stateRegistration
                           ),
                           placeholder: "Apenas números",
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "input",
-                          field: "responsableInscriptionCity",
+                          field: "responsableMunicipalRegistration",
                           label: "Inscrição municipal",
                           value: formatCityInscription(
-                            form.responsable.inscriptionCity
+                            form.responsible.municipalRegistration
                           ),
                           placeholder: "Apenas números",
                           gridSizes: { big: 6, small: 12 },
@@ -84,17 +88,18 @@ export const extraBranch = (
                       [
                         {
                           type: "input",
-                          field: "responsableName",
+                          field: "responsablePersonName",
                           label: "Pessoa responsável",
-                          value: form.responsable.name,
+                          value: form.responsible.personName,
                           placeholder: "Informe o nome da pessoa",
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "input",
-                          field: "responsableRegister",
+                          field: "responsableCpf",
                           label: "CPF",
-                          value: formatCpf(form.responsable.register),
+                          placeholder: "123.456.789-10",
+                          value: formatCpf(form.responsible.cpf),
                           gridSizes: { big: 6, small: 12 },
                         },
                       ],

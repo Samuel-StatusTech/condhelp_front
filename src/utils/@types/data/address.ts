@@ -1,3 +1,13 @@
+export type TNewAddress = {
+  id: number
+  street: string
+  number: number
+  complement: string
+  zipCode: string
+  city: string
+  countryId: number
+}
+
 export type TAddress = {
   country: string
   state: string

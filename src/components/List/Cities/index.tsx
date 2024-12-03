@@ -57,7 +57,7 @@ const CitiesList = ({ list, setList }: Props) => {
   const handleCityName = async (id: number, value: string) => {
     setList(
       list.map((i, k) =>
-        k !== id ? i : { ...i, name: value, isEdit: !i.isNew }
+        i.id !== id ? i : { ...i, name: value, isEdit: !i.isNew }
       )
     )
   }
