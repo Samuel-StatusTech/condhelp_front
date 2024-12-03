@@ -13,6 +13,7 @@ import SearchSelect from "./searchSelect"
 import Select from "./select"
 import TextArea from "./textarea"
 import Toggler from "./toggler"
+import ReadonlyField from "./readonly"
 
 const Input = {
   Date,
@@ -25,6 +26,7 @@ const Input = {
   Points,
   Profile,
   Radio,
+  ReadonlyField,
   Select,
   CondoSelect,
   SearchSelect,

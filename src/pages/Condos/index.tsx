@@ -13,6 +13,7 @@ import { getStore } from "../../store"
 import { Api } from "../../api"
 
 import Card from "../../components/Card"
+import { updateSelfInfo } from "../../utils/tb/helpers/updateSelfInfo"
 
 const CondosPage = () => {
   const { user, controllers } = getStore()
@@ -50,6 +51,8 @@ const CondosPage = () => {
 
   const loadData = useCallback(async () => {
     try {
+      await updateSelfInfo({ userId: user?.id, controllers })
+
       const req = await Api.condos.listAll({})
 
       if (req.ok) {
@@ -64,7 +67,7 @@ const CondosPage = () => {
     } catch (error) {
       // ...
     }
-  }, [controllers.feedback])
+  }, [controllers, user?.id])
 
   useEffect(() => {
     loadData()

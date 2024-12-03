@@ -7,7 +7,7 @@ import Divider from "../../../components/_minimals/Divider"
 import PageRow from "../../../components/_minimals/PageRow"
 import { getStore } from "../../../store"
 import { TBudget } from "../../../utils/@types/data/budget"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { DataResumeItem } from "../../../components/Card/variations/ApprovalResume"
 import Table from "../../../components/Table"
 import { tableConfig } from "../../../utils/system/table"
@@ -76,16 +76,27 @@ const DashboardManager = () => {
     )
   }
 
-  useEffect(() => {
-    setBudgets(fdata.managerBudgets)
-    setFinishedBudgets(
-      fdata.managerBudgets.filter((b) => b.status === "approved")
-    )
-    setOptions((opts) => ({
-      ...opts,
-      condos: parseOptionList(fdata.condos, "id", "name"),
-    }))
+  const loadData= useCallback(async () => {
+    try {
+      // Budgets
+      
+      setBudgets(fdata.managerBudgets)
+      setFinishedBudgets(
+        fdata.managerBudgets.filter((b) => b.status === "approved")
+      )
+  
+      setOptions((opts) => ({
+        ...opts,
+        condos: parseOptionList(user?.condominiums, "id", "name"),
+      }))
+    } catch (error) {
+      
+    }
   }, [])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   return (
     <S.SubContent>

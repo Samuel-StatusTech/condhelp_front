@@ -13,6 +13,7 @@ export const condoForm: TNewCondominium = {
   federateUnit: "",
   subsidiaryId: 0,
   manager: {
+    userAccountId: 0,
     id: 0,
     userId: 0,
     franchiseId: 0,
@@ -32,7 +33,7 @@ export const condoForm: TNewCondominium = {
 
     birthDate: "",
 
-    managerSince: new Date().getTime(),
+    managerSince: new Date().getTime() * 1000,
 
     condominiums: [],
   },

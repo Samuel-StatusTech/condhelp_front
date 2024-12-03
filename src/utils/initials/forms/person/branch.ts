@@ -1,6 +1,7 @@
 import { TNewUser, TUBranch } from "../../../@types/data/user"
 
 export const branchInitial: TNewUser & TUBranch = {
+  id: 0,
   userId: 0,
   status: "ATIVO",
   photo: null,

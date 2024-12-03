@@ -6,12 +6,14 @@ import { TExperience } from "./managerExperience"
 
 type TUDefault = {
   id: number
+  userAccountId: number
   userId: number
   status: "ATIVO" | "INATIVO" | "AGUARDANDO"
   photo: null | string
 }
 
 export type TNewUserDefault = {
+  id: number
   userId: number
   status: "ATIVO" | "INATIVO" | "AGUARDANDO"
   photo: null | string

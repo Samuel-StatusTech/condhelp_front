@@ -22,13 +22,14 @@ import { formatCep } from "../../../utils/tb/format/cep"
 import { Api } from "../../../api"
 import { TUserTypes } from "../../../utils/@types/data/user"
 import { getDateStr } from "../../../utils/tb/format/date"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 const FPcondo = () => {
   const navigate = useNavigate()
 
   const params = useParams()
 
-  const { controllers } = getStore()
+  const { user, controllers } = getStore()
 
   const [managers, setManagers] = useState<TUserTypes["SINDICO"][]>([])
   const [form, setForm] = useState<TNewCondominium | TCondominium>(
@@ -36,7 +37,7 @@ const FPcondo = () => {
   )
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     managers: [],
-    state: [],
+    state: systemOptions.states,
   })
 
   const handleCancel = () => {
@@ -55,7 +56,7 @@ const FPcondo = () => {
       city: form.city,
       federateUnit: form.federateUnit,
       electionDate: getDateStr(form.manager.managerSince, "javaDateTime"),
-      managerId: form.manager.userId,
+      managerId: Number(form.manager.id),
     }
 
     return params.id && !Number.isNaN(params.id)
@@ -166,30 +167,42 @@ const FPcondo = () => {
     else setForm((f: any) => ({ ...f, [field]: value }))
   }
 
+  const loadEditInfo = useCallback(async () => {
+    if (params.id && !Number.isNaN(params.id)) {
+      const infoReq = await Api.condos.getSingle({ id: Number(params.id) })
+
+      if (infoReq.ok) {
+        setForm((frm) => ({ ...frm, ...infoReq.data }))
+      } else {
+        throw new Error()
+      }
+    }
+  }, [params.id])
+
+
+
   const loadData = useCallback(async () => {
     try {
-      const managersReq = await Api.persons.getByRole({ role: "SINDICO" })
+      if (user?.profile === "SINDICO") {
+        setForm((frm) => ({ ...frm, managerId: user?.userId, manager: user }))
+        loadEditInfo()
+      } else {
+        const managersReq = await Api.persons.getByRole({ role: "SINDICO" })
 
-      if (managersReq.ok) {
-        setManagers(managersReq.data.content as TUserTypes["SINDICO"][])
-        setOptions((opts) => ({
-          ...opts,
-          managers: parseOptionList(managersReq.data.content, "userId", "name"),
-          state: systemOptions.states,
-        }))
+        if (managersReq.ok) {
+          setManagers(managersReq.data.content as TUserTypes["SINDICO"][])
+          setOptions((opts) => ({
+            ...opts,
+            managers: parseOptionList(
+              managersReq.data.content,
+              "userId",
+              "name"
+            ),
+          }))
 
-        if (params.id && !Number.isNaN(params.id)) {
-          const infoReq = await Api.condos.getSingle({ id: Number(params.id) })
-
-          if (infoReq.ok) {
-            console.log(infoReq.data)
-            
-            setForm(infoReq.data)
-          } else {
-            throw new Error()
-          }
-        }
-      } else throw new Error()
+          loadEditInfo()
+        } else throw new Error()
+      }
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -198,7 +211,7 @@ const FPcondo = () => {
         visible: true,
       })
     }
-  }, [controllers.feedback, params.id])
+  }, [controllers, loadEditInfo, user])
 
   useEffect(() => {
     // ...
@@ -334,15 +347,27 @@ const FPcondo = () => {
                         },
                       ],
                       [
-                        {
-                          type: "select",
-                          label: "Síndico",
-                          field: "managerId",
-                          // @ts-ignore
-                          value: form.manager.userId,
-                          gridSizes: { big: 9, small: 6 },
-                          options: options.managers,
-                        },
+                        ...((user
+                          ? [
+                              {
+                                type: "readonly",
+                                label: "Síndico",
+                                field: "",
+                                value: `${user?.name} (você)`,
+                                gridSizes: { big: 9, small: 6 },
+                              },
+                            ]
+                          : [
+                              {
+                                type: "select",
+                                label: "Síndico",
+                                field: "managerId",
+                                // @ts-ignore
+                                value: form.manager.userId,
+                                gridSizes: { big: 9, small: 6 },
+                                options: options.managers,
+                              },
+                            ]) as FormField[]),
                         {
                           type: "date",
                           label: "Data da eleição",

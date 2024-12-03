@@ -1,6 +1,7 @@
 import { TNewUser, TUManager } from "../../../@types/data/user"
 
 export const managerInitial: TNewUser & TUManager = {
+  id: 0,
   franchiseId: 0,
   userId: 0,
   status: "ATIVO",

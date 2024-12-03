@@ -13,7 +13,11 @@ import { TAccess } from "../../../utils/@types/data/access"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 import { Api } from "../../../api"
-import { TNewUser, TUManager } from "../../../utils/@types/data/user"
+import {
+  TNewUser,
+  TNewUserDefault,
+  TUManager,
+} from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
@@ -187,13 +191,22 @@ const FPpeople = () => {
   }
 
   const getObj = (userId: number) => {
-    let info: any = {}
+    let info = {}
+
+    const baseInfo: TNewUserDefault = {
+      id: userId,
+      userId: 0,
+      status: "ATIVO",
+      photo: null,
+    }
 
     switch ((form as TNewUser).profile) {
       case "SINDICO":
         let data: TNewUser & TUManager = form
 
         info = {
+          ...baseInfo,
+          id: userId,
           userId: userId,
           photo: data.photo,
           name: data.name,

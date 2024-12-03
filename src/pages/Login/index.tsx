@@ -31,42 +31,111 @@ const Login = () => {
     setForm({ ...form, [field]: v })
   }
 
-  const handleSubmit = async () => {
-    setSubmitting(true)
+  const handleCreateAccount = async () => {
+    try {
+      // const errors = checkErrors.subscribe(form)
+      const errors = { has: false }
 
-    const errors = checkErrors.login(form)
-
-    if (!errors.has) {
-      const auth = await Api.auth.login({
-        usuario: form.email,
-        senha: form.pass,
-      })
-
-      if (auth.ok) {
-        const userDataReq = await Api.persons.getSingle({
-          id: auth.data.userId,
+      if (!errors.has) {
+        const auth = await Api.auth.register({
+          usuario: form.email,
+          senha: form.pass,
+          tipo: "SINDICO",
         })
 
-        if (userDataReq.ok) {
-          controllers.user.setData(userDataReq.data)
-          navigate("/dashboard")
-        } else throw new Error()
+        if (auth.ok) {
+          controllers.feedback.setData({
+            state: "success",
+            message: "Conta criada com sucesso.",
+            visible: true,
+          })
+          setForm(initials.forms.login)
+          setContent("normal")
+        } else {
+          controllers.feedback.setData({
+            state: "error",
+            message: auth.error,
+            visible: true,
+          })
+        }
       } else {
         controllers.feedback.setData({
           state: "error",
-          message: auth.error,
+          message: "Verifique os dados e tente novamente.",
           visible: true,
         })
       }
-    } else {
+    } catch (error: any) {
+      // ...
       controllers.feedback.setData({
         state: "error",
-        message: "Verifique os dados e tente novamente.",
+        message: error.message ?? "Houve um erro. Tente novamente mais tarde",
         visible: true,
       })
     }
+  }
 
-    setSubmitting(false)
+  const handleSubmit = async () => {
+    try {
+      setSubmitting(true)
+
+      switch (content) {
+        case "createAccount":
+          handleCreateAccount()
+          break
+
+        default:
+          break
+      }
+
+      const errors = checkErrors.login(form)
+
+      if (!errors.has) {
+        const auth = await Api.auth.login({
+          usuario: form.email,
+          senha: form.pass,
+        })
+
+        if (auth.ok) {
+          const userDataReq = await Api.persons.getSingle({
+            id: auth.data.userId,
+          })
+
+          if (userDataReq.ok) {
+            controllers.user.setData(userDataReq.data)
+            navigate("/dashboard")
+          } else {
+            controllers.feedback.setData({
+              state: "error",
+              message: "Verifique os dados e tente novamente.",
+              visible: true,
+            })
+          }
+        } else {
+          controllers.feedback.setData({
+            state: "error",
+            message: auth.error,
+            visible: true,
+          })
+        }
+      } else {
+        controllers.feedback.setData({
+          state: "error",
+          message: "Verifique os dados e tente novamente.",
+          visible: true,
+        })
+      }
+
+      setSubmitting(false)
+    } catch (error: any) {
+      // ...
+      controllers.feedback.setData({
+        state: "error",
+        message: error.message ?? "Houve um erro. Tente novamente mais tarde",
+        visible: true,
+      })
+      setSubmitting(false)
+    }
   }
 
   const handleRecoveryMail = () => {

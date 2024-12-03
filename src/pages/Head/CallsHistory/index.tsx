@@ -25,8 +25,7 @@ const CallsHistory = () => {
   })
 
   const handlePickItem = (id: number) => {
-    const call = calls.find((c) => c.id === id)
-    console.log(call)
+    // const call = calls.find((c) => c.id === id)
   }
 
   const loadData = useCallback(async () => {

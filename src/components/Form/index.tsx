@@ -31,6 +31,8 @@ const getElement = (
       return <Input.Points {...field} onChange={handleField} key={key} />
     case "profile":
       return <Input.Profile {...field} onChange={handleField} key={key} />
+    case "readonly":
+      return <Input.ReadonlyField {...field} onChange={handleField} key={key} />
     case "select":
       return <Input.Select {...field} onChange={handleField} key={key} />
     case "radio":

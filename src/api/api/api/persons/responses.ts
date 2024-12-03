@@ -6,6 +6,7 @@ export type TApi_Responses_Persons = {
     listAll: Promise<TDefaultRes<TDefaultList<TUser>>>
     create: Promise<TDefaultRes<{}>>
     getSingle: Promise<TDefaultRes<TUser>>
+    getSelfData: Promise<TDefaultRes<TUser>>
     update: Promise<TDefaultRes<TUser>>
     delete: Promise<TDefaultRes<{}>>
     getByRole: Promise<TDefaultRes<TDefaultList<TUser>>>

@@ -130,7 +130,6 @@ const update: TApi["persons"]["update"] = async ({
           })
         })
     } catch (error) {
-      console.log(error)
       resolve({
         ok: false,
         error:
@@ -180,6 +179,58 @@ const deleteItem: TApi["persons"]["delete"] = async ({ person }) => {
 }
 
 const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${baseURL}/${id}`)
+        .then(async (res) => {
+          const info = res.data
+
+          if (info) {
+            const userProfile = info.profile as TAccess
+
+            if (userProfile !== "ADMIN") {
+              const extraDataReq = await service.get(
+                `${rolesUrlRelations[userProfile] ?? baseURL}/${info.id}`
+              )
+
+              if (extraDataReq.data) {
+                resolve({
+                  ok: true,
+                  data: extraDataReq.data,
+                })
+              } else throw new Error()
+            } else {
+              resolve({
+                ok: true,
+                data: info,
+              })
+            }
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível carregar as informações. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const getSelfData: TApi["persons"]["getSelfData"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -302,6 +353,9 @@ export type TApi_Persons = {
   getSingle: (
     p: TParams["persons"]["getSingle"]
   ) => TResponses["persons"]["getSingle"]
+  getSelfData: (
+    p: TParams["persons"]["getSelfData"]
+  ) => TResponses["persons"]["getSelfData"]
   update: (p: TParams["persons"]["update"]) => TResponses["persons"]["update"]
   delete: (p: TParams["persons"]["delete"]) => TResponses["persons"]["delete"]
   getByRole: (
@@ -313,6 +367,7 @@ export const apiPersons: TApi["persons"] = {
   listAll: listAll,
   create: create,
   getSingle: getSingle,
+  getSelfData: getSelfData,
   update: update,
   delete: deleteItem,
   getByRole: getByRole,
