@@ -16,7 +16,6 @@ import { Api } from "../../../api"
 import {
   TNewUser,
   TNewUserDefault,
-  TUBranch,
   TUFranchise,
   TUManager,
   TUProvider,
@@ -28,6 +27,7 @@ import { TRegion } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -113,7 +113,7 @@ const FPpeople = () => {
         case "FILIAL":
           const responsableKeys = [
             "responsablePersonName",
-            "responsableType",
+            "responsableResponsibleType",
             "responsableFantasyName",
             "responsableCnpj",
             "responsableStateRegistration",
@@ -181,6 +181,7 @@ const FPpeople = () => {
       id: userId,
       status: "ATIVO",
       userId: userId,
+      email: form.email,
       photo: null,
     }
 
@@ -195,45 +196,7 @@ const FPpeople = () => {
         break
 
       case "FILIAL":
-        let dataBranch: TNewUser & TUBranch = form
-
-        info = {
-          ...baseInfo,
-          name: dataBranch.name,
-          address: {
-            // id: 0,
-            street: dataBranch.address.street,
-            number: dataBranch.address.number,
-            complement: dataBranch.address.complement,
-            zipCode: dataBranch.address.cep,
-            city: dataBranch.address.city,
-            state: dataBranch.address.state,
-            country: dataBranch.address.country,
-          },
-
-          // addressId: 0,
-          userAccountId: userId,
-          providerIds: dataBranch.providerIds,
-          condominiumIds: dataBranch.condominiumIds,
-          budgetIds: dataBranch.budgetIds,
-          franqueadoIds: dataBranch.franqueadoIds,
-          responsible: {
-            // id: 0,
-            responsibleType: dataBranch.responsible.responsibleType,
-            companyName: dataBranch.responsible.companyName,
-            fantasyName: dataBranch.responsible.fantasyName,
-            cnpj: dataBranch.responsible.cnpj,
-            stateRegistration: dataBranch.responsible.stateRegistration,
-            municipalRegistration: dataBranch.responsible.municipalRegistration,
-            personName: dataBranch.responsible.personName,
-            cpf: dataBranch.responsible.cpf,
-            responsibleStatus: dataBranch.responsible.responsibleStatus,
-          },
-          phone1: dataBranch.phone1,
-          phone2: dataBranch.phone2,
-          // responsibleId: 0,
-        }
-
+        info = getUserObj({ ...form, userId }, "FILIAL")
         break
 
       case "FRANQUEADO":
@@ -269,9 +232,15 @@ const FPpeople = () => {
         break
     }
 
-    return params.id && !Number.isNaN(params.id)
-      ? { ...info, id: Number(params.id), originalPersonType }
-      : info
+    if (params.id && !Number.isNaN(params.id)) {
+      info = { ...info, id: Number(params.id) }
+    }
+
+    return {
+      profile: personType,
+      ...baseInfo,
+      ...info,
+    }
   }
 
   const handleUpdate = async () => {

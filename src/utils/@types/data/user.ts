@@ -16,6 +16,7 @@ export type TNewUserDefault = {
   id: number
   userId: number
   status: "ATIVO" | "INATIVO" | "AGUARDANDO"
+  email: string
   photo: null | string
 }
 
@@ -68,9 +69,8 @@ export type TUBranch = {
 
   // Responsable
   responsible: {
-    type?: "cnpj" | "cpf" 
     id: number
-    responsibleType: string
+    responsibleType: "CNPJ" | "CPF" 
     companyName: string
     fantasyName: string
     cnpj: string

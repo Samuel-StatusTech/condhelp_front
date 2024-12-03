@@ -25,15 +25,15 @@ export const extraBranch = (
             ? [
                 {
                   type: "radio",
-                  field: "responsableType",
-                  value: form.responsible.type,
+                  field: "responsableResponsibleType",
+                  value: form.responsible.responsibleType,
                   gridSizes: { big: 12 },
                   options: [
-                    { key: "cnpj", value: "Pessoa Jurídica" },
-                    { key: "cpf", value: "Pessoa Física" },
+                    { key: "CNPJ", value: "Pessoa Jurídica" },
+                    { key: "CPF", value: "Pessoa Física" },
                   ],
                 },
-                ...(form.responsible.type === "cnpj"
+                ...(form.responsible.responsibleType === "CNPJ"
                   ? [
                       {
                         type: "input",

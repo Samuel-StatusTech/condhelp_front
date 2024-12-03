@@ -22,7 +22,6 @@ export const branchInitial: TNewUser & TUBranch = {
   phone2: "",
   profile: "FILIAL",
   responsible: {
-    type: "cnpj",
     id: 0,
     cnpj: "",
     companyName: "",
@@ -30,7 +29,7 @@ export const branchInitial: TNewUser & TUBranch = {
     municipalRegistration: "",
     personName: "",
     responsibleStatus: "ATIVO",
-    responsibleType: "FILIAL",
+    responsibleType: "CNPJ",
     stateRegistration: "",
     fantasyName: ""
   },
