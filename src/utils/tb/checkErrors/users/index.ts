@@ -2,6 +2,7 @@ import { TNewUser, TUser } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
 import { adminCheck } from "./admin"
 import { branchCheck } from "./branch"
+import { franchiseCheck } from "./franchise"
 import { managerCheck } from "./manager"
 
 export type Params = TNewUser | TUser
@@ -20,6 +21,11 @@ export const usersCheck = (data: Params): TErrorsCheck => {
       break
     case "FILIAL":
       branchCheck(data, (newState: TErrorsCheck) => {
+        state = newState
+      })
+      break
+    case "FRANQUEADO":
+      franchiseCheck(data, (newState: TErrorsCheck) => {
         state = newState
       })
       break

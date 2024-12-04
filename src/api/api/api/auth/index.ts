@@ -23,7 +23,10 @@ const authRegister: TApi["auth"]["register"] = async (data) => {
   return new Promise(async (resolve) => {
     try {
       await service
-        .post(`/auth/register`, data)
+        .post(`/auth/register`, {
+          ...data,
+          tipo: data.tipo === "FRANQUEADO" ? "USUARIO" : data.tipo,
+        })
         .then((res) => {
           const info = res.data
 

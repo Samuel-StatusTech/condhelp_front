@@ -81,7 +81,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           return
         }
 
-        if (newPerson.profile === "ADMIN") {
+        if (["ADMIN", "FRANQUEADO"].includes(newPerson.profile)) {
           resolve({
             ok: true,
             data: userAccountRegister.data,
@@ -226,7 +226,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
           if (info) {
             const userProfile = info.profile as TAccess
 
-            if (userProfile !== "ADMIN") {
+            if (!["ADMIN", "FRANQUEADO"].includes(userProfile)) {
               const extraDataReq = await service.get(
                 `${rolesUrlRelations[userProfile] ?? baseURL}/${info.id}`
               )

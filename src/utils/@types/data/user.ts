@@ -3,6 +3,7 @@ import { TAccess } from "./access"
 import { TAddress } from "./address"
 import { TCondominium } from "./condominium"
 import { TExperience } from "./managerExperience"
+import { TRegion } from "./region"
 
 type TUDefault = {
   id: number
@@ -68,35 +69,21 @@ export type TUBranch = {
   franqueadoIds: number[]
 
   // Responsable
-  responsible: {
-    id: number
-    responsibleType: "CNPJ" | "CPF" 
-    companyName: string
-    fantasyName: string
-    cnpj: string
-    stateRegistration: string
-    municipalRegistration: string
-    personName: string
-    cpf: string
-    responsibleStatus: string
-  }
+  responsible: TResponsableTypes
   responsibleId: number
 }
 
 type TResponsableTypes = {
-  cpf: {
-    type: "cpf"
-    name: string
-    register: string
-  }
-  cnpj: {
-    type: "cnpj"
-    name: string
-    fantasyName: string
-    register: string
-    inscriptionState: string
-    inscriptionCity: string
-  }
+  id: number
+  responsibleType: "CNPJ" | "CPF"
+  companyName: string
+  fantasyName: string
+  cnpj: string
+  stateRegistration: string
+  municipalRegistration: string
+  personName: string
+  cpf: string
+  responsibleStatus: string
 }
 
 export type TUFranchise = {
@@ -110,7 +97,11 @@ export type TUFranchise = {
   phone2: string
   email: string
 
-  responsable: TResponsableTypes["cpf"] | TResponsableTypes["cnpj"]
+  // Responsable
+  responsible: TResponsableTypes
+
+  region: number
+  cities: TRegion["cities"][] | number[]
 }
 
 export type TUProvider = {

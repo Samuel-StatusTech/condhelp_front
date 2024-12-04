@@ -32,7 +32,7 @@ const SelectDefault = ({
   placeholder,
   value,
   field,
-  options,
+  options = [],
   disabled,
   onChange,
   gridSizes,

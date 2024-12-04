@@ -61,24 +61,27 @@ export const extraFranchise = (
 
             const content = !region
               ? []
-              : region.cities.map((city: TRegion["cities"][number]) => {
-                  return (
-                    <div
-                      style={{
-                        padding: 6,
-                        borderRadius: 18,
-                        backgroundColor: "white",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 4,
-                        cursor: "pointer",
-                      }}
-                    >
-                      <span>{city?.name}</span>
-                      <Icons.Close width={8} height={8} />
-                    </div>
-                  ) as JSX.Element
-                })
+              : region.cities.map(
+                  (city: TRegion["cities"][number], cityKey) => {
+                    return (
+                      <div
+                        key={cityKey}
+                        style={{
+                          padding: 6,
+                          borderRadius: 18,
+                          backgroundColor: "white",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 4,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <span>{city?.name}</span>
+                        <Icons.Close width={16} height={16} />
+                      </div>
+                    ) as JSX.Element
+                  }
+                )
 
             return (
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -95,25 +98,25 @@ export const extraFranchise = (
         {
           type: "fields",
           // @ts-ignore
-          fields: form.responsable
+          fields: form.responsible
             ? [
                 {
                   type: "radio",
-                  field: "responsableType",
-                  value: form.responsable.type,
+                  field: "responsableResponsibleType",
+                  value: form.responsible.responsibleType,
                   gridSizes: { big: 12 },
                   options: [
-                    { key: "cnpj", value: "Pessoa Jurídica" },
-                    { key: "cpf", value: "Pessoa Física" },
+                    { key: "CNPJ", value: "Pessoa Jurídica" },
+                    { key: "CPF", value: "Pessoa Física" },
                   ],
                 },
-                ...(form.responsable.type === "cnpj"
+                ...(form.responsible.responsibleType === "CNPJ"
                   ? [
                       {
                         type: "input",
-                        field: "responsableName",
+                        field: "responsableCompanyName",
                         label: "Pessoa Jurídica responsável",
-                        value: form.responsable.name,
+                        value: form.responsible.companyName,
                         placeholder: "Informe a razão social",
                         gridSizes: { big: 12 },
                       },
@@ -122,15 +125,15 @@ export const extraFranchise = (
                           type: "input",
                           field: "responsableFantasyName",
                           label: "Nome fantasia",
-                          value: form.responsable.fantasyName,
+                          value: form.responsible.fantasyName,
                           placeholder: "Informe o nome fantasia",
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "input",
-                          field: "responsableRegister",
+                          field: "responsableCnpj",
                           label: "CNPJ",
-                          value: formatCNPJ(form.responsable.register),
+                          value: formatCNPJ(form.responsible.cnpj),
                           placeholder: "00.000.000/0001-00",
                           gridSizes: { big: 6, small: 12 },
                         },
@@ -138,20 +141,20 @@ export const extraFranchise = (
                       [
                         {
                           type: "input",
-                          field: "responsableInscriptionState",
+                          field: "responsableStateRegistration",
                           label: "Inscrição estadual",
                           value: formatStateInscription(
-                            form.responsable.inscriptionState
+                            form.responsible.stateRegistration
                           ),
                           placeholder: "Apenas números",
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "input",
-                          field: "responsableInscriptionCity",
+                          field: "responsableMunicipalRegistration",
                           label: "Inscrição municipal",
                           value: formatCityInscription(
-                            form.responsable.inscriptionCity
+                            form.responsible.municipalRegistration
                           ),
                           placeholder: "Apenas números",
                           gridSizes: { big: 6, small: 12 },
@@ -162,17 +165,18 @@ export const extraFranchise = (
                       [
                         {
                           type: "input",
-                          field: "responsableName",
+                          field: "responsablePersonName",
                           label: "Pessoa responsável",
-                          value: form.responsable.name,
+                          value: form.responsible.personName,
                           placeholder: "Informe o nome da pessoa",
                           gridSizes: { big: 6, small: 12 },
                         },
                         {
                           type: "input",
-                          field: "responsableRegister",
+                          field: "responsableCpf",
                           label: "CPF",
-                          value: formatCpf(form.responsable.register),
+                          placeholder: "123.456.789-10",
+                          value: formatCpf(form.responsible.cpf),
                           gridSizes: { big: 6, small: 12 },
                         },
                       ],

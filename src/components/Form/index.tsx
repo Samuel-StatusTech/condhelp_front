@@ -57,7 +57,10 @@ const Form = ({ handleField, columns }: Props) => {
         {columns.map((column, columnKey) => (
           <S.BlockCols key={columnKey}>
             {column.blocks.map((block, blockKey) => (
-              <S.Block key={blockKey}>
+              <S.Block
+                key={blockKey}
+                $zIndex={100 + (column.blocks.length + 2 - blockKey)}
+              >
                 <S.BlockTitle>{block.title}</S.BlockTitle>
 
                 {block.groups.map((group, gKey) => (

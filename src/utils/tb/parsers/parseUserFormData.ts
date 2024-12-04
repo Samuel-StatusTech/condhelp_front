@@ -11,6 +11,9 @@ export const getUserObj = (user: TUser, profile: TUser["profile"]) => {
     case "FILIAL":
       data = getBranchObj(user as any)
       break
+    case "FRANQUEADO":
+      data = getFranchiseObj(user as any)
+      break
     case "SINDICO":
       data = getManagerObj(user as any)
       break
@@ -74,6 +77,20 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
     phone1: user.phone1,
     phone2: user.phone2,
     // responsibleId: 0,
+  }
+
+  return info
+}
+
+const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
+  const info = {
+    id: user.userId,
+    userId: user.userId,
+    photo: user.photo,
+    email: user.email,
+    profile: user.profile,
+    status: user.status,
+    name: user.name,
   }
 
   return info

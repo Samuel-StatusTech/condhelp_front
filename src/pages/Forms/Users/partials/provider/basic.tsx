@@ -74,7 +74,7 @@ export const basicProvider = ({
               }}
             >
               <span>{franchiseData?.name}</span>
-              <Icons.Close width={8} height={8} />
+              <Icons.Close width={16} height={16} />
             </div>
           ) as JSX.Element
         })

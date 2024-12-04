@@ -13,11 +13,7 @@ import { TAccess } from "../../../utils/@types/data/access"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 import { Api } from "../../../api"
-import {
-  TNewUser,
-  TNewUserDefault,
-  TUFranchise,
-} from "../../../utils/@types/data/user"
+import { TNewUser, TNewUserDefault } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
@@ -108,6 +104,7 @@ const FPpeople = () => {
           break
 
         case "FILIAL":
+        case "FRANQUEADO":
           const responsableKeys = [
             "responsablePersonName",
             "responsableResponsibleType",
@@ -130,10 +127,6 @@ const FPpeople = () => {
               responsible: { ...p.responsible, [fieldName]: value },
             }))
           } else setForm((p: any) => ({ ...p, [field]: value }))
-          break
-
-        case "FRANQUEADO":
-          setForm((p: any) => ({ ...p, [field]: value }))
           break
 
         case "SINDICO":
@@ -197,12 +190,7 @@ const FPpeople = () => {
         break
 
       case "FRANQUEADO":
-        let dataFranchise: TNewUser & TUFranchise = form
-
-        info = {
-          ...baseInfo,
-          ...dataFranchise,
-        }
+        info = getUserObj({ ...form, userId }, "FRANQUEADO")
         break
 
       case "SINDICO":
@@ -315,78 +303,6 @@ const FPpeople = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const franchisesReq = await Api.persons.getByRole({ role: "FRANQUEADO" })
-
-      if (franchisesReq.ok) {
-        setOptions((opts) => ({
-          ...opts,
-          franchise: parseOptionList(franchisesReq.data.content, "id", "name"),
-          franchises: parseOptionList(franchisesReq.data.content, "id", "name"),
-        }))
-      } else throw new Error()
-
-      const regionsReq = await Api.regions.listAll({}).then((res) => {
-        if (res.ok) {
-          setRegions(res.data.content)
-          setOptions((opts) => ({
-            ...opts,
-            region: parseOptionList(res.data.content, "id", "name"),
-          }))
-        } else {
-          controllers.feedback.setData({
-            message:
-              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
-            state: "error",
-            visible: true,
-          })
-          navigate(-1)
-        }
-      })
-
-      const countriesReq = await Api.countries.listAll({}).then((res) => {
-        if (res.ok) {
-          setOptions((opts) => ({
-            ...opts,
-            country: parseOptionList(res.data.content, "id", "name"),
-          }))
-        } else {
-          controllers.feedback.setData({
-            message:
-              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
-            state: "error",
-            visible: true,
-          })
-          navigate(-1)
-        }
-      })
-
-      const statesReq = await Api.states.listAll({}).then((res) => {
-        if (res.ok) {
-          setOptions((opts) => ({
-            ...opts,
-            state: parseOptionList(res.data.content, "id", "name"),
-          }))
-        } else {
-          controllers.feedback.setData({
-            message:
-              "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
-            state: "error",
-            visible: true,
-          })
-          navigate(-1)
-        }
-      })
-
-      await Promise.all([regionsReq, countriesReq, statesReq]).catch((err) => {
-        controllers.feedback.setData({
-          message:
-            "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
-          state: "error",
-          visible: true,
-        })
-        navigate(-1)
-      })
-
       // user info
 
       if (params.id) {
@@ -395,31 +311,134 @@ const FPpeople = () => {
         if (req.ok) {
           const hasInfo = req.data.profile && req.data.email
 
-          setOriginalPersonType(req.data.profile)
+          if (hasInfo) {
+            setOriginalPersonType(req.data.profile)
 
-          setForm((fm: any) => ({
-            ...fm,
-            ...(hasInfo
-              ? req.data
-              : {
-                  ...req.data,
-                  profile: "SINDICO",
-                }),
-          }))
+            const initialRoleInfo = initials.forms.person[req.data.profile]
+
+            setForm((fm: any) => ({
+              ...fm,
+              ...initialRoleInfo,
+              ...(hasInfo
+                ? req.data
+                : {
+                    ...req.data,
+                    profile: "ADMIN",
+                  }),
+            }))
+          }
         } else {
           controllers.feedback.setData({
             message: req.error,
             state: "error",
             visible: true,
           })
+
+          navigate(-1)
         }
       }
+
+      let proms: Promise<any>[] = []
+
+      // For Persons select
+      proms.push(
+        Api.persons.listAll({}).then((usersReq) => {
+          if (usersReq.ok) {
+            const list = usersReq.data.content
+
+            const branchesList = list.filter((i) => i.profile === "FILIAL")
+            const franchisesList = list.filter(
+              (i) => i.profile === "FRANQUEADO"
+            )
+
+            setOptions((opts) => ({
+              ...opts,
+              branch: parseOptionList(branchesList, "id", "name"),
+              franchise: parseOptionList(franchisesList, "id", "name"),
+              franchises: parseOptionList(franchisesList, "id", "name"),
+            }))
+          } else throw new Error()
+        })
+      )
+
+      // For Regions select
+      proms.push(
+        Api.regions.listAll({}).then((res) => {
+          if (res.ok) {
+            setRegions(res.data.content)
+            setOptions((opts) => ({
+              ...opts,
+              region: parseOptionList(res.data.content, "id", "name"),
+            }))
+          } else {
+            controllers.feedback.setData({
+              message:
+                "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+              state: "error",
+              visible: true,
+            })
+            navigate(-1)
+          }
+        })
+      )
+
+      // For Countries select
+      proms.push(
+        Api.countries.listAll({}).then((res) => {
+          if (res.ok) {
+            setOptions((opts) => ({
+              ...opts,
+              country: parseOptionList(res.data.content, "id", "name"),
+            }))
+          } else {
+            controllers.feedback.setData({
+              message:
+                "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+              state: "error",
+              visible: true,
+            })
+            navigate(-1)
+          }
+        })
+      )
+
+      // For States select
+      proms.push(
+        Api.states.listAll({}).then((res) => {
+          if (res.ok) {
+            setOptions((opts) => ({
+              ...opts,
+              state: parseOptionList(res.data.content, "id", "name"),
+            }))
+          } else {
+            controllers.feedback.setData({
+              message:
+                "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+              state: "error",
+              visible: true,
+            })
+            navigate(-1)
+          }
+        })
+      )
+
+      await Promise.all(proms).catch((err) => {
+        controllers.feedback.setData({
+          message:
+            "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+          state: "error",
+          visible: true,
+        })
+        navigate(-1)
+      })
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações do usuário.",
         state: "error",
         visible: true,
       })
+
+      navigate(-1)
     }
   }, [controllers.feedback, navigate, params.id])
 

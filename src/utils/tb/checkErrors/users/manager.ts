@@ -18,7 +18,6 @@ export const managerCheck = (
     if (!data.surname?.trim()) state = getInvalidCheck(state, "surname")
     if (!data.email?.trim()) state = getInvalidCheck(state, "email")
     if (!data.phone1?.trim()) state = getInvalidCheck(state, "phone1")
-    if (!data.phone2?.trim()) state = getInvalidCheck(state, "phone2")
     if (!data.documentType?.trim())
       state = getInvalidCheck(state, "documentType")
     if (!data.documentNumber?.trim())

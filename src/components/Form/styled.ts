@@ -23,7 +23,7 @@ export const BlockCols = styled.div`
   height: fit-content;
 `
 
-export const Block = styled.div`
+export const Block = styled.div<{ $zIndex: number }>`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -33,6 +33,7 @@ export const Block = styled.div`
   padding: 20px;
   border-radius: 8px;
   height: fit-content;
+  z-index: ${({ $zIndex }) => $zIndex};
 `
 
 export const BlockTitle = styled.span`
