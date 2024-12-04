@@ -60,7 +60,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
   return new Promise(async (resolve, reject) => {
     try {
       // Other profile
-      if (newPerson.profile !== "SINDICO") {
+      if (!["SINDICO"].includes(newPerson.profile)) {
         const userAccountRegister = await service.post(`${baseURL}`, {
           userId: newPerson.userId,
           photo: newPerson.photo,
@@ -75,6 +75,15 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
             ok: false,
             error:
               "Não foi possível criar o usuário. Tente novamente mais tarde.",
+          })
+
+          return
+        }
+
+        if (newPerson.profile === "ADMIN") {
+          resolve({
+            ok: true,
+            data: userAccountRegister.data,
           })
 
           return
