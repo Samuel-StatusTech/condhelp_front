@@ -103,7 +103,7 @@ const DashboardAdmin = () => {
     return content
   }, [gridData])
 
-  const getGridResume = (info: TUser[]) => {
+  const getGridResume = (info: TUser[], gridRef: any) => {
     return new Promise((resolve) => {
       let gridInfo: { [key in PDashboardShortcut["icon"]]: number } = {
         region: 0,
@@ -118,7 +118,10 @@ const DashboardAdmin = () => {
         subcategory: 0,
         user: 0,
         settings: 0,
+        ...gridRef
       }
+
+      console.log(gridRef)
 
       try {
         info.forEach((u) => {
@@ -157,6 +160,9 @@ const DashboardAdmin = () => {
     let userCount = 0
     let budgetCount = 0
 
+    let categoriesCount = 0
+    let subcategoriesCount = 0
+
     let budgetsInfo: { [key in TBudget["status"]]: number } = {
       approved: 0,
       awaiting: 0,
@@ -185,13 +191,43 @@ const DashboardAdmin = () => {
       SINDICO: 0,
       chat: 0,
       faq: 0,
-      category: 0,
-      subcategory: 0,
+      category: categoriesCount,
+      subcategory: subcategoriesCount,
       user: 0,
       settings: 0,
     }
 
     let proms: Promise<any>[] = []
+
+    // Subcategories
+    proms.push(
+      new Promise(async (resolve, reject) => {
+        try {
+          const req = await Api.subcategories.listAll({})
+
+          if (req.ok) subcategoriesCount = req.data.totalElements
+
+          resolve(true)
+        } catch (error) {
+          reject()
+        }
+      })
+    )
+
+    // Categories
+    proms.push(
+      new Promise(async (resolve, reject) => {
+        try {
+          const req = await Api.categories.listAll({})
+
+          if (req.ok) categoriesCount = req.data.totalElements
+
+          resolve(true)
+        } catch (error) {
+          reject()
+        }
+      })
+    )
 
     // Condos
     proms.push(
@@ -240,8 +276,8 @@ const DashboardAdmin = () => {
             // Users
             userCount = req.data.totalElements
 
-            const gridResume = (await getGridResume(req.data.content)) as any
-            gridInfo = gridResume
+            const gridResume = (await getGridResume(req.data.content, gridInfo)) as any
+            gridInfo = { ...gridInfo, ...gridResume }
           }
 
           resolve(true)
