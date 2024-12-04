@@ -47,11 +47,7 @@ const create: TApi["budgets"]["create"] = async ({ newBudget }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`, {
-          params: {
-            size: 300,
-          },
-        })
+        .get(`${baseURL}?size=300`)
         .then((res) => {
           const info = res.data
 
