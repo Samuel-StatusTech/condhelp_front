@@ -177,13 +177,17 @@ const FPpeople = () => {
 
     const baseInfo: TNewUserDefault = {
       id: userId,
-      status: "ATIVO",
+      status: form.status,
       userId: userId,
       email: form.email,
       photo: null,
     }
 
     switch ((form as TNewUser).profile) {
+      case "ADMIN":
+        // info = getUserObj({ ...form, userId }, "ADMIN")
+        break
+
       case "PRESTADOR":
         info = getUserObj({ ...form, userId }, "PRESTADOR")
         break

@@ -5,6 +5,9 @@ export const getUserObj = (user: TUser, profile: TUser["profile"]) => {
   let data = {}
 
   switch (profile) {
+    case "ADMIN":
+      data = getAdminObj(user as any)
+      break
     case "FILIAL":
       data = getBranchObj(user as any)
       break
@@ -19,6 +22,19 @@ export const getUserObj = (user: TUser, profile: TUser["profile"]) => {
   }
 
   return data
+}
+
+const getAdminObj = (user: TUserTypes["ADMIN"]) => {
+  const info = {
+    id: user.userId,
+    userId: user.userId,
+    photo: user.photo,
+    email: user.email,
+    profile: user.profile,
+    status: user.status,
+  }
+
+  return info
 }
 
 const getBranchObj = (user: TUserTypes["FILIAL"]) => {
@@ -86,7 +102,7 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
 const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
   const info = {
     id: user.userId,
-    userAccountId:user.userId,
+    userAccountId: user.userId,
     nome: user.name,
     contato: "",
     status: user.status,

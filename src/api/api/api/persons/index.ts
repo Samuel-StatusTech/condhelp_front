@@ -136,7 +136,10 @@ const update: TApi["persons"]["update"] = async ({
 }) => {
   return new Promise(async (resolve) => {
     try {
-      const roleUrl = rolesUrlRelations[originalPersonType]
+      const roleUrl =
+        originalPersonType !== "ADMIN"
+          ? rolesUrlRelations[originalPersonType]
+          : baseURL
 
       await service
         .put(`${roleUrl}/${person.id}`, person)

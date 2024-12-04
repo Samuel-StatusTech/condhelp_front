@@ -21,7 +21,7 @@ const SubcategoriesList = ({ list, setList }: Props) => {
 
   const handleDelete = (id: number) => {
     if (!list.find((i) => i.id === id)?.isNew) {
-      Api.cities
+      Api.subcategories
         .delete({ id })
         .then((res) => {
           if (res.ok) {
