@@ -12,11 +12,12 @@ export type TInputDefault = {
 type Props = TInputDefault & {
   onChange: (id: number, v: string) => void
   handleDelete: (id: number) => void
+  onEnter?: () => void
   gridSizes?: FormField["gridSizes"]
 }
 
 const ListInput = (props: Props) => {
-  const { id, value, placeholder, onChange, handleDelete } = props
+  const { id, value, placeholder, onChange, handleDelete, onEnter } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value
@@ -27,8 +28,12 @@ const ListInput = (props: Props) => {
     <S.Wrapper $gridSizes={props.gridSizes}>
       <S.Item $k={0}>
         <S.Input
+          id={String(props.id)}
           value={value}
           placeholder={placeholder}
+          onKeyUp={({ code, keyCode }) => {
+            if (!!onEnter && (code === "Enter" || keyCode === 13)) onEnter()
+          }}
           onChange={handleChange}
         />
         <S.BtnArea onClick={() => handleDelete(id)}>

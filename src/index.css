@@ -8,6 +8,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+input[type="password"]::-moz-textfield-decoration-container {
+  display: none;
+}
+
 /* Animations */
 
 @keyframes fade {

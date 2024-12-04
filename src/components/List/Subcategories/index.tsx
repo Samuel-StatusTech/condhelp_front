@@ -61,10 +61,22 @@ const SubcategoriesList = ({ list, setList }: Props) => {
     setList(list.map((i) => (i.id !== id ? i : { ...i, name: value })))
   }
 
+  const focusCity = (id: number) => {
+    setTimeout(() => {
+      const el = document.getElementById(String(id))
+
+      if (el) {
+        el.focus()
+      }
+    }, 150)
+  }
+
   const handleAddSubcategory = () => {
+    const newId = new Date().getTime()
+
     const newCategory: TNewSubCategory = {
       // @ts-ignore
-      id: new Date().getTime(),
+      id: newId,
       name: "",
       serviceCategory: 0,
       // @ts-ignore
@@ -72,6 +84,8 @@ const SubcategoriesList = ({ list, setList }: Props) => {
     }
 
     setList([...list, newCategory])
+
+    focusCity(newId)
   }
 
   return (
@@ -82,6 +96,7 @@ const SubcategoriesList = ({ list, setList }: Props) => {
           id={subcategory.id}
           handleDelete={handleDelete}
           onChange={handleSubcategoryName}
+          onEnter={handleAddSubcategory}
           value={subcategory.name}
           gridSizes={{ big: 12 }}
           placeholder="Nome da nova subcategoria"
