@@ -62,6 +62,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
       // Other profile
       if (!["SINDICO"].includes(newPerson.profile)) {
         const userAccountRegister = await service.post(`${baseURL}`, {
+          id: newPerson.userId,
           userId: newPerson.userId,
           photo: newPerson.photo,
           name: newPerson.name,

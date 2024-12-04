@@ -112,6 +112,7 @@ const FPpeople = () => {
             "responsablePersonName",
             "responsableResponsibleType",
             "responsableFantasyName",
+            "responsableCompanyName",
             "responsableCnpj",
             "responsableStateRegistration",
             "responsableMunicipalRegistration",

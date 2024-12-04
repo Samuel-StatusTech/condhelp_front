@@ -121,8 +121,6 @@ const DashboardAdmin = () => {
         ...gridRef
       }
 
-      console.log(gridRef)
-
       try {
         info.forEach((u) => {
           gridInfo.user += 1

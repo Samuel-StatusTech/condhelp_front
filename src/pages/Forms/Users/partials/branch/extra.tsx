@@ -37,9 +37,9 @@ export const extraBranch = (
                   ? [
                       {
                         type: "input",
-                        field: "responsablePersonName",
+                        field: "responsableCompanyName",
                         label: "Pessoa Jurídica responsável",
-                        value: form.responsible.personName,
+                        value: form.responsible.companyName,
                         placeholder: "Informe a razão social",
                         gridSizes: { big: 12 },
                       },
