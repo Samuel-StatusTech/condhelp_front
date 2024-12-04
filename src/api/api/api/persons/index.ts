@@ -227,14 +227,20 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
             const userProfile = info.profile as TAccess
 
             if (!["ADMIN", "FRANQUEADO"].includes(userProfile)) {
-              const extraDataReq = await service.get(
-                `${rolesUrlRelations[userProfile] ?? baseURL}/${info.id}`
-              )
+              const url =
+                userProfile === "FILIAL"
+                  ? "/subsidiaries/useraccount"
+                  : rolesUrlRelations[userProfile] ?? baseURL
+
+              const extraDataReq = await service.get(`${url}/${info.id}`)
 
               if (extraDataReq.data) {
                 resolve({
                   ok: true,
-                  data: extraDataReq.data,
+                  data: {
+                    ...info,
+                    ...extraDataReq.data
+                  },
                 })
               } else throw new Error()
             } else {

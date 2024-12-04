@@ -500,7 +500,7 @@ const FPpeople = () => {
         break
 
       case "FRANQUEADO":
-        content = formPartials.franchise.basic({ form, options })
+        content = formPartials.franchise.basic({ form, options, userProfile: user?.profile as any })
         break
 
       case "SINDICO":

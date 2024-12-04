@@ -1,38 +1,61 @@
+import { getStore } from "../../../../../store"
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
 type Props = {
+  userProfile: TAccess
   form: any
   options: { [key: string]: TOption[] }
 }
 
-export const basicFranchise = ({ form, options }: Props): TBlock["groups"] => {
+export const basicFranchise = ({
+  userProfile,
+  form,
+  options,
+}: Props): TBlock["groups"] => {
+  console.log(form)
+
   const content: TBlock["groups"] = [
     {
       type: "fields",
+      // @ts-ignore
       fields: [
-        [
-          {
-            type: "select",
-            label: "Filial",
-            placeholder: "Filial",
-            field: "branchId",
-            value: form.branchId ?? "",
-            options: options.branch,
-            gridSizes: { big: 6, small: 12 },
-            elevation: 10,
-          },
-          {
-            type: "input",
-            label: "Nome da franquia",
-            field: "name",
-            value: form.name,
-            placeholder: "Nome da franquia",
-            gridSizes: { big: 6, small: 12 },
-          },
-        ],
+        ...(userProfile === "FILIAL"
+          ? [
+              {
+                type: "input",
+                label: "Nome da franquia",
+                field: "name",
+                value: form.name,
+                placeholder: "Nome da franquia",
+                gridSizes: { big: 12 },
+              },
+            ]
+          : [
+              [
+                {
+                  type: "select",
+                  label: "Filial",
+                  placeholder: "Filial",
+                  field: "branchId",
+                  value: form.branchId ?? "",
+                  options: options.branch,
+                  gridSizes: { big: 6, small: 12 },
+                  elevation: 10,
+                },
+                {
+                  type: "input",
+                  label: "Nome da franquia",
+                  field: "name",
+                  value: form.name,
+                  placeholder: "Nome da franquia",
+                  gridSizes: { big: 6, small: 12 },
+                },
+              ],
+            ]),
       ],
     },
 
