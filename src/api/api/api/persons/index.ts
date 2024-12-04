@@ -23,7 +23,11 @@ const listAll: TApi["persons"]["listAll"] = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`, data)
+        .get(`${baseURL}`, {
+          params: {
+            size: 300,
+          },
+        })
         .then((res) => {
           const info = res.data
 

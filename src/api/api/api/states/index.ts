@@ -10,7 +10,7 @@ const listAll: TApi["states"]["listAll"] = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}?size=100&sort=name,asc`, data)
+        .get(`${baseURL}?size=300&sort=name,asc`, data)
         .then((res) => {
           const info = res.data
 

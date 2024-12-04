@@ -10,7 +10,11 @@ const listAll: TApi["faqs"]["listAll"] = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`, data)
+        .get(`${baseURL}`, {
+          params: {
+            size: 300,
+          },
+        })
         .then((res) => {
           const info = res.data
 
@@ -19,7 +23,7 @@ const listAll: TApi["faqs"]["listAll"] = async (data) => {
               ok: true,
               data: {
                 ...info,
-                content: info.content.filter((i: any) => !i.removed)
+                content: info.content.filter((i: any) => !i.removed),
               },
             })
           } else {
