@@ -17,15 +17,12 @@ import {
   TNewUser,
   TNewUserDefault,
   TUFranchise,
-  TUManager,
-  TUProvider,
 } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
 import { TRegion } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
-import { getDateStr } from "../../../utils/tb/format/date"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 
@@ -144,7 +141,7 @@ const FPpeople = () => {
 
         case "PRESTADOR":
           switch (field) {
-            case "documentNumber":
+            case "documentRegister":
               setForm((p: any) => ({
                 ...p,
                 // @ts-ignore
@@ -187,12 +184,7 @@ const FPpeople = () => {
 
     switch ((form as TNewUser).profile) {
       case "PRESTADOR":
-        let dataProvider: TNewUser & TUProvider = form
-
-        info = {
-          ...baseInfo,
-          ...dataProvider,
-        }
+        info = getUserObj({ ...form, userId }, "PRESTADOR")
         break
 
       case "FILIAL":
@@ -209,23 +201,7 @@ const FPpeople = () => {
         break
 
       case "SINDICO":
-        let dataManager: TNewUser & TUManager = form
-
-        info = {
-          ...baseInfo,
-          name: dataManager.name,
-          email: dataManager.email,
-          profile: dataManager.profile,
-          status: dataManager.status ? "ATIVO" : "INATIVO",
-          surname: dataManager.surname,
-          phone1: dataManager.phone1,
-          phone2: dataManager.phone2,
-          documentType: dataManager.documentType,
-          documentNumber: dataManager.documentNumber,
-          condominiumIds: dataManager.condominiums.map((c) => c.id),
-          managerSince: +new Date(dataManager.managerSince).getTime(),
-          birthDate: getDateStr(dataManager.birthDate, "javaDateTime"),
-        }
+        info = getUserObj({ ...form, userId }, "SINDICO")
         break
 
       default:
@@ -340,6 +316,7 @@ const FPpeople = () => {
         setOptions((opts) => ({
           ...opts,
           franchise: parseOptionList(franchisesReq.data.content, "id", "name"),
+          franchises: parseOptionList(franchisesReq.data.content, "id", "name"),
         }))
       } else throw new Error()
 

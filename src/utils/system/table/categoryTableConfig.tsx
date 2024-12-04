@@ -13,7 +13,7 @@ export const categoryTableConfig: TConfig = {
   ],
   specialFields: {
     name: (item: TCategory) => item.name,
-    serviceSubcategories: (item: TCategory) => item.serviceSubcategories.length,
+    serviceSubcategories: (item: TCategory) => (item.serviceSubcategories ?? []).length,
     creator: (item: TCategory) => (
       <ColorTextIndicator
         role="profile"

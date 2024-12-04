@@ -13,6 +13,9 @@ import Divider from "../../components/_minimals/Divider"
 import Table from "../../components/Table"
 import PageHeader from "../../components/PageHeader"
 import SearchBlock from "../../components/SearchBlock"
+import { TUser } from "../../utils/@types/data/user"
+import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
+import { TOption } from "../../utils/@types/data/option"
 
 const CategoriesPage = () => {
   const navigate = useNavigate()
@@ -29,12 +32,8 @@ const CategoriesPage = () => {
   const [filters, setFilters] = useState({
     creator: "",
   })
-  const [options] = useState({
-    creator: [
-      { key: "1", value: "Fulano Silva" },
-      { key: "2", value: "Ambrosio Vasconcelos" },
-      { key: "3", value: "Marta Pereira" },
-    ],
+  const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
+    creator: [],
   })
 
   const handleFilters = (filter: Partial<TFilter>) => {
@@ -56,6 +55,35 @@ const CategoriesPage = () => {
     navigate(`single/${id}`)
   }
 
+  const getCreators = async (creatorsIds: number[]) => {
+    try {
+      let creatorsList: TUser[] = []
+
+      let proms: Promise<any>[] = []
+
+      creatorsIds.forEach((c) => {
+        proms.push(
+          new Promise(async (resolve) => {
+            const req = await Api.persons.getSingle({ id: c })
+
+            if (req.ok) creatorsList.push(req.data)
+
+            resolve(true)
+          })
+        )
+      })
+
+      await Promise.all(proms)
+
+      setOptions((opts) => ({
+        ...opts,
+        creator: parseOptionList(creatorsList, "userId", "name"),
+      }))
+    } catch (error) {
+      // TODO: show error
+    }
+  }
+
   // Start component
 
   const loadData = useCallback(async () => {
@@ -64,6 +92,10 @@ const CategoriesPage = () => {
 
       if (req.ok) {
         setCategories(req.data.content)
+
+        const creatorsIds = req.data.content.map((c) => c.userAccountId)
+
+        getCreators(creatorsIds)
       } else {
         controllers.feedback.setData({
           visible: true,
@@ -107,15 +139,43 @@ const CategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.categories}
-        data={categories.map((i) => ({
-          ...i,
-          subcategories: [],
-          creator: {
-            id: user?.id,
-            name: user?.name,
-            role: user?.profile,
-          },
-        }))}
+        data={categories
+          .filter((i) => {
+            let ok = true
+
+            const searchOk = !!search
+              ? [
+                  i.name,
+                  (i.serviceSubcategories ?? []).map((sc) => sc.name),
+                  /*
+                   * Creator filter
+                   */
+                  // i.creator.name,
+                ]
+                  .flat()
+                  .some((val) =>
+                    String(val).toLowerCase().includes(search.toLowerCase())
+                  )
+              : true
+
+            const creatorOk =
+              !!filters.creator && filters.creator !== "all"
+                ? i.creator.id === filters.creator
+                : true
+
+            ok = searchOk && creatorOk
+
+            return ok
+          })
+          .map((i) => ({
+            ...i,
+            subcategories: [],
+            creator: {
+              id: user?.id,
+              name: user?.name,
+              role: user?.profile,
+            },
+          }))}
         actions={{
           edit: handleEdit,
         }}

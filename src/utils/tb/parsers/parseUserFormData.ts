@@ -1,4 +1,5 @@
 import { TUser, TUserTypes } from "../../@types/data/user"
+import { getDateStr } from "../format/date"
 
 export const getUserObj = (user: TUser, profile: TUser["profile"]) => {
   let data = {}
@@ -6,6 +7,12 @@ export const getUserObj = (user: TUser, profile: TUser["profile"]) => {
   switch (profile) {
     case "FILIAL":
       data = getBranchObj(user as any)
+      break
+    case "SINDICO":
+      data = getManagerObj(user as any)
+      break
+    case "PRESTADOR":
+      data = getProviderObj(user as any)
       break
     default:
       break
@@ -49,6 +56,53 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
     phone1: user.phone1,
     phone2: user.phone2,
     // responsibleId: 0,
+  }
+
+  return info
+}
+
+const getManagerObj = (user: TUserTypes["SINDICO"]) => {
+  const info = {
+    userAccountId: user.userId,
+    name: user.name,
+    email: user.email,
+    profile: user.profile,
+    status: user.status ? "ATIVO" : "INATIVO",
+    surname: user.surname,
+    phone1: user.phone1,
+    phone2: user.phone2,
+    documentType: user.documentType,
+    documentNumber: user.documentNumber,
+    condominiumIds: user.condominiums.map((c) => c.id),
+    managerSince: +Math.floor(
+      +new Date(user.managerSince).getTime() / 1000
+    ).toFixed(0),
+    birthDate: getDateStr(user.birthDate, "javaDateTime"),
+  }
+
+  return info
+}
+
+const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
+  const info = {
+    id: user.userId,
+    userAccountId:user.userId,
+    nome: user.name,
+    contato: "",
+    status: user.status,
+    email: user.email,
+    site: user.website,
+    razaoSocial: user.socialRole,
+    cnpj: user.document,
+    urlCartaoCnpj: "",
+    dataAbertura: "2024-12-04T04:33:41.318Z",
+    // inscricaoEstadual: user.inscricaoEstadual,
+    // inscricaoMunicipal: userstate.inscricaoMunicipal,
+    inscricaoEstadual: "",
+    inscricaoMunicipal: "",
+    nomeResponsavel: user.responsable,
+    endereco: "",
+    cep: "",
   }
 
   return info

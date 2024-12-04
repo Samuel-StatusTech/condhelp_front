@@ -13,6 +13,7 @@ export type TCategory = {
   active: boolean
   name: string
   description: string
+  userAccountId: number
   creator: TCreator
   serviceSubcategories: TSubCategory[]
 }

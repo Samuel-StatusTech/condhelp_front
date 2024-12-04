@@ -111,7 +111,24 @@ const CondosPage = () => {
         {/* Table content */}
         <Table
           config={tableConfig.condos}
-          data={condos}
+          data={condos.filter((i) => {
+            let ok = true
+
+            const searchOk = !!search
+              ? Object.values(i).some((val) =>
+                  String(val).toLowerCase().includes(search.toLowerCase())
+                )
+              : true
+
+            const stateOk =
+              !!filters.states && filters.states !== "all"
+                ? i.federateUnit === filters.states
+                : true
+
+            ok = searchOk && stateOk
+
+            return ok
+          })}
           actions={{
             edit: handleEdit,
           }}

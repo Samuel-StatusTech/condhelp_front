@@ -326,7 +326,11 @@ const getByRole: TApi["persons"]["getByRole"] = async ({ role }) => {
           })
       } else {
         await service
-          .get(`${baseURL}`)
+          .get(`${baseURL}`, {
+            params: {
+              size: 1000
+            }
+          })
           .then(async (res) => {
             const info = res.data
 
