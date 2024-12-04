@@ -5,50 +5,32 @@ import { TRegion } from "../../../utils/@types/data/region"
 
 import Button from "../../Button"
 import Input from "../../Input"
-import { Api } from "../../../api"
+
 import { getStore } from "../../../store"
 
 type Props = {
   list: TRegion["cities"][number][]
+  unlinkCity: (cityId: number) => boolean
   setList: (list: TRegion["cities"]) => void
 }
 
-const CitiesList = ({ list, setList }: Props) => {
+const CitiesList = ({ list, setList, unlinkCity }: Props) => {
   const { controllers } = getStore()
 
   const handleDelete = (id: number) => {
-    if (!list.find((i) => i.id === id)?.isNew) {
-      Api.cities
-        .delete({ id })
-        .then((res) => {
-          if (res.ok) {
-            controllers.feedback.setData({
-              message: "Cidade excluida com sucesso.",
-              state: "success",
-              visible: true,
-            })
-            setList(list.filter((i) => i.id !== id))
-          } else {
-            controllers.feedback.setData({
-              message: res.error,
-              state: "error",
-              visible: true,
-            })
-          }
-        })
-        .catch(() => {
-          controllers.feedback.setData({
-            message:
-              "Não foi possível excluir a cidade. Tente novamente mais tarde.",
-            state: "error",
-            visible: true,
-          })
-        })
-    } else {
-      setList(list.filter((i) => i.id !== id))
+    const removal = unlinkCity(id)
+
+    if (removal) {
       controllers.feedback.setData({
-        message: "Cidade excluida com sucesso.",
+        message: "Cidade desrelacionada com sucesso.",
         state: "success",
+        visible: true,
+      })
+    } else {
+      controllers.feedback.setData({
+        message:
+          "Não foi possível desrelacionar a cidade. Tente novamente mais tarde.",
+        state: "error",
         visible: true,
       })
     }

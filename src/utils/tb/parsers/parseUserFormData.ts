@@ -32,6 +32,8 @@ const getAdminObj = (user: TUserTypes["ADMIN"]) => {
     email: user.email,
     profile: user.profile,
     status: user.status,
+    name: user.name,
+    surname: user.surname,
   }
 
   return info
@@ -79,6 +81,8 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
 
 const getManagerObj = (user: TUserTypes["SINDICO"]) => {
   const info = {
+    id: user.userId,
+    userId: user.userId,
     userAccountId: user.userId,
     name: user.name,
     email: user.email,

@@ -86,7 +86,10 @@ const update: TApi["regions"]["update"] = async ({ region }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .put(`${baseURL}/${region.id}`, region)
+        .put(`${baseURL}/${region.id}`, {
+          ...region,
+          citiesIds: region.cities.map((i) => i.id),
+        })
         .then((res) => {
           const info = res.data
 

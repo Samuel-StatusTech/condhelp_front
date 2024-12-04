@@ -12,7 +12,7 @@ import { TOption } from "../../../utils/@types/data/option"
 import { TCity, TNewRegion } from "../../../utils/@types/data/region"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import { List } from "../../../components/List"
-import ImportCsvArea from "../../../components/ImportCsvArea"
+
 import { Api } from "../../../api"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { checkErrors } from "../../../utils/tb/checkErrors"
@@ -37,10 +37,6 @@ const FPregion = () => {
 
   const handleCancel = () => {
     navigate(-1)
-  }
-
-  const handleLoadCsv = (list: any[]) => {
-    // ...
   }
 
   const handleField = async (field: string, value: any) => {
@@ -73,25 +69,20 @@ const FPregion = () => {
     }
   }
 
-  const handleUpdate = async () => {
+  const unlinkCity = (cityId: number): boolean => {
     try {
-      await citiesTreat()
+      const newCitiesList: TCity[] = form.cities.filter(
+        (city) => city.id !== cityId
+      )
 
-      const req = await Api.regions.update({
-        region: { ...form, id: params.id as string },
-      })
+      setForm((reg) => ({
+        ...reg,
+        cities: newCitiesList,
+      }))
 
-      if (req.ok) {
-        controllers.feedback.setData({
-          visible: true,
-          state: "success",
-          message: "Região atualizada com sucesso",
-        })
-
-        navigate("/dashboard/regions")
-      }
+      return true
     } catch (error) {
-      // ...
+      return false
     }
   }
 
@@ -110,14 +101,12 @@ const FPregion = () => {
 
             proms.push(
               Api.cities.create({ newCity: newCity }).then((res) => {
-                if (res.ok) {
-                  newCitiesList = form.cities.map((i) => {
-                    return i.id !== item.id ? i : { ...i, id: res.data.id }
-                  })
-                }
+                if (res.ok) newCitiesList.push(res.data)
               })
             )
           } else {
+            newCitiesList.push(item)
+
             proms.push(
               Api.cities.update({
                 city: {
@@ -130,23 +119,21 @@ const FPregion = () => {
           }
         })
       } else {
-        form.cities.forEach(async (item) => {
+        form.cities.forEach((item) => {
           if (item.isNew && !!item.name.trim()) {
-            const newCity = {
+            const newCity: any = {
               stateId: Number(form.stateId),
               name: item.name,
             }
 
             proms.push(
               Api.cities.create({ newCity: newCity }).then((res) => {
-                if (res.ok) {
-                  newCitiesList = form.cities.map((i) => {
-                    return i.id !== item.id ? i : { ...i, id: res.data.id }
-                  })
-                }
+                if (res.ok) newCitiesList.push(res.data)
               })
             )
           } else if (item.isEdit) {
+            newCitiesList.push(item)
+
             proms.push(
               Api.cities.update({
                 city: {
@@ -156,20 +143,43 @@ const FPregion = () => {
                 },
               })
             )
-          }
+          } else newCitiesList.push(item)
         })
       }
 
-      await Promise.all(proms)
+      await Promise.allSettled(proms)
 
-      setForm((reg) => ({
-        ...reg,
-        cities: newCitiesList,
-      }))
+      setForm((reg) => ({ ...reg, cities: newCitiesList }))
 
       return newCitiesList
     } catch (error) {
       return form.cities
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      const cities = await citiesTreat()
+
+      const req = await Api.regions.update({
+        region: {
+          ...form,
+          cities: cities,
+          id: params.id as string,
+        },
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Região atualizada com sucesso",
+        })
+
+        navigate("/dashboard/regions")
+      }
+    } catch (error) {
+      // ...
     }
   }
 
@@ -336,10 +346,6 @@ const FPregion = () => {
                       ],
                     ],
                   },
-                  {
-                    type: "custom",
-                    element: <ImportCsvArea onLoadList={handleLoadCsv} />,
-                  },
                 ],
               },
             ],
@@ -354,6 +360,7 @@ const FPregion = () => {
                     element: (
                       <List.Cities
                         list={form.cities}
+                        unlinkCity={unlinkCity}
                         setList={(list: any[]) =>
                           setForm((regionData) => ({
                             ...regionData,

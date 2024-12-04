@@ -185,7 +185,7 @@ const FPpeople = () => {
 
     switch ((form as TNewUser).profile) {
       case "ADMIN":
-        // info = getUserObj({ ...form, userId }, "ADMIN")
+        info = getUserObj({ ...form, userId }, "ADMIN")
         break
 
       case "PRESTADOR":
@@ -227,7 +227,7 @@ const FPpeople = () => {
   const handleUpdate = async () => {
     try {
       if (params.id && !Number.isNaN(params.id)) {
-        const obj = getObj(Number(form.userId))
+        const obj = getObj(Number(params.id))
 
         const req = await Api.persons.update({
           person: obj as any,
