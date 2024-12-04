@@ -1,8 +1,10 @@
 import * as S from "./styled"
 import { TConfig } from "../../utils/system/table"
 import { useState } from "react"
+import { TDefaultList } from "../../api/types/responses"
 
 type Props = {
+  searchData?: TDefaultList<any>
   config: TConfig
   data: any[]
   actions?: {
@@ -15,6 +17,7 @@ type Props = {
 }
 
 const Table = ({
+  searchData,
   config,
   data,
   noHover,

@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 48px;
 
   overflow: auto;
 `
@@ -343,4 +343,30 @@ export const ItemContent = styled.div<{
   font-size: 14px;
   font-weight: 400;
   padding: 0 12px;
+`
+// #
+// #
+// #
+// #
+// #
+// #
+// # Pagination
+// #
+// #
+// #
+// #
+// #
+// #
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 64px;
+`
+
+export const Showinglabel = styled.span`
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.neutral.lightMain};
+  font-weight: 300;
 `

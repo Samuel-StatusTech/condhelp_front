@@ -11,7 +11,7 @@ export const branchInitial: TNewUser & TUBranch = {
     cep: "",
     city: "",
     complement: "",
-    country: "br",
+    country: "",
     number: "",
     state: "",
     street: "",
