@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react"
+import { ChangeEvent, useState } from "react"
 import * as S from "./styled"
 import { ReactComponent as MailIcon } from "../../../assets/icons/mail_soft.svg"
 import { ReactComponent as PassIcon } from "../../../assets/icons/hidepass_soft.svg"
@@ -10,20 +10,25 @@ type Props = {
   onChange: (v: string | boolean) => void
 }
 
-const iconRef: { [key in Props["type"]]: JSX.Element } = {
-  mail: <MailIcon />,
-  pass: <PassIcon />,
-}
-
 const Input = (props: Props) => {
   const { type, placeholder, value, onChange } = props
+
+  const [secure, setSecure] = useState(true)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value as string | boolean)
   }
 
   const renderIcon = () => {
-    const icon = iconRef[type]
+    const icon =
+      type === "mail" ? (
+        <MailIcon />
+      ) : (
+        <PassIcon
+          onClick={() => setSecure(!secure)}
+          style={{ cursor: "pointer" }}
+        />
+      )
 
     return icon ?? null
   }
@@ -31,7 +36,7 @@ const Input = (props: Props) => {
   return (
     <S.Wrapper>
       <S.Input
-        type={type === "pass" ? "password" : "text"}
+        type={type === "pass" ? (secure ? "password" : "text") : "text"}
         placeholder={placeholder}
         value={String(value)}
         onChange={handleChange}
