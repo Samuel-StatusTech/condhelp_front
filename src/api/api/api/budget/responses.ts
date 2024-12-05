@@ -1,4 +1,4 @@
-import { TBudget } from "../../../../utils/@types/data/budget"
+import { TBudget, TBudgetResume } from "../../../../utils/@types/data/budget"
 import { TDefaultRes } from "../../../types/responses"
 
 export type TApi_Responses_Budgets = {
@@ -22,7 +22,7 @@ export type TApi_Responses_Budgets = {
         first: boolean
         last: boolean
         size: number
-        content: TBudget[]
+        content: TBudgetResume[]
         number: number
         sort: {
           sorted: boolean

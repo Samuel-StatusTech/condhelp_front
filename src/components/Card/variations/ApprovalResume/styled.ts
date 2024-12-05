@@ -89,6 +89,7 @@ export const GraphData = styled.div<{
   $size: number
   $type: string
 }>`
+  width: 0;
   width: ${({ $size }) => $size}%;
   display: grid;
   place-items: center;
@@ -98,7 +99,7 @@ export const GraphData = styled.div<{
       : $type === "awaiting"
       ? theme.colors.orange.main
       : theme.colors.red.main};
-  transition: width 0.3s;
+  transition: width 1.3s ease-out;
 
   span {
     color: ${({ theme }) => theme.colors.neutral.white};

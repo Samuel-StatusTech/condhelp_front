@@ -1,8 +1,9 @@
 import { TNewRegion } from "../../../../utils/@types/data/region"
+import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Regions = {
   regions: {
-    listAll: {}
+    listAll: TDefaultFilters
     create: {
       newRegion: TNewRegion
     }

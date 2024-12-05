@@ -40,7 +40,7 @@ const RegionsPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.regions.listAll({})
+      const req = await Api.regions.listAll({ size: 300 })
 
       if (req.ok) {
         setRegions(req.data.content)

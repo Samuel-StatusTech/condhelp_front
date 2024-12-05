@@ -63,7 +63,7 @@ const SubcategoriesPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const catReq = await Api.categories.listAll({})
+      const catReq = await Api.categories.listAll({ size: 300 })
 
       if (catReq.ok) {
         setOptions((opts) => ({

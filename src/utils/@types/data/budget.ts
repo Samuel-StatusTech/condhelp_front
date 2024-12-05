@@ -35,6 +35,22 @@ export type TBudget = {
   contacts: TContact[]
 }
 
+export type TBudgetResume = {
+  id: number
+  title: string
+  condominiumName: string
+  isUrgent: boolean
+  categoryName: string
+  subcategoryName: string
+  description: string
+  startDate: string | null
+  endDate: string | null
+  attachmentUrl: string
+  awaiting: number
+  rejected: number
+  accepted: number
+}
+
 export type TContact = {
   id: number
   date: string

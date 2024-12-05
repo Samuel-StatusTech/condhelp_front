@@ -14,6 +14,7 @@ import Card from "../../components/Card"
 import Input from "../../components/Input"
 import Divider from "../../components/_minimals/Divider"
 import Table from "../../components/Table"
+import { Api } from "../../api"
 
 const Budgets = () => {
   const { user } = getStore()
@@ -74,18 +75,19 @@ const Budgets = () => {
   const loadData = useCallback(async () => {
     try {
       // Budgets
+      const req = await Api.budgets.listAll({ size: 300 })
 
-      // await Api.budgets.listAll({  })
+      if (req.ok) {
+        setBudgets(fdata.managerBudgets)
+        setFinishedBudgets(
+          fdata.managerBudgets.filter((b) => b.status === "approved")
+        )
 
-      setBudgets(fdata.managerBudgets)
-      setFinishedBudgets(
-        fdata.managerBudgets.filter((b) => b.status === "approved")
-      )
-
-      setOptions((opts) => ({
-        ...opts,
-        // condos: parseOptionList(user?.condominiums, "id", "name"),
-      }))
+        setOptions((opts) => ({
+          ...opts,
+          // condos: parseOptionList(user?.condominiums, "id", "name"),
+        }))
+      }
     } catch (error) {}
   }, [])
 

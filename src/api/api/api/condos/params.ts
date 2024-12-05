@@ -1,8 +1,12 @@
-import { TCondominium, TNewCondominium } from "../../../../utils/@types/data/condominium"
+import {
+  TCondominium,
+  TNewCondominium,
+} from "../../../../utils/@types/data/condominium"
+import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Condos = {
   condos: {
-    listAll: {}
+    listAll: TDefaultFilters
     create: {
       newCondo: TNewCondominium
     }

@@ -6,11 +6,21 @@ import { TApi_Responses_Budgets as TResponses } from "./responses"
 
 const baseURL = "/budgets"
 
-const listAll: TApi["budgets"]["listAll"] = async () => {
+const listAll: TApi["budgets"]["listAll"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}?size=300`)
+        .get(`${baseURL}`, {
+          params: {
+            userId: filters.managerId,
+            condominiumId: filters.condominiumId,
+            subsidiaryId: filters.branchId,
+            providerId: filters.providerId,
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
         .then((res) => {
           const info = res.data
 

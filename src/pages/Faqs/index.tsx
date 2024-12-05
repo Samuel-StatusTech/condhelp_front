@@ -39,7 +39,7 @@ const FaqsPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.faqs.listAll({})
+      const req = await Api.faqs.listAll({ size: 300 })
 
       if (req.ok) {
         setFaqs(req.data.content)

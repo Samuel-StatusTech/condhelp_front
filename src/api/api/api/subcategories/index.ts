@@ -10,11 +10,13 @@ import { TApi_Responses_Subcategories as TResponses } from "./responses"
 
 const baseURL = "/service-subcategories"
 
-const listAll: TApi["subcategories"]["listAll"] = async (data) => {
+const listAll: TApi["subcategories"]["listAll"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}?size=300`)
+        .get(`${baseURL}`, {
+          params: filters,
+        })
         .then((res) => {
           const info = res.data
 

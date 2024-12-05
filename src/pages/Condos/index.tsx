@@ -61,7 +61,7 @@ const CondosPage = () => {
         controllers.user.setData(userReq.data)
       }
 
-      const req = await Api.condos.listAll({})
+      const req = await Api.condos.listAll({ size: 300 })
 
       if (req.ok) {
         setCondos(req.data.content)

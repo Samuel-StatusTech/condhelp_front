@@ -57,7 +57,7 @@ const UsersPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.persons.listAll({})
+      const req = await Api.persons.listAll({ size: 300 })
 
       if (req.ok) {
         setPeople(req.data.content)

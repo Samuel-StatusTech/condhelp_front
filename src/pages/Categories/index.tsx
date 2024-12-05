@@ -88,7 +88,7 @@ const CategoriesPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.categories.listAll({})
+      const req = await Api.categories.listAll({ size: 300 })
 
       if (req.ok) {
         setCategories(req.data.content)

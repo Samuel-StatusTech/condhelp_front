@@ -1,8 +1,9 @@
 import { TBudget, TNewBudget } from "../../../../utils/@types/data/budget"
+import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Budgets = {
   budgets: {
-    listAll: {
+    listAll: TDefaultFilters & {
       managerId?: number
       condominiumId?: number
       branchId?: number

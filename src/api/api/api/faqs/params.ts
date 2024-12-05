@@ -1,8 +1,9 @@
 import { TFaq, TNewFaq } from "../../../../utils/@types/data/faq"
+import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Faqs = {
   faqs: {
-    listAll: {}
+    listAll: TDefaultFilters
     create: {
       newFaq: TNewFaq
     }
