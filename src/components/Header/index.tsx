@@ -14,6 +14,10 @@ const Header = () => {
             <Link to={mi.link}>{mi.text}</Link>
           </S.MenuItem>
         ))}
+
+        <S.MenuItem $k={system.menu.nav.length}>
+          <Link to={"/login"}>Sair</Link>
+        </S.MenuItem>
       </S.Nav>
     </S.Element>
   )

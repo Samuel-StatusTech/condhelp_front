@@ -86,7 +86,7 @@ export const menu: {
     {
       text: "Dashboard",
       link: "/dashboard",
-      access: ["ADMIN"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
     },
     // {
     //   text: "Monitoramento",
@@ -106,17 +106,12 @@ export const menu: {
     {
       text: "FAQ",
       link: "/faqs",
-      access: ["ADMIN", "SINDICO"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
     },
-    {
-      text: "Política de privacidade",
-      link: "/policy",
-      access: ["ADMIN"],
-    },
-    {
-      text: "Minha conta",
-      link: "/myaccount",
-      access: ["ADMIN"],
-    },
+    // {
+    //   text: "Política de privacidade",
+    //   link: "/policy",
+    //   access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
+    // },
   ],
 }
