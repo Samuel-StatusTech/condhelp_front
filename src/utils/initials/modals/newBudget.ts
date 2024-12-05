@@ -13,5 +13,4 @@ export const newBudget: TNewBudget = {
   userId: 0,
   status: "",
   providerIds: [],
-  subsidiaryId: 0,
 }

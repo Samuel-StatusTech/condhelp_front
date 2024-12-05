@@ -31,6 +31,9 @@ const iconRef: { [key: string]: JSX.Element } = {
 const SideMenuItem = ({ data, active, k, action }: Props) => {
   const { user } = getStore()
 
+  const userAllowed =
+    user?.profile !== "SINDICO" || user?.condominiums.length > 0
+
   const render = !data.access
     ? true
     : data.access.includes(user?.profile as TAccess)
@@ -43,10 +46,17 @@ const SideMenuItem = ({ data, active, k, action }: Props) => {
 
   return render ? (
     <S.Wrapper $active={active} $k={k}>
-      <Link to={`/dashboard${data.link}`} onClick={action}>
-        {renderIcon()}
-        <S.Title>{data.text}</S.Title>
-      </Link>
+      {userAllowed ? (
+        <Link to={`/dashboard${data.link}`} onClick={action}>
+          {renderIcon()}
+          <S.Title>{data.text}</S.Title>
+        </Link>
+      ) : (
+        <div>
+          {renderIcon()}
+          <S.Title>{data.text}</S.Title>
+        </div>
+      )}
     </S.Wrapper>
   ) : null
 }

@@ -69,7 +69,7 @@ const SideMenu = (props: Props) => {
         </S.MenuContainer>
       </S.MenuArea>
 
-      {user?.profile !== "ADMIN" && (
+      {user?.profile === "SINDICO" && (
         <S.ButtonWrapper>
           <Button
             type="main"
@@ -77,6 +77,8 @@ const SideMenu = (props: Props) => {
             action={toggleNewBudgetModal}
             icon={<Icons.PlusCircle />}
             iconLeft={true}
+            fromSidebar={true}
+            disabled={user?.condominiums.length === 0}
           />
         </S.ButtonWrapper>
       )}

@@ -30,9 +30,7 @@ type Props = {
 const NewBudget = ({ onClose, handleOp }: Props) => {
   const { user, controllers } = getStore()
 
-  const [form, setForm] = useState<TNewBudget>({
-    ...initials.modals.newBudget,
-  })
+  const [form, setForm] = useState<TNewBudget>(initials.modals.newBudget)
 
   const [categories, setCategories] = useState<TCategory[]>([])
   const [, setCondos] = useState<TCondominium[]>([])
@@ -117,41 +115,28 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   const loadData = useCallback(async () => {
     try {
-      if (user?.profile === "FRANQUEADO") {
-        setForm((frm) => ({ ...frm, subsidiaryId: user?.userId }))
-      }
-
       let subsidiariesList: TUser[] = []
       let categoriesList: TCategory[] = []
       let condosList: TCondominium[] = []
 
       let proms: Promise<any>[] = []
 
-      // • Subsidiaries
-      proms.push(
-        Api.persons
-          .getByRole({ role: "FILIAL" })
-          .then((res) => {
-            if (res.ok) subsidiariesList = res.data.content
-            else throw new Error()
-          })
-          .catch(() => {
-            throw new Error()
-          })
-      )
-
       // • Condos
-      proms.push(
-        Api.condos
-          .listAll({})
-          .then((res) => {
-            if (res.ok) condosList = res.data.content
-            else throw new Error()
-          })
-          .catch(() => {
-            throw new Error()
-          })
-      )
+      if (user?.profile === "SINDICO") {
+        condosList = user?.condominiums
+      } else {
+        proms.push(
+          Api.condos
+            .listAll({})
+            .then((res) => {
+              if (res.ok) condosList = res.data.content
+              else throw new Error()
+            })
+            .catch(() => {
+              throw new Error()
+            })
+        )
+      }
 
       // • Categories
       proms.push(
@@ -177,7 +162,6 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
       setOptions((opts: any) => ({
         ...opts,
-        subsidiary: parseOptionList(subsidiariesList, "id", "name"),
         condo: parseOptionList(condosList, "id", "name"),
         category: parseOptionList(categoriesList, "id", "name"),
         subcategory: parseOptionList(firstCategorySubcategories, "id", "name"),
@@ -192,7 +176,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
       onClose()
     }
-  }, [controllers.feedback, onClose, user?.profile, user?.userId])
+  }, [controllers.feedback, onClose, user])
 
   useEffect(() => {
     loadData()
@@ -216,19 +200,6 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       </C.Header>
 
       <S.Content>
-        {/* For Branches */}
-        {user?.profile === "FILIAL" && (
-          <Input.Select
-            field={"subsidiaryId"}
-            onChange={handleField}
-            value={form.subsidiaryId as any}
-            options={options.subsidiary}
-            gridSizes={{ big: 12 }}
-            placeholder="Franquia"
-            elevation={1}
-          />
-        )}
-
         {/* For Branches and Managers */}
         <Input.Select
           field={"condominiumId"}

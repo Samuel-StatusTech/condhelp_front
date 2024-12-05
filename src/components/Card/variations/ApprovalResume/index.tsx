@@ -1,4 +1,3 @@
-import { TBudget } from "../../../../utils/@types/data/budget"
 import * as C from "../../styled"
 import * as S from "./styled"
 
@@ -8,9 +7,7 @@ type Props = {
   k: number
   title: string
   data: {
-    approved: number
-    awaiting: number
-    rejected: number
+    [key: string]: number
   }
   isExpansible?: boolean
   role: "budgets" | "providers"
@@ -84,7 +81,7 @@ export const DataResumeItem = ({
  */
 
 type PGraphData = {
-  type: TBudget["status"]
+  type: string
   size: number
 }
 

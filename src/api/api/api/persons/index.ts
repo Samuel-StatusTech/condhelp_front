@@ -12,7 +12,7 @@ const rolesUrlRelations: { [key in TAccess]: string } = {
   ADMIN: "",
   USUARIO: "",
   MATRIZ: "",
-  PRESTADOR: "",
+  PRESTADOR: "/providers",
   FILIAL: "/subsidiaries",
   MONITOR: "",
   FRANQUEADO: "",

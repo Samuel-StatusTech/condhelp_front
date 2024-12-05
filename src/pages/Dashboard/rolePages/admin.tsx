@@ -10,7 +10,6 @@ import {
 } from "../../../utils/system/dashboardShortcuts"
 import { useCallback, useEffect, useState } from "react"
 import { Api } from "../../../api"
-import { TBudget } from "../../../utils/@types/data/budget"
 import { TUser } from "../../../utils/@types/data/user"
 
 const DashboardAdmin = () => {
@@ -22,7 +21,7 @@ const DashboardAdmin = () => {
   })
 
   const [budgetsDetails, setBudgetsDetails] = useState<{
-    [key in TBudget["status"]]: number
+    [key: string]: number
   }>({
     approved: 0,
     awaiting: 0,
@@ -118,7 +117,7 @@ const DashboardAdmin = () => {
         subcategory: 0,
         user: 0,
         settings: 0,
-        ...gridRef
+        ...gridRef,
       }
 
       try {
@@ -161,7 +160,7 @@ const DashboardAdmin = () => {
     let categoriesCount = 0
     let subcategoriesCount = 0
 
-    let budgetsInfo: { [key in TBudget["status"]]: number } = {
+    let budgetsInfo: { [key: string]: number } = {
       approved: 0,
       awaiting: 0,
       rejected: 0,
@@ -274,7 +273,10 @@ const DashboardAdmin = () => {
             // Users
             userCount = req.data.totalElements
 
-            const gridResume = (await getGridResume(req.data.content, gridInfo)) as any
+            const gridResume = (await getGridResume(
+              req.data.content,
+              gridInfo
+            )) as any
             gridInfo = { ...gridInfo, ...gridResume }
           }
 

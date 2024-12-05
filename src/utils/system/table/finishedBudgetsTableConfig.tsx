@@ -9,13 +9,13 @@ export const finishedBudgetsTableConfig: TConfig = {
   columns: [
     { title: "Título", field: "title" },
     { title: "Condomínio", field: "condo" },
-    { title: "Data fim", field: "finishDate" },
+    { title: "Data fim", field: "endDate" },
     { title: "Status", field: "status" },
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    condo: (item: TBudget) => item.condominium.name,
-    finishDate: (item: TBudget) => getDateStr(item.finishDate, "dmy"),
+    condo: (item: TBudget) => item.condominiumName,
+    endDate: (item: TBudget) => getDateStr(item.endDate, "dmy"),
     status: (item: TBudget) => (
       <ColorTextIndicator role="status" data={"active"} text="Finalizado" />
     ),

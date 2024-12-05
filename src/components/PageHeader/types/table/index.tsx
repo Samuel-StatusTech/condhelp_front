@@ -4,6 +4,7 @@ import * as S from "./styled"
 import { ReactComponent as PlusIcon } from "../../../../assets/icons/plus_circle.svg"
 import { THeaderFrom } from "../.."
 import { memo } from "react"
+import { getStore } from "../../../../store"
 
 type Props = {
   from: THeaderFrom
@@ -22,16 +23,27 @@ const titleRelations: { [key in THeaderFrom]: string } = {
 }
 
 const TablePageHeader = ({ from, action }: Props) => {
+  const { user } = getStore()
+
   const handleAction = () => {
     action && action()
   }
 
   return (
     <C.Element>
-      <S.PageIndicator $k={1}>
-        <span>{titleRelations[from]}</span>
+      <S.PageIndicator
+        $k={1}
+        $fullSize={
+          user?.profile === "SINDICO" && user?.condominiums.length === 0
+        }
+      >
+        <span>
+          {from === "condos" && user?.profile === "SINDICO"
+            ? "Seus condomínios"
+            : titleRelations[from]}
+        </span>
       </S.PageIndicator>
-      {action && (
+      {action && !(user?.profile === "SINDICO") && (
         <S.Button $k={2} onClick={handleAction}>
           <PlusIcon />
           <span>Novo</span>

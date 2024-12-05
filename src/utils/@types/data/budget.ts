@@ -1,5 +1,4 @@
 import { TCondominium } from "./condominium"
-import { TDefaultStatus } from "./status"
 
 export type TNewBudget = {
   title: string
@@ -14,27 +13,24 @@ export type TNewBudget = {
   userId: number
   status: string
   providerIds: number[]
-  subsidiaryId: number
 }
 
 export type TBudget = {
   id: string
   title: string
+  condominiumName: string
+  condominium?: TCondominium
+  isUrgent: boolean
+  categoryName: string
+  subcategoryName: string
   description: string
   startDate: string
-  finishDate: string
-  attachedUrl: string
-
-  condominium: Partial<TCondominium>
-  urgent: boolean
-  category: string
-  subcategory: string
-  date: string
-  status: TDefaultStatus
-  file?: {
-    url: string
-    name: string
-  }
+  endDate: string
+  attachmentUrl: string
+  awaiting: number
+  rejected: number
+  accepted: number
+  status?: string
 
   contacts: TContact[]
 }

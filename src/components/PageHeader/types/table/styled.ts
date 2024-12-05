@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
-export const PageIndicator = styled.div<{ $k: number }>`
+export const PageIndicator = styled.div<{ $k: number; $fullSize: boolean }>`
+  flex: ${({ $fullSize }) => ($fullSize ? 1 : "unset")};
   display: flex;
   align-items: center;
   gap: 8px;
@@ -18,6 +19,8 @@ export const PageIndicator = styled.div<{ $k: number }>`
   span {
     font-weight: 500;
     ${({ $k, theme }) => theme.animations.delays.main($k + 0.5)}
+    width: ${({ $fullSize }) => ($fullSize ? "100%" : "unset")};
+    text-align: ${({ $fullSize }) => ($fullSize ? "center" : "unset")};
   }
 `
 

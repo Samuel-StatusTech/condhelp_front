@@ -33,6 +33,7 @@ import FPregion from "../pages/Forms/Region"
 import FPerrand from "../pages/Forms/Errand"
 import FPfaq from "../pages/Forms/Faq"
 import FaqsView from "../pages/Head/Faq"
+import Budgets from "../pages/Budgets"
 
 const Router = () => {
   return (
@@ -76,6 +77,9 @@ const Router = () => {
               <Route path="" element={<SubcategoriesPage />} />
               <Route path="single" element={<FPsubcategory />} />
               <Route path="single/:id" element={<FPsubcategory />} />
+            </Route>
+            <Route path="budgets">
+              <Route path="" element={<Budgets />} />
             </Route>
             <Route path="regions">
               <Route path="" element={<RegionsPage />} />

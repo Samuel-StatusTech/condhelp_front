@@ -11,6 +11,7 @@ type Props =
       k?: number
       greenText?: boolean
       disabled?: boolean
+      fromSidebar?: boolean
     }
   | {
       type: "tertiary"
@@ -19,6 +20,7 @@ type Props =
       fit?: boolean
       k?: number
       disabled?: boolean
+      fromSidebar?: boolean
     }
 
 const Button = (props: Props) => {
@@ -30,6 +32,7 @@ const Button = (props: Props) => {
       $k={props.k}
       onClick={props.disabled ? undefined : props.action}
       disabled={props.disabled}
+      $fromSidebar={props.fromSidebar}
     >
       {
         // @ts-ignore

@@ -14,6 +14,8 @@ import { Api } from "../../api"
 import Card from "../../components/Card"
 
 import { TCondominium } from "../../utils/@types/data/condominium"
+import { Icons } from "../../assets/icons/icons"
+import Button from "../../components/Button"
 
 const CondosPage = () => {
   const { user, controllers } = getStore()
@@ -51,6 +53,14 @@ const CondosPage = () => {
 
   const loadData = useCallback(async () => {
     try {
+      const userReq = await Api.persons.getSingle({
+        id: user?.userId as number,
+      })
+
+      if (userReq.ok) {
+        controllers.user.setData(userReq.data)
+      }
+
       const req = await Api.condos.listAll({})
 
       if (req.ok) {
@@ -65,7 +75,7 @@ const CondosPage = () => {
     } catch (error) {
       // ...
     }
-  }, [controllers])
+  }, [controllers.feedback, controllers.user, user?.userId])
 
   useEffect(() => {
     loadData()
@@ -74,14 +84,33 @@ const CondosPage = () => {
   const renderContent = () => {
     return user?.profile === "SINDICO" ? (
       <S.CardsWrapper>
-        {user.condominiums.map((c, ck) => (
-          <Card.Condominium
-            k={ck}
-            key={ck}
-            onPick={() => handleEdit(c.id)}
-            data={c}
-          />
-        ))}
+        {user.condominiums.length === 0 ? (
+          <S.EmptyListWrapper>
+            <Icons.Conds />
+            <span>
+              Você ainda possui
+              <br />
+              condomínios cadastrados...
+            </span>
+            <Button
+              type="main"
+              text="Cadastrar condomínio"
+              action={handleNew}
+              icon={<Icons.PlusCircle />}
+              iconLeft={true}
+              fromSidebar={true}
+            />
+          </S.EmptyListWrapper>
+        ) : (
+          user.condominiums.map((c, ck) => (
+            <Card.Condominium
+              k={ck}
+              key={ck}
+              onPick={() => handleEdit(c.id)}
+              data={c}
+            />
+          ))
+        )}
       </S.CardsWrapper>
     ) : (
       <>

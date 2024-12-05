@@ -40,7 +40,7 @@ const BudgetCard = ({ k, data, onPick }: Props) => {
       <C.MainWrapper $expanded={true}>
         <C.ContentWrapper>
           <S.Content>
-            {data.urgent && (
+            {data.isUrgent && (
               <S.AlertArea>
                 <Icons.Alert />
               </S.AlertArea>
@@ -48,15 +48,15 @@ const BudgetCard = ({ k, data, onPick }: Props) => {
 
             <S.Info>
               <S.BudgetNumber>Nº {Number(data.id)}</S.BudgetNumber>
-              <S.InfoItem>{data.condominium.name}</S.InfoItem>
+              <S.InfoItem>{data.condominiumName}</S.InfoItem>
             </S.Info>
 
             <Divider />
 
             <S.Info>
               <S.InfoItem $bold={true}>{data.title}</S.InfoItem>
-              <S.InfoItem>{data.category}</S.InfoItem>
-              <S.InfoItem>{data.subcategory}</S.InfoItem>
+              <S.InfoItem>{data.categoryName}</S.InfoItem>
+              <S.InfoItem>{data.subcategoryName}</S.InfoItem>
             </S.Info>
 
             {renderButton()}

@@ -87,7 +87,7 @@ export const NullishBudgets = styled.span`
 
 export const GraphData = styled.div<{
   $size: number
-  $type: "approved" | "awaiting" | "rejected"
+  $type: string
 }>`
   width: ${({ $size }) => $size}%;
   display: grid;

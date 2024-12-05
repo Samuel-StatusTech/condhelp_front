@@ -88,21 +88,21 @@ export const menu: {
       link: "/dashboard",
       access: ["ADMIN"],
     },
-    {
-      text: "Monitoramento",
-      link: "/monitoring",
-      access: ["ADMIN"],
-    },
+    // {
+    //   text: "Monitoramento",
+    //   link: "/monitoring",
+    //   access: ["ADMIN"],
+    // },
     // {
     //   text: "Histórico de Chamados",
     //   link: "/callshistory",
     //   access: ["ADMIN"],
     // },
-    {
-      text: "Sobre",
-      link: "/about",
-      access: ["ADMIN"],
-    },
+    // {
+    //   text: "Sobre",
+    //   link: "/about",
+    //   access: ["ADMIN"],
+    // },
     {
       text: "FAQ",
       link: "/faqs",

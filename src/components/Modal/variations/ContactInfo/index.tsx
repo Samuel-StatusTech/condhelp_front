@@ -165,7 +165,7 @@ const ContactInfo = ({ data, onClose, handleOp }: Props) => {
             <S.DITitle>Fechado</S.DITitle>
             <S.DIValue>
               {data.status !== "awaiting"
-                ? getDateStr(data.finishDate, "dmy")
+                ? getDateStr(data.endDate, "dmy")
                 : "-"}
             </S.DIValue>
           </S.DataInfo>

@@ -14,6 +14,7 @@ type Props = {
     rejected: number
   }
   data: TBudget
+  forBranch?: boolean
 }
 
 type PDataResumeItem = {
@@ -55,7 +56,7 @@ const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
  *  Approval Resume Component
  */
 
-const ManagerBudgetResume = ({ k, resume, data }: Props) => {
+const ManagerBudgetResume = ({ k, resume, data, forBranch }: Props) => {
   const total = resume.approved + resume.awaiting + resume.rejected
 
   const renderDate = () => {
@@ -67,7 +68,7 @@ const ManagerBudgetResume = ({ k, resume, data }: Props) => {
   }
 
   const renderDateAlert = () => {
-    const split = data.finishDate.split("-")
+    const split = data.endDate.split("-")
 
     const d = new Date()
 
@@ -105,13 +106,19 @@ const ManagerBudgetResume = ({ k, resume, data }: Props) => {
         <C.ContentWrapper>
           <S.Content>
             <S.Info>
+              {forBranch && (
+                <S.InfoItem>
+                  <Icons.Franchise />
+                  <span>Nome da franquia</span>
+                </S.InfoItem>
+              )}
               <S.InfoItem>
                 <Icons.Conds />
-                <span>{data.condominium.name}</span>
+                <span>{data.condominiumName}</span>
               </S.InfoItem>
               <S.InfoItem>
                 <Icons.Subcategory />
-                <span>{data.subcategory}</span>
+                <span>{data.subcategoryName}</span>
               </S.InfoItem>
             </S.Info>
 

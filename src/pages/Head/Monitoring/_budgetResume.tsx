@@ -13,7 +13,7 @@ const BudgetResumeBlock = ({ budget }: Props) => {
     <S.Block>
       <S.BlockHeader>
         <S.BlockTitle>Orçamento Nº {budget.id}</S.BlockTitle>
-        {budget.urgent && (
+        {budget.isUrgent && (
           <S.Urgent>
             <span>URGENTE</span>
             <Icons.Alert />
@@ -26,19 +26,19 @@ const BudgetResumeBlock = ({ budget }: Props) => {
       <S.DataResumeArea>
         <S.DataInfo>
           <S.DITitle>Condomínio</S.DITitle>
-          <S.DIValue>{budget.condominium.name}</S.DIValue>
+          <S.DIValue>{budget.condominium?.name}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Categoria</S.DITitle>
-          <S.DIValue>{budget.category}</S.DIValue>
+          <S.DIValue>{budget.categoryName}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Unidades</S.DITitle>
-          <S.DIValue>{budget.condominium.unities}</S.DIValue>
+          <S.DIValue>{budget.condominium?.unities}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Subcategoria</S.DITitle>
-          <S.DIValue>{budget.subcategory}</S.DIValue>
+          <S.DIValue>{budget.subcategoryName}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Título</S.DITitle>
@@ -58,8 +58,8 @@ const BudgetResumeBlock = ({ budget }: Props) => {
         </S.DataInfo>
         <S.DataInfo $small={true}>
           <S.DITitle>Anexo</S.DITitle>
-          <S.FileDownload $disabled={!budget.file}>
-            {budget.file ? budget.file.name : "Não possui"}
+          <S.FileDownload $disabled={!budget.attachmentUrl}>
+            {budget.attachmentUrl ? budget.attachmentUrl : "Não possui"}
           </S.FileDownload>
         </S.DataInfo>
       </S.DataResumeArea>

@@ -5,6 +5,7 @@ export const Element = styled.button<{
   $outlined: boolean
   $fit?: boolean
   $k?: number
+  $fromSidebar?: boolean
 }>`
   ${({ $fit }) => ($fit ? `width: fit-content;` : `flex: 1;`)}
   min-width: ${({ $type, $fit }) =>
@@ -62,7 +63,8 @@ export const Element = styled.button<{
   transition: background-color 0.3s;
 
   &:disabled {
-    background-color: ${({ theme }) => theme.colors.neutral.medium};
+    background-color: ${({ $fromSidebar, theme }) =>
+      !$fromSidebar ? theme.colors.neutral.medium : theme.colors.neutral.soft};
     cursor: unset;
   }
 
