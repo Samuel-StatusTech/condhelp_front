@@ -57,6 +57,7 @@ export const BudgetsArea = styled.div`
   gap: 16px;
   overflow-x: auto;
   width: 100%;
+  max-width: 100%;
 `
 
 export const ManagerBudgetsResumeArea = styled.div`

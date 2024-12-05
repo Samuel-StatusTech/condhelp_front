@@ -2,7 +2,7 @@ import * as C from "../../styled"
 import * as S from "./styled"
 
 import { Icons } from "../../../../assets/icons/icons"
-import { TBudget } from "../../../../utils/@types/data/budget"
+import { TBudget, TBudgetResume } from "../../../../utils/@types/data/budget"
 import { getDateStr } from "../../../../utils/tb/format/date"
 import Divider from "../../../_minimals/Divider"
 
@@ -13,7 +13,7 @@ type Props = {
     awaiting: number
     rejected: number
   }
-  data: TBudget
+  data: TBudget | TBudgetResume
   forBranch?: boolean
 }
 
@@ -60,36 +60,32 @@ const ManagerBudgetResume = ({ k, resume, data, forBranch }: Props) => {
   const total = resume.approved + resume.awaiting + resume.rejected
 
   const renderDate = () => {
-    const split = data.startDate.split("-")
-
-    const budgetTime = new Date(+split[0], +split[1] - 1, +split[2])
-
-    return getDateStr(budgetTime, "dmy")
+    return data.startDate ? getDateStr(data.startDate, "dmy") : "-"
   }
 
   const renderDateAlert = () => {
-    const split = data.endDate.split("-")
+    if (data.endDate) {
+      const d = new Date()
 
-    const d = new Date()
+      const todayTime = new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate()
+      ).getTime()
+      const budgetTime = new Date(data.endDate).getTime()
 
-    const todayTime = new Date(
-      d.getFullYear(),
-      d.getMonth(),
-      d.getDate()
-    ).getTime()
-    const budgetTime = new Date(+split[0], +split[1] - 1, +split[2]).getTime()
+      const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
+      const shouldShow = diff <= 3 && diff > -1
 
-    const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
-    const shouldShow = diff <= 3 && diff > -1
-
-    return shouldShow ? (
-      <S.AlertArea>
-        <span>
-          {diff === 0 ? "O prazo se encerra hoje" : `Restam ${diff} dias`}
-        </span>
-        <Icons.Alert />
-      </S.AlertArea>
-    ) : null
+      return shouldShow ? (
+        <S.AlertArea>
+          <span>
+            {diff === 0 ? "O prazo se encerra hoje" : `Restam ${diff} dias`}
+          </span>
+          <Icons.Alert />
+        </S.AlertArea>
+      ) : null
+    } else return null
   }
 
   return (

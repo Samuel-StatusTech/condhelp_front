@@ -7,14 +7,14 @@ import { TFilter } from "../../utils/@types/components/SearchBlock"
 import PageRow from "../../components/_minimals/PageRow"
 import { TOption } from "../../components/Input/condosSelect"
 import SearchBlock from "../../components/SearchBlock"
-import { TBudget } from "../../utils/@types/data/budget"
-import { fdata } from "../../utils/_dev/falseData"
+import { TBudget, TBudgetResume } from "../../utils/@types/data/budget"
 import { tableConfig } from "../../utils/system/table"
 import Card from "../../components/Card"
 import Input from "../../components/Input"
 import Divider from "../../components/_minimals/Divider"
 import Table from "../../components/Table"
 import { Api } from "../../api"
+import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 
 const Budgets = () => {
   const { user } = getStore()
@@ -30,7 +30,7 @@ const Budgets = () => {
   })
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     status: systemOptions.budgetsStatus,
-    condos: [],
+    franchises: [],
   })
 
   const handleFilters = (filter: Partial<TFilter>) => {
@@ -44,10 +44,8 @@ const Budgets = () => {
 
   // Engine
 
-  const [budgets, setBudgets] = useState<TBudget[]>(fdata.managerBudgets)
-  const [finishedBudgets, setFinishedBudgets] = useState<TBudget[]>(
-    fdata.managerBudgets
-  )
+  const [budgets, setBudgets] = useState<TBudgetResume[]>([])
+  const [finishedBudgets, setFinishedBudgets] = useState<TBudget[]>([])
 
   // Cards
 
@@ -58,9 +56,9 @@ const Budgets = () => {
         forBranch={true}
         k={2}
         resume={{
-          approved: 32,
-          awaiting: 8,
-          rejected: 12,
+          approved: budget.accepted,
+          awaiting: budget.awaiting,
+          rejected: budget.rejected,
         }}
       />
     ))
@@ -78,15 +76,33 @@ const Budgets = () => {
       const req = await Api.budgets.listAll({ size: 300 })
 
       if (req.ok) {
-        setBudgets(fdata.managerBudgets)
-        setFinishedBudgets(
-          fdata.managerBudgets.filter((b) => b.status === "approved")
+        setBudgets(
+          req.data.content.sort((a, b) =>
+            !a.endDate || !b.endDate
+              ? 1
+              : new Date(a.endDate).getTime() < new Date(b.endDate).getTime()
+              ? -1
+              : 1
+          )
         )
+        setFinishedBudgets([])
+        // req.data.content.filter((b) => b.status === "approved")
 
-        setOptions((opts) => ({
-          ...opts,
-          // condos: parseOptionList(user?.condominiums, "id", "name"),
-        }))
+        // Franchises
+        const franchisesReq = await Api.persons.getByRole({
+          role: "FRANQUEADO",
+        })
+
+        if (franchisesReq.ok) {
+          setOptions((opts) => ({
+            ...opts,
+            franchises: parseOptionList(
+              franchisesReq.data.content,
+              "id",
+              "name"
+            ),
+          }))
+        }
       }
     } catch (error) {}
   }, [])
@@ -107,8 +123,8 @@ const Budgets = () => {
               </span>
             </S.BlockTitle>
             <Input.CondoSelect
-              field="condo"
-              options={options.condos}
+              field="franchises"
+              options={options.franchises}
               label="Todos as franquias"
               value={specificCondo}
               onChange={setSpecificCondo}

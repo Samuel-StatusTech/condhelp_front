@@ -4,7 +4,6 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 16px;
 `
 
 export const SubContent = styled.div`

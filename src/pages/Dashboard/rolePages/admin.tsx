@@ -117,38 +117,36 @@ const DashboardAdmin = () => {
   }, [gridData])
 
   const getGridResume = (info: TUser[], gridRef: TGridInfo) => {
-    return new Promise((resolve) => {
-      let gridInfo: TGridInfo = gridRef
+    let gridInfo: TGridInfo = gridRef
 
-      try {
-        info.forEach((u) => {
-          switch (u.profile) {
-            case "FILIAL":
-              gridInfo.FILIAL += 1
-              break
-            case "FRANQUEADO":
-              gridInfo.FRANQUEADO += 1
-              break
-            case "PRESTADOR":
-              gridInfo.PRESTADOR += 1
-              break
-            case "SINDICO":
-              gridInfo.SINDICO += 1
-              break
-            default:
-              break
-          }
-        })
-      } catch (error) {}
+    try {
+      info.forEach((u) => {
+        switch (u.profile) {
+          case "FILIAL":
+            gridInfo.FILIAL += 1
+            break
+          case "FRANQUEADO":
+            gridInfo.FRANQUEADO += 1
+            break
+          case "PRESTADOR":
+            gridInfo.PRESTADOR += 1
+            break
+          case "SINDICO":
+            gridInfo.SINDICO += 1
+            break
+          default:
+            break
+        }
+      })
+    } catch (error) {}
 
-      gridInfo.user =
-        gridInfo.FILIAL +
-        gridInfo.FRANQUEADO +
-        gridInfo.PRESTADOR +
-        gridInfo.SINDICO
+    gridInfo.user =
+      gridInfo.FILIAL +
+      gridInfo.FRANQUEADO +
+      gridInfo.PRESTADOR +
+      gridInfo.SINDICO
 
-      resolve(gridInfo)
-    })
+    return gridInfo
   }
 
   /*
@@ -166,7 +164,20 @@ const DashboardAdmin = () => {
       rejected: 0,
     }
 
-    let gridInfo: TGridInfo = gridInitial
+    let gridInfo: TGridInfo = {
+      condo: 0,
+      FILIAL: 0,
+      FRANQUEADO: 0,
+      PRESTADOR: 0,
+      SINDICO: 0,
+      region: 0,
+      chat: 0,
+      faq: 0,
+      category: 0,
+      subcategory: 0,
+      user: 0,
+      settings: 0,
+    }
 
     let proms: Promise<any>[] = []
 
@@ -255,11 +266,7 @@ const DashboardAdmin = () => {
               (u) => u.profile === "PRESTADOR"
             ).length
 
-            const gridResume = (await getGridResume(
-              req.data.content,
-              gridInfo
-            )) as any
-            gridInfo = { ...gridInfo, ...gridResume }
+            gridInfo = getGridResume(req.data.content, gridInfo)
           }
 
           resolve(true)

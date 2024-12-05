@@ -34,6 +34,7 @@ export const PageContent = styled.div`
   background-color: ${({ theme }) => theme.colors.neutral.soft};
   border-radius: 8px;
   max-width: 100%;
+  overflow: hidden;
 
   &:has(.falseSubContentWrapper) {
     background-color: transparent;
