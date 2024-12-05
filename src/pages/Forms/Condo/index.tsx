@@ -56,7 +56,9 @@ const FPcondo = () => {
       city: form.city,
       federateUnit: form.federateUnit,
       electionDate: getDateStr(form.manager.managerSince, "javaDateTime"),
-      managerId: Number(form.manager.id),
+      managerId: Number(
+        form.manager.userId ?? (form as TNewCondominium).managerId
+      ),
     }
 
     return params.id && !Number.isNaN(params.id)
@@ -178,8 +180,6 @@ const FPcondo = () => {
       }
     }
   }, [params.id])
-
-
 
   const loadData = useCallback(async () => {
     try {
@@ -347,13 +347,13 @@ const FPcondo = () => {
                         },
                       ],
                       [
-                        ...((user
+                        ...((user && user.profile === "SINDICO"
                           ? [
                               {
                                 type: "readonly",
                                 label: "Síndico",
                                 field: "",
-                                value: `${user?.name} (você)`,
+                                value: `${user.name} (você)`,
                                 gridSizes: { big: 9, small: 6 },
                               },
                             ]

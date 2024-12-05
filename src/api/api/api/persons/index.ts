@@ -239,7 +239,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
                   ok: true,
                   data: {
                     ...info,
-                    ...extraDataReq.data
+                    ...extraDataReq.data,
                   },
                 })
               } else throw new Error()
@@ -392,6 +392,43 @@ const getByRole: TApi["persons"]["getByRole"] = async ({ role }) => {
   })
 }
 
+const getAllBranches: TApi["persons"]["getAllBranches"] = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${rolesUrlRelations.FILIAL}`)
+        .then(async (res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível carregar as informações. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export type TApi_Persons = {
   listAll: (
     p: TParams["persons"]["listAll"]
@@ -408,6 +445,9 @@ export type TApi_Persons = {
   getByRole: (
     p: TParams["persons"]["getByRole"]
   ) => TResponses["persons"]["getByRole"]
+  getAllBranches: (
+    p: TParams["persons"]["getAllBranches"]
+  ) => TResponses["persons"]["getAllBranches"]
 }
 
 export const apiPersons: TApi["persons"] = {
@@ -418,4 +458,5 @@ export const apiPersons: TApi["persons"] = {
   update: update,
   delete: deleteItem,
   getByRole: getByRole,
+  getAllBranches: getAllBranches,
 }

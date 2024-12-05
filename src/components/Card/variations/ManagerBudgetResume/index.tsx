@@ -59,7 +59,7 @@ const ManagerBudgetResume = ({ k, resume, data }: Props) => {
   const total = resume.approved + resume.awaiting + resume.rejected
 
   const renderDate = () => {
-    const split = data.start.split("-")
+    const split = data.startDate.split("-")
 
     const budgetTime = new Date(+split[0], +split[1] - 1, +split[2])
 
@@ -67,7 +67,7 @@ const ManagerBudgetResume = ({ k, resume, data }: Props) => {
   }
 
   const renderDateAlert = () => {
-    const split = data.end.split("-")
+    const split = data.finishDate.split("-")
 
     const d = new Date()
 

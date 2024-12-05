@@ -4,15 +4,22 @@ import * as S from "./styled"
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 
 import Input from "../../../Input"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import initials from "../../../../utils/initials"
 
 import Button from "../../../Button"
-import { TNewBudget } from "../../../../utils/@types/data/budget"
-import { fdata } from "../../../../utils/_dev/falseData"
+import { TBudget, TNewBudget } from "../../../../utils/@types/data/budget"
 
 import { parseOptionList } from "../../../../utils/tb/parsers/parseOptionList"
 import { getStore } from "../../../../store"
+import { TCategory } from "../../../../utils/@types/data/category"
+import { Api } from "../../../../api"
+import { TCondominium } from "../../../../utils/@types/data/condominium"
+import { TSubCategory } from "../../../../utils/@types/data/category/subcategories"
+import { checkErrors } from "../../../../utils/tb/checkErrors"
+import { TDefaultRes } from "../../../../api/types/responses"
+import { TUser } from "../../../../utils/@types/data/user"
+import { getDateStr } from "../../../../utils/tb/format/date"
 
 type Props = {
   data?: any
@@ -21,25 +28,58 @@ type Props = {
 }
 
 const NewBudget = ({ onClose, handleOp }: Props) => {
-  const { user } = getStore()
+  const { user, controllers } = getStore()
 
   const [form, setForm] = useState<TNewBudget>({
     ...initials.modals.newBudget,
   })
 
+  const [categories, setCategories] = useState<TCategory[]>([])
+  const [, setCondos] = useState<TCondominium[]>([])
+
   const [options, setOptions] = useState<any>({
-    FRANQUEADO: [],
+    subsidiary: [],
     condo: [],
     category: [],
     subcategory: [],
   })
 
-  const handleSubmit = () => {
+  const getObj = () => {
+    const obj: TNewBudget = {
+      ...form,
+      userId: user?.userId as number,
+      startDate: getDateStr(form.startDate, "javaDateTime"),
+      finishDate: getDateStr(form.finishDate, "javaDateTime"),
+    }
+
+    return obj
+  }
+
+  const budgetCreate = () => {
+    const obj = getObj()
+
+    return new Promise<TDefaultRes<TBudget>>(async (resolve) => {
+      const req = await Api.budgets.create({ newBudget: obj })
+      resolve(req)
+    })
+  }
+
+  const handleSubmit = async () => {
     // TODO: check errors
 
-    if (handleOp) handleOp(form)
+    const creation = await budgetCreate()
 
-    onClose()
+    if (creation.ok) {
+      if (handleOp) handleOp(form)
+
+      onClose()
+    } else {
+      controllers.feedback.setData({
+        state: "error",
+        message: creation.error,
+        visible: true,
+      })
+    }
   }
 
   const handleClose = () => {
@@ -47,34 +87,120 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
   }
 
   const handleField = (field: string, value: boolean | string) => {
-    if (field === "points") {
-      // setForm((f) => ({ ...f, points: f.points + +value }))
-    } else setForm((f) => ({ ...f, [field]: value }))
+    setForm((f) => ({ ...f, [field]: value }))
   }
 
   useEffect(() => {
-    setOptions((opts: any) => ({
-      ...opts,
-      subcategory: parseOptionList(
-        fdata.categories[0].serviceSubcategories,
-        "id",
-        "name"
-      ),
-    }))
-  }, [form.category])
+    if (form.serviceCategoryId && !Number.isNaN(form.serviceCategoryId)) {
+      const categoryData = categories.find(
+        (c) => c.id === Number(form.serviceCategoryId)
+      ) as TCategory
+
+      const firstSubcategory = categoryData.serviceSubcategories[0]
+
+      if (firstSubcategory)
+        setForm((frm) => ({
+          ...frm,
+          serviceSubcategoryId: firstSubcategory.id,
+        }))
+
+      setOptions((opts: any) => ({
+        ...opts,
+        subcategory: parseOptionList(
+          categoryData.serviceSubcategories,
+          "id",
+          "name"
+        ),
+      }))
+    }
+  }, [categories, form.serviceCategoryId])
+
+  const loadData = useCallback(async () => {
+    try {
+      if (user?.profile === "FRANQUEADO") {
+        setForm((frm) => ({ ...frm, subsidiaryId: user?.userId }))
+      }
+
+      let subsidiariesList: TUser[] = []
+      let categoriesList: TCategory[] = []
+      let condosList: TCondominium[] = []
+
+      let proms: Promise<any>[] = []
+
+      // • Subsidiaries
+      proms.push(
+        Api.persons
+          .getByRole({ role: "FILIAL" })
+          .then((res) => {
+            if (res.ok) subsidiariesList = res.data.content
+            else throw new Error()
+          })
+          .catch(() => {
+            throw new Error()
+          })
+      )
+
+      // • Condos
+      proms.push(
+        Api.condos
+          .listAll({})
+          .then((res) => {
+            if (res.ok) condosList = res.data.content
+            else throw new Error()
+          })
+          .catch(() => {
+            throw new Error()
+          })
+      )
+
+      // • Categories
+      proms.push(
+        Api.categories
+          .listAll({})
+          .then((res) => {
+            if (res.ok) categoriesList = res.data.content
+            else throw new Error()
+          })
+          .catch(() => {
+            throw new Error()
+          })
+      )
+
+      await Promise.allSettled(proms)
+
+      setCategories(categoriesList)
+      setCondos(condosList)
+      console.log(subsidiariesList)
+
+      let firstCategorySubcategories: TSubCategory[] =
+        categoriesList.length > 0 ? categoriesList[0].serviceSubcategories : []
+
+      setOptions((opts: any) => ({
+        ...opts,
+        subsidiary: parseOptionList(subsidiariesList, "id", "name"),
+        condo: parseOptionList(condosList, "id", "name"),
+        category: parseOptionList(categoriesList, "id", "name"),
+        subcategory: parseOptionList(firstCategorySubcategories, "id", "name"),
+      }))
+    } catch (error) {
+      controllers.feedback.setData({
+        state: "error",
+        message:
+          "Não foi possível carregar as informações necessárias. Tente novamente mais tarde.",
+        visible: true,
+      })
+
+      onClose()
+    }
+  }, [controllers.feedback, onClose, user?.profile, user?.userId])
 
   useEffect(() => {
-    setOptions((opts: any) => ({
-      ...opts,
-      condo: parseOptionList(fdata.condos, "id", "name"),
-      category: parseOptionList(fdata.categories, "id", "name"),
-      subcategory: parseOptionList(
-        fdata.categories[0].serviceSubcategories,
-        "id",
-        "name"
-      ),
-    }))
-  }, [])
+    loadData()
+  }, [loadData])
+
+  const errors = () => {
+    return checkErrors.budget(form)
+  }
 
   return (
     <S.Element>
@@ -93,23 +219,25 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
         {/* For Branches */}
         {user?.profile === "FILIAL" && (
           <Input.Select
-            field={"FRANQUEADO"}
+            field={"subsidiaryId"}
             onChange={handleField}
-            value={form.FRANQUEADO as string}
-            options={options.FRANQUEADO}
+            value={form.subsidiaryId as any}
+            options={options.subsidiary}
             gridSizes={{ big: 12 }}
             placeholder="Franquia"
+            elevation={1}
           />
         )}
 
         {/* For Branches and Managers */}
         <Input.Select
-          field={"condo"}
+          field={"condominiumId"}
           onChange={handleField}
-          value={form.condominium}
+          value={form.condominiumId as any}
           options={options.condo}
           gridSizes={{ big: 8 }}
           placeholder="Condomínio"
+          elevation={2}
         />
 
         <Input.Toggler
@@ -121,29 +249,23 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
         />
 
         <Input.Select
-          field={"category"}
+          field={"serviceCategoryId"}
           onChange={handleField}
-          value={form.category}
+          value={form.serviceCategoryId as any}
           options={options.category}
           gridSizes={{ big: 12 }}
           placeholder="Categoria"
+          elevation={3}
         />
 
         <Input.Select
-          field={"subcategory"}
+          field={"serviceSubcategoryId"}
           onChange={handleField}
-          value={form.subcategory}
+          value={form.serviceSubcategoryId as any}
           options={options.subcategory}
           gridSizes={{ big: 12 }}
           placeholder="Subcategoria"
-        />
-
-        <Input.Default
-          field={"title"}
-          onChange={handleField}
-          value={form.title}
-          gridSizes={{ big: 12 }}
-          placeholder="Condomínio"
+          elevation={4}
         />
 
         <Input.Default
@@ -164,32 +286,37 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
         />
 
         <Input.Date
-          field={"start"}
+          field={"startDate"}
           onChange={handleField}
-          value={form.start}
+          value={form.startDate}
           gridSizes={{ big: 6 }}
           label="Data de Início"
         />
 
         <Input.Date
-          field={"end"}
+          field={"finishDate"}
           onChange={handleField}
-          value={form.end}
+          value={form.finishDate}
           gridSizes={{ big: 6 }}
           label="Data fim"
         />
 
         <Input.File
-          field={"file"}
+          field={"attachedUrl"}
           onChange={handleField}
-          value={form.file as File | null}
+          value={form.attachedUrl}
           gridSizes={{ big: 12 }}
           label="Anexar um arquivo"
           singleComponent={true}
         />
 
         <S.Bottom>
-          <Button type="main" text="Solicitar" action={handleSubmit} />
+          <Button
+            type="main"
+            text="Solicitar"
+            action={handleSubmit}
+            disabled={errors().has}
+          />
         </S.Bottom>
       </S.Content>
     </S.Element>

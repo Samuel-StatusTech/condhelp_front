@@ -23,5 +23,6 @@ export type TApi_Params_Persons = {
     getByRole: {
       role: TAccess
     }
+    getAllBranches: {}
   }
 }

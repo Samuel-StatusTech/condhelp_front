@@ -1,14 +1,17 @@
 import { TNewBudget } from "../../@types/data/budget"
 
 export const newBudget: TNewBudget = {
-  FRANQUEADO: "",
   title: "",
-  condominium: "",
-  urgent: false,
-  category: "",
-  subcategory: "",
   description: "",
-  start: "",
-  end: "",
-  attached: [],
+  startDate: "",
+  finishDate: "",
+  attachedUrl: "",
+  urgent: false,
+  condominiumId: 0,
+  serviceCategoryId: 0,
+  serviceSubcategoryId: 0,
+  userId: 0,
+  status: "",
+  providerIds: [],
+  subsidiaryId: 0,
 }

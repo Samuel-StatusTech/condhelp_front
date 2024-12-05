@@ -65,9 +65,7 @@ const MonitoringPage = () => {
   useEffect(() => {
     setNewContact((nct) => ({ ...nct, provider: "" }))
 
-    const providersList = fdata.people.filter(
-      (p) => p.profile === "PRESTADOR" && p.category === newContact.category
-    ) as TUserTypes["PRESTADOR"][]
+    const providersList: any[] = []  //  category's providers
 
     setActualProviders(providersList)
 

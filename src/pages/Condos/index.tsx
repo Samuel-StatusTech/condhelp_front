@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react"
 import Divider from "../../components/_minimals/Divider"
 import * as S from "./styled"
 import Table from "../../components/Table"
-import { fdata } from "../../utils/_dev/falseData"
 import PageHeader from "../../components/PageHeader"
 import { useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/system/table"
@@ -13,14 +12,15 @@ import { getStore } from "../../store"
 import { Api } from "../../api"
 
 import Card from "../../components/Card"
-import { updateSelfInfo } from "../../utils/tb/helpers/updateSelfInfo"
+
+import { TCondominium } from "../../utils/@types/data/condominium"
 
 const CondosPage = () => {
   const { user, controllers } = getStore()
 
   const navigate = useNavigate()
 
-  const [condos, setCondos] = useState(fdata.condos)
+  const [condos, setCondos] = useState<TCondominium[]>([])
   const [search, setSearch] = useState("")
 
   const [filters, setFilters] = useState({
@@ -51,8 +51,6 @@ const CondosPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      await updateSelfInfo({ userId: user?.id, controllers })
-
       const req = await Api.condos.listAll({})
 
       if (req.ok) {
@@ -67,7 +65,7 @@ const CondosPage = () => {
     } catch (error) {
       // ...
     }
-  }, [controllers, user?.id])
+  }, [controllers])
 
   useEffect(() => {
     loadData()

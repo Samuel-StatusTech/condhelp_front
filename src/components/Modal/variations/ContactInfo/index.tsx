@@ -62,7 +62,9 @@ const ContactInfo = ({ data, onClose, handleOp }: Props) => {
   }
 
   useEffect(() => {
-    const cat = categories.find((c) => c.id === Number(form.category))
+    const cat = categories.find(
+      (c) => c.id === Number(form.serviceSubcategoryId)
+    )
 
     setOptions((opts: any) => ({
       ...opts,
@@ -72,7 +74,7 @@ const ContactInfo = ({ data, onClose, handleOp }: Props) => {
         "name"
       ),
     }))
-  }, [categories, form.category])
+  }, [categories, form.serviceSubcategoryId])
 
   const loadData = useCallback(async () => {
     try {
@@ -157,29 +159,31 @@ const ContactInfo = ({ data, onClose, handleOp }: Props) => {
           </S.DataInfo>
           <S.DataInfo>
             <S.DITitle>Abertura</S.DITitle>
-            <S.DIValue>{getDateStr(data.start, "dmy")}</S.DIValue>
+            <S.DIValue>{getDateStr(data.startDate, "dmy")}</S.DIValue>
           </S.DataInfo>
           <S.DataInfo>
             <S.DITitle>Fechado</S.DITitle>
             <S.DIValue>
-              {data.status !== "awaiting" ? getDateStr(data.end, "dmy") : "-"}
+              {data.status !== "awaiting"
+                ? getDateStr(data.finishDate, "dmy")
+                : "-"}
             </S.DIValue>
           </S.DataInfo>
         </S.DataResumeArea>
 
         <Input.Select
-          field={"category"}
+          field={"serviceCategoryId"}
           onChange={handleField}
-          value={form.category}
+          value={String(form.serviceCategoryId)}
           options={options.category}
           gridSizes={{ big: 12 }}
           placeholder="Categoria"
         />
 
         <Input.Select
-          field={"subcategory"}
+          field={"serviceSubcategoryId"}
           onChange={handleField}
-          value={form.subcategory}
+          value={String(form.serviceSubcategoryId)}
           options={options.subcategory}
           gridSizes={{ big: 12 }}
           placeholder="Subcategoria"

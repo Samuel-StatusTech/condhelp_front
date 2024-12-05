@@ -10,7 +10,7 @@ const listAll: TApi["budgets"]["listAll"] = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`)
+        .get(`${baseURL}?size=300`)
         .then((res) => {
           const info = res.data
 
@@ -47,7 +47,7 @@ const create: TApi["budgets"]["create"] = async ({ newBudget }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}?size=300`)
+        .post(`${baseURL}`, newBudget)
         .then((res) => {
           const info = res.data
 

@@ -1,34 +1,36 @@
 import { TCondominium } from "./condominium"
 import { TDefaultStatus } from "./status"
-import { TUserTypes } from "./user"
 
 export type TNewBudget = {
-  FRANQUEADO?: string
-  condominium: string
-  urgent: boolean
-  category: string
-  subcategory: string
   title: string
   description: string
-  start: string
-  end: string
-  attached: TUserTypes["PRESTADOR"][]
-  file?: File
+  startDate: string
+  finishDate: string
+  attachedUrl: string
+  urgent: boolean
+  condominiumId: number
+  serviceCategoryId: number
+  serviceSubcategoryId: number
+  userId: number
+  status: string
+  providerIds: number[]
+  subsidiaryId: number
 }
 
 export type TBudget = {
   id: string
+  title: string
+  description: string
+  startDate: string
+  finishDate: string
+  attachedUrl: string
+
   condominium: Partial<TCondominium>
   urgent: boolean
   category: string
   subcategory: string
-  title: string
-  description: string
-  start: string
-  end: string
   date: string
   status: TDefaultStatus
-  attached: TUserTypes["PRESTADOR"][]
   file?: {
     url: string
     name: string

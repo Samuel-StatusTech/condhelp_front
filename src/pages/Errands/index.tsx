@@ -2,7 +2,6 @@ import { useCallback, useState } from "react"
 import Divider from "../../components/_minimals/Divider"
 import * as S from "./styled"
 import Table from "../../components/Table"
-import { fdata } from "../../utils/_dev/falseData"
 import PageHeader from "../../components/PageHeader"
 import { useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/system/table"
@@ -13,7 +12,7 @@ import { systemOptions } from "../../utils/system/options"
 const ErrandsPage = () => {
   const navigate = useNavigate()
 
-  const [errands] = useState(fdata.errands)
+  const [errands] = useState([])
 
   /*
    *  Search control

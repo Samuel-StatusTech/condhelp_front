@@ -7,7 +7,6 @@ import { useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 
 import { getStore } from "../../../store"
-import { fdata } from "../../../utils/_dev/falseData"
 import { TOption } from "../../../utils/@types/data/option"
 
 import { TNewErrand, TErrand } from "../../../utils/@types/data/errand"
@@ -81,7 +80,7 @@ const FPerrand = () => {
         }))
 
         if (params.id) {
-          const info = fdata.errands.find((i) => i.id === params.id)
+          const info = null
 
           if (info) {
             setForm(info)

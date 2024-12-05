@@ -33,7 +33,7 @@ export type TApi_Responses_Budgets = {
         empty: boolean
       }>
     >
-    create: Promise<TDefaultRes<{}>>
+    create: Promise<TDefaultRes<TBudget>>
     getSingle: Promise<TDefaultRes<TBudget>>
     update: Promise<TDefaultRes<TBudget>>
     delete: Promise<TDefaultRes<{}>>

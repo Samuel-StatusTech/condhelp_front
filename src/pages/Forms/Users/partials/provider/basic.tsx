@@ -3,7 +3,7 @@ import Button from "../../../../../components/Button"
 import Input from "../../../../../components/Input"
 import { TBlock, TForm } from "../../../../../utils/@types/components/Form"
 import { TOption } from "../../../../../utils/@types/data/option"
-import { fdata } from "../../../../../utils/_dev/falseData"
+import { TUserTypes } from "../../../../../utils/@types/data/user"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
@@ -13,12 +13,14 @@ type Props = {
     [key: string]: TOption[]
   }
   handleField: TForm["handleField"]
+  franchise?: TUserTypes["FRANQUEADO"]
 }
 
 export const basicProvider = ({
   form,
   options,
   handleField,
+  franchise,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -57,9 +59,7 @@ export const basicProvider = ({
       type: "custom",
       element: (() => {
         const content = form.franchises.map((f: any) => {
-          const franchiseData = fdata.people
-            .filter((i) => i.profile === "FRANQUEADO")
-            .find((i) => i.id === f)
+          const franchiseData = franchise
 
           return (
             <div
