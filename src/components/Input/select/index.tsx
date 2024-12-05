@@ -24,6 +24,7 @@ type Props = TInputSelect & {
   onChange: (field: string, v: any) => void
   gridSizes?: FormField["gridSizes"]
   alignBottom?: boolean
+  avoidValueShow?: boolean
 }
 
 const SelectDefault = ({
@@ -38,6 +39,7 @@ const SelectDefault = ({
   gridSizes,
   byKey,
   alignBottom,
+  avoidValueShow,
 }: Props) => {
   // use ref ...
 
@@ -72,7 +74,7 @@ const SelectDefault = ({
             $disabled={disabled}
           >
             <S.Left>
-              {selected && selected.value ? (
+              {selected && selected.value && !avoidValueShow ? (
                 <S.SelectedInfo>
                   {byKey ? selected.key : selected?.value}
                 </S.SelectedInfo>

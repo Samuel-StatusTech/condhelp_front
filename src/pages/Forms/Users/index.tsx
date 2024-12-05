@@ -13,7 +13,11 @@ import { TAccess } from "../../../utils/@types/data/access"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 import { Api } from "../../../api"
-import { TNewUser, TNewUserDefault } from "../../../utils/@types/data/user"
+import {
+  TNewUser,
+  TNewUserDefault,
+  TUser,
+} from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
@@ -21,6 +25,7 @@ import { TRegion } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
+import { TCategory } from "../../../utils/@types/data/category"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -33,6 +38,8 @@ const FPpeople = () => {
 
   const [personType, setPersonType] = useState<TAccess>("ADMIN")
   const [regions, setRegions] = useState<TRegion[]>([])
+  const [franchises, setFranchises] = useState<TUser[]>([])
+  const [, setCategories] = useState<TCategory[]>([])
 
   const [form, setForm] = useState<any>(initials.forms.person[personType])
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
@@ -47,6 +54,7 @@ const FPpeople = () => {
     country: [],
     state: [],
     franchises: [],
+    category: [],
   })
 
   const handleCancel = () => {
@@ -142,6 +150,7 @@ const FPpeople = () => {
                 document: { ...p.document, register: value },
               }))
               break
+
             case "documentDate":
               setForm((p: any) => ({
                 ...p,
@@ -149,7 +158,20 @@ const FPpeople = () => {
               }))
               break
 
-            // TODO: condos insert case
+            case "franchises":
+              const shouldInclude =
+                Array.isArray(form.franchises) &&
+                !form.franchises.includes(value as number)
+
+              const newList = shouldInclude
+                ? [...form.franchises, value]
+                : form.franchises.filter((i: number) => i !== value)
+
+              setForm((p: any) => ({
+                ...p,
+                franchises: newList,
+              }))
+              break
 
             default:
               setForm((p: any) => ({ ...p, [field]: value }))
@@ -240,7 +262,7 @@ const FPpeople = () => {
   const handleCreate = async () => {
     try {
       const accountRegister = await Api.auth.register({
-        tipo: personType,
+        tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
         senha: "123456",
         usuario: form.email,
       })
@@ -351,6 +373,8 @@ const FPpeople = () => {
               (i) => i.profile === "FRANQUEADO"
             )
 
+            setFranchises(franchisesList)
+
             setOptions((opts) => ({
               ...opts,
               branch: parseOptionList(branchesList, "id", "name"),
@@ -420,6 +444,27 @@ const FPpeople = () => {
             navigate(-1)
           }
         })
+      )
+
+      // • Categories
+      proms.push(
+        Api.categories
+          .listAll({})
+          .then((res) => {
+            if (res.ok) {
+              const list = res.data.content
+
+              setCategories(list)
+
+              setOptions((opts) => ({
+                ...opts,
+                category: parseOptionList(list, "id", "name"),
+              }))
+            } else throw new Error()
+          })
+          .catch(() => {
+            throw new Error()
+          })
       )
 
       await Promise.all(proms).catch((err) => {
@@ -500,7 +545,11 @@ const FPpeople = () => {
         break
 
       case "FRANQUEADO":
-        content = formPartials.franchise.basic({ form, options, userProfile: user?.profile as any })
+        content = formPartials.franchise.basic({
+          form,
+          options,
+          userProfile: user?.profile as any,
+        })
         break
 
       case "SINDICO":
@@ -508,7 +557,12 @@ const FPpeople = () => {
         break
 
       case "PRESTADOR":
-        content = formPartials.provider.basic({ form, options, handleField })
+        content = formPartials.provider.basic({
+          form,
+          options,
+          handleField,
+          franchises: franchises,
+        })
         break
 
       default:
@@ -545,7 +599,7 @@ const FPpeople = () => {
         break
 
       case "PRESTADOR":
-        content = formPartials.provider.extra(form, formSubmitFields)
+        content = formPartials.provider.extra(form, formSubmitFields, options)
         break
 
       default:

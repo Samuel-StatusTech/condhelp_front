@@ -1,10 +1,11 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { TOption } from "../../../../../utils/@types/data/option"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
-import { parseOptionList } from "../../../../../utils/tb/parsers/parseOptionList"
 
 export const extraProvider = (
   form: any,
-  formSubmitFields: TBlock["groups"][number]
+  formSubmitFields: TBlock["groups"][number],
+  options: { [key: string]: TOption[] }
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -55,7 +56,7 @@ export const extraProvider = (
               label: "Categorias de serviço prestado",
               field: "category",
               value: form.category,
-              options: parseOptionList([], "id", "name"),
+              options: options.category,
               gridSizes: { big: 12 },
             },
           ],
@@ -210,7 +211,7 @@ export const extraProvider = (
             [
               {
                 type: "input",
-                field: "fgts",
+                field: "fgtsCnd",
                 label: "FGTS",
                 value: form.fgtsCnd,
                 placeholder: "000000000000",
@@ -218,14 +219,14 @@ export const extraProvider = (
               },
               {
                 type: "date",
-                field: "fgtsStart",
+                field: "fgtsCndStart",
                 label: "Início",
                 value: form.fgtsCndStart,
                 gridSizes: { big: 4, small: 12 },
               },
               {
                 type: "date",
-                field: "fgtsEnd",
+                field: "fgtsCndEnd",
                 label: "Final",
                 value: form.fgtsCndEnd,
                 gridSizes: { big: 4, small: 12 },
@@ -234,14 +235,14 @@ export const extraProvider = (
             [
               {
                 type: "toggler",
-                field: "fgtsFree",
+                field: "fgtsCndFree",
                 label: "Isento",
                 value: form.fgtsCndFree,
                 gridSizes: { big: 4, small: 12 },
               },
               {
                 type: "file",
-                field: "fgtsDocument",
+                field: "fgtsCndDocument",
                 value: form.fgtsCndDocument,
                 gridSizes: { big: 8, small: 12 },
               },

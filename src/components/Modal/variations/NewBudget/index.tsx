@@ -18,7 +18,7 @@ import { TCondominium } from "../../../../utils/@types/data/condominium"
 import { TSubCategory } from "../../../../utils/@types/data/category/subcategories"
 import { checkErrors } from "../../../../utils/tb/checkErrors"
 import { TDefaultRes } from "../../../../api/types/responses"
-import { TUser } from "../../../../utils/@types/data/user"
+
 import { getDateStr } from "../../../../utils/tb/format/date"
 
 type Props = {
@@ -115,7 +115,6 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   const loadData = useCallback(async () => {
     try {
-      let subsidiariesList: TUser[] = []
       let categoriesList: TCategory[] = []
       let condosList: TCondominium[] = []
 
@@ -155,7 +154,6 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
       setCategories(categoriesList)
       setCondos(condosList)
-      console.log(subsidiariesList)
 
       let firstCategorySubcategories: TSubCategory[] =
         categoriesList.length > 0 ? categoriesList[0].serviceSubcategories : []

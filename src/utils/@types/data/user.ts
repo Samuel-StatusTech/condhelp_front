@@ -106,9 +106,8 @@ export type TUFranchise = {
 
 export type TUProvider = {
   profile: "PRESTADOR"
-  name: string
   franchises: string[]
-  fantasyName: string
+  name: string
   address: TAddress
 
   responsable: string
@@ -155,6 +154,8 @@ export type TUProvider = {
     cityCnd: TPendency
     fgts: TPendency
   }
+
+  openingDate?: any
 }
 
 export type TPendency = "none" | "free" | "has"

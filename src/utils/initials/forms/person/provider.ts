@@ -10,7 +10,6 @@ export const providerInitial: TNewUserDefault & TUProvider = {
 
   franchises: [],
 
-  fantasyName: "",
   address: {
     street: "",
     number: "",

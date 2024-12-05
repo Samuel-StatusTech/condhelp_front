@@ -3,7 +3,7 @@ import Button from "../../../../../components/Button"
 import Input from "../../../../../components/Input"
 import { TBlock, TForm } from "../../../../../utils/@types/components/Form"
 import { TOption } from "../../../../../utils/@types/data/option"
-import { TUserTypes } from "../../../../../utils/@types/data/user"
+import { TUser } from "../../../../../utils/@types/data/user"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
@@ -13,15 +13,19 @@ type Props = {
     [key: string]: TOption[]
   }
   handleField: TForm["handleField"]
-  franchise?: TUserTypes["FRANQUEADO"]
+  franchises?: TUser[]
 }
 
 export const basicProvider = ({
   form,
   options,
   handleField,
-  franchise,
+  franchises,
 }: Props): TBlock["groups"] => {
+  const unlinkFranchise = (franchiseId: number) => {
+    handleField("franchises", franchiseId)
+  }
+
   const content: TBlock["groups"] = [
     {
       type: "custom",
@@ -36,6 +40,8 @@ export const basicProvider = ({
           }}
         >
           <Input.Select
+            avoidValueShow={true}
+            placeholder={`Selecionadas: ${form.franchises.length}`}
             value={""}
             label="Selecione as franquias"
             options={options.franchises}
@@ -58,8 +64,10 @@ export const basicProvider = ({
     {
       type: "custom",
       element: (() => {
-        const content = form.franchises.map((f: any) => {
-          const franchiseData = franchise
+        const content = form.franchises.map((f: number) => {
+          const franchiseData = franchises?.find(
+            (franchise) => franchise.id === f
+          )
 
           return (
             <div
@@ -72,8 +80,9 @@ export const basicProvider = ({
                 gap: 4,
                 cursor: "pointer",
               }}
+              onClick={() => unlinkFranchise(f)}
             >
-              <span>{franchiseData?.name}</span>
+              <span style={{ fontSize: 14 }}>{franchiseData?.name}</span>
               <Icons.Close width={16} height={16} />
             </div>
           ) as JSX.Element
@@ -100,8 +109,8 @@ export const basicProvider = ({
           {
             type: "input",
             label: "Nome fantasia",
-            field: "fantasyName",
-            value: form.fantasyName,
+            field: "name",
+            value: form.name,
             placeholder: "Informe o nome fantasia",
             gridSizes: { big: 9, small: 12 },
           },

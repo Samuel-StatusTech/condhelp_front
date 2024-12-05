@@ -15,8 +15,6 @@ export const basicFranchise = ({
   form,
   options,
 }: Props): TBlock["groups"] => {
-  console.log(form)
-
   const content: TBlock["groups"] = [
     {
       type: "fields",

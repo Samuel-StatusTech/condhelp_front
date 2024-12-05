@@ -122,24 +122,77 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
 
 const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
   const info = {
-    id: user.userId,
     userAccountId: user.userId,
-    nome: user.name,
-    contato: "",
-    status: user.status,
+    name: user.name,
+    contact: "-",
+    // status: user.status,
+    status: "AGUARDANDO",
     email: user.email,
     site: user.website,
-    razaoSocial: user.socialRole,
-    cnpj: user.document,
-    urlCartaoCnpj: "",
-    dataAbertura: "2024-12-04T04:33:41.318Z",
-    // inscricaoEstadual: user.inscricaoEstadual,
-    // inscricaoMunicipal: userstate.inscricaoMunicipal,
-    inscricaoEstadual: "",
-    inscricaoMunicipal: "",
-    nomeResponsavel: user.responsable,
-    endereco: "",
-    cep: "",
+    logoUrl: "",
+    phone1: user.phone1,
+    phone2: user.phone2,
+    phone3: user.phone3,
+    companyName: user.socialRole,
+    cnpj: user.document.register,
+    cardCnpjUrl: user.cnpjCard,
+    openingDate: getDateStr(user.openingDate ?? new Date(), "javaDateTime"),
+
+    stateRegistration: "",
+    municipalRegistration: "",
+    responsibleName: user.responsable,
+
+    federalCnd: user.federalCnd,
+    federalCndStart: user.federalCndStart
+      ? getDateStr(user.federalCndStart, "javaDateTime")
+      : "",
+    federalCndEnd: user.federalCndEnd
+      ? getDateStr(user.federalCndEnd, "javaDateTime")
+      : "",
+    federalCndFree: user.federalCndFree,
+    federalCndDocAttachment: user.federalCndDocument,
+
+    stateCnd: user.stateCnd,
+    stateCndStart: user.stateCndStart
+      ? getDateStr(user.stateCndStart, "javaDateTime")
+      : "",
+    stateCndEnd: user.stateCndEnd
+      ? getDateStr(user.stateCndEnd, "javaDateTime")
+      : "",
+    stateCndFree: user.stateCndFree,
+    stateCndDocAttachment: user.stateCndDocument,
+
+    cityCnd: user.cityCnd,
+    cityCndStart: user.cityCndStart
+      ? getDateStr(user.cityCndStart, "javaDateTime")
+      : "",
+    cityCndEnd: user.cityCndEnd
+      ? getDateStr(user.cityCndEnd, "javaDateTime")
+      : "",
+    cityCndFree: user.cityCndFree,
+    cityCndDocAttachment: user.cityCndDocument,
+
+    fgtsCnd: user.fgtsCnd,
+    fgtsCndStart: user.fgtsCndStart
+      ? getDateStr(user.fgtsCndStart, "javaDateTime")
+      : "",
+    fgtsCndEnd: user.fgtsCndEnd
+      ? getDateStr(user.fgtsCndEnd, "javaDateTime")
+      : "",
+    fgtsCndFree: user.fgtsCndFree,
+    fgtsCndDocAttachment: user.fgtsCndDocument,
+
+    address: {
+      street: user.address.street,
+      number: user.address.number,
+      complement: user.address.complement,
+      zipCode: user.address.cep,
+      city: user.address.city,
+      state: user.address.state,
+      country: user.address.country,
+    },
+    subsidiaryIds: null,
+    serviceCategoryIds: [user.category],
   }
 
   return info

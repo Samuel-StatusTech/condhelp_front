@@ -4,6 +4,7 @@ import { adminCheck } from "./admin"
 import { branchCheck } from "./branch"
 import { franchiseCheck } from "./franchise"
 import { managerCheck } from "./manager"
+import { providerCheck } from "./provider"
 
 export type Params = TNewUser | TUser
 
@@ -34,8 +35,10 @@ export const usersCheck = (data: Params): TErrorsCheck => {
         state = newState
       })
       break
-
-    default:
+    case "PRESTADOR":
+      providerCheck(data, (newState: TErrorsCheck) => {
+        state = newState
+      })
       break
   }
 
