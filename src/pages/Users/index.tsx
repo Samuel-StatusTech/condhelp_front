@@ -12,11 +12,13 @@ import { TFilter } from "../../utils/@types/components/SearchBlock"
 import { Api } from "../../api"
 import { getStore } from "../../store"
 import { TUser } from "../../utils/@types/data/user"
+import { userSubordinates } from "../../utils/system/options/profiles"
+import { TAccess } from "../../utils/@types/data/access"
 
 const UsersPage = () => {
   const navigate = useNavigate()
 
-  const { controllers } = getStore()
+  const { user, controllers } = getStore()
 
   const [people, setPeople] = useState<TUser[]>([])
 
@@ -26,10 +28,10 @@ const UsersPage = () => {
 
   const [search, setSearch] = useState("")
   const [filters, setFilters] = useState({
-    profile: "",
-    status: "",
+    profile: "all",
+    status: "all",
   })
-  const [options] = useState({
+  const [options, setOptions] = useState({
     profile: systemOptions.profiles,
     status: systemOptions.userStatus,
   })
@@ -60,7 +62,15 @@ const UsersPage = () => {
       const req = await Api.persons.listAll({ size: 300 })
 
       if (req.ok) {
-        setPeople(req.data.content)
+        const userAllowed = userSubordinates[user?.profile as TAccess].map(
+          (i) => i.key
+        )
+
+        const filtered = req.data.content.filter((i) =>
+          userAllowed.includes(i.profile)
+        )
+
+        setPeople(filtered)
       } else {
         controllers.feedback.setData({
           visible: true,
@@ -69,13 +79,30 @@ const UsersPage = () => {
         })
       }
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message:
+          "Houve um erro ao processar as informações. Tente novamente mais tarde.",
+      })
+
+      navigate(-1)
     }
-  }, [controllers.feedback])
+  }, [controllers.feedback, navigate, user?.profile])
 
   useEffect(() => {
     loadData()
-  }, [loadData])
+
+    const usersOptions = [
+      { key: "all", value: "Todos" },
+      ...(userSubordinates[user?.profile as TAccess] ?? []),
+    ]
+
+    setOptions((opts) => ({
+      ...opts,
+      profile: usersOptions,
+    }))
+  }, [loadData, user?.profile])
 
   return (
     <S.Content>

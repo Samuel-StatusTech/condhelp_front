@@ -1,7 +1,6 @@
-import { Icons } from "../../../../../assets/icons/icons"
-import Button from "../../../../../components/Button"
-import Input from "../../../../../components/Input"
 import { TBlock, TForm } from "../../../../../utils/@types/components/Form"
+import { FormField } from "../../../../../utils/@types/components/FormFields"
+import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { TUser } from "../../../../../utils/@types/data/user"
 import { formatCep } from "../../../../../utils/tb/format/cep"
@@ -14,86 +13,43 @@ type Props = {
   }
   handleField: TForm["handleField"]
   franchises?: TUser[]
+  personType: TAccess
+  franchiseName?: string
 }
 
 export const basicProvider = ({
   form,
   options,
-  handleField,
-  franchises,
+  personType,
+  franchiseName,
 }: Props): TBlock["groups"] => {
-  const unlinkFranchise = (franchiseId: number) => {
-    handleField("franchises", franchiseId)
-  }
-
   const content: TBlock["groups"] = [
     {
-      type: "custom",
-      element: (() => (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(12, minmax(0, 1fr))",
-            width: "100%",
-            alignItems: "end",
-            gap: 16,
-          }}
-        >
-          <Input.Select
-            avoidValueShow={true}
-            placeholder={`Selecionadas: ${form.franchises.length}`}
-            value={""}
-            label="Selecione as franquias"
-            options={options.franchises}
-            field="franchises"
-            onChange={handleField}
-            gridSizes={{ big: 9, small: 12 }}
-          />
-          <div style={{ gridColumn: `span 3`, paddingBottom: 2 }}>
-            <Button
-              type="main"
-              action={() => {}}
-              text="Editar franquia"
-              icon={<Icons.Edit />}
-              iconLeft={true}
-            />
-          </div>
-        </div>
-      ))(),
-    },
-    {
-      type: "custom",
-      element: (() => {
-        const content = form.franchises.map((f: number) => {
-          const franchiseData = franchises?.find(
-            (franchise) => franchise.id === f
-          )
-
-          return (
-            <div
-              style={{
-                padding: 6,
-                borderRadius: 18,
-                backgroundColor: "white",
-                display: "flex",
-                alignItems: "center",
-                gap: 4,
-                cursor: "pointer",
-              }}
-              onClick={() => unlinkFranchise(f)}
-            >
-              <span style={{ fontSize: 14 }}>{franchiseData?.name}</span>
-              <Icons.Close width={16} height={16} />
-            </div>
-          ) as JSX.Element
-        })
-
-        return (
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {content}
-          </div>
-        )
-      })(),
+      type: "fields",
+      fields: [
+        ...((personType === "FRANQUEADO"
+          ? [
+              {
+                type: "readonly",
+                label: "Franquia",
+                field: "franchise",
+                value: `${franchiseName} (Você)`,
+                gridSizes: { big: 12 },
+              } as FormField,
+            ]
+          : [
+              {
+                type: "select",
+                label: "Franquia",
+                placeholder: "Selecione a franquia",
+                field: "franchise",
+                value: form.franchise ?? "",
+                options: options.franchise,
+                gridSizes: { big: 3, small: 6 },
+                elevation: 10,
+              },
+            ]) as FormField[]),
+      ],
     },
     {
       type: "fields",

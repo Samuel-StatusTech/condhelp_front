@@ -106,7 +106,7 @@ export type TUFranchise = {
 
 export type TUProvider = {
   profile: "PRESTADOR"
-  franchises: string[]
+  franchise: string
   name: string
   address: TAddress
 

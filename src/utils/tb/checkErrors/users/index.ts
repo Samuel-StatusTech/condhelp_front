@@ -14,32 +14,34 @@ export const usersCheck = (data: Params): TErrorsCheck => {
     fields: [],
   }
 
-  switch (data.profile) {
-    case "ADMIN":
-      adminCheck(data, (newState: TErrorsCheck) => {
-        state = newState
-      })
-      break
-    case "FILIAL":
-      branchCheck(data, (newState: TErrorsCheck) => {
-        state = newState
-      })
-      break
-    case "FRANQUEADO":
-      franchiseCheck(data, (newState: TErrorsCheck) => {
-        state = newState
-      })
-      break
-    case "SINDICO":
-      managerCheck(data, (newState: TErrorsCheck) => {
-        state = newState
-      })
-      break
-    case "PRESTADOR":
-      providerCheck(data, (newState: TErrorsCheck) => {
-        state = newState
-      })
-      break
+  if (data) {
+    switch (data.profile) {
+      case "ADMIN":
+        adminCheck(data, (newState: TErrorsCheck) => {
+          state = newState
+        })
+        break
+      case "FILIAL":
+        branchCheck(data, (newState: TErrorsCheck) => {
+          state = newState
+        })
+        break
+      case "FRANQUEADO":
+        franchiseCheck(data, (newState: TErrorsCheck) => {
+          state = newState
+        })
+        break
+      case "SINDICO":
+        managerCheck(data, (newState: TErrorsCheck) => {
+          state = newState
+        })
+        break
+      case "PRESTADOR":
+        providerCheck(data, (newState: TErrorsCheck) => {
+          state = newState
+        })
+        break
+    }
   }
 
   return state

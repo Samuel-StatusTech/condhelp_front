@@ -132,16 +132,10 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
   })
 }
 
-const update: TApi["persons"]["update"] = async ({
-  person,
-  originalPersonType,
-}) => {
+const update: TApi["persons"]["update"] = async ({ person }) => {
   return new Promise(async (resolve) => {
     try {
-      const roleUrl =
-        originalPersonType !== "ADMIN"
-          ? rolesUrlRelations[originalPersonType]
-          : baseURL
+      const roleUrl = rolesUrlRelations[person.profile]
 
       await service
         .put(`${roleUrl}/${person.id}`, person)

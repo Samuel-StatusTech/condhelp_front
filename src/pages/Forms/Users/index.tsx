@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import * as C from "../styled"
 
 import initials from "../../../utils/initials"
@@ -26,6 +26,7 @@ import { checkErrors } from "../../../utils/tb/checkErrors"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 import { TCategory } from "../../../utils/@types/data/category"
+import { userSubordinates } from "../../../utils/system/options/profiles"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -34,9 +35,14 @@ const FPpeople = () => {
 
   const { user, controllers } = getStore()
 
-  const [originalPersonType, setOriginalPersonType] = useState<TAccess>("ADMIN")
+  const userAlloweds = useMemo(
+    () => userSubordinates[user?.profile as TAccess] ?? [{ key: "" }],
+    [user?.profile]
+  )
 
-  const [personType, setPersonType] = useState<TAccess>("ADMIN")
+  const [personType, setPersonType] = useState<TAccess>(
+    userAlloweds[0].key as TAccess
+  )
   const [regions, setRegions] = useState<TRegion[]>([])
   const [franchises, setFranchises] = useState<TUser[]>([])
   const [, setCategories] = useState<TCategory[]>([])
@@ -188,8 +194,6 @@ const FPpeople = () => {
   }
 
   const getObj = (userId: number) => {
-    let info = {}
-
     const baseInfo: TNewUserDefault = {
       id: userId,
       status: form.status,
@@ -198,30 +202,7 @@ const FPpeople = () => {
       photo: null,
     }
 
-    switch ((form as TNewUser).profile) {
-      case "ADMIN":
-        info = getUserObj({ ...form, userId }, "ADMIN")
-        break
-
-      case "PRESTADOR":
-        info = getUserObj({ ...form, userId }, "PRESTADOR")
-        break
-
-      case "FILIAL":
-        info = getUserObj({ ...form, userId }, "FILIAL")
-        break
-
-      case "FRANQUEADO":
-        info = getUserObj({ ...form, userId }, "FRANQUEADO")
-        break
-
-      case "SINDICO":
-        info = getUserObj({ ...form, userId }, "SINDICO")
-        break
-
-      default:
-        break
-    }
+    let info = getUserObj({ ...form, userId }, (form as TNewUser).profile)
 
     if (params.id && !Number.isNaN(params.id)) {
       info = { ...info, id: Number(params.id) }
@@ -241,7 +222,6 @@ const FPpeople = () => {
 
         const req = await Api.persons.update({
           person: obj as any,
-          originalPersonType,
         })
 
         if (req.ok) {
@@ -334,8 +314,6 @@ const FPpeople = () => {
           const hasInfo = req.data.profile && req.data.email
 
           if (hasInfo) {
-            setOriginalPersonType(req.data.profile)
-
             const initialRoleInfo = initials.forms.person[req.data.profile]
 
             setForm((fm: any) => ({
@@ -364,7 +342,7 @@ const FPpeople = () => {
 
       // For Persons select
       proms.push(
-        Api.persons.listAll({}).then((usersReq) => {
+        Api.persons.listAll({ size: 300 }).then((usersReq) => {
           if (usersReq.ok) {
             const list = usersReq.data.content
 
@@ -372,6 +350,8 @@ const FPpeople = () => {
             const franchisesList = list.filter(
               (i) => i.profile === "FRANQUEADO"
             )
+
+            console.log()
 
             setFranchises(franchisesList)
 
@@ -488,7 +468,6 @@ const FPpeople = () => {
   }, [controllers.feedback, navigate, params.id])
 
   useEffect(() => {
-    // ...
     if (location.state && location.state.role) {
       const hasForm = initials.forms.person[location.state.role as TAccess]
 
@@ -498,19 +477,19 @@ const FPpeople = () => {
       }
 
       location.state = undefined
+    } else {
+      setForm((frm: TUser) => ({ ...frm, profile: userAlloweds[0].key }))
     }
 
-    loadData()
-  }, [loadData, location])
-
-  useEffect(() => {
     setOptions((opts: any) => ({
       ...opts,
-      profile: systemOptions.profiles.filter((i) => i.key !== "all"),
+      profile: userAlloweds,
       country: [{ key: "br", value: "Brasil" }],
       state: systemOptions.states,
     }))
-  }, [])
+
+    loadData()
+  }, [loadData, location, user?.profile, userAlloweds])
 
   const errors = () => {
     return checkErrors.users(form)
@@ -532,7 +511,7 @@ const FPpeople = () => {
     ),
   }
 
-  const renderBasicFields = () => {
+  const renderBasic = () => {
     let content: TBlock["groups"] = []
 
     switch (form.profile) {
@@ -562,6 +541,8 @@ const FPpeople = () => {
           options,
           handleField,
           franchises: franchises,
+          personType: user?.profile as TAccess,
+          franchiseName: user?.name,
         })
         break
 
@@ -572,7 +553,7 @@ const FPpeople = () => {
     return content
   }
 
-  const renderBlocks = () => {
+  const renderExtra = () => {
     let content: TBlock[] = []
 
     switch (form.profile) {
@@ -661,13 +642,13 @@ const FPpeople = () => {
                         : []),
                     ],
                   },
-                  ...renderBasicFields(),
+                  ...renderBasic(),
                 ],
               },
             ],
           },
           {
-            blocks: [...renderBlocks()],
+            blocks: [...renderExtra()],
           },
         ]}
       />
