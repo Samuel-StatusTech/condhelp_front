@@ -373,8 +373,6 @@ const FPpeople = () => {
               (i) => i.profile === "FRANQUEADO"
             )
 
-            console.log()
-
             setFranchises(franchisesList)
 
             setOptions((opts) => ({

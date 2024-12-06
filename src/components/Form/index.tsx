@@ -59,6 +59,7 @@ const Form = ({ handleField, columns }: Props) => {
             {column.blocks.map((block, blockKey) => (
               <S.Block
                 key={blockKey}
+                $white={block.isWhite}
                 $zIndex={100 + (column.blocks.length + 2 - blockKey)}
               >
                 <S.BlockTitle>{block.title}</S.BlockTitle>

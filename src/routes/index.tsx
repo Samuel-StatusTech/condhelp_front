@@ -34,6 +34,7 @@ import FPerrand from "../pages/Forms/Errand"
 import FPfaq from "../pages/Forms/Faq"
 import FaqsView from "../pages/Head/Faq"
 import Budgets from "../pages/Budgets"
+import FPdocuments from "../pages/Forms/Documents"
 
 const Router = () => {
   return (
@@ -58,6 +59,7 @@ const Router = () => {
           </Route>
           <Route path="/dashboard" element={<DashTemplate />}>
             <Route path="" element={<Dashboard />} />
+            <Route path="documents" element={<FPdocuments />} />
             <Route path="users">
               <Route path="" element={<UsersPage />} />
               <Route path="single" element={<PersonPage />} />

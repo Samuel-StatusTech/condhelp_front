@@ -19,6 +19,13 @@ export const menu: {
       tag: "dash",
     },
     {
+      icon: "document",
+      text: "Documentação",
+      link: "/documents",
+      tag: "documents",
+      access: ["PRESTADOR"],
+    },
+    {
       icon: "user",
       text: "Usuários",
       link: "/users",

@@ -4,7 +4,7 @@ import Button from "../Button"
 import { Icons } from "../../assets/icons/icons"
 
 type Props = {
-  handleDelete: (params: any) => void
+  handleDelete?: (params: any) => void
   handleCancel: (params: any) => void
   handleSave: (params: any) => void
   disabled?: boolean
@@ -17,15 +17,17 @@ const FormDefaultButtons = ({
   disabled,
 }: Props) => {
   return (
-    <S.Buttons className="buttonsArea">
-      <Button
-        type="quaternary"
-        action={handleDelete}
-        text="Excluir"
-        icon={<Icons.Trash />}
-        iconLeft={true}
-        fit={true}
-      />
+    <S.Buttons className="buttonsArea" $alignEnd={!handleDelete}>
+      {handleDelete && (
+        <Button
+          type="quaternary"
+          action={handleDelete}
+          text="Excluir"
+          icon={<Icons.Trash />}
+          iconLeft={true}
+          fit={true}
+        />
+      )}
       <S.BtnArea>
         <Button
           type="outlined"

@@ -90,8 +90,6 @@ const DashboardProvider = () => {
           resume.rejected = resume.rejected + b.rejected
         })
 
-        console.log(resume)
-
         setBudgets(budgetsReq.data.content)
         setBudgetsResume(resume)
         setFinishedBudgets(

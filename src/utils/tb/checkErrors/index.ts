@@ -6,6 +6,7 @@ import { regionsCheck } from "./regions"
 import { condosCheck } from "./condos"
 import { usersCheck } from "./users"
 import { budgetCheck } from "./budget"
+import { documentationCheck } from "./documentation"
 
 export const checkErrors = {
   login: loginCheck,
@@ -15,6 +16,7 @@ export const checkErrors = {
   condos: condosCheck,
   users: usersCheck,
   budget: budgetCheck,
+  documentation: documentationCheck,
 }
 
 export const getInvalidCheck = (actualState: TErrorsCheck, field: string) => {

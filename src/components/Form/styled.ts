@@ -23,12 +23,13 @@ export const BlockCols = styled.div`
   height: fit-content;
 `
 
-export const Block = styled.div<{ $zIndex: number }>`
+export const Block = styled.div<{ $white?: boolean; $zIndex: number }>`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background-color: ${({ theme }) => theme.colors.neutral.soft};
+  background-color: ${({ $white, theme }) =>
+    $white ? theme.colors.neutral.white : theme.colors.neutral.soft};
   box-shadow: 0 0 4px 6px rgba(0, 0, 0, 0.03);
   padding: 20px;
   border-radius: 8px;

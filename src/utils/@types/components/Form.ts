@@ -16,6 +16,7 @@ type TContent = FormField | FormField[]
 
 export type TBlock = {
   title: string
+  isWhite?: boolean
   groups: TGroup[]
 }
 

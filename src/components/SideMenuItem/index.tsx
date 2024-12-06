@@ -17,6 +17,7 @@ type Props = {
 
 const iconRef: { [key: string]: JSX.Element } = {
   dashboard: <Icons.Dashboard />,
+  document: <Icons.Document />,
   user: <Icons.User />,
   condos: <Icons.Conds />,
   folder: <Icons.Folder />,

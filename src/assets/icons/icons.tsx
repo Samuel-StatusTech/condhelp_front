@@ -24,6 +24,7 @@ import { ReactComponent as Conds } from "./conds.svg"
 import { ReactComponent as Copy } from "./copy.svg"
 import { ReactComponent as Dashboard } from "./dashboard.svg"
 import { ReactComponent as Dropdown } from "./dropdown.svg"
+import { ReactComponent as DocumentIcon } from "./document.svg"
 import { ReactComponent as Edit } from "./edit.svg"
 import { ReactComponent as Errand } from "./error.svg"
 import { ReactComponent as Error } from "./error.svg"
@@ -102,6 +103,7 @@ export const Icons = {
   Copy,
   Dashboard,
   Dropdown,
+  Document: DocumentIcon,
   Edit,
   Error,
   Eye,
