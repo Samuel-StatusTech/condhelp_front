@@ -25,6 +25,8 @@ const FPcategory = () => {
 
   const { controllers } = getStore()
 
+  const [loading, setLoading] = useState(false)
+
   const [form, setForm] = useState<TNewCategory | TCategory>(
     initials.forms.category
   )
@@ -38,6 +40,8 @@ const FPcategory = () => {
   }
 
   const handleDelete = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.categories.delete({ id: Number(params.id) })
 
@@ -48,10 +52,14 @@ const FPcategory = () => {
           message: "Categoria excluida",
         })
 
+        setLoading(false)
+
         navigate("/dashboard/categories")
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
@@ -65,6 +73,8 @@ const FPcategory = () => {
   }
 
   const handleUpdate = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.categories.update({ category: form as TCategory })
 
@@ -79,8 +89,12 @@ const FPcategory = () => {
 
         navigate("/dashboard/categories")
       }
+
+      setLoading(false)
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
@@ -135,6 +149,8 @@ const FPcategory = () => {
   }
 
   const handleCreate = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.categories.create({ newCategory: form })
 
@@ -147,10 +163,13 @@ const FPcategory = () => {
           message: "Categoria criada com sucesso",
         })
 
+        setLoading(false)
         navigate("/dashboard/categories")
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
@@ -159,6 +178,8 @@ const FPcategory = () => {
   }
 
   const loadCategoryData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.categories.getSingle({ id: Number(params.id) })
 
@@ -171,12 +192,16 @@ const FPcategory = () => {
           visible: true,
         })
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações da categoria.",
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }, [controllers.feedback, params.id])
 
@@ -186,6 +211,13 @@ const FPcategory = () => {
       loadCategoryData()
     }
   }, [loadCategoryData, params.id])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <C.Content>

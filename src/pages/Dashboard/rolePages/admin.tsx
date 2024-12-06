@@ -8,6 +8,7 @@ import { dashboardShortcuts } from "../../../utils/system/dashboardShortcuts"
 import { useCallback, useEffect, useState } from "react"
 import { Api } from "../../../api"
 import { TUser } from "../../../utils/@types/data/user"
+import { getStore } from "../../../store"
 
 type TGridInfo = {
   region: number
@@ -40,6 +41,8 @@ const gridInitial: TGridInfo = {
 }
 
 const DashboardAdmin = () => {
+  const { controllers } = getStore()
+
   const [data, setData] = useState({
     condos: 0,
     providers: 0,
@@ -56,6 +59,8 @@ const DashboardAdmin = () => {
   })
 
   const [gridData, setGridData] = useState(gridInitial)
+
+  const [loading, setLoading] = useState(true)
 
   // Cards
 
@@ -154,175 +159,190 @@ const DashboardAdmin = () => {
    */
 
   const loadData = useCallback(async () => {
-    let condoCount = 0
-    let providerCount = 0
-    let budgetCount = 0
+    setLoading(true)
 
-    let budgetsInfo: { [key: string]: number } = {
-      approved: 0,
-      awaiting: 0,
-      rejected: 0,
+    try {
+      let condoCount = 0
+      let providerCount = 0
+      let budgetCount = 0
+
+      let budgetsInfo: { [key: string]: number } = {
+        approved: 0,
+        awaiting: 0,
+        rejected: 0,
+      }
+
+      let gridInfo: TGridInfo = {
+        condo: 0,
+        FILIAL: 0,
+        FRANQUEADO: 0,
+        PRESTADOR: 0,
+        SINDICO: 0,
+        region: 0,
+        chat: 0,
+        faq: 0,
+        category: 0,
+        subcategory: 0,
+        user: 0,
+        settings: 0,
+      }
+
+      let proms: Promise<any>[] = []
+
+      // Categories
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.categories.listAll({ size: 1 })
+
+            if (req.ok) gridInfo.category = req.data.totalElements
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      // Subcategories
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.subcategories.listAll({ size: 1 })
+
+            if (req.ok) gridInfo.subcategory = req.data.totalElements
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      // Condos
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.condos.listAll({ size: 1 })
+
+            if (req.ok) {
+              condoCount = req.data.totalElements
+              gridInfo.condo = req.data.totalElements
+            }
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      // Budgets
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.budgets.listAll({})
+
+            if (req.ok) {
+              budgetCount = req.data.totalElements
+              budgetsInfo = req.data.content.reduce(
+                (prev, b) => ({
+                  approved: prev.approved + b.accepted,
+                  awaiting: prev.awaiting + b.awaiting,
+                  rejected: prev.rejected + b.rejected,
+                }),
+                budgetsInfo
+              )
+            }
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      // Providers and users
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.persons.listAll({ size: 300 })
+
+            if (req.ok) {
+              // Providers
+              providerCount = req.data.content.filter(
+                (u) => u.profile === "PRESTADOR"
+              ).length
+
+              gridInfo = getGridResume(req.data.content, gridInfo)
+            }
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      // Regions
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.regions.listAll({ size: 1 })
+
+            if (req.ok) gridInfo.region = req.data.totalElements
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      // FAQ's
+      proms.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const req = await Api.faqs.listAll({ size: 1 })
+
+            if (req.ok) gridInfo.faq = req.data.totalElements
+
+            resolve(true)
+          } catch (error) {
+            reject()
+          }
+        })
+      )
+
+      await Promise.all(proms)
+
+      setData({
+        condos: condoCount,
+        providers: providerCount,
+        users: gridInfo.user,
+        budgets: budgetCount,
+      })
+
+      setBudgetsDetails(budgetsInfo)
+
+      setGridData(gridInfo)
+
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
     }
-
-    let gridInfo: TGridInfo = {
-      condo: 0,
-      FILIAL: 0,
-      FRANQUEADO: 0,
-      PRESTADOR: 0,
-      SINDICO: 0,
-      region: 0,
-      chat: 0,
-      faq: 0,
-      category: 0,
-      subcategory: 0,
-      user: 0,
-      settings: 0,
-    }
-
-    let proms: Promise<any>[] = []
-
-    // Categories
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.categories.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.category = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Subcategories
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.subcategories.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.subcategory = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Condos
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.condos.listAll({ size: 1 })
-
-          if (req.ok) {
-            condoCount = req.data.totalElements
-            gridInfo.condo = req.data.totalElements
-          }
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Budgets
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.budgets.listAll({})
-
-          if (req.ok) {
-            budgetCount = req.data.totalElements
-            budgetsInfo = req.data.content.reduce(
-              (prev, b) => ({
-                approved: prev.approved + b.accepted,
-                awaiting: prev.awaiting + b.awaiting,
-                rejected: prev.rejected + b.rejected,
-              }),
-              budgetsInfo
-            )
-          }
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Providers and users
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.persons.listAll({ size: 300 })
-
-          if (req.ok) {
-            // Providers
-            providerCount = req.data.content.filter(
-              (u) => u.profile === "PRESTADOR"
-            ).length
-
-            gridInfo = getGridResume(req.data.content, gridInfo)
-          }
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Regions
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.regions.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.region = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // FAQ's
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.faqs.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.faq = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    await Promise.all(proms)
-
-    setData({
-      condos: condoCount,
-      providers: providerCount,
-      users: gridInfo.user,
-      budgets: budgetCount,
-    })
-
-    setBudgetsDetails(budgetsInfo)
-
-    setGridData(gridInfo)
   }, [])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.SubContent>

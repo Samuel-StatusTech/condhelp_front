@@ -22,6 +22,8 @@ const CategoriesPage = () => {
 
   const { user, controllers } = getStore()
 
+  const [loading, setLoading] = useState(true)
+
   const [categories, setCategories] = useState<TCategory[]>([])
 
   /*
@@ -87,6 +89,8 @@ const CategoriesPage = () => {
   // Start component
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.categories.listAll({ size: 300 })
 
@@ -103,14 +107,25 @@ const CategoriesPage = () => {
           message: req.error,
         })
       }
+
+      setLoading(false)
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }, [controllers.feedback])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Content>

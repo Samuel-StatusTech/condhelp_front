@@ -22,6 +22,8 @@ const FPfaq = () => {
 
   const { controllers } = getStore()
 
+  const [loading, setLoading] = useState(true)
+
   const [form, setForm] = useState<TNewFaq | TFaq>(initials.forms.faq)
 
   const handleCancel = () => {
@@ -36,6 +38,8 @@ const FPfaq = () => {
   }
 
   const handleUpdate = async () => {
+    setLoading(true)
+
     try {
       // check errors
 
@@ -49,6 +53,9 @@ const FPfaq = () => {
           state: "success",
           visible: true,
         })
+
+        setLoading(false)
+
         navigate("/dashboard/managefaq")
       } else throw new Error()
     } catch (error) {
@@ -58,10 +65,14 @@ const FPfaq = () => {
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }
 
   const handleCreate = async () => {
+    setLoading(true)
+
     try {
       // check errors
 
@@ -75,6 +86,9 @@ const FPfaq = () => {
           state: "success",
           visible: true,
         })
+
+        setLoading(false)
+
         navigate("/dashboard/managefaq")
       } else throw new Error()
     } catch (error) {
@@ -83,6 +97,8 @@ const FPfaq = () => {
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }
 
@@ -93,6 +109,8 @@ const FPfaq = () => {
 
   const handleDelete = async () => {
     if (params.id) {
+      setLoading(true)
+
       try {
         if (Number.isNaN(params.id)) throw new Error()
         else {
@@ -104,6 +122,9 @@ const FPfaq = () => {
               state: "success",
               visible: true,
             })
+
+            setLoading(false)
+
             navigate("/dashboard/managefaq")
           } else throw new Error()
         }
@@ -114,6 +135,8 @@ const FPfaq = () => {
           state: "error",
           visible: true,
         })
+
+        setLoading(false)
       }
     }
   }
@@ -191,6 +214,8 @@ const FPfaq = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       if (params.id) {
         const req = await Api.faqs.getSingle({ id: Number(params.id) })
@@ -202,18 +227,29 @@ const FPfaq = () => {
           else throw new Error()
         }
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações.",
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }, [controllers.feedback, params.id])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <C.Content className="falseSubContentWrapper">

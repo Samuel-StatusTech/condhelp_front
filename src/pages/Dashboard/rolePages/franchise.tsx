@@ -71,15 +71,6 @@ const DashboardFranchise = () => {
         />
       )
     })
-    content.push(
-      <Card.DashboardShortcut
-        k={5 + dashboardShortcuts.FRANQUEADO.length / 2}
-        title={"Configurações"}
-        icon={"settings"}
-        link={"/settings"}
-        text={"Avançado"}
-      />
-    )
 
     return content
   }

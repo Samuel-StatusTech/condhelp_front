@@ -17,11 +17,13 @@ import { Api } from "../../api"
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 
 const Budgets = () => {
-  const { user } = getStore()
+  const { user, controllers } = getStore()
 
   /*
    *  Search control
    */
+
+  const [loading, setLoading] = useState(true)
 
   const [specificCondo, setSpecificCondo] = useState("")
   const [finishedBudgetsSearch, setFinishedBudgetsSearch] = useState("")
@@ -71,6 +73,8 @@ const Budgets = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       // Budgets
       const req = await Api.budgets.listAll({ size: 300 })
@@ -104,12 +108,23 @@ const Budgets = () => {
           }))
         }
       }
-    } catch (error) {}
+
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Content>

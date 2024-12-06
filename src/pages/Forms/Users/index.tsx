@@ -35,6 +35,8 @@ const FPpeople = () => {
 
   const { user, controllers } = getStore()
 
+  const [loading, setLoading] = useState(false)
+
   const userAlloweds = useMemo(
     () => userSubordinates[user?.profile as TAccess] ?? [{ key: "" }],
     [user?.profile]
@@ -216,6 +218,8 @@ const FPpeople = () => {
   }
 
   const handleUpdate = async () => {
+    setLoading(true)
+
     try {
       if (params.id && !Number.isNaN(params.id)) {
         const obj = getObj(Number(params.id))
@@ -231,15 +235,21 @@ const FPpeople = () => {
             message: "Usuário atualizado com sucesso",
           })
 
+          setLoading(false)
+
           navigate("/dashboard/users")
         }
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
   const handleCreate = async () => {
+    setLoading(true)
+
     try {
       const accountRegister = await Api.auth.register({
         tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
@@ -262,6 +272,8 @@ const FPpeople = () => {
             message: "Usuário criado com sucesso",
           })
 
+          setLoading(false)
+
           navigate("/dashboard/users")
         } else throw new Error()
       } else throw new Error()
@@ -273,6 +285,8 @@ const FPpeople = () => {
         message:
           "Não foi possível registrar o usuário. Verifique as informações e tente novamente.",
       })
+
+      setLoading(false)
     }
   }
 
@@ -286,6 +300,8 @@ const FPpeople = () => {
   }
 
   const handleDelete = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.persons.delete({ person: form.userId })
 
@@ -296,14 +312,20 @@ const FPpeople = () => {
           message: "Usuário excluído",
         })
 
+        setLoading(false)
+
         navigate("/dashboard/users")
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       // user info
 
@@ -456,12 +478,16 @@ const FPpeople = () => {
         })
         navigate(-1)
       })
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações do usuário.",
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
 
       navigate(-1)
     }
@@ -490,6 +516,13 @@ const FPpeople = () => {
 
     loadData()
   }, [loadData, location, user?.profile, userAlloweds])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   const errors = () => {
     return checkErrors.users(form)

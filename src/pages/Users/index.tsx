@@ -20,6 +20,8 @@ const UsersPage = () => {
 
   const { user, controllers } = getStore()
 
+  const [loading, setLoading] = useState(true)
+
   const [people, setPeople] = useState<TUser[]>([])
 
   /*
@@ -58,6 +60,8 @@ const UsersPage = () => {
   // Start component
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.persons.listAll({ size: 300 })
 
@@ -78,6 +82,8 @@ const UsersPage = () => {
           message: req.error,
         })
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         visible: true,
@@ -85,6 +91,8 @@ const UsersPage = () => {
         message:
           "Houve um erro ao processar as informações. Tente novamente mais tarde.",
       })
+
+      setLoading(false)
 
       navigate(-1)
     }
@@ -103,6 +111,13 @@ const UsersPage = () => {
       profile: usersOptions,
     }))
   }, [loadData, user?.profile])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Content>

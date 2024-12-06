@@ -21,6 +21,8 @@ const FaqsPage = () => {
    *  Search control
    */
 
+  const [loading, setLoading] = useState(true)
+
   const [search, setSearch] = useState("")
 
   const handleSearch = async () => {}
@@ -38,6 +40,8 @@ const FaqsPage = () => {
   // Start component
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.faqs.listAll({ size: 300 })
 
@@ -50,18 +54,30 @@ const FaqsPage = () => {
           message: req.error,
         })
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         visible: true,
         state: "alert",
-        message: "Houve um erro ao carregar as informações. Tente novamente mais tarde.",
+        message:
+          "Houve um erro ao carregar as informações. Tente novamente mais tarde.",
       })
+
+      setLoading(false)
     }
   }, [controllers.feedback])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Content>

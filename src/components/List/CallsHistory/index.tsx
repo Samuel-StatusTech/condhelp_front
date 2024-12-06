@@ -1,6 +1,4 @@
 import * as S from "./styled"
-import { TBudget } from "../../../utils/@types/data/budget"
-import { getDateStr } from "../../../utils/tb/format/date"
 
 import { Icons } from "../../../assets/icons/icons"
 import { TCall } from "../../../utils/@types/data/call"

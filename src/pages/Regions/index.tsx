@@ -18,6 +18,8 @@ const RegionsPage = () => {
 
   const [regions, setRegions] = useState<TRegion[]>([])
 
+  const [loading, setLoading] = useState(true)
+
   /*
    *  Search control
    */
@@ -39,6 +41,8 @@ const RegionsPage = () => {
   // Start component
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.regions.listAll({ size: 300 })
 
@@ -51,14 +55,24 @@ const RegionsPage = () => {
           message: req.error,
         })
       }
+
+      setLoading(false)
     } catch (error) {
       // ...
+      setLoading(false)
     }
   }, [controllers.feedback])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Content>

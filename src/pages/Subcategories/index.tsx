@@ -22,6 +22,8 @@ const SubcategoriesPage = () => {
 
   const [subcategories, setSubcategories] = useState<TSubCategory[]>([])
 
+  const [loading, setLoading] = useState(true)
+
   /*
    *  Search control
    */
@@ -62,6 +64,8 @@ const SubcategoriesPage = () => {
   // Start component
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+    
     try {
       const catReq = await Api.categories.listAll({ size: 300 })
 
@@ -83,14 +87,24 @@ const SubcategoriesPage = () => {
           message: req.error,
         })
       }
+
+      setLoading(false)
     } catch (error) {
-      // ...
+
+      setLoading(false)
     }
   }, [controllers.feedback])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Content>

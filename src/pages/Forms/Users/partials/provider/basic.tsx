@@ -45,7 +45,7 @@ export const basicProvider = ({
                 field: "franchise",
                 value: form.franchise ?? "",
                 options: options.franchise,
-                gridSizes: { big: 3, small: 6 },
+                gridSizes: { big: 12 },
                 elevation: 10,
               },
             ]) as FormField[]),

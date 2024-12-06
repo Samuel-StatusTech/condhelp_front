@@ -11,6 +11,7 @@ import NewErrand from "./variations/NewErrand"
 import SuccessFeedback from "./variations/SuccessFeedback"
 import DeleteConfirm from "./variations/DeleteConfirm"
 import ContactInfo from "./variations/ContactInfo"
+import LoadingModal from "../LoadingModal"
 
 export type ModalProps = {
   width?: DialogProps["maxWidth"]
@@ -23,6 +24,7 @@ export type ModalProps = {
 }
 
 export type TModals =
+  | "loading"
   | "newBudget"
   | "newErrand"
   | "successFeedback"
@@ -80,7 +82,9 @@ const Modal = () => {
     return el
   }
 
-  return (
+  return role === "loading" ? (
+    <LoadingModal />
+  ) : (
     <div id={"modal"}>
       <Dialog
         open={visible}

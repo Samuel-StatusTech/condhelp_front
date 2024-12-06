@@ -22,6 +22,8 @@ const CondosPage = () => {
 
   const navigate = useNavigate()
 
+  const [loading, setLoading] = useState(true)
+
   const [condos, setCondos] = useState<TCondominium[]>([])
   const [search, setSearch] = useState("")
 
@@ -52,6 +54,8 @@ const CondosPage = () => {
   // Start component
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const userReq = await Api.persons.getSingle({
         id: user?.userId as number,
@@ -72,14 +76,25 @@ const CondosPage = () => {
           message: req.error,
         })
       }
+
+      setLoading(false)
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }, [controllers.feedback, controllers.user, user?.userId])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   const renderContent = () => {
     return user?.profile === "SINDICO" ? (

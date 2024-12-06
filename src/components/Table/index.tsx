@@ -2,8 +2,10 @@ import * as S from "./styled"
 import { TConfig } from "../../utils/system/table"
 import { useState } from "react"
 import { TDefaultList } from "../../api/types/responses"
+import Skeleton from "../Skeleton"
 
 type Props = {
+  loading?: boolean
   searchData?: TDefaultList<any>
   config: TConfig
   data: any[]
@@ -17,6 +19,7 @@ type Props = {
 }
 
 const Table = ({
+  loading,
   searchData,
   config,
   data,
@@ -44,33 +47,39 @@ const Table = ({
           </S.RowItem>
         </S.TableHead>
         <S.TableBody $noHover={noHover}>
-          {data
-            .filter((item) => {
-              let ok = false
+          {loading ? (
+            <Skeleton role="table" columns={config.columns.length} rows={10} />
+          ) : (
+            data
+              .filter((item) => {
+                let ok = false
 
-              if (!!search) {
-                searchFields?.forEach((sf) => {
-                  if (!ok) {
-                    const v = sf.includes(".")
-                      ? item[sf.split(".")[0]][sf.split(".")[1]]
-                      : item[sf]
+                if (!!search) {
+                  searchFields?.forEach((sf) => {
+                    if (!ok) {
+                      const v = sf.includes(".")
+                        ? item[sf.split(".")[0]][sf.split(".")[1]]
+                        : item[sf]
 
-                    ok = String(v).toLowerCase().includes(search.toLowerCase())
-                  }
-                })
-              } else ok = true
+                      ok = String(v)
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                    }
+                  })
+                } else ok = true
 
-              return ok
-            })
-            .map((item, k) => (
-              <RowItem
-                key={k}
-                item={item}
-                config={config}
-                actions={actions}
-                expandComponent={expandComponent}
-              />
-            ))}
+                return ok
+              })
+              .map((item, k) => (
+                <RowItem
+                  key={k}
+                  item={item}
+                  config={config}
+                  actions={actions}
+                  expandComponent={expandComponent}
+                />
+              ))
+          )}
         </S.TableBody>
       </S.Table>
     </S.Wrapper>

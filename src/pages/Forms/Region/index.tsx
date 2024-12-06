@@ -24,6 +24,8 @@ const FPregion = () => {
 
   const { controllers } = getStore()
 
+  const [loading, setLoading] = useState(true)
+
   const [changedCountryState, setChangedCountryState] = useState(false)
   const [form, setForm] = useState<TNewRegion>(initials.forms.region)
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
@@ -52,6 +54,8 @@ const FPregion = () => {
   }
 
   const handleDelete = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.regions.delete({ id: Number(params.id) })
 
@@ -62,10 +66,14 @@ const FPregion = () => {
           message: "Categoria excluida",
         })
 
+        setLoading(false)
+
         navigate("/dashboard/regions")
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
@@ -158,6 +166,8 @@ const FPregion = () => {
   }
 
   const handleUpdate = async () => {
+    setLoading(true)
+
     try {
       const cities = await citiesTreat()
 
@@ -176,14 +186,20 @@ const FPregion = () => {
           message: "Região atualizada com sucesso",
         })
 
+        setLoading(false)
+
         navigate("/dashboard/regions")
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
   const handleCreate = async () => {
+    setLoading(true)
+
     try {
       const cities = await citiesTreat()
 
@@ -201,6 +217,8 @@ const FPregion = () => {
           message: "Região criada com sucesso",
         })
 
+        setLoading(false)
+
         navigate("/dashboard/regions")
       } else throw new Error()
     } catch (error) {
@@ -210,6 +228,8 @@ const FPregion = () => {
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }
 
@@ -223,6 +243,8 @@ const FPregion = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const countriesReq = await Api.countries.listAll({}).then((res) => {
         if (res.ok) {
@@ -285,12 +307,16 @@ const FPregion = () => {
           })
         }
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações da região.",
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }, [controllers.feedback, navigate, params.id])
 
@@ -298,6 +324,13 @@ const FPregion = () => {
     // ...
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <C.Content>

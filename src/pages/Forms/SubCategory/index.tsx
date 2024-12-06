@@ -25,6 +25,8 @@ const FPsubcategory = () => {
 
   const { controllers } = getStore()
 
+  const [loading, setLoading] = useState(true)
+
   const [form, setForm] = useState<TNewSubCategory | TSubCategory>(
     initials.forms.subcategory
   )
@@ -42,6 +44,8 @@ const FPsubcategory = () => {
   }
 
   const handleDelete = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.subcategories.delete({ id: Number(params.id) })
 
@@ -52,14 +56,20 @@ const FPsubcategory = () => {
           message: "Categoria excluida",
         })
 
+        setLoading(false)
+
         navigate("/dashboard/subcategories")
       }
     } catch (error) {
       // ...
+
+      setLoading(false)
     }
   }
 
   const handleUpdate = async () => {
+    setLoading(true)
+
     const req = await Api.subcategories.update({
       subcategory: form as TSubCategory,
     })
@@ -71,11 +81,17 @@ const FPsubcategory = () => {
         message: "Subcategoria atualizada com sucesso",
       })
 
+      setLoading(false)
+
       navigate("/dashboard/subcategories")
+    } else {
+      setLoading(false)
     }
   }
 
   const handleCreate = async () => {
+    setLoading(true)
+
     const req = await Api.subcategories.create({
       newSubcategory: form as TNewSubCategory,
     })
@@ -87,7 +103,11 @@ const FPsubcategory = () => {
         message: "Subcategoria criada com sucesso",
       })
 
+      setLoading(false)
+
       navigate("/dashboard/subcategories")
+    } else {
+      setLoading(false)
     }
   }
 
@@ -105,6 +125,8 @@ const FPsubcategory = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const catReq = await Api.categories.listAll({})
 
@@ -128,12 +150,16 @@ const FPsubcategory = () => {
           })
         }
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         message: "Não foi possível carregar as informações da categoria.",
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }, [controllers.feedback, params.id])
 
@@ -141,6 +167,13 @@ const FPsubcategory = () => {
     // ...
     loadData()
   }, [loadData, params.id])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <C.Content>

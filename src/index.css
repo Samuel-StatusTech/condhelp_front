@@ -16,7 +16,31 @@ input[type="password"]::-moz-textfield-decoration-container {
   display: none;
 }
 
+/* Skeletons */
+.bone {
+  background-color: #e0e4eb;
+
+  animation: pulse;
+  animation-duration: 1.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
 /* Animations */
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e4eb;
+  }
+
+  50% {
+    background-color: #cdd1d8;
+  }
+
+  100% {
+    background-color: #e0e4eb;
+  }
+}
 
 @keyframes fade {
   0% {

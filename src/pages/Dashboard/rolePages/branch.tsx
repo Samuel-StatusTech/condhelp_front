@@ -116,15 +116,6 @@ const DashboardBranch = () => {
         />
       )
     })
-    content.push(
-      <Card.DashboardShortcut
-        k={5 + dashboardShortcuts.FILIAL.length / 2}
-        title={"Configurações"}
-        icon={"settings"}
-        link={"/settings"}
-        text={"Avançado"}
-      />
-    )
 
     return content
   }

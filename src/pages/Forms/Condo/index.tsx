@@ -31,6 +31,8 @@ const FPcondo = () => {
 
   const { user, controllers } = getStore()
 
+  const [loading, setLoading] = useState(true)
+
   const [managers, setManagers] = useState<TUserTypes["SINDICO"][]>([])
   const [form, setForm] = useState<TNewCondominium | TCondominium>(
     initials.forms.condo
@@ -67,6 +69,8 @@ const FPcondo = () => {
   }
 
   const handleUpdate = async () => {
+    setLoading(true)
+
     try {
       // check errors
 
@@ -82,6 +86,9 @@ const FPcondo = () => {
           state: "success",
           visible: true,
         })
+
+        setLoading(false)
+
         navigate("/dashboard/condos")
       } else throw new Error()
     } catch (error) {
@@ -91,10 +98,14 @@ const FPcondo = () => {
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }
 
   const handleCreate = async () => {
+    setLoading(true)
+
     try {
       // check errors
 
@@ -108,6 +119,9 @@ const FPcondo = () => {
           state: "success",
           visible: true,
         })
+
+        setLoading(false)
+
         navigate("/dashboard/condos")
       } else throw new Error()
     } catch (error) {
@@ -117,6 +131,8 @@ const FPcondo = () => {
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }
 
@@ -126,6 +142,8 @@ const FPcondo = () => {
   }
 
   const handleDelete = async () => {
+    setLoading(true)
+
     if (params.id) {
       try {
         if (Number.isNaN(params.id)) throw new Error()
@@ -138,6 +156,9 @@ const FPcondo = () => {
               state: "success",
               visible: true,
             })
+
+            setLoading(false)
+
             navigate("/dashboard/condos")
           } else throw new Error()
         }
@@ -148,6 +169,8 @@ const FPcondo = () => {
           state: "error",
           visible: true,
         })
+
+        setLoading(false)
       }
     }
   }
@@ -182,6 +205,8 @@ const FPcondo = () => {
   }, [params.id])
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       if (user?.profile === "SINDICO") {
         setForm((frm) => ({ ...frm, managerId: user?.userId, manager: user }))
@@ -203,6 +228,8 @@ const FPcondo = () => {
           loadEditInfo()
         } else throw new Error()
       }
+
+      setLoading(false)
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -210,6 +237,8 @@ const FPcondo = () => {
         state: "error",
         visible: true,
       })
+
+      setLoading(false)
     }
   }, [controllers, loadEditInfo, user])
 
@@ -217,6 +246,13 @@ const FPcondo = () => {
     // ...
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   const errors = () => {
     return checkErrors.condos(form)
