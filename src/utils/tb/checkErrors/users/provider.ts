@@ -17,10 +17,10 @@ export const providerCheck = (
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
     if (!data.email?.trim()) state = getInvalidCheck(state, "email")
     if (!data.phone1?.trim()) state = getInvalidCheck(state, "phone1")
-    if (!data.franchise?.trim()) state = getInvalidCheck(state, "franchise")
+    if (!data.franchise) state = getInvalidCheck(state, "franchise")
     if (!data.responsable?.trim()) state = getInvalidCheck(state, "responsable")
     if (!data.website?.trim()) state = getInvalidCheck(state, "website")
-    if (!data.document.register?.trim())
+    if (data.document.register?.replace(/\D/g, "").length < 8)
       state = getInvalidCheck(state, "document.register")
     if (!data.document.date) state = getInvalidCheck(state, "document.date")
     if (
@@ -43,26 +43,26 @@ export const providerCheck = (
         state = getInvalidCheck(state, "address.number")
     }
 
-    if (data.federalCndFree) {
+    if (!data.federalCndFree) {
       if (!data.federalCnd?.trim()) state = getInvalidCheck(state, "federalCnd")
       if (!data.federalCndStart)
         state = getInvalidCheck(state, "federalCndStart")
       if (!data.federalCndEnd) state = getInvalidCheck(state, "federalCndEnd")
     }
 
-    if (data.stateCndFree) {
+    if (!data.stateCndFree) {
       if (!data.stateCnd?.trim()) state = getInvalidCheck(state, "stateCnd")
       if (!data.stateCndStart) state = getInvalidCheck(state, "stateCndStart")
       if (!data.stateCndEnd) state = getInvalidCheck(state, "stateCndEnd")
     }
 
-    if (data.cityCndFree) {
+    if (!data.cityCndFree) {
       if (!data.cityCnd?.trim()) state = getInvalidCheck(state, "cityCnd")
       if (!data.cityCndStart) state = getInvalidCheck(state, "cityCndStart")
       if (!data.cityCndEnd) state = getInvalidCheck(state, "cityCndEnd")
     }
 
-    if (data.fgtsCndFree) {
+    if (!data.fgtsCndFree) {
       if (!data.fgtsCnd?.trim()) state = getInvalidCheck(state, "fgtsCnd")
       if (!data.fgtsCndStart) state = getInvalidCheck(state, "fgtsCndStart")
       if (!data.fgtsCndEnd) state = getInvalidCheck(state, "fgtsCndEnd")

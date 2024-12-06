@@ -49,6 +49,7 @@ export type TBudgetResume = {
   awaiting: number
   rejected: number
   accepted: number
+  status?: string
 }
 
 export type TContact = {

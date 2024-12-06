@@ -84,26 +84,37 @@ const Login = () => {
           handleCreateAccount()
           break
 
-        default:
-          break
-      }
+        case "normal":
+          const errors = checkErrors.login(form)
 
-      const errors = checkErrors.login(form)
+          if (!errors.has) {
+            const auth = await Api.auth.login({
+              usuario: form.email,
+              senha: form.pass,
+            })
 
-      if (!errors.has) {
-        const auth = await Api.auth.login({
-          usuario: form.email,
-          senha: form.pass,
-        })
+            if (auth.ok) {
+              const userDataReq = await Api.persons.getSingle({
+                id: auth.data.userId,
+              })
 
-        if (auth.ok) {
-          const userDataReq = await Api.persons.getSingle({
-            id: auth.data.userId,
-          })
-
-          if (userDataReq.ok) {
-            controllers.user.setData(userDataReq.data)
-            navigate("/dashboard")
+              if (userDataReq.ok) {
+                controllers.user.setData(userDataReq.data)
+                navigate("/dashboard")
+              } else {
+                controllers.feedback.setData({
+                  state: "error",
+                  message: "Verifique os dados e tente novamente.",
+                  visible: true,
+                })
+              }
+            } else {
+              controllers.feedback.setData({
+                state: "error",
+                message: auth.error,
+                visible: true,
+              })
+            }
           } else {
             controllers.feedback.setData({
               state: "error",
@@ -111,19 +122,10 @@ const Login = () => {
               visible: true,
             })
           }
-        } else {
-          controllers.feedback.setData({
-            state: "error",
-            message: auth.error,
-            visible: true,
-          })
-        }
-      } else {
-        controllers.feedback.setData({
-          state: "error",
-          message: "Verifique os dados e tente novamente.",
-          visible: true,
-        })
+          break
+
+        default:
+          break
       }
 
       setSubmitting(false)

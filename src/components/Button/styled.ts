@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export const Element = styled.button<{
+  $red?: boolean
   $type: string
   $outlined: boolean
   $fit?: boolean
@@ -9,7 +10,10 @@ export const Element = styled.button<{
 }>`
   ${({ $fit }) => ($fit ? `width: fit-content;` : `flex: 1;`)}
   min-width: ${({ $type, $fit }) =>
-    $type !== "tertiary" || !$fit ? `160px` : "unset"};
+    ($type !== "tertiary" && $type !== "quarternary" && $type !== "green") ||
+    !$fit
+      ? `160px`
+      : "unset"};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,11 +32,15 @@ export const Element = styled.button<{
       ? theme.colors.neutral.medium
       : $type === "tertiary"
       ? theme.colors.neutral.white
+      : $type === "green"
+      ? theme.colors.green.medium
       : "transparent"};
   cursor: pointer;
 
-  color: ${({ $type, theme }) =>
-    $type === "main"
+  color: ${({ $red, $type, theme }) =>
+    $red
+      ? theme.colors.red.main
+      : $type === "main"
       ? theme.colors.green.dark
       : $type === "secondary"
       ? theme.colors.neutral.dark
@@ -40,6 +48,8 @@ export const Element = styled.button<{
       ? theme.colors.neutral.dark
       : $type === "outlined" || $type === "tertiary"
       ? theme.colors.green.light
+      : $type === "green"
+      ? theme.colors.neutral.white
       : "transparent"};
 
   svg {

@@ -2,7 +2,7 @@ import * as S from "./styled"
 
 type Props =
   | {
-      type: "main" | "secondary" | "quaternary" | "outlined"
+      type: "main" | "secondary" | "quaternary" | "outlined" | "green"
       text: string
       icon?: JSX.Element
       iconLeft?: boolean
@@ -12,6 +12,7 @@ type Props =
       greenText?: boolean
       disabled?: boolean
       fromSidebar?: boolean
+      red?: boolean
     }
   | {
       type: "tertiary"
@@ -21,11 +22,13 @@ type Props =
       k?: number
       disabled?: boolean
       fromSidebar?: boolean
+      red?: boolean
     }
 
 const Button = (props: Props) => {
   return (
     <S.Element
+      $red={props.red}
       $type={props.type}
       $outlined={props.type === "outlined"}
       $fit={props.fit}

@@ -225,7 +225,9 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
             if (!["ADMIN", "FRANQUEADO"].includes(userProfile)) {
               const url =
                 userProfile === "FILIAL"
-                  ? "/subsidiaries/useraccount"
+                  ? `${rolesUrlRelations[userProfile]}/useraccount`
+                  : userProfile === "PRESTADOR"
+                  ? `${rolesUrlRelations[userProfile]}/useraccount`
                   : rolesUrlRelations[userProfile] ?? baseURL
 
               const extraDataReq = await service.get(`${url}/${info.id}`)
