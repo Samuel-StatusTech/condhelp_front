@@ -2,15 +2,15 @@ import * as C from "../../styled"
 import * as S from "./styled"
 
 import { Icons } from "../../../../assets/icons/icons"
-import { TBudget } from "../../../../utils/@types/data/budget"
+import { TBudgetResume } from "../../../../utils/@types/data/budget"
 
 import Divider from "../../../_minimals/Divider"
 import Button from "../../../Button"
 
 type Props = {
   k: number
-  data: TBudget
-  onPick: (budget: TBudget) => void
+  data: TBudgetResume
+  onPick: (budget: TBudgetResume) => void
 }
 
 const BudgetCard = ({ k, data, onPick }: Props) => {

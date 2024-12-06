@@ -1,11 +1,10 @@
 import * as S from "./styled"
-import { TBudget } from "../../../utils/@types/data/budget"
 import { Icons } from "../../../assets/icons/icons"
 import Divider from "../../../components/_minimals/Divider"
 import { getDateStr } from "../../../utils/tb/format/date"
 
 type Props = {
-  budget: TBudget
+  budget: any
 }
 
 const BudgetResumeBlock = ({ budget }: Props) => {
@@ -13,7 +12,7 @@ const BudgetResumeBlock = ({ budget }: Props) => {
     <S.Block>
       <S.BlockHeader>
         <S.BlockTitle>Orçamento Nº {budget.id}</S.BlockTitle>
-        {budget.isUrgent && (
+        {budget.isUrgente && (
           <S.Urgent>
             <span>URGENTE</span>
             <Icons.Alert />
@@ -26,40 +25,44 @@ const BudgetResumeBlock = ({ budget }: Props) => {
       <S.DataResumeArea>
         <S.DataInfo>
           <S.DITitle>Condomínio</S.DITitle>
-          <S.DIValue>{budget.condominium?.name}</S.DIValue>
+          <S.DIValue>{budget.nomeCondominio}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Categoria</S.DITitle>
-          <S.DIValue>{budget.categoryName}</S.DIValue>
+          <S.DIValue>{budget.nomeCategoria}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Unidades</S.DITitle>
-          <S.DIValue>{budget.condominium?.unities}</S.DIValue>
+          <S.DIValue>25</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Subcategoria</S.DITitle>
-          <S.DIValue>{budget.subcategoryName}</S.DIValue>
+          <S.DIValue>{budget.nomeSubcategoria}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Título</S.DITitle>
-          <S.DIValue>{budget.title}</S.DIValue>
+          <S.DIValue>{budget.titulo}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo>
           <S.DITitle>Descrição</S.DITitle>
-          <S.DIValue>{budget.description}</S.DIValue>
+          <S.DIValue>{budget.descricao}</S.DIValue>
         </S.DataInfo>
         <S.DataInfo $small={true}>
           <S.DITitle>Data Início</S.DITitle>
-          <S.DIValue>{getDateStr(budget.startDate, "dmy")}</S.DIValue>
+          <S.DIValue>
+            {budget.dataInicio ? getDateStr(budget.dataInicio, "dmy") : "-"}
+          </S.DIValue>
         </S.DataInfo>
         <S.DataInfo $small={true}>
           <S.DITitle>Hora</S.DITitle>
-          <S.DIValue>{getDateStr(budget.startDate, "time")}</S.DIValue>
+          <S.DIValue>
+            {budget.dataInicio ? getDateStr(budget.dataInicio, "time") : "-"}
+          </S.DIValue>
         </S.DataInfo>
         <S.DataInfo $small={true}>
           <S.DITitle>Anexo</S.DITitle>
-          <S.FileDownload $disabled={!budget.attachmentUrl}>
-            {budget.attachmentUrl ? budget.attachmentUrl : "Não possui"}
+          <S.FileDownload $disabled={!budget.urlAnexo}>
+            {budget.urlAnexo ? budget.urlAnexo : "Não possui"}
           </S.FileDownload>
         </S.DataInfo>
       </S.DataResumeArea>

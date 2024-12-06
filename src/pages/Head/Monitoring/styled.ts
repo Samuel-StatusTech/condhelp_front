@@ -51,6 +51,30 @@ export const BlockRow = styled.span<{ $small?: boolean }>`
   gap: 20px;
 `
 
+export const EmptyMessage = styled.div`
+  grid-column: span 6;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+  width: 100%;
+  flex: 1;
+
+  span {
+    color: ${({ theme }) => theme.colors.neutral.lightMain};
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    grid-column: span 12;
+  }
+`
+
 export const Urgent = styled.div`
   color: ${({ theme }) => theme.colors.red.main};
   display: flex;
