@@ -120,7 +120,7 @@ export const basicProvider = ({
             type: "input",
             field: "number",
             label: "Número",
-            value: form.address?.number.replace(/\D/g, "") ?? "",
+            value: String(form.address?.number).replace(/\D/g, "") ?? "",
             placeholder: "0",
             gridSizes: { big: 4, small: 5 },
           },

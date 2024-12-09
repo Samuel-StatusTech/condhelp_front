@@ -33,6 +33,7 @@ import { ReactComponent as Eye } from "./eye.svg"
 import { ReactComponent as Faq } from "./faq.svg"
 import { ReactComponent as Folder } from "./folder.svg"
 import { ReactComponent as Franchise } from "./franchise.svg"
+import { ReactComponent as Globe } from "./globe.svg"
 import { ReactComponent as Goals } from "./goals.svg"
 import { ReactComponent as Google } from "./google.svg"
 import { ReactComponent as HidepassSoft } from "./hidepass_soft.svg"
@@ -112,6 +113,7 @@ export const Icons = {
   Faq,
   Folder,
   Franchise,
+  Globe,
   Goals,
   Google,
   Hidepass,

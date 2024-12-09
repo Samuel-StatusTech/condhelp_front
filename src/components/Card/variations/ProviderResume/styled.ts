@@ -4,20 +4,22 @@ export const Element = styled.div<{ $k?: number }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* flex: 1; */
-  width: 100%;
-  max-width: 360px;
+  min-width: 360px;
   background-color: ${({ theme }) => theme.colors.neutral.white};
   border-radius: 8px;
   align-self: stretch;
   padding: 20px;
-  cursor: pointer;
 
   opacity: 0;
   ${({ $k, theme }) =>
     theme.animations.types.fade +
     theme.animations.durations.main +
     theme.animations.delays.main($k)}
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    min-width: unset;
+    width: 100%;
+  }
 `
 
 export const Content = styled.div`
@@ -64,11 +66,63 @@ export const InfoItem = styled.div`
     width: 16px;
     height: 16px;
   }
+
+  span {
+    font-size: 12px;
+
+    &.urgent {
+      text-transform: uppercase;
+      color: ${({ theme }) => theme.colors.red.main};
+    }
+  }
 `
 
 export const ResumeArea = styled.div`
   display: flex;
   gap: 8px;
+`
+
+export const Available = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.neutral.lightMain};
+  text-align: center;
+  width: 100%;
+`
+
+export const InRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`
+
+export const InMessage = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: ${({ theme }) => theme.colors.green.medium};
+`
+
+export const AwaitingManager = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: ${({ theme }) => theme.colors.yellow.dark};
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  span {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+  }
 `
 
 export const DataResumeArea = styled.div<{ $selfLine?: boolean }>`
@@ -120,18 +174,22 @@ export const BottomCard = styled.div`
   gap: 24px;
 `
 
-export const DateArea = styled.div`
+export const StatusArea = styled.div<{ $status: string }>`
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: ${({ theme }) => theme.colors.neutral.main};
-  font-size: 14px;
+  gap: 8px;
+
+  color: ${({ $status, theme }) =>
+    $status === "AGUARDANDO"
+      ? theme.colors.yellow.dark
+      : $status === "ATIVO"
+      ? theme.colors.green.medium
+      : theme.colors.red.main};
 `
 
-export const AlertArea = styled.div`
+export const ButtonsArea = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: ${({ theme }) => theme.colors.red.main};
-  font-size: 14px;
+  justify-content: space-between;
+  gap: 24px;
 `

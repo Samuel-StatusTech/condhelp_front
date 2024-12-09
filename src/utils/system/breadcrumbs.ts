@@ -6,11 +6,10 @@ type TBreadCrumbLink = {
 }
 
 export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
+  panelBudget: [{ title: "Painel" }, { title: "Detalhes do Orçamento" }],
   categories: [
     { title: "Categorias", to: "/dashboard/categories" },
-    {
-      title: "Detalhes da categoria",
-    },
+    { title: "Detalhes da categoria" },
   ],
   condos: [
     { title: "Condomínios", to: "/dashboard/condos" },
@@ -24,9 +23,7 @@ export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
     { title: "Gerenciar FAQ's", to: "/dashboard/managefaq" },
     { title: "Detalhes do FAQ" },
   ],
-  faqView: [
-    { title: "FAQS" },
-  ],
+  faqView: [{ title: "FAQS" }],
   regions: [
     { title: "Regiões", to: "/dashboard/regions" },
     { title: "Detalhes da região" },

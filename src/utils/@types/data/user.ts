@@ -105,6 +105,13 @@ export type TUFranchise = {
 }
 
 export type TUProvider = {
+  companyName?: string
+  responsibleName?: string
+  stateRegistration?: string
+  municipalRegistration?: string
+
+  // ---
+  
   profile: "PRESTADOR"
   franchise: string
   name: string

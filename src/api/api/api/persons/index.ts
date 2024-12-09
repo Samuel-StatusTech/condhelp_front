@@ -233,11 +233,17 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
               const extraDataReq = await service.get(`${url}/${info.id}`)
 
               if (extraDataReq.data) {
+                let extraInfo = extraDataReq.data
+
+                if (userProfile === "PRESTADOR") {
+                  if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
+                    extraInfo.address.cep = extraInfo.address.zipCode
+                }
                 resolve({
                   ok: true,
                   data: {
                     ...info,
-                    ...extraDataReq.data,
+                    ...extraInfo,
                   },
                 })
               } else throw new Error()

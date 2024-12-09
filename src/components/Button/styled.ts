@@ -10,7 +10,7 @@ export const Element = styled.button<{
 }>`
   ${({ $fit }) => ($fit ? `width: fit-content;` : `flex: 1;`)}
   min-width: ${({ $type, $fit }) =>
-    ($type !== "tertiary" && $type !== "quarternary" && $type !== "green") ||
+    ($type !== "tertiary" && $type !== "quaternary" && $type !== "green") ||
     !$fit
       ? `160px`
       : "unset"};

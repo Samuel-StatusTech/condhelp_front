@@ -62,6 +62,7 @@ const Budgets = () => {
           awaiting: budget.awaiting,
           rejected: budget.rejected,
         }}
+        handlePick={() => {}}
       />
     ))
 

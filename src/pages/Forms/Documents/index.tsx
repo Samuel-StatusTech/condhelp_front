@@ -99,7 +99,7 @@ const FPdocuments = () => {
     try {
       // user info
 
-      const req = await Api.persons.getSingle({ id: Number(params.id) })
+      const req = await Api.persons.getSingle({ id: Number(user?.id) })
 
       if (req.ok) {
         const hasInfo = req.data.profile && req.data.email
@@ -140,7 +140,7 @@ const FPdocuments = () => {
 
       navigate(-1)
     }
-  }, [controllers.feedback, navigate, params.id])
+  }, [controllers.feedback, navigate, user?.id])
 
   useEffect(() => {
     loadData()

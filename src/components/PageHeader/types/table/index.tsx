@@ -12,6 +12,7 @@ type Props = {
 }
 
 const titleRelations: { [key in THeaderFrom]: string } = {
+  panelBudget: "",
   users: "Usuários",
   condos: "Condomínios",
   categories: "Categorias",

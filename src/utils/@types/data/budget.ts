@@ -16,6 +16,17 @@ export type TNewBudget = {
 }
 
 export type TBudget = {
+  titulo: string
+  nomeCondominio: string
+  isUrgente: boolean
+  nomeCategoria: string
+  nomeSubcategoria: string
+  descricao: string
+  dataInicio: string
+  dataFim: string
+  urlAnexo: string
+  prestadores: any[]
+
   id: string
   title: string
   condominiumName: string

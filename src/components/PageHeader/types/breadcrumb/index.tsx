@@ -15,11 +15,17 @@ type Props = {
   handleAction?: () => void
 }
 
-const BreadcrumbPageHeader = ({ from, forForm, noBack }: Props) => {
+const BreadcrumbPageHeader = ({
+  from,
+  forForm,
+  noBack,
+  handleAction,
+}: Props) => {
   const navigate = useNavigate()
 
-  const handleAction = () => {
-    navigate(-1)
+  const handleButton = () => {
+    if (handleAction) handleAction()
+    else navigate(-1)
   }
 
   const getPaths = () => {
@@ -33,10 +39,10 @@ const BreadcrumbPageHeader = ({ from, forForm, noBack }: Props) => {
       <S.PageIndicator $k={1}>
         <BreadCrumb paths={getPaths()} />
       </S.PageIndicator>
-      {forForm && !noBack && (
+      {(forForm || !noBack) && (
         <Button
           type="quaternary"
-          action={handleAction}
+          action={handleButton}
           text="Voltar"
           icon={<Icons.Back />}
           iconLeft={true}

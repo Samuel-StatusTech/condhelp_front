@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as S from "../styled"
-import { fdata } from "../../../utils/_dev/falseData"
 
 import Card from "../../../components/Card"
 import Divider from "../../../components/_minimals/Divider"
 import PageRow from "../../../components/_minimals/PageRow"
 import { getStore } from "../../../store"
-import { TBudget } from "../../../utils/@types/data/budget"
+import { TBudget, TBudgetResume } from "../../../utils/@types/data/budget"
 import { useCallback, useEffect, useState } from "react"
 import { DataResumeItem } from "../../../components/Card/variations/ApprovalResume"
 import Table from "../../../components/Table"
@@ -18,16 +17,23 @@ import Input from "../../../components/Input"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../../components/Input/points"
 import { TUserTypes } from "../../../utils/@types/data/user"
+import { Api } from "../../../api"
+
+import BudgetDetails from "./details/budget"
 
 const DashboardManager = () => {
-  const { user } = getStore((store) => ({
+  const { user, controllers } = getStore((store) => ({
+    controllers: store.controllers,
     user: store.user as TUserTypes["SINDICO"],
   }))
+
+  const [loading, setLoading] = useState(true)
 
   /*
    *  Search control
    */
 
+  const [budget, setBudget] = useState<TBudget | null>()
   const [specificCondo, setSpecificCondo] = useState("")
   const [finishedBudgetsSearch, setFinishedBudgetsSearch] = useState("")
   const [filters, setFilters] = useState({
@@ -49,10 +55,21 @@ const DashboardManager = () => {
 
   // Engine
 
-  const [budgets, setBudgets] = useState<TBudget[]>(fdata.managerBudgets)
-  const [finishedBudgets, setFinishedBudgets] = useState<TBudget[]>(
-    fdata.managerBudgets
-  )
+  const [budgets, setBudgets] = useState<TBudgetResume[]>([])
+  const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
+
+  const handlePickBudget = async (id: number) => {
+    setLoading(true)
+
+    try {
+      const req = await Api.budgets.getSingle({ id: id })
+
+      if (req.ok) setBudget(req.data)
+      else throw new Error()
+    } catch {}
+
+    setLoading(false)
+  }
 
   // Cards
 
@@ -62,10 +79,11 @@ const DashboardManager = () => {
         data={budget}
         k={2}
         resume={{
-          approved: 32,
-          awaiting: 8,
-          rejected: 12,
+          approved: budget.accepted,
+          awaiting: budget.awaiting,
+          rejected: budget.rejected,
         }}
+        handlePick={handlePickBudget}
       />
     ))
 
@@ -76,29 +94,56 @@ const DashboardManager = () => {
     )
   }
 
-  const loadData= useCallback(async () => {
+  const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
-      // Budgets
-      
-      setBudgets(fdata.managerBudgets)
-      setFinishedBudgets(
-        fdata.managerBudgets.filter((b) => b.status === "approved")
-      )
-  
       setOptions((opts) => ({
         ...opts,
         condos: parseOptionList(user?.condominiums, "id", "name"),
       }))
+
+      // Budgets
+      const budgetsReq = await Api.budgets.listAll({ size: 300 })
+
+      if (budgetsReq.ok) {
+        setBudgets(
+          budgetsReq.data.content.sort((a, b) =>
+            a.endDate && b.endDate
+              ? new Date(a.endDate).getTime() > new Date(b.endDate).getTime()
+                ? -1
+                : 1
+              : 1
+          )
+        )
+        setFinishedBudgets(
+          budgetsReq.data.content.filter((b) => b.status === "approved")
+        )
+      } else throw new Error()
     } catch (error) {
-      
+      controllers.feedback.setData({
+        state: "alert",
+        message:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+        visible: true,
+      })
     }
+
+    setLoading(false)
   }, [])
 
   useEffect(() => {
     loadData()
   }, [loadData])
 
-  return (
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
+
+  return !budget ? (
     <S.SubContent>
       <S.BlockArea className="falseSubContentWrapper">
         <S.BlockHeader>
@@ -177,6 +222,8 @@ const DashboardManager = () => {
         <Table data={finishedBudgets} config={tableConfig.finishedBudgets} />
       </S.BlockArea>
     </S.SubContent>
+  ) : (
+    <BudgetDetails budget={budget} handleBack={() => setBudget(null)} />
   )
 }
 

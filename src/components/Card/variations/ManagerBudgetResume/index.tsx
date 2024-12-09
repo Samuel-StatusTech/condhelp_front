@@ -2,7 +2,7 @@ import * as C from "../../styled"
 import * as S from "./styled"
 
 import { Icons } from "../../../../assets/icons/icons"
-import { TBudget, TBudgetResume } from "../../../../utils/@types/data/budget"
+import { TBudgetResume } from "../../../../utils/@types/data/budget"
 import { getDateStr } from "../../../../utils/tb/format/date"
 import Divider from "../../../_minimals/Divider"
 
@@ -13,8 +13,9 @@ type Props = {
     awaiting: number
     rejected: number
   }
-  data: TBudget | TBudgetResume
+  data: TBudgetResume
   forBranch?: boolean
+  handlePick: (id: number) => void
 }
 
 type PDataResumeItem = {
@@ -56,7 +57,13 @@ const DataResumeItem = ({ type, number, total }: PDataResumeItem) => {
  *  Approval Resume Component
  */
 
-const ManagerBudgetResume = ({ k, resume, data, forBranch }: Props) => {
+const ManagerBudgetResume = ({
+  k,
+  resume,
+  data,
+  forBranch,
+  handlePick,
+}: Props) => {
   const total = resume.approved + resume.awaiting + resume.rejected
 
   const renderDate = () => {
@@ -88,8 +95,12 @@ const ManagerBudgetResume = ({ k, resume, data, forBranch }: Props) => {
     } else return null
   }
 
+  const handleClick = () => {
+    handlePick(data.id)
+  }
+
   return (
-    <S.Element $k={k}>
+    <S.Element $k={k} onClick={handleClick}>
       <C.HTop>
         <C.Header>
           <C.HPart $k={k}>
