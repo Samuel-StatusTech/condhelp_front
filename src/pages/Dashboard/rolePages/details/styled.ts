@@ -129,7 +129,7 @@ export const RoundButton = styled.button`
   outline: none;
 
   background: none;
-  background-color: #F4F5F7;
+  background-color: #f4f5f7;
   min-width: 48px;
   height: 48px;
   border-radius: 48px;
@@ -146,4 +146,67 @@ export const RoundButton = styled.button`
   &:hover {
     background-color: #e0e0e0;
   }
+`
+
+/*
+ *
+ *
+ *
+ *
+ * Provider
+ *
+ *
+ *
+ *
+ */
+
+export const ProviderBrand = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+`
+
+export const LogoArea = styled.div`
+  width: 120px;
+  height: 82px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background-color: ${({ theme }) => theme.colors.neutral.lightMain};
+`
+
+export const ContactInfos = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
+
+export const Contact = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  span {
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.green.light};
+  }
+`
+
+export const StatusArea = styled.div<{ $status: string }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: ${({ $status, theme }) =>
+    $status === "AGUARDANDO"
+      ? theme.colors.yellow.dark
+      : $status === "ATIVO"
+      ? theme.colors.green.medium
+      : theme.colors.red.main};
 `

@@ -104,16 +104,22 @@ const DashboardManager = () => {
       }))
 
       // Budgets
-      const budgetsReq = await Api.budgets.listAll({ size: 300 })
+      const budgetsReq = await Api.budgets.listAll({
+        size: 300,
+        managerId: user?.id,
+        condominiumId: Number.isNaN(specificCondo) ? +specificCondo : undefined,
+      })
 
       if (budgetsReq.ok) {
         setBudgets(
           budgetsReq.data.content.sort((a, b) =>
             a.endDate && b.endDate
               ? new Date(a.endDate).getTime() > new Date(b.endDate).getTime()
-                ? -1
-                : 1
-              : 1
+                ? 1
+                : -1
+              : a.endDate && !b.endDate
+              ? 1
+              : -1
           )
         )
         setFinishedBudgets(
@@ -130,7 +136,7 @@ const DashboardManager = () => {
     }
 
     setLoading(false)
-  }, [])
+  }, [specificCondo])
 
   useEffect(() => {
     loadData()
@@ -172,25 +178,25 @@ const DashboardManager = () => {
           <S.ManagerBudgetsResumeArea>
             <S.MBRMessage>
               Para <span>todos os condomínios</span>, você já pediu{" "}
-              <span>11</span> orçamentos:
+              <span>{budgets.length}</span> orçamentos:
             </S.MBRMessage>
             <S.MBRDataArea>
               <DataResumeItem
                 type={"approved"}
-                number={5}
-                total={11}
+                number={0}
+                total={budgets.length}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"awaiting"}
-                number={3}
-                total={11}
+                number={0}
+                total={budgets.length}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"rejected"}
-                number={3}
-                total={11}
+                number={0}
+                total={budgets.length}
                 role={"budgets"}
               />
             </S.MBRDataArea>

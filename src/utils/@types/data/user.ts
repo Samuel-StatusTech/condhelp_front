@@ -1,4 +1,5 @@
 import { TDocument } from "./_user/document"
+import { TUProvider } from "./_user/provider"
 import { TAccess } from "./access"
 import { TAddress } from "./address"
 import { TCondominium } from "./condominium"
@@ -102,67 +103,6 @@ export type TUFranchise = {
 
   region: number
   cities: TRegion["cities"][] | number[]
-}
-
-export type TUProvider = {
-  companyName?: string
-  responsibleName?: string
-  stateRegistration?: string
-  municipalRegistration?: string
-
-  // ---
-  
-  profile: "PRESTADOR"
-  franchise: string
-  name: string
-  address: TAddress
-
-  responsable: string
-  website: string
-  email: string
-  phone1: string
-  phone2: string
-  phone3: string
-
-  // Comercial info
-  socialRole: string
-  document: TDocument["cnpj"]
-  cnpjCard: any
-  category: string
-
-  // Documentation
-  federalCnd: string
-  federalCndStart: string
-  federalCndEnd: string
-  federalCndFree: boolean
-  federalCndDocument: null | File
-
-  stateCnd: string
-  stateCndStart: string
-  stateCndEnd: string
-  stateCndFree: boolean
-  stateCndDocument: null | File
-
-  cityCnd: string
-  cityCndStart: string
-  cityCndEnd: string
-  cityCndFree: boolean
-  cityCndDocument: null | File
-
-  fgtsCnd: string
-  fgtsCndStart: string
-  fgtsCndEnd: string
-  fgtsCndFree: boolean
-  fgtsCndDocument: null | File
-
-  pendencies: {
-    federalCnd: TPendency
-    stateCnd: TPendency
-    cityCnd: TPendency
-    fgts: TPendency
-  }
-
-  openingDate?: any
 }
 
 export type TPendency = "none" | "free" | "has"

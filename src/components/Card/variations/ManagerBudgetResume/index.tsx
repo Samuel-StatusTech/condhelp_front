@@ -67,7 +67,7 @@ const ManagerBudgetResume = ({
   const total = resume.approved + resume.awaiting + resume.rejected
 
   const renderDate = () => {
-    return data.startDate ? getDateStr(data.startDate, "dmy") : "-"
+    return data.endDate ? getDateStr(data.endDate, "dmy") : "-"
   }
 
   const renderDateAlert = () => {
@@ -82,12 +82,16 @@ const ManagerBudgetResume = ({
       const budgetTime = new Date(data.endDate).getTime()
 
       const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
-      const shouldShow = diff <= 3 && diff > -1
+      const shouldShow = diff <= 3
 
       return shouldShow ? (
         <S.AlertArea>
           <span>
-            {diff === 0 ? "O prazo se encerra hoje" : `Restam ${diff} dias`}
+            {diff === 0
+              ? "O prazo se encerra hoje"
+              : diff > 0
+              ? `Restam ${diff} dias`
+              : "Prazo expirado"}
           </span>
           <Icons.Alert />
         </S.AlertArea>

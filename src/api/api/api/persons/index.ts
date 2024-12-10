@@ -4,6 +4,7 @@ import { AxiosError } from "axios"
 import { TApi_Params_Persons as TParams } from "./params"
 import { TApi_Responses_Persons as TResponses } from "./responses"
 import { TAccess } from "../../../../utils/@types/data/access"
+import { parseUserProvider } from "../../../../utils/tb/parsers/api/user/provider"
 
 const baseURL = "/user-accounts"
 
@@ -236,6 +237,10 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
                 let extraInfo = extraDataReq.data
 
                 if (userProfile === "PRESTADOR") {
+                  extraInfo = parseUserProvider({
+                    ...info,
+                    ...extraDataReq.data,
+                  })
                   if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
                     extraInfo.address.cep = extraInfo.address.zipCode
                 }

@@ -1,4 +1,5 @@
-import { TNewUserDefault, TUProvider } from "../../../@types/data/user"
+import { TUProvider } from "../../../@types/data/_user/provider"
+import { TNewUserDefault } from "../../../@types/data/user"
 
 export const providerInitial: TNewUserDefault & TUProvider = {
   id: 0,
@@ -36,6 +37,9 @@ export const providerInitial: TNewUserDefault & TUProvider = {
   },
   cnpjCard: null,
   category: "",
+
+  stateRegistration: "",
+  municipalRegistration: "",
 
   // Documentation
   federalCnd: "",

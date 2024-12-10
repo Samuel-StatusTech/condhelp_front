@@ -1,5 +1,6 @@
 import { getInvalidCheck } from ".."
-import { TNewUserDefault, TUProvider } from "../../../@types/data/user"
+import { TUProvider } from "../../../@types/data/_user/provider"
+import { TNewUserDefault } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
 
 type Params = (TNewUserDefault & TUProvider) | null

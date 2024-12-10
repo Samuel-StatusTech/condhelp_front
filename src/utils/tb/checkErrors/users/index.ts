@@ -17,22 +17,22 @@ export const usersCheck = (data: Params): TErrorsCheck => {
   if (data) {
     switch (data.profile) {
       case "ADMIN":
-        adminCheck(data, (newState: TErrorsCheck) => {
+        adminCheck(data as any, (newState: TErrorsCheck) => {
           state = newState
         })
         break
       case "FILIAL":
-        branchCheck(data, (newState: TErrorsCheck) => {
+        branchCheck(data as any, (newState: TErrorsCheck) => {
           state = newState
         })
         break
       case "FRANQUEADO":
-        franchiseCheck(data, (newState: TErrorsCheck) => {
+        franchiseCheck(data as any, (newState: TErrorsCheck) => {
           state = newState
         })
         break
       case "SINDICO":
-        managerCheck(data, (newState: TErrorsCheck) => {
+        managerCheck(data as any, (newState: TErrorsCheck) => {
           state = newState
         })
         break

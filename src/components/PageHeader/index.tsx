@@ -12,6 +12,7 @@ export type THeaderFrom =
   | "faqs"
   | "faqView"
   | "panelBudget"
+  | "panelProvider"
 
 export type TBreadCrumFrom = THeaderFrom
 

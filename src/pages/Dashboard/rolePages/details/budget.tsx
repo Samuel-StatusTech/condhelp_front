@@ -56,8 +56,14 @@ const BudgetDetails = ({ budget, handleBack }: Props) => {
       try {
         const req = await Api.persons.getSingle({ id: prov.id })
 
-        if (req.ok) setProvider(req.data as TUserTypes["PRESTADOR"])
-        else throw new Error()
+        if (req.ok) {
+          let info = req.data as TUserTypes["PRESTADOR"]
+
+          info.address.state = +info.address.state as any
+          info.address.country = +info.address.country as any
+
+          setProvider(info as TUserTypes["PRESTADOR"])
+        } else throw new Error()
       } catch (error) {
         controllers.feedback.setData({
           state: "alert",
