@@ -44,15 +44,27 @@ const CitiesList = ({ list, setList, unlinkCity }: Props) => {
     )
   }
 
+  const focusCity = (id: number) => {
+    setTimeout(() => {
+      const el = document.getElementById(String(id))
+
+      if (el) {
+        el.focus()
+      }
+    }, 150)
+  }
+
   const handleAddCity = () => {
+    const newId = new Date().getTime()
     const newCity: TRegion["cities"][number] = {
-      // @ts-ignore
-      id: `new-${list.length}`,
+      id: newId,
       name: "",
       isNew: true,
     }
 
     setList([...list, newCity])
+
+    focusCity(newId)
   }
 
   return (
@@ -63,6 +75,7 @@ const CitiesList = ({ list, setList, unlinkCity }: Props) => {
           id={city.id}
           handleDelete={handleDelete}
           onChange={handleCityName}
+          onEnter={handleAddCity}
           value={city.name}
           gridSizes={{ big: 12 }}
           placeholder="Nome da nova cidade"

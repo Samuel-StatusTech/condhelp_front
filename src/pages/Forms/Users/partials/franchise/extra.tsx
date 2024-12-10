@@ -3,7 +3,7 @@ import Button from "../../../../../components/Button"
 import Input from "../../../../../components/Input"
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { TOption } from "../../../../../utils/@types/data/option"
-import { TRegion } from "../../../../../utils/@types/data/region"
+import { TCity, TRegion } from "../../../../../utils/@types/data/region"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import {
@@ -16,7 +16,8 @@ export const extraFranchise = (
   regions: TRegion[],
   options: { [key: string]: TOption[] },
   handleField: (field: string, value: any) => void,
-  formSubmitFields: TBlock["groups"][number]
+  formSubmitFields: TBlock["groups"][number],
+  setIsManagingFranchiseCities: (is: boolean) => void
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -45,7 +46,7 @@ export const extraFranchise = (
               <div style={{ gridColumn: `span 3`, paddingBottom: 2 }}>
                 <Button
                   type="main"
-                  action={() => {}}
+                  action={() => setIsManagingFranchiseCities(true)}
                   text="Editar franquia"
                   icon={<Icons.Edit />}
                   iconLeft={true}
@@ -61,30 +62,42 @@ export const extraFranchise = (
 
             const content = !region
               ? []
-              : region.cities.map(
-                  (city: TRegion["cities"][number], cityKey) => {
-                    return (
-                      <div
-                        key={cityKey}
-                        style={{
-                          padding: 6,
-                          borderRadius: 18,
-                          backgroundColor: "white",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 4,
-                          cursor: "pointer",
-                        }}
-                      >
-                        <span>{city?.name}</span>
-                        <Icons.Close width={16} height={16} />
-                      </div>
-                    ) as JSX.Element
-                  }
-                )
+              : form.cities.map((city: number, cityKey: number) => {
+                  const cityData = region.cities.find(
+                    (c) => c.id === city
+                  ) as TCity
+
+                  return (
+                    <div
+                      key={cityKey}
+                      style={{
+                        padding: 6,
+                        borderRadius: 18,
+                        backgroundColor: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 4,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <span style={{ whiteSpace: "nowrap" }}>
+                        {cityData.name}
+                      </span>
+                      {/* <Icons.Close width={16} height={16} /> */}
+                    </div>
+                  ) as JSX.Element
+                })
 
             return (
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  maxWidth: "100%",
+                  gap: 12,
+                }}
+              >
                 {content}
               </div>
             )

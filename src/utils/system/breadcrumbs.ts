@@ -38,4 +38,9 @@ export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
     { title: "Detalhes da subcategoria" },
   ],
   users: [{ title: "Pessoas", to: "/dashboard/users" }, { title: "Detalhes" }],
+  franchiseCities: [
+    { title: "Pessoas" },
+    { title: "Detalhes do usuário" },
+    { title: "Cidades da Franquia" },
+  ],
 }

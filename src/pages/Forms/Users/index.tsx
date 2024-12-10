@@ -27,6 +27,7 @@ import { FormField } from "../../../utils/@types/components/FormFields"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 import { TCategory } from "../../../utils/@types/data/category"
 import { userSubordinates } from "../../../utils/system/options/profiles"
+import FranchiseCities from "./partials/franchiseCities"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -36,6 +37,8 @@ const FPpeople = () => {
   const { user, controllers } = getStore()
 
   const [loading, setLoading] = useState(false)
+  const [isManagingFranchiseCities, setIsManagingFranchiseCities] =
+    useState(false)
 
   const userAlloweds = useMemo(
     () => userSubordinates[user?.profile as TAccess] ?? [{ key: "" }],
@@ -597,7 +600,8 @@ const FPpeople = () => {
           regions,
           options,
           handleField,
-          formSubmitFields
+          formSubmitFields,
+          setIsManagingFranchiseCities
         )
         break
 
@@ -616,7 +620,16 @@ const FPpeople = () => {
     return content
   }
 
-  return (
+  return form.profile === "FRANQUEADO" && isManagingFranchiseCities ? (
+    <C.Content>
+      <FranchiseCities
+        cities={form.cities}
+        region={regions.find((r) => r.id === form.region) as TRegion}
+        handleBack={() => setIsManagingFranchiseCities(false)}
+        handleList={(list) => handleField("cities", list)}
+      />
+    </C.Content>
+  ) : (
     <C.Content className="falseSubContentWrapper">
       <PageHeader type={"breadcrumb"} from={"users"} forForm={true} />
 

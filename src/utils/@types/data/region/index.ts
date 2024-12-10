@@ -16,7 +16,7 @@ export type TRegion = {
 export type TCity = {
   id: number
   name: string
-  state: TState
+  state?: TState
 
   isNew?: boolean
   isEdit?: boolean
