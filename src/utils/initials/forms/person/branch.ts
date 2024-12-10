@@ -1,7 +1,9 @@
-import { TNewUser, TUBranch } from "../../../@types/data/user"
+import { TUBranch } from "../../../@types/data/_user/branch"
+import { TNewUser } from "../../../@types/data/user"
 
 export const branchInitial: TNewUser & TUBranch = {
   id: 0,
+  subsidiaryId: 0,
   userAccountId: 0,
   addressId: 0,
   userId: 0,
@@ -31,12 +33,7 @@ export const branchInitial: TNewUser & TUBranch = {
     responsibleStatus: "ATIVO",
     responsibleType: "CNPJ",
     stateRegistration: "",
-    fantasyName: ""
+    fantasyName: "",
   },
   responsibleId: 0,
-  
-  budgetIds: [],
-  franqueadoIds: [],
-  providerIds: [],
-  condominiumIds: []
 }

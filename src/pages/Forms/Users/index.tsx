@@ -211,7 +211,7 @@ const FPpeople = () => {
     }
 
     return {
-      profile: personType,
+      profile: form.profile,
       ...baseInfo,
       ...info,
     }
@@ -341,12 +341,7 @@ const FPpeople = () => {
             setForm((fm: any) => ({
               ...fm,
               ...initialRoleInfo,
-              ...(hasInfo
-                ? req.data
-                : {
-                    ...req.data,
-                    profile: "ADMIN",
-                  }),
+              ...req.data,
             }))
           }
         } else {

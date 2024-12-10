@@ -17,8 +17,8 @@ export const categoryTableConfig: TConfig = {
     creator: (item: TCategory) => (
       <ColorTextIndicator
         role="profile"
-        data={item.creator.role}
-        text={item.creator.name}
+        data={item.user.profile}
+        text={item.user.name}
       />
     ),
     actions: (item: TCategory, { callbacks }) => (

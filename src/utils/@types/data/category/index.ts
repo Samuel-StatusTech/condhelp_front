@@ -1,3 +1,4 @@
+import { TAccess } from "../access"
 import { TCreator } from "../creator"
 import { TSubCategory } from "./subcategories"
 
@@ -14,6 +15,10 @@ export type TCategory = {
   name: string
   description: string
   userAccountId: number
-  creator: TCreator
+  user: {
+    id: number
+    profile: TAccess
+    name: string
+  }
   serviceSubcategories: TSubCategory[]
 }

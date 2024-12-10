@@ -1,3 +1,4 @@
+import { TUBranch } from "./_user/branch"
 import { TDocument } from "./_user/document"
 import { TUProvider } from "./_user/provider"
 import { TAccess } from "./access"
@@ -6,7 +7,7 @@ import { TCondominium } from "./condominium"
 import { TExperience } from "./managerExperience"
 import { TRegion } from "./region"
 
-type TUDefault = {
+export type TUDefault = {
   id: number
   userAccountId: number
   userId: number
@@ -54,27 +55,7 @@ export type TUAdmin = {
   document: TDocument["cpf"] | TDocument["cnpj"]
 }
 
-export type TUBranch = {
-  userAccountId: number
-  profile: "FILIAL"
-  name: string
-  address: TAddress
-  addressId: number
-  phone1: string
-  phone2: string
-  email: string
-
-  providerIds: number[]
-  condominiumIds: number[]
-  budgetIds: number[]
-  franqueadoIds: number[]
-
-  // Responsable
-  responsible: TResponsableTypes
-  responsibleId: number
-}
-
-type TResponsableTypes = {
+export type TResponsableTypes = {
   id: number
   responsibleType: "CNPJ" | "CPF"
   companyName: string

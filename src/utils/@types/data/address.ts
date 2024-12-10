@@ -9,8 +9,8 @@ export type TNewAddress = {
 }
 
 export type TAddress = {
-  country: string
-  state: string
+  country: string | number
+  state: string | number
   city: string
   street: string
   number: string

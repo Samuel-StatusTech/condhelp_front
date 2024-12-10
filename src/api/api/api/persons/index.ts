@@ -5,6 +5,7 @@ import { TApi_Params_Persons as TParams } from "./params"
 import { TApi_Responses_Persons as TResponses } from "./responses"
 import { TAccess } from "../../../../utils/@types/data/access"
 import { parseUserProvider } from "../../../../utils/tb/parsers/api/user/provider"
+import { parseUserBranch } from "../../../../utils/tb/parsers/api/user/branch"
 
 const baseURL = "/user-accounts"
 
@@ -138,8 +139,11 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
     try {
       const roleUrl = rolesUrlRelations[person.profile]
 
+      const id =
+        person.profile === "FILIAL" ? person.subsidiaryId : person.userAccountId
+
       await service
-        .put(`${roleUrl}/${person.id}`, person)
+        .put(`${roleUrl}/${id}`, person)
         .then((res) => {
           const info = res.data
 
@@ -243,7 +247,15 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
                   })
                   if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
                     extraInfo.address.cep = extraInfo.address.zipCode
+                } else if (userProfile === "FILIAL") {
+                  extraInfo = parseUserBranch({
+                    ...info,
+                    ...extraDataReq.data,
+                  })
+                  if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
+                    extraInfo.address.cep = extraInfo.address.zipCode
                 }
+
                 resolve({
                   ok: true,
                   data: {

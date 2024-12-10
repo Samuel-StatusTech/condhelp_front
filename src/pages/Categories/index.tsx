@@ -13,14 +13,14 @@ import Divider from "../../components/_minimals/Divider"
 import Table from "../../components/Table"
 import PageHeader from "../../components/PageHeader"
 import SearchBlock from "../../components/SearchBlock"
-import { TUser } from "../../utils/@types/data/user"
+
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../utils/@types/data/option"
 
 const CategoriesPage = () => {
   const navigate = useNavigate()
 
-  const { user, controllers } = getStore()
+  const { controllers } = getStore()
 
   const [loading, setLoading] = useState(true)
 
@@ -57,35 +57,6 @@ const CategoriesPage = () => {
     navigate(`single/${id}`)
   }
 
-  const getCreators = async (creatorsIds: number[]) => {
-    try {
-      let creatorsList: TUser[] = []
-
-      let proms: Promise<any>[] = []
-
-      creatorsIds.forEach((c) => {
-        proms.push(
-          new Promise(async (resolve) => {
-            const req = await Api.persons.getSingle({ id: c })
-
-            if (req.ok) creatorsList.push(req.data)
-
-            resolve(true)
-          })
-        )
-      })
-
-      await Promise.all(proms)
-
-      setOptions((opts) => ({
-        ...opts,
-        creator: parseOptionList(creatorsList, "userId", "name"),
-      }))
-    } catch (error) {
-      // TODO: show error
-    }
-  }
-
   // Start component
 
   const loadData = useCallback(async () => {
@@ -97,9 +68,15 @@ const CategoriesPage = () => {
       if (req.ok) {
         setCategories(req.data.content)
 
-        const creatorsIds = req.data.content.map((c) => c.userAccountId)
+        const creatorsList = req.data.content.map((c) => c.user)
 
-        getCreators(creatorsIds)
+        setOptions((opts) => ({
+          ...opts,
+          creator: [
+            { key: "all", value: "Todos" },
+            ...parseOptionList(creatorsList, "id", "name"),
+          ],
+        }))
       } else {
         controllers.feedback.setData({
           visible: true,
@@ -154,43 +131,33 @@ const CategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.categories}
-        data={categories
-          .filter((i) => {
-            let ok = true
+        data={categories.filter((i) => {
+          let ok = true
 
-            const searchOk = !!search
-              ? [
-                  i.name,
-                  (i.serviceSubcategories ?? []).map((sc) => sc.name),
-                  /*
-                   * Creator filter
-                   */
-                  // i.creator.name,
-                ]
-                  .flat()
-                  .some((val) =>
-                    String(val).toLowerCase().includes(search.toLowerCase())
-                  )
+          const searchOk = !!search
+            ? [
+                i.name,
+                (i.serviceSubcategories ?? []).map((sc) => sc.name),
+                /*
+                 * Creator filter
+                 */
+                // i.creator.name,
+              ]
+                .flat()
+                .some((val) =>
+                  String(val).toLowerCase().includes(search.toLowerCase())
+                )
+            : true
+
+          const creatorOk =
+            !!filters.creator && filters.creator !== "all"
+              ? i.user.id === +filters.creator
               : true
 
-            const creatorOk =
-              !!filters.creator && filters.creator !== "all"
-                ? i.creator.id === filters.creator
-                : true
+          ok = searchOk && creatorOk
 
-            ok = searchOk && creatorOk
-
-            return ok
-          })
-          .map((i) => ({
-            ...i,
-            subcategories: [],
-            creator: {
-              id: user?.id,
-              name: user?.name,
-              role: user?.profile,
-            },
-          }))}
+          return ok
+        })}
         actions={{
           edit: handleEdit,
         }}

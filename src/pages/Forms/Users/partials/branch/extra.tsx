@@ -1,5 +1,6 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
-import { TNewUser, TUBranch } from "../../../../../utils/@types/data/user"
+import { TUBranch } from "../../../../../utils/@types/data/_user/branch"
+import { TNewUser } from "../../../../../utils/@types/data/user"
 import initials from "../../../../../utils/initials"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
