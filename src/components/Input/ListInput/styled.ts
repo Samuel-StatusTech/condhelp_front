@@ -7,7 +7,7 @@ export const Wrapper = styled.div<{ $gridSizes?: FormField["gridSizes"] }>`
   flex: ${({ $gridSizes }) => (!$gridSizes ? 1 : "unset")};
   display: flex;
   min-width: unset;
-  overflow: hidden;
+  position: relative;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     grid-column: span
@@ -85,4 +85,35 @@ export const BtnArea = styled.div`
   gap: 10px;
   cursor: pointer;
   padding: 4px;
+`
+
+export const OptionsArea = styled.div<{ $visible?: boolean }>`
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: calc(100%);
+  background-color: ${({ theme }) => theme.colors.neutral.white};
+  width: 100%;
+  z-index: 2;
+  padding: 6px;
+  box-shadow: ${({ theme }) => theme.shadows.default};
+
+  &.visible {
+    display: flex;
+  }
+`
+
+export const Option = styled.button`
+  border: none;
+  display: flex;
+  transition: background-color 0.3s;
+  background-color: ${({ theme }) => theme.colors.neutral.white};
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: ${({ theme }) => theme.colors.yellow.main};
+  }
 `

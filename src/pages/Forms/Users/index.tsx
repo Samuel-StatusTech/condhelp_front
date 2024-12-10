@@ -490,6 +490,9 @@ const FPpeople = () => {
   }, [controllers.feedback, navigate, params.id])
 
   useEffect(() => {
+    if (user?.profile === "FILIAL")
+      setForm((frm: any) => ({ ...frm, branchId: user?.subsidiaryId }))
+
     if (location.state && location.state.role) {
       const hasForm = initials.forms.person[location.state.role as TAccess]
 
@@ -511,7 +514,7 @@ const FPpeople = () => {
     }))
 
     loadData()
-  }, [loadData, location, user?.profile, userAlloweds])
+  }, [loadData, location, user?.profile, user, userAlloweds])
 
   useEffect(() => {
     controllers.modal.open({

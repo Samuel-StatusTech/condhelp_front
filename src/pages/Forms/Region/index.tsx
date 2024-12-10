@@ -25,6 +25,7 @@ const FPregion = () => {
   const { controllers } = getStore()
 
   const [loading, setLoading] = useState(true)
+  const [citiesOptions, setCitiesOptions] = useState<TCity[]>([])
 
   const [changedCountryState, setChangedCountryState] = useState(false)
   const [form, setForm] = useState<TNewRegion>(initials.forms.region)
@@ -39,6 +40,18 @@ const FPregion = () => {
 
   const handleCancel = () => {
     navigate(-1)
+  }
+
+  const handleCity = async (cityStr: string) => {
+    if (!!cityStr) {
+      const req = await Api.cities.searchByName({ search: cityStr })
+
+      if (req.ok) {
+        const results = req.data.content
+
+        setCitiesOptions(results)
+      }
+    } else setCitiesOptions([])
   }
 
   const handleField = async (field: string, value: any) => {
@@ -94,75 +107,8 @@ const FPregion = () => {
     }
   }
 
-  const citiesTreat = async () => {
-    try {
-      let proms: Promise<any>[] = []
-      let newCitiesList: TCity[] = []
-
-      if (changedCountryState) {
-        form.cities.forEach(async (item) => {
-          if (item.isNew && !!item.name.trim()) {
-            const newCity = {
-              stateId: Number(form.stateId),
-              name: item.name,
-            }
-
-            proms.push(
-              Api.cities.create({ newCity: newCity }).then((res) => {
-                if (res.ok) newCitiesList.push(res.data)
-              })
-            )
-          } else {
-            newCitiesList.push(item)
-
-            proms.push(
-              Api.cities.update({
-                city: {
-                  id: item.id,
-                  stateId: Number(form.stateId),
-                  name: item.name,
-                },
-              })
-            )
-          }
-        })
-      } else {
-        form.cities.forEach((item) => {
-          if (item.isNew && !!item.name.trim()) {
-            const newCity: any = {
-              stateId: Number(form.stateId),
-              name: item.name,
-            }
-
-            proms.push(
-              Api.cities.create({ newCity: newCity }).then((res) => {
-                if (res.ok) newCitiesList.push(res.data)
-              })
-            )
-          } else if (item.isEdit) {
-            newCitiesList.push(item)
-
-            proms.push(
-              Api.cities.update({
-                city: {
-                  id: item.id,
-                  stateId: Number(form.stateId),
-                  name: item.name,
-                },
-              })
-            )
-          } else newCitiesList.push(item)
-        })
-      }
-
-      await Promise.allSettled(proms)
-
-      setForm((reg) => ({ ...reg, cities: newCitiesList }))
-
-      return newCitiesList
-    } catch (error) {
-      return form.cities
-    }
+  const citiesTreat = () => {
+    return form.cities
   }
 
   const handleUpdate = async () => {
@@ -392,14 +338,19 @@ const FPregion = () => {
                     type: "custom",
                     element: (
                       <List.Cities
+                        citiesOptions={citiesOptions}
                         list={form.cities}
                         unlinkCity={unlinkCity}
-                        setList={(list: any[]) =>
+                        handleCity={handleCity}
+                        setList={(list: any[]) => {
                           setForm((regionData) => ({
                             ...regionData,
                             cities: list,
                           }))
-                        }
+                        }}
+                        clearSearch={() => {
+                          setCitiesOptions([])
+                        }}
                       />
                     ),
                   },

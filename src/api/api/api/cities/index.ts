@@ -6,6 +6,48 @@ import { TApi_Responses_Cities as TResponses } from "./responses"
 
 const baseURL = "/cities"
 
+const searchByName: TApi["cities"]["searchByName"] = async ({ search }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${baseURL}/search`, {
+          params: {
+            size: 300,
+            name: search,
+          },
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar as regiões. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar as regiões. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar as regiões. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const listAll: TApi["cities"]["listAll"] = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -190,6 +232,9 @@ const getSingle: TApi["cities"]["getSingle"] = async ({ id }) => {
 }
 
 export type TApi_Cities = {
+  searchByName: (
+    p: TParams["cities"]["searchByName"]
+  ) => TResponses["cities"]["searchByName"]
   listAll: (p: TParams["cities"]["listAll"]) => TResponses["cities"]["listAll"]
   create: (p: TParams["cities"]["create"]) => TResponses["cities"]["create"]
   getSingle: (
@@ -200,6 +245,7 @@ export type TApi_Cities = {
 }
 
 export const apiCities: TApi["cities"] = {
+  searchByName: searchByName,
   listAll: listAll,
   create: create,
   getSingle: getSingle,

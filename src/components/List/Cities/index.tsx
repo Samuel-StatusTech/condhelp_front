@@ -1,20 +1,31 @@
 import * as S from "./styled"
 
 import { Icons } from "../../../assets/icons/icons"
-import { TRegion } from "../../../utils/@types/data/region"
+import { TCity, TRegion } from "../../../utils/@types/data/region"
 
 import Button from "../../Button"
 import Input from "../../Input"
 
 import { getStore } from "../../../store"
+import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 type Props = {
   list: TRegion["cities"][number][]
   unlinkCity: (cityId: number) => boolean
   setList: (list: TRegion["cities"]) => void
+  handleCity: (cityName: string) => Promise<void>
+  citiesOptions: TCity[]
+  clearSearch: () => void
 }
 
-const CitiesList = ({ list, setList, unlinkCity }: Props) => {
+const CitiesList = ({
+  list,
+  setList,
+  unlinkCity,
+  handleCity,
+  citiesOptions,
+  clearSearch,
+}: Props) => {
   const { controllers } = getStore()
 
   const handleDelete = (id: number) => {
@@ -42,6 +53,24 @@ const CitiesList = ({ list, setList, unlinkCity }: Props) => {
         i.id !== id ? i : { ...i, name: value, isEdit: !i.isNew }
       )
     )
+
+    handleCity(value)
+  }
+
+  const handleCitySelect = (id: any, cityId: number) => {
+    const city = citiesOptions.find((c) => c.id === cityId) as TCity
+
+    handleCity("")
+
+    const newList = list.map((i) => (i.id !== id ? i : city))
+
+    console.log(newList)
+
+    setList(newList)
+
+    clearSearch()
+
+    return city
   }
 
   const focusCity = (id: number) => {
@@ -55,6 +84,8 @@ const CitiesList = ({ list, setList, unlinkCity }: Props) => {
   }
 
   const handleAddCity = () => {
+    clearSearch()
+
     const newId = new Date().getTime()
     const newCity: TRegion["cities"][number] = {
       id: newId,
@@ -79,6 +110,9 @@ const CitiesList = ({ list, setList, unlinkCity }: Props) => {
           value={city.name}
           gridSizes={{ big: 12 }}
           placeholder="Nome da nova cidade"
+          autoSugest={true}
+          options={parseOptionList(citiesOptions, "id", "name")}
+          onSelectOption={handleCitySelect}
         />
       ))}
 
