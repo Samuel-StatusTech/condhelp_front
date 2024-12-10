@@ -6,7 +6,10 @@ import { TApi_Responses_Cities as TResponses } from "./responses"
 
 const baseURL = "/cities"
 
-const searchByName: TApi["cities"]["searchByName"] = async ({ search }) => {
+const searchByName: TApi["cities"]["searchByName"] = async ({
+  search,
+  stateId,
+}) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -14,6 +17,7 @@ const searchByName: TApi["cities"]["searchByName"] = async ({ search }) => {
           params: {
             size: 300,
             name: search,
+            state: stateId ?? undefined,
           },
         })
         .then((res) => {

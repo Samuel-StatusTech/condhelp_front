@@ -39,11 +39,8 @@ export const parseUserBranch = (
       responsibleId: backUser.responsible.id,
     }
 
-    console.log("User parsed: ", user)
-
     return user
   } catch (error) {
-    console.log(error)
     return null as any
   }
 }

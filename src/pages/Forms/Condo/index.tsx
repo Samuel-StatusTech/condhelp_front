@@ -23,6 +23,7 @@ import { Api } from "../../../api"
 import { TUserTypes } from "../../../utils/@types/data/user"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TState } from "../../../utils/@types/data/region"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -37,6 +38,9 @@ const FPcondo = () => {
   const [form, setForm] = useState<TNewCondominium | TCondominium>(
     initials.forms.condo
   )
+
+  const [states, setStates] = useState<TState[]>([])
+
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     managers: [],
     state: systemOptions.states,
@@ -204,10 +208,27 @@ const FPcondo = () => {
     }
   }, [params.id])
 
+  const handleSelectCity = (cityId: number) => {
+    setForm((frm) => ({
+      ...frm,
+      cityId: cityId,
+    }))
+  }
+
   const loadData = useCallback(async () => {
     setLoading(true)
 
     try {
+      const statesReq = await Api.states.listAll({ size: 1000 })
+
+      if (statesReq.ok) {
+        setStates(statesReq.data.content)
+        setOptions((opts) => ({
+          ...opts,
+          state: parseOptionList(statesReq.data.content, "initials", "name"),
+        }))
+      }
+
       if (user?.profile === "SINDICO") {
         setForm((frm) => ({ ...frm, managerId: user?.userId, manager: user }))
         loadEditInfo()
@@ -365,12 +386,16 @@ const FPcondo = () => {
                           gridSizes: { big: 5, small: 12 },
                         },
                         {
-                          type: "input",
+                          type: "cityInput",
                           label: "Cidade",
                           field: "city",
                           placeholder: "Digite aqui",
                           value: form.city,
                           gridSizes: { big: 5, small: 6 },
+                          stateId: states.find(
+                            (s) => s.initials === form.federateUnit
+                          )?.id,
+                          onSelectCity: handleSelectCity,
                         },
                         {
                           type: "select",

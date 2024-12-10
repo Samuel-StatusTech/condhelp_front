@@ -64,8 +64,6 @@ const CitiesList = ({
 
     const newList = list.map((i) => (i.id !== id ? i : city))
 
-    console.log(newList)
-
     setList(newList)
 
     clearSearch()

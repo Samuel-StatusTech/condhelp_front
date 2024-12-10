@@ -7,7 +7,8 @@ import { TInputMultiple } from "../../../components/Input/multiple"
 import { TInputPoint } from "../../../components/Input/points"
 import { TInputRadio } from "../../../components/Input/radio"
 import { TReadonlyField } from "../../../components/Input/readonly"
-import { TInputSelect } from "../../../components/Input/select"
+import { TInputSelect as TSelect } from "../../../components/Input/select"
+import { TCityInput } from "../../../components/Input/cityInput"
 import { TInputTextArea } from "../../../components/Input/textarea"
 import { TInputToggler } from "../../../components/Input/toggler"
 
@@ -21,7 +22,8 @@ type IPoints = { type: "points" } & TInputPoint
 type IProfile = { type: "profile" } & TInputImage
 type IRadio = { type: "radio" } & TInputRadio
 type IReadonly = { type: "readonly" } & TReadonlyField
-type ISelect = { type: "select"; multiple?: boolean } & TInputSelect
+type ICityInput = { type: "cityInput" } & TCityInput
+type ISelect = { type: "select"; multiple?: boolean } & TSelect
 type ITextArea = { type: "textarea" } & TInputTextArea
 type IToggler = { type: "toggler" } & TInputToggler
 
@@ -36,6 +38,7 @@ export type FormField = (
   | IPoints
   | IRadio
   | IReadonly
+  | ICityInput
   | ISelect
   | ITextArea
   | IToggler

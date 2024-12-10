@@ -44,7 +44,10 @@ const FPregion = () => {
 
   const handleCity = async (cityStr: string) => {
     if (!!cityStr) {
-      const req = await Api.cities.searchByName({ search: cityStr })
+      const req = await Api.cities.searchByName({
+        search: cityStr,
+        stateId: form.stateId,
+      })
 
       if (req.ok) {
         const results = req.data.content

@@ -10,6 +10,7 @@ import Points from "./points"
 import Profile from "./profile"
 import Radio from "./radio"
 import SearchSelect from "./searchSelect"
+import CityInput from "./cityInput"
 import Select from "./select"
 import TextArea from "./textarea"
 import Toggler from "./toggler"
@@ -27,6 +28,7 @@ const Input = {
   Profile,
   Radio,
   ReadonlyField,
+  CityInput,
   Select,
   CondoSelect,
   SearchSelect,

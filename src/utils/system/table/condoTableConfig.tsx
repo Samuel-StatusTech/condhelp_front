@@ -7,7 +7,7 @@ export const condoTableConfig: TConfig = {
   columns: [
     { title: "Nome", field: "name" },
     { title: "Sìndico", field: "manager" },
-    { title: "City", field: "city" },
+    { title: "Cidade", field: "city" },
     { title: "Estado", field: "federateUnit" },
     { title: "", field: "actions", align: "right" },
   ],

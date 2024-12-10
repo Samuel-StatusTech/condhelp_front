@@ -4,20 +4,20 @@ import { Icons } from "../../../assets/icons/icons"
 import { TOption } from "../../../utils/@types/data/option"
 import { useState } from "react"
 
-export type TInputDefault = {
+export type TInputSelect = {
   id: number
   label?: string
   placeholder?: string
   value: string
-}
-
-type Props = TInputDefault & {
   autoSugest?: boolean
   options?: TOption[]
+  onEnter?: () => void
   onSelectOption?: (id: any, params: any) => any
+}
+
+type Props = TInputSelect & {
   onChange: (id: number, v: string) => void
   handleDelete: (id: number) => void
-  onEnter?: () => void
   gridSizes?: FormField["gridSizes"]
 }
 

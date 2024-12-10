@@ -8,6 +8,7 @@ export const Wrapper = styled.div<{
   grid-column: span ${({ $gridSizes }) => $gridSizes?.big ?? "unset"};
   display: flex;
   align-self: ${({ $alignBottom }) => ($alignBottom ? "flex-end" : "unset")};
+  position: relative;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     grid-column: span ${({ $gridSizes }) => $gridSizes?.small ?? "unset"};
