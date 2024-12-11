@@ -37,6 +37,7 @@ export const extraProvider = (
                 label: "Data de abertura da empresa",
                 value: form.document.date,
                 gridSizes: { big: 6, small: 12 },
+                maxDate: new Date(),
               },
             ],
             {

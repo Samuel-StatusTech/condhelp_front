@@ -85,8 +85,6 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
   }
 
   const handleField = (field: string, value: boolean | string) => {
-    console.log(field, value)
-
     if (field === "serviceCategoryId") {
       setForm((f) => ({
         ...f,
@@ -260,6 +258,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           value={form.startDate}
           gridSizes={{ big: 6 }}
           label="Data de Início"
+          minDate={new Date()}
         />
 
         <Input.Date
@@ -268,6 +267,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           value={form.finishDate}
           gridSizes={{ big: 6 }}
           label="Data fim"
+          minDate={new Date(form.startDate)}
         />
 
         <Input.File

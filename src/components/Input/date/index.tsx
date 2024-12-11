@@ -11,6 +11,8 @@ export type TInputDate = {
   field: string | number
   value: string | Date | null
   disabled?: boolean
+  minDate?: Date | string | number
+  maxDate?: Date | string | number
 }
 
 type Props = TInputDate & {
@@ -25,6 +27,8 @@ const InputDate = ({
   field,
   disabled,
   onChange,
+  minDate,
+  maxDate,
 }: Props) => {
   const pickerRef = useRef<any>(null)
 
@@ -61,6 +65,8 @@ const InputDate = ({
             label="Data de expiração"
             value={dayjs(value)}
             onChange={handlePickDate}
+            minDate={minDate ? dayjs(new Date(minDate)) : undefined}
+            maxDate={maxDate ? dayjs(new Date(maxDate)) : undefined}
           />
         </S.DatePickerWrapper>
 

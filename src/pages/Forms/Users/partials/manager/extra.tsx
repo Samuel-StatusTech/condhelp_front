@@ -4,6 +4,7 @@ import { TUManager } from "../../../../../utils/@types/data/user"
 import { systemOptions } from "../../../../../utils/system/options"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
+import { getMajorityDate } from "../../../../../utils/tb/helpers/getMajorityDate"
 
 export const extraManager = (
   form: TUManager,
@@ -62,6 +63,7 @@ export const extraManager = (
                 label: "Data de nascimento",
                 value: new Date(form.birthDate),
                 gridSizes: { big: 3, small: 12 },
+                maxDate: getMajorityDate(),
               },
             ],
           ],

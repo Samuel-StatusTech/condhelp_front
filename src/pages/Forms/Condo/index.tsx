@@ -447,6 +447,7 @@ const FPcondo = () => {
                           field: "managerSince",
                           value: new Date(form.manager.managerSince),
                           gridSizes: { big: 3, small: 6 },
+                          maxDate: new Date(),
                         },
                       ],
                     ],

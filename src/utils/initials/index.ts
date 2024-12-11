@@ -9,7 +9,6 @@ import { faqForm } from "./forms/faq"
 
 // Modal
 
-import { goalFill } from "./modals/goalFill"
 import { goalApprove } from "./modals/goalApprove"
 import { goalPoints } from "./modals/goalPoints"
 import { newBudget } from "./modals/newBudget"
@@ -26,7 +25,6 @@ const initials = {
     faq: faqForm,
   },
   modals: {
-    goalFill: goalFill,
     goalApprove: goalApprove,
     goalPoints: goalPoints,
     newBudget: newBudget,

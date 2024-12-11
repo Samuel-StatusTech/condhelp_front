@@ -1,5 +1,6 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
+import { getMajorityDate } from "../../../../../utils/tb/helpers/getMajorityDate"
 
 export const extraAdmin = (
   form: any,
@@ -35,6 +36,7 @@ export const extraAdmin = (
                 label: "Data de nascimento",
                 value: form.document.date,
                 gridSizes: { big: 3, small: 12 },
+                maxDate: getMajorityDate(),
               },
             ],
           ],
