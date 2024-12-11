@@ -106,7 +106,7 @@ const DashboardManager = () => {
       // Budgets
       const budgetsReq = await Api.budgets.listAll({
         size: 300,
-        managerId: user?.id,
+        // managerId: user?.id,
         condominiumId: Number.isNaN(specificCondo) ? +specificCondo : undefined,
       })
 

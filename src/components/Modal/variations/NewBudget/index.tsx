@@ -15,7 +15,7 @@ import { getStore } from "../../../../store"
 import { TCategory } from "../../../../utils/@types/data/category"
 import { Api } from "../../../../api"
 import { TCondominium } from "../../../../utils/@types/data/condominium"
-import { TSubCategory } from "../../../../utils/@types/data/category/subcategories"
+
 import { checkErrors } from "../../../../utils/tb/checkErrors"
 import { TDefaultRes } from "../../../../api/types/responses"
 
@@ -85,7 +85,17 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
   }
 
   const handleField = (field: string, value: boolean | string) => {
-    setForm((f) => ({ ...f, [field]: value }))
+    console.log(field, value)
+
+    if (field === "serviceCategoryId") {
+      setForm((f) => ({
+        ...f,
+        serviceSubcategoryId: "0" as any,
+        [field]: value as any,
+      }))
+    } else {
+      setForm((f) => ({ ...f, [field]: value }))
+    }
   }
 
   useEffect(() => {
@@ -94,13 +104,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
         (c) => c.id === Number(form.serviceCategoryId)
       ) as TCategory
 
-      const firstSubcategory = categoryData.serviceSubcategories[0]
-
-      if (firstSubcategory)
-        setForm((frm) => ({
-          ...frm,
-          serviceSubcategoryId: firstSubcategory.id,
-        }))
+      setForm((f) => ({ ...f, serviceSubcategoryId: 0 }))
 
       setOptions((opts: any) => ({
         ...opts,
@@ -155,14 +159,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       setCategories(categoriesList)
       setCondos(condosList)
 
-      let firstCategorySubcategories: TSubCategory[] =
-        categoriesList.length > 0 ? categoriesList[0].serviceSubcategories : []
-
       setOptions((opts: any) => ({
         ...opts,
         condo: parseOptionList(condosList, "id", "name"),
         category: parseOptionList(categoriesList, "id", "name"),
-        subcategory: parseOptionList(firstCategorySubcategories, "id", "name"),
       }))
     } catch (error) {
       controllers.feedback.setData({
