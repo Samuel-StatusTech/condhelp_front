@@ -27,11 +27,7 @@ export const parseUserProvider = (
       },
 
       profile: "PRESTADOR",
-      franchise: String(
-        backProvider.subsidiaries.length === 0
-          ? null
-          : backProvider.subsidiaries[0].franqueados[0].id
-      ),
+      franqId: backProvider.franqId,
       name: backProvider.name,
 
       responsable: backProvider.responsibleName,

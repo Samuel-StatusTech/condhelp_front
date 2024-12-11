@@ -26,6 +26,7 @@ const FPregion = () => {
 
   const [loading, setLoading] = useState(true)
   const [citiesOptions, setCitiesOptions] = useState<TCity[]>([])
+  // const [pickedCity, setPickedCity] = useState<TCity | null>(null)
 
   const [changedCountryState, setChangedCountryState] = useState(false)
   const [form, setForm] = useState<TNewRegion>(initials.forms.region)
@@ -184,8 +185,16 @@ const FPregion = () => {
 
   const handleSave = async () => {
     try {
+      // if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
       if (params.id) handleUpdate()
       else handleCreate()
+      // } else {
+      //   controllers.feedback.setData({
+      //     state: "alert",
+      //     message: "Selecione uma cidade válida",
+      //     visible: true,
+      //   })
+      // }
     } catch (error) {
       // ...
     }

@@ -5,7 +5,6 @@ import initials from "../../../utils/initials"
 import Form from "../../../components/Form"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
-import { systemOptions } from "../../../utils/system/options"
 
 import { TBlock } from "../../../utils/@types/components/Form"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
@@ -21,7 +20,7 @@ import {
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
-import { TRegion } from "../../../utils/@types/data/region"
+import { TCity, TRegion, TState } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
@@ -36,6 +35,8 @@ const FPpeople = () => {
 
   const { user, controllers } = getStore()
 
+  const [states, setStates] = useState<TState[]>([])
+
   const [loading, setLoading] = useState(false)
   const [isManagingFranchiseCities, setIsManagingFranchiseCities] =
     useState(false)
@@ -44,6 +45,8 @@ const FPpeople = () => {
     () => userSubordinates[user?.profile as TAccess] ?? [{ key: "" }],
     [user?.profile]
   )
+
+  const [, setPickedCity] = useState<TCity | null>(null)
 
   const [personType, setPersonType] = useState<TAccess>(
     userAlloweds[0].key as TAccess
@@ -326,6 +329,28 @@ const FPpeople = () => {
     }
   }
 
+  const handleSelectCity = (city: TCity) => {
+    setPickedCity(city)
+
+    setForm((frm: any) => ({
+      ...frm,
+      cityId: city.id,
+    }))
+  }
+
+  useEffect(() => {
+    if (form && form.address && form.address.country) {
+      const availableStates = states.filter(
+        (s) => Number(s.country.id) === Number(form.address.country)
+      )
+
+      setOptions((opt) => ({
+        ...opt,
+        state: parseOptionList(availableStates, "id", "name"),
+      }))
+    }
+  }, [form, states])
+
   const loadData = useCallback(async () => {
     setLoading(true)
 
@@ -428,10 +453,9 @@ const FPpeople = () => {
       proms.push(
         Api.states.listAll({}).then((res) => {
           if (res.ok) {
-            setOptions((opts) => ({
-              ...opts,
-              state: parseOptionList(res.data.content, "id", "name"),
-            }))
+            const results = res.data.content
+
+            setStates(results)
           } else {
             controllers.feedback.setData({
               message:
@@ -510,7 +534,6 @@ const FPpeople = () => {
       ...opts,
       profile: userAlloweds,
       country: [{ key: "br", value: "Brasil" }],
-      state: systemOptions.states,
     }))
 
     loadData()
@@ -552,7 +575,12 @@ const FPpeople = () => {
         break
 
       case "FILIAL":
-        content = formPartials.branch.basic({ form, options })
+        content = formPartials.branch.basic({
+          form,
+          options,
+          states,
+          handleSelectCity,
+        })
         break
 
       case "FRANQUEADO":
@@ -560,6 +588,7 @@ const FPpeople = () => {
           form,
           options,
           userProfile: user?.profile as any,
+          handleSelectCity,
         })
         break
 
@@ -575,6 +604,7 @@ const FPpeople = () => {
           franchises: franchises,
           personType: user?.profile as TAccess,
           franchiseName: user?.name,
+          handleSelectCity,
         })
         break
 

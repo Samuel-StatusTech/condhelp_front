@@ -17,10 +17,9 @@ export const adminCheck = (
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
     if (!data.surname?.trim()) state = getInvalidCheck(state, "surname")
     if (!data.email?.trim()) state = getInvalidCheck(state, "email")
-    if (!data.document.register?.trim())
+    if (data.document.register?.replace(/\D/g, "").length < 11)
       state = getInvalidCheck(state, "document.register")
-    if (!data.document.date)
-      state = getInvalidCheck(state, "document.date")
+    if (!data.document.date) state = getInvalidCheck(state, "document.date")
   }
 
   changeState(state)

@@ -3,7 +3,7 @@ import { TDocument } from "./document"
 
 export type TUProvider = {
   profile: "PRESTADOR"
-  franchise: string
+  franqId: number
   name: string
   address: TAddress
 
@@ -83,7 +83,7 @@ export type T_Back_Provider = {
   responsibleName: string
   status: string
   budget: any
-  subsidiaries: T_Back_ProviderSubsidiary[]
+  franqId: number
   serviceCategories: {
     id: number
     name: string
@@ -136,86 +136,3 @@ export type T_Back_Provider = {
 }
 
 export type TPendency = "none" | "free" | "has"
-
-type T_Back_ProviderSubsidiary = {
-  id: number
-  name: string
-  phone1: string
-  phone2: string
-  active: true
-  providers: string[]
-  condominiums: [
-    {
-      id: number
-      name: string
-      unities: number
-      cnpj: string
-      photoPath: string
-      minutesElectionPath: string
-      address: string
-      addressNumber: number
-      zipCode: string
-      neighborhood: string
-      city: string
-      federateUnit: string
-      manager: {
-        id: number
-        userId: number
-        photo: string
-        name: string
-        email: string
-        profile: string
-        status: string
-        birthDate: string
-        surname: string
-        phone1: string
-        phone2: string
-        documentType: string
-        documentNumber: string
-        managerSince: number
-        condominiums: string[]
-      }
-      electionDate: string
-    }
-  ]
-  budgets: string[]
-  franqueados: {
-    id: number
-    nome: string
-    contato: string
-    userAccountId: number
-    subsidiary: string
-  }[]
-  address: {
-    id: number
-    street: string
-    number: number
-    complement: string
-    zipCode: string
-    city: string
-    state: string
-    country: string
-  }
-  responsible: {
-    id: number
-    responsibleType: string
-    companyName: string
-    fantasyName: string
-    cnpj: string
-    stateRegistration: string
-    municipalRegistration: string
-    personName: string
-    cpf: string
-    responsibleStatus: string
-  }
-  userAccount: {
-    id: number
-    userId: number
-    photo: string
-    name: string
-    email: string
-    profile: string
-    status: string
-    birthDate: string
-  }
-}

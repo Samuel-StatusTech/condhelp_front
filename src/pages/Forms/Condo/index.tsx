@@ -23,7 +23,7 @@ import { Api } from "../../../api"
 import { TUserTypes } from "../../../utils/@types/data/user"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { FormField } from "../../../utils/@types/components/FormFields"
-import { TState } from "../../../utils/@types/data/region"
+import { TCity, TState } from "../../../utils/@types/data/region"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -38,6 +38,8 @@ const FPcondo = () => {
   const [form, setForm] = useState<TNewCondominium | TCondominium>(
     initials.forms.condo
   )
+
+  const [pickedCity, setPickedCity] = useState<TCity | null>(null)
 
   const [states, setStates] = useState<TState[]>([])
 
@@ -141,8 +143,16 @@ const FPcondo = () => {
   }
 
   const handleSave = async () => {
-    if (params.id) handleUpdate()
-    else handleCreate()
+    if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
+      if (params.id) handleUpdate()
+      else handleCreate()
+    } else {
+      controllers.feedback.setData({
+        state: "alert",
+        message: "Selecione uma cidade válida",
+        visible: true,
+      })
+    }
   }
 
   const handleDelete = async () => {
@@ -208,10 +218,12 @@ const FPcondo = () => {
     }
   }, [params.id])
 
-  const handleSelectCity = (cityId: number) => {
+  const handleSelectCity = (city: TCity) => {
+    setPickedCity(city)
+
     setForm((frm) => ({
       ...frm,
-      cityId: cityId,
+      cityId: city.id,
     }))
   }
 

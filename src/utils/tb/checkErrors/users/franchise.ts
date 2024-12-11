@@ -16,7 +16,8 @@ export const franchiseCheck = (
   if (data) {
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
     if (!data.email?.trim()) state = getInvalidCheck(state, "email")
-    if (!data.phone1?.trim()) state = getInvalidCheck(state, "phone1")
+    if (data.phone1?.replace(/\D/g, "").length < 11)
+      state = getInvalidCheck(state, "phone1")
     if (!data.branchId) state = getInvalidCheck(state, "branchId")
     if (!data.region) state = getInvalidCheck(state, "region")
 

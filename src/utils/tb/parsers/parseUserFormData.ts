@@ -122,6 +122,7 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
     userAccountId: user.userId,
     name: user.name,
     contact: "-",
+    franqId: user.franqId,
     // status: user.status,
     status: "AGUARDANDO",
     email: user.email,
@@ -188,7 +189,6 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
       state: user.address.state,
       country: user.address.country,
     },
-    subsidiaryIds: null,
     serviceCategoryIds: [user.category],
   }
 

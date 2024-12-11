@@ -73,7 +73,10 @@ const DashboardProvider = () => {
     try {
       // Budgets
 
-      const budgetsReq = await Api.budgets.listAll({ size: 300 })
+      const budgetsReq = await Api.budgets.listAll({
+        size: 300,
+        providerId: user?.userAccountId,
+      })
 
       if (budgetsReq.ok) {
         let resume = {

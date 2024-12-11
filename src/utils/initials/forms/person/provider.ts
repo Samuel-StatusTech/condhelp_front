@@ -9,7 +9,7 @@ export const providerInitial: TNewUserDefault & TUProvider = {
   status: "ATIVO",
   photo: null,
 
-  franchise: "",
+  franqId: 0,
 
   address: {
     street: "",

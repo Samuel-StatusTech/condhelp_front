@@ -17,11 +17,12 @@ export const providerCheck = (
   if (data) {
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
     if (!data.email?.trim()) state = getInvalidCheck(state, "email")
-    if (!data.phone1?.trim()) state = getInvalidCheck(state, "phone1")
-    if (!data.franchise) state = getInvalidCheck(state, "franchise")
+    if (data.phone1?.replace(/\D/g, "").length < 11)
+      state = getInvalidCheck(state, "phone1")
+    if (!data.franqId) state = getInvalidCheck(state, "franchise")
     if (!data.responsable?.trim()) state = getInvalidCheck(state, "responsable")
     if (!data.website?.trim()) state = getInvalidCheck(state, "website")
-    if (data.document.register?.replace(/\D/g, "").length < 8)
+    if (data.document.register?.replace(/\D/g, "").length < 14)
       state = getInvalidCheck(state, "document.register")
     if (!data.document.date) state = getInvalidCheck(state, "document.date")
     if (

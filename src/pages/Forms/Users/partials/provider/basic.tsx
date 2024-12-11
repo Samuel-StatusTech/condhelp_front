@@ -2,6 +2,7 @@ import { TBlock, TForm } from "../../../../../utils/@types/components/Form"
 import { FormField } from "../../../../../utils/@types/components/FormFields"
 import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
+import { TCity } from "../../../../../utils/@types/data/region"
 import { TUser } from "../../../../../utils/@types/data/user"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
@@ -15,6 +16,7 @@ type Props = {
   franchises?: TUser[]
   personType: TAccess
   franchiseName?: string
+  handleSelectCity: (city: TCity) => void
 }
 
 export const basicProvider = ({
@@ -22,6 +24,7 @@ export const basicProvider = ({
   options,
   personType,
   franchiseName,
+  handleSelectCity,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -32,7 +35,7 @@ export const basicProvider = ({
               {
                 type: "readonly",
                 label: "Franquia",
-                field: "franchise",
+                field: "franqId",
                 value: `${franchiseName} (Você)`,
                 gridSizes: { big: 12 },
               } as FormField,
@@ -42,8 +45,8 @@ export const basicProvider = ({
                 type: "select",
                 label: "Franquia",
                 placeholder: "Selecione a franquia",
-                field: "franchise",
-                value: form.franchise ?? "",
+                field: "franqId",
+                value: form.franqId ?? "",
                 options: options.franchise,
                 gridSizes: { big: 12 },
                 elevation: 10,
@@ -99,12 +102,14 @@ export const basicProvider = ({
             gridSizes: { big: 3, small: 6 },
           },
           {
-            type: "input",
+            type: "cityInput",
+            label: "Cidade",
             field: "city",
-            label: "Nome da cidade",
-            value: form.address?.city ?? "",
             placeholder: "Digite aqui",
+            value: form.address.city,
             gridSizes: { big: 6, small: 12 },
+            stateId: form.address.state,
+            onSelectCity: handleSelectCity,
           },
         ],
         [

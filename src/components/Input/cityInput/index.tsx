@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Api } from "../../../api"
 
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
+import { TCity } from "../../../utils/@types/data/region"
 
 export type TCityInput = {
   stateId?: string | number | null
@@ -30,6 +31,7 @@ const CityInput = (props: Props) => {
 
   const [canSelect, setCanSelect] = useState(false)
 
+  const [cities, setCities] = useState<TCity[]>([])
   const [citiesOptions, setCitiesOptions] = useState<TOption[]>([])
 
   const clearSearch = () => {
@@ -41,21 +43,23 @@ const CityInput = (props: Props) => {
       if (!!cityStr) {
         const req = await Api.cities.searchByName({
           search: cityStr,
-          stateId: props.stateId,
+          stateId: stateId,
         })
 
         if (req.ok) {
           const results = req.data.content
+
+          setCities(results)
           setCitiesOptions(parseOptionList(results, "id", "name"))
         }
       } else setCitiesOptions([])
     },
-    [props.stateId]
+    [stateId]
   )
 
   useEffect(() => {
     if (!!value && canSelect) handleCity(value)
-  }, [handleCity, value, canSelect])
+  }, [handleCity, value, canSelect, stateId])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!canSelect) setCanSelect(true)
@@ -65,7 +69,8 @@ const CityInput = (props: Props) => {
   }
 
   const handleCityPick = (city: TOption) => {
-    if (onSelectCity) onSelectCity(city.key)
+    const cityData = cities.find((c) => c.id === +city.key)
+    if (onSelectCity) onSelectCity(cityData)
 
     if (canSelect) setCanSelect(false)
 

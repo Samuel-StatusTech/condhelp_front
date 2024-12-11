@@ -9,13 +9,16 @@ const baseURL = "/budgets"
 const listAll: TApi["budgets"]["listAll"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const url = !!filters.providerId
+        ? `${baseURL}/provider/${filters.providerId}`
+        : baseURL
+
       await service
-        .get(`${baseURL}`, {
+        .get(`${url}`, {
           params: {
             userId: filters.managerId,
             condominiumId: filters.condominiumId,
             subsidiaryId: filters.branchId,
-            providerId: filters.providerId,
             page: filters.page,
             size: filters.size,
             sort: filters.sort,

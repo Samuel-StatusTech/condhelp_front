@@ -1,6 +1,7 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
+import { TCity } from "../../../../../utils/@types/data/region"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
@@ -8,12 +9,14 @@ type Props = {
   userProfile: TAccess
   form: any
   options: { [key: string]: TOption[] }
+  handleSelectCity: (city: TCity) => void
 }
 
 export const basicFranchise = ({
   userProfile,
   form,
   options,
+  handleSelectCity
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -81,12 +84,14 @@ export const basicFranchise = ({
             gridSizes: { big: 3, small: 6 },
           },
           {
-            type: "input",
+            type: "cityInput",
+            label: "Cidade",
             field: "city",
-            label: "Nome da cidade",
-            value: form.address?.city ?? "",
             placeholder: "Digite aqui",
+            value: form.address.city,
             gridSizes: { big: 6, small: 12 },
+            stateId: form.address.state,
+            onSelectCity: handleSelectCity,
           },
         ],
         [
