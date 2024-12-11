@@ -65,7 +65,7 @@ export const Element = styled.button<{
         theme.animations.delays.main($k)
       : ""}
 
-  &:hover span {
+  &:not(:disabled):hover span {
     text-decoration: ${({ $type }) =>
       $type === "quaternary" ? "underline" : "unset"};
   }
@@ -73,9 +73,15 @@ export const Element = styled.button<{
   transition: background-color 0.3s;
 
   &:disabled {
-    background-color: ${({ $fromSidebar, theme }) =>
-      !$fromSidebar ? theme.colors.neutral.medium : theme.colors.neutral.soft};
+    background-color: ${({ $fromSidebar, $type, theme }) =>
+      $fromSidebar
+        ? theme.colors.neutral.medium
+        : $type === "quaternary"
+        ? "transparent"
+        : theme.colors.neutral.soft};
     cursor: unset;
+
+    opacity: ${({ $type }) => ($type === "quaternary" ? 0.5 : 1)};
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {

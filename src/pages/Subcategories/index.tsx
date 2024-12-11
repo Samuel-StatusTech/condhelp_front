@@ -35,11 +35,7 @@ const SubcategoriesPage = () => {
   })
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     category: [],
-    creator: [
-      { key: "1", value: "Fulano Silva" },
-      { key: "2", value: "Ambrosio Vasconcelos" },
-      { key: "3", value: "Marta Pereira" },
-    ],
+    creator: [],
   })
 
   const handleFilters = (filter: Partial<TFilter>) => {
@@ -65,20 +61,25 @@ const SubcategoriesPage = () => {
 
   const loadData = useCallback(async () => {
     setLoading(true)
-    
+
     try {
       const catReq = await Api.categories.listAll({ size: 300 })
 
       if (catReq.ok) {
-        setOptions((opts) => ({
-          ...opts,
-          category: parseOptionList(catReq.data.content, "id", "name"),
-        }))
       }
 
       const req = await Api.subcategories.listAll({})
 
       if (req.ok) {
+        setOptions((opts) => ({
+          ...opts,
+          category: parseOptionList(
+            req.data.content.map((sc) => sc.category),
+            "id",
+            "name"
+          ),
+        }))
+
         setSubcategories(req.data.content)
       } else {
         controllers.feedback.setData({
@@ -90,7 +91,6 @@ const SubcategoriesPage = () => {
 
       setLoading(false)
     } catch (error) {
-
       setLoading(false)
     }
   }, [controllers.feedback])

@@ -275,6 +275,7 @@ const FPcategory = () => {
                         handleCancel={handleCancel}
                         handleSave={handleSave}
                         disabled={errors().has}
+                        deleteModalTitle={"Excluir Categoria"}
                       />
                     ),
                   },

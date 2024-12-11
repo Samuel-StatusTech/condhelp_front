@@ -323,6 +323,7 @@ const FPfaq = () => {
                         handleDelete={handleDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
+                        deleteModalTitle={"Excluir FAQ"}
                       />
                     ),
                   },

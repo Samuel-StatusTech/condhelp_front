@@ -2,12 +2,15 @@ import * as S from "./styled"
 
 import Button from "../Button"
 import { Icons } from "../../assets/icons/icons"
+import { useParams } from "react-router-dom"
+import { getStore } from "../../store"
 
 type Props = {
   handleDelete?: (params: any) => void
   handleCancel: (params: any) => void
   handleSave: (params: any) => void
   disabled?: boolean
+  deleteModalTitle?: string
 }
 
 const FormDefaultButtons = ({
@@ -15,17 +18,35 @@ const FormDefaultButtons = ({
   handleCancel,
   handleSave,
   disabled,
+  deleteModalTitle,
 }: Props) => {
+  const { controllers } = getStore()
+
+  const params = useParams()
+
+  const handlePressDelete = () => {
+    controllers.modal.open({
+      role: "confirmDelete",
+      visible: true,
+      handleOp: handleDelete,
+      width: "xs",
+      data: {
+        title: deleteModalTitle,
+      },
+    })
+  }
+
   return (
     <S.Buttons className="buttonsArea" $alignEnd={!handleDelete}>
       {handleDelete && (
         <Button
           type="quaternary"
-          action={handleDelete}
+          action={handlePressDelete}
           text="Excluir"
           icon={<Icons.Trash />}
           iconLeft={true}
           fit={true}
+          disabled={!params.id}
         />
       )}
       <S.BtnArea>

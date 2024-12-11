@@ -23,18 +23,13 @@ const listAll: TApi["subcategories"]["listAll"] = async (filters) => {
           if (info) {
             resolve({
               ok: true,
-              data: {
-                ...info,
-                content: info.content.filter(
-                  (i: any) => i.serviceCategory.active
-                ),
-              },
+              data: info,
             })
           } else {
             resolve({
               ok: false,
               error:
-                "Não foi possível listar as categorias. Tente novamente mais tarde.",
+                "Não foi possível listar as subcategorias. Tente novamente mais tarde. 1",
             })
           }
         })
@@ -42,13 +37,13 @@ const listAll: TApi["subcategories"]["listAll"] = async (filters) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível listar as categorias. Tente novamente mais tarde.",
+              "Não foi possível listar as subcategorias. Tente novamente mais tarde. 2",
           })
         })
     } catch (error) {
       reject({
         error:
-          "Não foi possível listar as categorias. Tente novamente mais tarde.",
+          "Não foi possível listar as subcategorias. Tente novamente mais tarde. 3",
       })
     }
   })
@@ -101,7 +96,7 @@ const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
         .put(`${baseURL}/${subcategory.id}`, {
           id: subcategory.id,
           name: subcategory.name,
-          serviceCategoryId: subcategory.serviceCategory,
+          serviceCategoryId: subcategory.category.id,
         })
         .then((res) => {
           const info = res.data

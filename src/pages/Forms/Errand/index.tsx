@@ -202,6 +202,7 @@ const FPerrand = () => {
                         handleDelete={() => {}}
                         handleCancel={() => {}}
                         handleSave={() => {}}
+                        deleteModalTitle={"Excluir Recado"}
                       />
                     ),
                   },

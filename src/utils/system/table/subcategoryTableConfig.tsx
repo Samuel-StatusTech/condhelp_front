@@ -12,13 +12,13 @@ export const subcategoryTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    serviceCategory: (item: TSubCategory) => item.serviceCategory?.name,
+    serviceCategory: (item: TSubCategory) => item.category.name,
     name: (item: TSubCategory) => item.name,
     creator: (item: TSubCategory) => (
       <ColorTextIndicator
         role="profile"
-        data={item.creator.role}
-        text={item.creator.name}
+        data={item.user.profile}
+        text={item.user.name}
       />
     ),
     actions: (item: TSubCategory, { callbacks }) => (

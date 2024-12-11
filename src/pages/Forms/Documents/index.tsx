@@ -168,6 +168,7 @@ const FPdocuments = () => {
         handleCancel={handleCancel}
         handleSave={handleSave}
         disabled={errors().has}
+        deleteModalTitle={"Excluir Documentos"}
       />
     ),
   }

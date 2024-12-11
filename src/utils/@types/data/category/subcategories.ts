@@ -1,5 +1,4 @@
-import { TCategory } from "."
-import { TCreator } from "../creator"
+import { TAccess } from "../access"
 
 export type TNewSubCategory = {
   name: string
@@ -11,8 +10,17 @@ export type TNewSubCategory = {
 export type TSubCategory = {
   id: number
   name: string
-  serviceCategory: TCategory
-  creator: TCreator
-
+  category: {
+    id: number
+    name: string
+    description: string
+    userAccountId: number
+    active: boolean
+  }
+  user: {
+    userId: number
+    name: string
+    profile: TAccess
+  }
   isNew?: boolean
 }

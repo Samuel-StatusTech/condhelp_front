@@ -124,6 +124,7 @@ const FranchiseCities = ({ cities, region, handleBack, handleList }: Props) => {
               handleDelete={handleDelete}
               handleCancel={handleCancel}
               handleSave={handleSave}
+              deleteModalTitle={"Excluir Configurações"}
             />
           </S.Block>
         </S.Column>

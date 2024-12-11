@@ -53,7 +53,7 @@ const FPsubcategory = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Categoria excluida",
+          message: "Subcategoria excluida",
         })
 
         setLoading(false)
@@ -141,7 +141,7 @@ const FPsubcategory = () => {
         const req = await Api.subcategories.getSingle({ id: Number(params.id) })
 
         if (req.ok) {
-          setForm({ ...req.data, serviceCategory: req.data.serviceCategory.id })
+          setForm({ ...req.data, serviceCategory: req.data.category.id })
         } else {
           controllers.feedback.setData({
             message: req.error,
@@ -196,7 +196,8 @@ const FPsubcategory = () => {
                         type: "select",
                         placeholder: "Categoria pai",
                         field: "serviceCategory",
-                        value: form.serviceCategory as unknown as string,
+                        value: (form as TNewSubCategory)
+                          .serviceCategory as unknown as string,
                         options: options.serviceCategory,
                         gridSizes: { big: 12 },
                       },
@@ -231,6 +232,7 @@ const FPsubcategory = () => {
                         handleCancel={handleCancel}
                         handleSave={handleSave}
                         disabled={errors().has}
+                        deleteModalTitle={"Excluir Subcategoria"}
                       />
                     ),
                   },
