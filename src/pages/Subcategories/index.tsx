@@ -18,7 +18,7 @@ import { TOption } from "../../utils/@types/data/option"
 const SubcategoriesPage = () => {
   const navigate = useNavigate()
 
-  const { user, controllers } = getStore()
+  const { controllers } = getStore()
 
   const [subcategories, setSubcategories] = useState<TSubCategory[]>([])
 
@@ -63,21 +63,45 @@ const SubcategoriesPage = () => {
     setLoading(true)
 
     try {
-      const catReq = await Api.categories.listAll({ size: 300 })
-
-      if (catReq.ok) {
-      }
-
-      const req = await Api.subcategories.listAll({})
+      const req = await Api.subcategories.listAll({
+        size: 300,
+        sort: "name,asc",
+      })
 
       if (req.ok) {
+        let cats: TSubCategory["category"][] = []
+        let makers: TSubCategory["user"][] = []
+
+        req.data.content.forEach((sc) => {
+          const catsIds = cats.map((i) => i.id)
+          const makersIds = makers.map((i) => i.userId)
+
+          if (!catsIds.includes(sc.category.id)) cats.push(sc.category)
+          if (!makersIds.includes(sc.user.userId)) makers.push(sc.user)
+        })
+
         setOptions((opts) => ({
           ...opts,
-          category: parseOptionList(
-            req.data.content.map((sc) => sc.category),
-            "id",
-            "name"
-          ),
+          category: [
+            { key: "all", value: "Todas" },
+            ...parseOptionList(
+              cats.sort((a, b) =>
+                a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+              ),
+              "id",
+              "name"
+            ),
+          ],
+          creator: [
+            { key: "all", value: "Todos" },
+            ...parseOptionList(
+              makers.sort((a, b) =>
+                a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+              ),
+              "userId",
+              "name"
+            ),
+          ],
         }))
 
         setSubcategories(req.data.content)
@@ -139,14 +163,33 @@ const SubcategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.subcategories}
-        data={subcategories.map((i) => ({
-          ...i,
-          creator: {
-            id: user?.id,
-            name: user?.name,
-            role: user?.profile,
-          },
-        }))}
+        data={subcategories.filter((i) => {
+          let ok = false
+
+          let searchOk = true
+          let categoryOk = true
+          let creatorOk = true
+
+          if (!!search) {
+            searchOk = [i.name, i.category.name, i.user.name]
+              .flat()
+              .some((val) =>
+                String(val).toLowerCase().includes(search.toLowerCase())
+              )
+          }
+
+          if (filters.category && filters.category !== "all") {
+            categoryOk = i.category.id === +filters.category
+          }
+
+          if (filters.creator && filters.creator !== "all") {
+            creatorOk = i.user.userId === +filters.creator
+          }
+
+          ok = searchOk && categoryOk && creatorOk
+
+          return ok
+        })}
         actions={{
           edit: handleEdit,
         }}

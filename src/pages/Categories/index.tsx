@@ -16,6 +16,7 @@ import SearchBlock from "../../components/SearchBlock"
 
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../utils/@types/data/option"
+import { sorts } from "../../utils/tb/parsers/sort"
 
 const CategoriesPage = () => {
   const navigate = useNavigate()
@@ -68,13 +69,25 @@ const CategoriesPage = () => {
       if (req.ok) {
         setCategories(req.data.content)
 
-        const creatorsList = req.data.content.map((c) => c.user)
+        let makers: TCategory["user"][] = []
+
+        req.data.content.forEach((c) => {
+          console.log(c)
+
+          const makersIds = makers.map((i) => i.userId)
+
+          if (!makersIds.includes(c.user.userId)) makers.push(c.user)
+        })
 
         setOptions((opts) => ({
           ...opts,
           creator: [
             { key: "all", value: "Todos" },
-            ...parseOptionList(creatorsList, "id", "name"),
+            ...parseOptionList(
+              sorts.alphabetically(makers, "name"),
+              "userId",
+              "name"
+            ),
           ],
         }))
       } else {
@@ -138,10 +151,7 @@ const CategoriesPage = () => {
             ? [
                 i.name,
                 (i.serviceSubcategories ?? []).map((sc) => sc.name),
-                /*
-                 * Creator filter
-                 */
-                // i.creator.name,
+                i.user.name,
               ]
                 .flat()
                 .some((val) =>
@@ -151,7 +161,7 @@ const CategoriesPage = () => {
 
           const creatorOk =
             !!filters.creator && filters.creator !== "all"
-              ? i.user.id === +filters.creator
+              ? i.user.userId === +filters.creator
               : true
 
           ok = searchOk && creatorOk

@@ -28,6 +28,14 @@ const titleRelations: { [key in THeaderFrom]: string } = {
 const TablePageHeader = ({ from, action }: Props) => {
   const { user } = getStore()
 
+  const canCreate =
+    action &&
+    ((from === "condos" && !(user?.profile === "SINDICO")) ||
+      (from === "condos" &&
+        user?.profile === "SINDICO" &&
+        user?.condominiums.length > 0) ||
+      from !== "condos")
+
   const handleAction = () => {
     action && action()
   }
@@ -46,7 +54,7 @@ const TablePageHeader = ({ from, action }: Props) => {
             : titleRelations[from]}
         </span>
       </S.PageIndicator>
-      {action && !(user?.profile === "SINDICO") && (
+      {canCreate && (
         <S.Button $k={2} onClick={handleAction}>
           <PlusIcon />
           <span>Novo</span>

@@ -30,6 +30,9 @@ const SideMenu = (props: Props) => {
     controllers.modal.open({
       role: "newBudget",
       visible: true,
+      handleOp: () => {
+        window.location.reload()
+      },
     })
   }, [controllers.modal])
 

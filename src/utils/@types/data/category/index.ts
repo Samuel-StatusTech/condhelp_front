@@ -1,5 +1,4 @@
 import { TAccess } from "../access"
-import { TCreator } from "../creator"
 import { TSubCategory } from "./subcategories"
 
 export type TNewCategory = {
@@ -17,6 +16,7 @@ export type TCategory = {
   userAccountId: number
   user: {
     id: number
+    userId: number
     profile: TAccess
     name: string
   }
