@@ -2,21 +2,30 @@ import * as C from "../../styled"
 import * as S from "./styled"
 
 import { Icons } from "../../../../assets/icons/icons"
-import { TBudgetResume } from "../../../../utils/@types/data/budget"
+import { TProviderBudgetResume } from "../../../../utils/@types/data/budget"
 import { getDateStr } from "../../../../utils/tb/format/date"
 import Divider from "../../../_minimals/Divider"
 import Button from "../../../Button"
+import { Api } from "../../../../api"
+import { getStore } from "../../../../store"
 
 type Props = {
   k: number
-  data: TBudgetResume
+  data: TProviderBudgetResume
+  onPickBudget: (budgetId: number) => void
 }
 
 /*
  *  Approval Resume Component
  */
 
-const ManagerBudgetResume = ({ k, data }: Props) => {
+const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
+  const { user, controllers } = getStore()
+
+  const reloadPage = () => {
+    window.location.reload()
+  }
+
   const renderDateAlert = () => {
     if (data.endDate) {
       const d = new Date()
@@ -42,17 +51,49 @@ const ManagerBudgetResume = ({ k, data }: Props) => {
     } else return null
   }
 
-  const handleReject = () => {
-    // ...
+  const handleReject = async () => {
+    try {
+      const req = await Api.budgets.interact({
+        budgetId: data.id,
+        providerId: user?.id as number,
+        status: !data.status ? "RECUSADO" : "CANCELADO",
+      })
+
+      if (req.ok) reloadPage()
+      else throw new Error()
+    } catch {
+      controllers.feedback.setData({
+        state: "error",
+        message:
+          "Não foi possível recusar sua participação. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
   }
 
-  const handleGetIn = () => {
-    // ...
+  const handleGetIn = async () => {
+    try {
+      const req = await Api.budgets.interact({
+        budgetId: data.id,
+        providerId: user?.id as number,
+        status: "ACEITO",
+      })
+
+      if (req.ok) reloadPage()
+      else throw new Error()
+    } catch {
+      controllers.feedback.setData({
+        state: "error",
+        message:
+          "Não foi possível confirmar sua participação. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
   }
 
-  // const handleSeeDetails = () => {
-  //   // ...
-  // }
+  const handleSeeDetails = () => {
+    onPickBudget(data.id)
+  }
 
   return (
     <S.Element $k={k}>
@@ -96,7 +137,7 @@ const ManagerBudgetResume = ({ k, data }: Props) => {
                   <span>
                     {data.endDate ? getDateStr(data.endDate, "dmy") : "-"}
                   </span>
-                  <span className="urgent">Urgente</span>
+                  {data.isUrgent && <span className="urgent">Urgente</span>}
                 </S.InfoItem>
 
                 {renderDateAlert()}
@@ -106,26 +147,34 @@ const ManagerBudgetResume = ({ k, data }: Props) => {
             <Divider />
 
             <S.ResumeArea>
-              <S.Available>Disponível para participação</S.Available>
-              {/* <S.AwaitingManager>
-                <Icons.Alert />
-                <span>Aguardando Síndico</span>
-              </S.AwaitingManager> */}
-              {/* <S.InRow>
-                <S.InMessage>
-                  <Icons.CheckFill />
-                  <span>PARTICIPANDO</span>
-                </S.InMessage>
+              {!data.status && (
+                <S.Available>Disponível para participação</S.Available>
+              )}
+              {data.status === "ACEITO" &&
+                data.statusBudget === "AGUARDANDO" && (
+                  <S.AwaitingManager>
+                    <Icons.Alert width={14} height={14} />
+                    <span>Aguardando Síndico</span>
+                  </S.AwaitingManager>
+                )}
+              {data.status === "ACEITO" &&
+                data.statusBudget === "PARTICIPANDO" && (
+                  <S.InRow>
+                    <S.InMessage>
+                      <Icons.CheckFill />
+                      <span>PARTICIPANDO</span>
+                    </S.InMessage>
 
-                <Button
-                  greenText={true}
-                  type="quaternary"
-                  text={"Detalhes"}
-                  action={handleSeeDetails}
-                  fit={true}
-                  icon={<Icons.Expand />}
-                />
-              </S.InRow> */}
+                    <Button
+                      greenText={true}
+                      type="quaternary"
+                      text={"Detalhes"}
+                      action={handleSeeDetails}
+                      fit={true}
+                      icon={<Icons.Expand width={14} height={14} />}
+                    />
+                  </S.InRow>
+                )}
             </S.ResumeArea>
 
             <Divider />
@@ -133,7 +182,7 @@ const ManagerBudgetResume = ({ k, data }: Props) => {
             <S.BottomCard>
               <Button
                 type="quaternary"
-                text={"Recusar"}
+                text={!data.status ? "Recusar" : "Cancelar Participação"}
                 action={handleReject}
                 fit={true}
                 red={true}
@@ -144,6 +193,7 @@ const ManagerBudgetResume = ({ k, data }: Props) => {
                 text={"PARTICIPAR"}
                 action={handleGetIn}
                 fit={true}
+                disabled={data.status === "ACEITO"}
               />
             </S.BottomCard>
           </S.Content>

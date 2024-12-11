@@ -5,7 +5,10 @@ import Card from "../../../components/Card"
 import Divider from "../../../components/_minimals/Divider"
 import PageRow from "../../../components/_minimals/PageRow"
 import { getStore } from "../../../store"
-import { TBudgetResume } from "../../../utils/@types/data/budget"
+import {
+  TBudgetResume,
+  TProviderBudgetResume,
+} from "../../../utils/@types/data/budget"
 import { useCallback, useEffect, useState } from "react"
 import { DataResumeItem } from "../../../components/Card/variations/ApprovalResume"
 import Table from "../../../components/Table"
@@ -15,6 +18,7 @@ import { systemOptions } from "../../../utils/system/options"
 import { TFilter } from "../../../utils/@types/components/SearchBlock"
 import { TOption } from "../../../components/Input/points"
 import { Api } from "../../../api"
+import ProviderBudgetDetails from "./details/providerBudgetDetails"
 
 const DashboardProvider = () => {
   const { user, controllers } = getStore()
@@ -24,6 +28,7 @@ const DashboardProvider = () => {
    */
 
   const [loading, setLoading] = useState(true)
+  const [budget, setBudget] = useState<TProviderBudgetResume | null>(null)
 
   const [finishedBudgetsSearch, setFinishedBudgetsSearch] = useState("")
   const [filters, setFilters] = useState({
@@ -44,7 +49,7 @@ const DashboardProvider = () => {
 
   // Engine
 
-  const [budgets, setBudgets] = useState<TBudgetResume[]>([])
+  const [budgets, setBudgets] = useState<TProviderBudgetResume[]>([])
   const [budgetsResume, setBudgetsResume] = useState({
     total: 0,
     approved: 0,
@@ -53,11 +58,20 @@ const DashboardProvider = () => {
   })
   const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
 
+  const loadBudgetInfo = async (pickedBudget: TProviderBudgetResume) => {
+    setBudget(pickedBudget)
+  }
+
   // Cards
 
   const renderCardsContent = () => {
+    console.log(budgets)
     const content: JSX.Element[] = budgets.map((budget) => (
-      <Card.ProviderBudgetResume data={budget} k={2} />
+      <Card.ProviderBudgetResume
+        k={2}
+        data={budget}
+        onPickBudget={() => loadBudgetInfo(budget)}
+      />
     ))
 
     return (
@@ -73,7 +87,7 @@ const DashboardProvider = () => {
     try {
       // Budgets
 
-      const budgetsReq = await Api.budgets.listAll({
+      const budgetsReq = await Api.budgets.listProviderBudgets({
         size: 300,
         providerId: user?.userAccountId,
       })
@@ -96,7 +110,7 @@ const DashboardProvider = () => {
         setBudgets(budgetsReq.data.content)
         setBudgetsResume(resume)
         setFinishedBudgets(
-          budgetsReq.data.content.filter((b) => b.status === "approved")
+          budgetsReq.data.content.filter((b) => b.statusBudget === "FINALIZADO")
         )
       }
 
@@ -117,7 +131,7 @@ const DashboardProvider = () => {
     })
   }, [controllers.modal, loading])
 
-  return (
+  return !budget ? (
     <S.SubContent>
       <S.BlockArea className="falseSubContentWrapper">
         <S.BlockHeader>
@@ -185,6 +199,14 @@ const DashboardProvider = () => {
         <Table data={finishedBudgets} config={tableConfig.finishedBudgets} />
       </S.BlockArea>
     </S.SubContent>
+  ) : (
+    <ProviderBudgetDetails
+      budget={budget}
+      handleBack={() => {
+        setBudget(null)
+        window.location.reload()
+      }}
+    />
   )
 }
 

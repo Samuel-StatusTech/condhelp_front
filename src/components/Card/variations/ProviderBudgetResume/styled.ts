@@ -88,6 +88,9 @@ export const Available = styled.span`
   color: ${({ theme }) => theme.colors.neutral.lightMain};
   text-align: center;
   width: 100%;
+
+  height: 32px;
+  line-height: 32px;
 `
 
 export const InRow = styled.div`
@@ -95,6 +98,8 @@ export const InRow = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  height: 32px;
 `
 
 export const InMessage = styled.span`
@@ -111,6 +116,8 @@ export const AwaitingManager = styled.div`
   align-items: center;
   gap: 4px;
   color: ${({ theme }) => theme.colors.yellow.dark};
+
+  height: 32px;
 
   svg {
     width: 16px;

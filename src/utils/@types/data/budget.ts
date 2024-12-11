@@ -63,6 +63,30 @@ export type TBudgetResume = {
   status?: string
 }
 
+export type TProviderBudgetResume = {
+  id: number
+  title: string
+  condominiumName: string
+  isUrgent: boolean
+  categoryName: string
+  subcategoryName: string
+  description: string
+  startDate: string | null
+  endDate: string | null
+  attachmentUrl: string
+  awaiting: number
+  rejected: number
+  accepted: number
+  status?: "" | "ACEITO" | "RECUSADO" | "CANCELADO"
+
+  statusBudget:
+    | "AGUARDANDO"
+    | "PARTICIPANDO"
+    | "RECUSADO"
+    | "FINALIZADO"
+    | "EXPIRADO"
+}
+
 export type TContact = {
   id: number
   date: string

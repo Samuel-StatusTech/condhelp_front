@@ -73,15 +73,18 @@ export const Element = styled.button<{
   transition: background-color 0.3s;
 
   &:disabled {
+    color: ${({ $type, theme }) =>
+      $type === "green" ? theme.colors.neutral.lightMain : "currentColor"};
     background-color: ${({ $fromSidebar, $type, theme }) =>
       $fromSidebar
         ? theme.colors.neutral.medium
         : $type === "quaternary"
         ? "transparent"
-        : theme.colors.neutral.soft};
+        : theme.colors.neutral.medium};
     cursor: unset;
 
     opacity: ${({ $type }) => ($type === "quaternary" ? 0.5 : 1)};
+    filter: saturate(0);
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {

@@ -9,6 +9,12 @@ export type TApi_Params_Budgets = {
       branchId?: number
       providerId?: number
     }
+    listProviderBudgets: TDefaultFilters & {
+      managerId?: number
+      condominiumId?: number
+      branchId?: number
+      providerId?: number
+    }
     create: {
       newBudget: TNewBudget
     }
@@ -20,6 +26,11 @@ export type TApi_Params_Budgets = {
     }
     getSingle: {
       id: number
+    }
+    interact: {
+      budgetId: number
+      providerId: number
+      status: "ACEITO" | "RECUSADO" | "CANCELADO"
     }
   }
 }

@@ -9,9 +9,57 @@ const baseURL = "/budgets"
 const listAll: TApi["budgets"]["listAll"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const url = !!filters.providerId
-        ? `${baseURL}/provider/${filters.providerId}`
-        : baseURL
+      const url = baseURL
+
+      await service
+        .get(`${url}`, {
+          params: {
+            userId: filters.managerId,
+            condominiumId: filters.condominiumId,
+            subsidiaryId: filters.branchId,
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const listProviderBudgets: TApi["budgets"]["listProviderBudgets"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/provider/${filters.providerId}`
 
       await service
         .get(`${url}`, {
@@ -204,22 +252,71 @@ const getSingle: TApi["budgets"]["getSingle"] = async ({ id }) => {
   })
 }
 
+const interact: TApi["budgets"]["interact"] = async ({
+  budgetId,
+  providerId,
+  status,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let statusStr = ""
+
+      if (status === "ACEITO") statusStr = "aceito"
+      if (status === "RECUSADO") statusStr = "recusado"
+      if (status === "CANCELADO") statusStr = "cancelado"
+
+      await service
+        .put(`/providers/${providerId}/budgets/${budgetId}?status=${statusStr}`)
+        .then((res) => {
+          if (res.status === 200) resolve({ ok: true, data: {} })
+          else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível carregar as informações. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export type TApi_Budgets = {
   listAll: (
     p: TParams["budgets"]["listAll"]
   ) => TResponses["budgets"]["listAll"]
+  listProviderBudgets: (
+    p: TParams["budgets"]["listProviderBudgets"]
+  ) => TResponses["budgets"]["listProviderBudgets"]
   create: (p: TParams["budgets"]["create"]) => TResponses["budgets"]["create"]
   getSingle: (
     p: TParams["budgets"]["getSingle"]
   ) => TResponses["budgets"]["getSingle"]
   update: (p: TParams["budgets"]["update"]) => TResponses["budgets"]["update"]
   delete: (p: TParams["budgets"]["delete"]) => TResponses["budgets"]["delete"]
+  interact: (
+    p: TParams["budgets"]["interact"]
+  ) => TResponses["budgets"]["interact"]
 }
 
 export const apiBudgets: TApi["budgets"] = {
   listAll: listAll,
+  listProviderBudgets: listProviderBudgets,
   create: create,
   getSingle: getSingle,
   update: update,
   delete: deleteItem,
+  interact: interact,
 }
