@@ -52,8 +52,11 @@ const FPregion = () => {
 
       if (req.ok) {
         const results = req.data.content
+        const alreadyAdded = form.cities.map((c) => c.id)
 
-        setCitiesOptions(results)
+        const choosable = results.filter((i) => !alreadyAdded.includes(i.id))
+
+        setCitiesOptions(choosable)
       }
     } else setCitiesOptions([])
   }
@@ -80,7 +83,7 @@ const FPregion = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Categoria excluida",
+          message: "Região excluida",
         })
 
         setLoading(false)
@@ -112,7 +115,9 @@ const FPregion = () => {
   }
 
   const citiesTreat = () => {
-    return form.cities
+    const isOk = form.cities.every((c) => !c.notPicked && !!c.name)
+
+    return isOk ? form.cities : null
   }
 
   const handleUpdate = async () => {
@@ -121,24 +126,35 @@ const FPregion = () => {
     try {
       const cities = await citiesTreat()
 
-      const req = await Api.regions.update({
-        region: {
-          ...form,
-          cities: cities,
-          id: params.id as string,
-        },
-      })
+      if (cities) {
+        const req = await Api.regions.update({
+          region: {
+            ...form,
+            cities: cities,
+            id: params.id as string,
+          },
+        })
 
-      if (req.ok) {
+        if (req.ok) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "success",
+            message: "Região atualizada com sucesso",
+          })
+
+          setLoading(false)
+
+          navigate("/dashboard/regions")
+        }
+      } else {
         controllers.feedback.setData({
+          message:
+            "Verifique as cidades novamente. Todas as cidades devem ser válidas.",
+          state: "error",
           visible: true,
-          state: "success",
-          message: "Região atualizada com sucesso",
         })
 
         setLoading(false)
-
-        navigate("/dashboard/regions")
       }
     } catch (error) {
       // ...
@@ -153,24 +169,35 @@ const FPregion = () => {
     try {
       const cities = await citiesTreat()
 
-      const req = await Api.regions.create({
-        newRegion: {
-          ...(form as TNewRegion),
-          cities,
-        },
-      })
+      if (cities) {
+        const req = await Api.regions.create({
+          newRegion: {
+            ...(form as TNewRegion),
+            cities,
+          },
+        })
 
-      if (req.ok) {
+        if (req.ok) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "success",
+            message: "Região criada com sucesso",
+          })
+
+          setLoading(false)
+
+          navigate("/dashboard/regions")
+        } else throw new Error()
+      } else {
         controllers.feedback.setData({
+          message:
+            "Verifique as cidades novamente. Todas as cidades devem ser válidas.",
+          state: "error",
           visible: true,
-          state: "success",
-          message: "Região criada com sucesso",
         })
 
         setLoading(false)
-
-        navigate("/dashboard/regions")
-      } else throw new Error()
+      }
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -185,16 +212,8 @@ const FPregion = () => {
 
   const handleSave = async () => {
     try {
-      // if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
       if (params.id) handleUpdate()
       else handleCreate()
-      // } else {
-      //   controllers.feedback.setData({
-      //     state: "alert",
-      //     message: "Selecione uma cidade válida",
-      //     visible: true,
-      //   })
-      // }
     } catch (error) {
       // ...
     }

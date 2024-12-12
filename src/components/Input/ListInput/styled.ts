@@ -95,7 +95,8 @@ export const OptionsArea = styled.div<{ $visible?: boolean }>`
   background-color: ${({ theme }) => theme.colors.neutral.white};
   width: 100%;
   z-index: 2;
-  padding: 6px;
+  padding: 12px 6px;
+  border-radius: 4px;
   box-shadow: ${({ theme }) => theme.shadows.default};
 
   &.visible {

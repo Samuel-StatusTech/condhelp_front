@@ -50,7 +50,7 @@ const CitiesList = ({
   const handleCityName = async (id: number, value: string) => {
     setList(
       list.map((i, k) =>
-        i.id !== id ? i : { ...i, name: value, isEdit: !i.isNew }
+        i.id !== id ? i : { ...i, name: value, notPicked: true }
       )
     )
 
@@ -59,8 +59,6 @@ const CitiesList = ({
 
   const handleCitySelect = (id: any, cityId: number) => {
     const city = citiesOptions.find((c) => c.id === cityId) as TCity
-
-    handleCity("")
 
     const newList = list.map((i) => (i.id !== id ? i : city))
 
@@ -88,7 +86,7 @@ const CitiesList = ({
     const newCity: TRegion["cities"][number] = {
       id: newId,
       name: "",
-      isNew: true,
+      notPicked: true,
     }
 
     setList([...list, newCity])

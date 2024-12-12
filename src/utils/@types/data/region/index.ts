@@ -18,8 +18,7 @@ export type TCity = {
   name: string
   state?: TState
 
-  isNew?: boolean
-  isEdit?: boolean
+  notPicked?: boolean
 }
 
 export type TNewCity = {
