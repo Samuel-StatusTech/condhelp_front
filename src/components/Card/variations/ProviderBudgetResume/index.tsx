@@ -148,7 +148,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
             <Divider />
 
             <S.ResumeArea>
-              {!data.status && (
+              {data.status !== "ACEITO" && (
                 <S.Available>Disponível para participação</S.Available>
               )}
               {data.status === "ACEITO" &&

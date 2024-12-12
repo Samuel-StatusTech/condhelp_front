@@ -20,14 +20,16 @@ type Props = {
 const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
   const { user, controllers } = getStore()
 
-  const [loading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleReject = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.budgets.interact({
         budgetId: +budget.id,
         providerId: user?.id as number,
-        status: "RECUSADO",
+        status: "CANCELADO",
       })
 
       if (req.ok) handleBack()
@@ -40,6 +42,8 @@ const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
         visible: true,
       })
     }
+
+    setLoading(false)
   }
 
   useEffect(() => {

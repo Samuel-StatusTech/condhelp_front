@@ -110,7 +110,15 @@ const DashboardProvider = () => {
           resume.rejected = resume.rejected + b.rejected
         })
 
-        setBudgets(budgetsReq.data.content)
+        const visible = budgetsReq.data.content.filter(
+          (b) =>
+            b.status !== "CANCELADO" &&
+            b.status !== "RECUSADO" &&
+            b.statusBudget !== "EXPIRADO" &&
+            b.statusBudget !== "FINALIZADO"
+        )
+
+        setBudgets(visible)
         setFinishedBudgets(
           budgetsReq.data.content.filter((b) => b.statusBudget === "FINALIZADO")
         )
@@ -145,13 +153,17 @@ const DashboardProvider = () => {
       <S.BlockArea className="falseSubContentWrapper">
         <S.BlockHeader>
           <S.BlockTitle $k={2}>
-            <span>Olá {user?.name}, estes são os orçamentos em andamento:</span>
+            <span>
+              {budgets.length > 0
+                ? `Olá ${user?.name}, estes são os orçamentos em andamento:`
+                : `Olá ${user?.name}, você não tem orçamentos em andamento.`}
+            </span>
           </S.BlockTitle>
         </S.BlockHeader>
 
-        <Divider />
+        {budgets.length > 0 && <Divider />}
 
-        {renderCardsContent()}
+        {budgets.length > 0 && renderCardsContent()}
       </S.BlockArea>
 
       <PageRow>
