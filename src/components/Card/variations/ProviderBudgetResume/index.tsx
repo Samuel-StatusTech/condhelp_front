@@ -130,6 +130,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  position: "relative",
                 }}
               >
                 <S.InfoItem>
@@ -153,7 +154,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
               {data.status === "ACEITO" &&
                 data.statusBudget === "AGUARDANDO" && (
                   <S.AwaitingManager>
-                    <Icons.Alert width={14} height={14} />
+                    <Icons.Alert />
                     <span>Aguardando Síndico</span>
                   </S.AwaitingManager>
                 )}
@@ -171,7 +172,8 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
                       text={"Detalhes"}
                       action={handleSeeDetails}
                       fit={true}
-                      icon={<Icons.Expand width={14} height={14} />}
+                      icon={<Icons.Expand />}
+                      iconSize={18}
                     />
                   </S.InRow>
                 )}

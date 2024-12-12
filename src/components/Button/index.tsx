@@ -13,6 +13,7 @@ type Props =
       disabled?: boolean
       fromSidebar?: boolean
       red?: boolean
+      iconSize?: number
     }
   | {
       type: "tertiary"
@@ -23,6 +24,7 @@ type Props =
       disabled?: boolean
       fromSidebar?: boolean
       red?: boolean
+      iconSize?: number
     }
 
 const Button = (props: Props) => {
@@ -36,6 +38,7 @@ const Button = (props: Props) => {
       onClick={props.disabled ? undefined : props.action}
       disabled={props.disabled}
       $fromSidebar={props.fromSidebar}
+      $iconSize={props.iconSize}
     >
       {
         // @ts-ignore

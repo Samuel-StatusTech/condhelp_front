@@ -72,7 +72,6 @@ const CategoriesPage = () => {
         let makers: TCategory["user"][] = []
 
         req.data.content.forEach((c) => {
-          console.log(c)
 
           const makersIds = makers.map((i) => i.userId)
 

@@ -19,6 +19,7 @@ import { TFilter } from "../../../utils/@types/components/SearchBlock"
 import { TOption } from "../../../components/Input/points"
 import { Api } from "../../../api"
 import ProviderBudgetDetails from "./details/providerBudgetDetails"
+import { TBudgetStatistics } from "../../../utils/@types/data/budgetResume"
 
 const DashboardProvider = () => {
   const { user, controllers } = getStore()
@@ -50,11 +51,14 @@ const DashboardProvider = () => {
   // Engine
 
   const [budgets, setBudgets] = useState<TProviderBudgetResume[]>([])
-  const [budgetsResume, setBudgetsResume] = useState({
+  const [budgetsResume, setBudgetsResume] = useState<TBudgetStatistics>({
     total: 0,
-    approved: 0,
-    awaiting: 0,
-    rejected: 0,
+    completed: 0,
+    inProgress: 0,
+    canceled: 0,
+    completedPercentage: 0,
+    inProgressPercentage: 0,
+    canceledPercentage: 0,
   })
   const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
 
@@ -65,7 +69,6 @@ const DashboardProvider = () => {
   // Cards
 
   const renderCardsContent = () => {
-    console.log(budgets)
     const content: JSX.Element[] = budgets.map((budget) => (
       <Card.ProviderBudgetResume
         k={2}
@@ -108,11 +111,17 @@ const DashboardProvider = () => {
         })
 
         setBudgets(budgetsReq.data.content)
-        setBudgetsResume(resume)
         setFinishedBudgets(
           budgetsReq.data.content.filter((b) => b.statusBudget === "FINALIZADO")
         )
-      }
+
+        let resumeReq = await Api.budgets.statistics({
+          providerId: user?.userAccountId as number,
+        })
+
+        if (resumeReq.ok) setBudgetsResume(resumeReq.data)
+        else throw new Error()
+      } else throw new Error()
 
       setLoading(false)
     } catch (error) {
@@ -149,24 +158,25 @@ const DashboardProvider = () => {
         <S.BlockArea>
           <S.ManagerBudgetsResumeArea>
             <S.MBRMessage>
-              Sua empresa já recebeu, <span>{budgets.length}</span> orçamentos:
+              Sua empresa já recebeu, <span>{budgetsResume.total}</span>{" "}
+              orçamentos:
             </S.MBRMessage>
             <S.MBRDataArea>
               <DataResumeItem
                 type={"approved"}
-                number={budgetsResume.approved}
+                number={budgetsResume.completed}
                 total={budgetsResume.total}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"awaiting"}
-                number={budgetsResume.awaiting}
+                number={budgetsResume.inProgress}
                 total={budgetsResume.total}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"rejected"}
-                number={budgetsResume.rejected}
+                number={budgetsResume.canceled}
                 total={budgetsResume.total}
                 role={"budgets"}
               />

@@ -3,6 +3,7 @@ import {
   TBudgetResume,
   TProviderBudgetResume,
 } from "../../../../utils/@types/data/budget"
+import { TBudgetStatistics } from "../../../../utils/@types/data/budgetResume"
 import { TDefaultList, TDefaultRes } from "../../../types/responses"
 
 export type TApi_Responses_Budgets = {
@@ -16,5 +17,6 @@ export type TApi_Responses_Budgets = {
     update: Promise<TDefaultRes<TBudget>>
     delete: Promise<TDefaultRes<{}>>
     interact: Promise<TDefaultRes<{}>>
+    statistics: Promise<TDefaultRes<TBudgetStatistics>>
   }
 }

@@ -80,6 +80,11 @@ export const InfoItem = styled.div`
 export const ResumeArea = styled.div`
   display: flex;
   gap: 8px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `
 
 export const Available = styled.span`
@@ -118,11 +123,6 @@ export const AwaitingManager = styled.div`
   color: ${({ theme }) => theme.colors.yellow.dark};
 
   height: 32px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
 
   span {
     font-size: 16px;
@@ -195,4 +195,7 @@ export const AlertArea = styled.div`
   gap: 4px;
   color: ${({ theme }) => theme.colors.red.main};
   font-size: 14px;
+
+  position: absolute;
+  right: 0;
 `

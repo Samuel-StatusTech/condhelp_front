@@ -3,9 +3,5 @@ export const sortAlphabetically = (list: any[], field: string) => {
     a[field].toLowerCase().localeCompare(b[field].toLowerCase())
   )
 
-  console.log(list)
-  console.log(sorted)
-  console.log(field)
-
   return sorted
 }

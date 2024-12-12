@@ -32,5 +32,8 @@ export type TApi_Params_Budgets = {
       providerId: number
       status: "ACEITO" | "RECUSADO" | "CANCELADO"
     }
+    statistics: {
+      providerId: number
+    }
   }
 }

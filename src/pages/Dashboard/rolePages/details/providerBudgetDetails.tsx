@@ -18,8 +18,6 @@ type Props = {
 }
 
 const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
-  console.log(budget)
-
   const { user, controllers } = getStore()
 
   const [loading] = useState(false)
@@ -144,7 +142,50 @@ const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
             </S.ButtonsArea>
           </S.Block>
         </S.Column>
-        <S.Column></S.Column>
+        <S.Column>
+          <S.Block>
+            <S.BlockHeader>
+              <S.BlockTitle>{budget.condominiumName}</S.BlockTitle>
+            </S.BlockHeader>
+
+            <Divider />
+
+            <S.DetailsList>
+              <S.DetailItem>
+                <S.DetailName>Síndico:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>Unidades:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>CNPJ:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>Endereço:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>Bairro:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>CEP:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>Cidade:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+              <S.DetailItem>
+                <S.DetailName>Estado:</S.DetailName>
+                <S.DetailValue>{"-"}</S.DetailValue>
+              </S.DetailItem>
+            </S.DetailsList>
+          </S.Block>
+        </S.Column>
       </S.SubContent>
     </C.SubContent>
   )

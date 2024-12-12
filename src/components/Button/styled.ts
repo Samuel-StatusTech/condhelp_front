@@ -7,6 +7,7 @@ export const Element = styled.button<{
   $fit?: boolean
   $k?: number
   $fromSidebar?: boolean
+  $iconSize?: number
 }>`
   ${({ $fit }) => ($fit ? `width: fit-content;` : `flex: 1;`)}
   min-width: ${({ $type, $fit }) =>
@@ -53,8 +54,8 @@ export const Element = styled.button<{
       : "transparent"};
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: ${({ $iconSize }) => $iconSize ?? 24}px;
+    height: ${({ $iconSize }) => $iconSize ?? 24}px;
   }
 
   ${({ $k, theme }) =>
