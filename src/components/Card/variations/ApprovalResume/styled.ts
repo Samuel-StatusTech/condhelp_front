@@ -30,6 +30,8 @@ export const DataResumeArea = styled.div<{ $selfLine?: boolean }>`
   width: ${({ $selfLine }) => ($selfLine ? "100%" : "unset")};
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    min-width: 100%;
+    align-items: flex-start;
     order: 3;
     flex: 2;
     margin-top: 16px;

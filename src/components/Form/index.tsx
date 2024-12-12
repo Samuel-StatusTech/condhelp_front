@@ -68,7 +68,7 @@ const Form = ({ handleField, columns }: Props) => {
               <S.Block
                 key={blockKey}
                 $white={block.isWhite}
-                $zIndex={100 + (column.blocks.length + 2 - blockKey)}
+                $zIndex={50 + (column.blocks.length + 2 - blockKey)}
               >
                 <S.BlockTitle>{block.title}</S.BlockTitle>
 
@@ -79,7 +79,7 @@ const Form = ({ handleField, columns }: Props) => {
                       display: "flex",
                       flexDirection: "column",
                       gap: 8,
-                      zIndex: 100 - (gKey + 1),
+                      zIndex: 50 - (gKey + 1),
                     }}
                   >
                     <Divider />

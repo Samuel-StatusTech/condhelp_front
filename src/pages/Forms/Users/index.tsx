@@ -27,6 +27,7 @@ import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 import { TCategory } from "../../../utils/@types/data/category"
 import { userSubordinates } from "../../../utils/system/options/profiles"
 import FranchiseCities from "./partials/franchiseCities"
+import ProviderLegalization from "../../../components/ProviderLegalization"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -558,7 +559,7 @@ const FPpeople = () => {
     type: "custom",
     element: (
       <FormDefaultButtons
-        handleDelete={handleDelete}
+        handleDelete={params.id ? handleDelete : undefined}
         handleCancel={handleCancel}
         handleSave={handleSave}
         disabled={errors().has}
@@ -718,6 +719,47 @@ const FPpeople = () => {
                   ...renderBasic(),
                 ],
               },
+              ...((form.profile === "PRESTADOR"
+                ? [
+                    {
+                      title: "STATUS DA DOCUMENTAÇÃO (INTEGRAÇÃO API)",
+                      isWhite: true,
+                      groups: [
+                        {
+                          type: "custom",
+                          element: (() => {
+                            return (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  maxWidth: 320,
+                                }}
+                              >
+                                <ProviderLegalization
+                                  label={"CND Federal"}
+                                  value={"free"}
+                                />
+                                <ProviderLegalization
+                                  label={"CND Estadual"}
+                                  value={"free"}
+                                />
+                                <ProviderLegalization
+                                  label={"CND Municipal"}
+                                  value={"free"}
+                                />
+                                <ProviderLegalization
+                                  label={"FGTS"}
+                                  value={"free"}
+                                />
+                              </div>
+                            )
+                          })(),
+                        },
+                      ],
+                    },
+                  ]
+                : []) as TBlock[]),
             ],
           },
           {

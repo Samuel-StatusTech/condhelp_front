@@ -23,6 +23,8 @@ const SideMenu = (props: Props) => {
   const [sideOpened, setSideOpened] = useState(false)
 
   const toggleSideMenu = () => {
+    window.document.body.style.overflow = !sideOpened ? "hidden" : "unset"
+
     setSideOpened(!sideOpened)
   }
 
