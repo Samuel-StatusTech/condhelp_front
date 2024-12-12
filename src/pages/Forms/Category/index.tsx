@@ -49,7 +49,7 @@ const FPcategory = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Categoria excluida",
+          message: "Categoria excluída",
         })
 
         setLoading(false)

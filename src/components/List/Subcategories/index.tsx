@@ -26,7 +26,7 @@ const SubcategoriesList = ({ list, setList }: Props) => {
         .then((res) => {
           if (res.ok) {
             controllers.feedback.setData({
-              message: "Subcategoria excluida com sucesso.",
+              message: "Subcategoria excluída com sucesso.",
               state: "success",
               visible: true,
             })
@@ -50,7 +50,7 @@ const SubcategoriesList = ({ list, setList }: Props) => {
     } else {
       setList(list.filter((i) => i.id !== id))
       controllers.feedback.setData({
-        message: "Subcategoria excluida com sucesso.",
+        message: "Subcategoria excluída com sucesso.",
         state: "success",
         visible: true,
       })

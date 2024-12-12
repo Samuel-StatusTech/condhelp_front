@@ -166,7 +166,7 @@ const FPcondo = () => {
 
           if (req.ok) {
             controllers.feedback.setData({
-              message: "Condomínio excluida com sucesso.",
+              message: "Condomínio excluída com sucesso.",
               state: "success",
               visible: true,
             })

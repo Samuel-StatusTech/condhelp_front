@@ -53,7 +53,7 @@ const FPsubcategory = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Subcategoria excluida",
+          message: "Subcategoria excluída",
         })
 
         setLoading(false)

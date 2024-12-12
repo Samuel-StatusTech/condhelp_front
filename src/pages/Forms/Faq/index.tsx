@@ -118,7 +118,7 @@ const FPfaq = () => {
 
           if (req.ok) {
             controllers.feedback.setData({
-              message: "Faq excluida com sucesso.",
+              message: "Faq excluída com sucesso.",
               state: "success",
               visible: true,
             })

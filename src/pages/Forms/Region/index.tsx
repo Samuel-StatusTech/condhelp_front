@@ -83,7 +83,7 @@ const FPregion = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Região excluida",
+          message: "Região excluída",
         })
 
         setLoading(false)

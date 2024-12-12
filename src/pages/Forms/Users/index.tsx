@@ -247,9 +247,16 @@ const FPpeople = () => {
 
           navigate("/dashboard/users")
         }
+        throw new Error()
       }
+      throw new Error()
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "success",
+        message:
+          "Houve um erro ao atualizar o usuário. Verifique as informações e tente novamente.",
+      })
 
       setLoading(false)
     }
@@ -323,9 +330,13 @@ const FPpeople = () => {
         setLoading(false)
 
         navigate("/dashboard/users")
-      }
+      } else throw new Error()
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "success",
+        message: "Usuário excluído com sucesso",
+      })
 
       setLoading(false)
     }
