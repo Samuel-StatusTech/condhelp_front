@@ -140,7 +140,11 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
       const roleUrl = rolesUrlRelations[person.profile]
 
       const id =
-        person.profile === "FILIAL" ? person.subsidiaryId : person.userAccountId
+        person.profile === "FILIAL"
+          ? person.subsidiaryId
+          : person.profile === "PRESTADOR"
+          ? person.id
+          : person.userAccountId
 
       await service
         .put(`${roleUrl}/${id}`, person)

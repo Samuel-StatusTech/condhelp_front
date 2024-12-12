@@ -119,6 +119,7 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
 
 const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
   const info = {
+    id: user.id,
     userAccountId: user.userId,
     name: user.name,
     contact: "-",

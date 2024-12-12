@@ -16,6 +16,7 @@ import {
   TNewUser,
   TNewUserDefault,
   TUser,
+  TUserTypes,
 } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
@@ -213,7 +214,7 @@ const FPpeople = () => {
 
     let info = getUserObj({ ...form, userId }, (form as TNewUser).profile)
 
-    if (params.id && !Number.isNaN(params.id)) {
+    if (params.id && !Number.isNaN(params.id) && form.profile !== "PRESTADOR") {
       info = { ...info, id: Number(params.id) }
     }
 
@@ -367,11 +368,23 @@ const FPpeople = () => {
           if (hasInfo) {
             const initialRoleInfo = initials.forms.person[req.data.profile]
 
-            setForm((fm: any) => ({
-              ...fm,
+            const reqInfo = req.data as TUserTypes["PRESTADOR"]
+
+            const gettedInfo = {
+              ...form,
               ...initialRoleInfo,
-              ...req.data,
-            }))
+              ...{
+                ...reqInfo,
+                address: {
+                  ...reqInfo.address,
+                  country: +reqInfo.address.country,
+                  state: +reqInfo.address.state,
+                },
+                category: +reqInfo.category,
+              },
+            }
+
+            setForm(gettedInfo)
           }
         } else {
           controllers.feedback.setData({
@@ -512,6 +525,7 @@ const FPpeople = () => {
 
       navigate(-1)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controllers.feedback, navigate, params.id])
 
   useEffect(() => {
@@ -534,7 +548,6 @@ const FPpeople = () => {
     setOptions((opts: any) => ({
       ...opts,
       profile: userAlloweds,
-      country: [{ key: "br", value: "Brasil" }],
     }))
 
     loadData()
