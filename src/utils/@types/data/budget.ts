@@ -77,12 +77,15 @@ export type TProviderBudgetResume = {
   awaiting: number
   rejected: number
   accepted: number
-  status?: "" | "ACEITO" | "RECUSADO" | "CANCELADO"
-
-  statusBudget:
-    | "AGUARDANDO"
-    | "PARTICIPANDO"
-    | "RECUSADO"
+  status:
+    | "DISPONIVEL"
+    | "AGUARDANDO_SINDICO"
+    | "APROVADO_SINDICO"
+    | "RECUSADO_SINDICO"
+    | "RECUSADO_PRESTADOR"
+    | "CANCELADO_SINDICO"
+    | "CANCELADO_PRESTADOR"
+    | "CONTRATADO"
     | "FINALIZADO"
     | "EXPIRADO"
 }

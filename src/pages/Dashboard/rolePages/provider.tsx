@@ -112,15 +112,16 @@ const DashboardProvider = () => {
 
         const visible = budgetsReq.data.content.filter(
           (b) =>
-            b.status !== "CANCELADO" &&
-            b.status !== "RECUSADO" &&
-            b.statusBudget !== "EXPIRADO" &&
-            b.statusBudget !== "FINALIZADO"
+            b.status !== "CANCELADO_SINDICO" &&
+            b.status !== "CANCELADO_PRESTADOR" &&
+            b.status !== "RECUSADO_PRESTADOR" &&
+            b.status !== "FINALIZADO" &&
+            b.status !== "EXPIRADO"
         )
 
         setBudgets(visible)
         setFinishedBudgets(
-          budgetsReq.data.content.filter((b) => b.statusBudget === "FINALIZADO")
+          budgetsReq.data.content.filter((b) => b.status === "FINALIZADO")
         )
 
         let resumeReq = await Api.budgets.statistics({

@@ -108,7 +108,10 @@ const create: TApi["budgets"]["create"] = async ({ newBudget }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .post(`${baseURL}`, newBudget)
+        .post(`${baseURL}`, {
+          ...newBudget,
+          franqId: 3,
+        })
         .then((res) => {
           const info = res.data
 
@@ -259,11 +262,7 @@ const interact: TApi["budgets"]["interact"] = async ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let statusStr = ""
-
-      if (status === "ACEITO") statusStr = "aceito"
-      if (status === "RECUSADO") statusStr = "recusado"
-      if (status === "CANCELADO") statusStr = "cancelado"
+      let statusStr = status.toLowerCase()
 
       await service
         .put(`/providers/${providerId}/budgets/${budgetId}?status=${statusStr}`)

@@ -56,7 +56,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
       const req = await Api.budgets.interact({
         budgetId: data.id,
         providerId: user?.id as number,
-        status: !data.status ? "RECUSADO" : "CANCELADO",
+        status: !data.status ? "RECUSADO_PRESTADOR" : "CANCELADO_PRESTADOR",
       })
 
       if (req.ok) reloadPage()
@@ -76,7 +76,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
       const req = await Api.budgets.interact({
         budgetId: data.id,
         providerId: user?.id as number,
-        status: "ACEITO",
+        status: "AGUARDANDO_SINDICO",
       })
 
       if (req.ok) reloadPage()
@@ -148,35 +148,33 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
             <Divider />
 
             <S.ResumeArea>
-              {data.status !== "ACEITO" && (
+              {data.status === "DISPONIVEL" && (
                 <S.Available>Disponível para participação</S.Available>
               )}
-              {data.status === "ACEITO" &&
-                data.statusBudget === "AGUARDANDO" && (
-                  <S.AwaitingManager>
-                    <Icons.Alert />
-                    <span>Aguardando Síndico</span>
-                  </S.AwaitingManager>
-                )}
-              {data.status === "ACEITO" &&
-                data.statusBudget === "PARTICIPANDO" && (
-                  <S.InRow>
-                    <S.InMessage>
-                      <Icons.CheckFill />
-                      <span>PARTICIPANDO</span>
-                    </S.InMessage>
+              {data.status === "AGUARDANDO_SINDICO" && (
+                <S.AwaitingManager>
+                  <Icons.Alert />
+                  <span>Aguardando Síndico</span>
+                </S.AwaitingManager>
+              )}
+              {data.status === "APROVADO_SINDICO" && (
+                <S.InRow>
+                  <S.InMessage>
+                    <Icons.CheckFill />
+                    <span>PARTICIPANDO</span>
+                  </S.InMessage>
 
-                    <Button
-                      greenText={true}
-                      type="quaternary"
-                      text={"Detalhes"}
-                      action={handleSeeDetails}
-                      fit={true}
-                      icon={<Icons.Expand />}
-                      iconSize={18}
-                    />
-                  </S.InRow>
-                )}
+                  <Button
+                    greenText={true}
+                    type="quaternary"
+                    text={"Detalhes"}
+                    action={handleSeeDetails}
+                    fit={true}
+                    icon={<Icons.Expand />}
+                    iconSize={18}
+                  />
+                </S.InRow>
+              )}
             </S.ResumeArea>
 
             <Divider />
@@ -184,7 +182,16 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
             <S.BottomCard>
               <Button
                 type="quaternary"
-                text={!data.status ? "Recusar" : "Cancelar Participação"}
+                text={
+                  (
+                    [
+                      "DISPONIVEL",
+                      "AGUARDANDO_SINDICO",
+                    ] as TProviderBudgetResume["status"][]
+                  ).includes(data.status)
+                    ? "Recusar"
+                    : "Cancelar Participação"
+                }
                 action={handleReject}
                 fit={true}
                 red={true}
@@ -195,7 +202,17 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
                 text={"PARTICIPAR"}
                 action={handleGetIn}
                 fit={true}
-                disabled={data.status === "ACEITO"}
+                disabled={(
+                  [
+                    "AGUARDANDO_SINDICO",
+                    "APROVADO_SINDICO",
+                    "RECUSADO_SINDICO",
+                    "CANCELADO_SINDICO",
+                    "CONTRATADO",
+                    "FINALIZADO",
+                    "EXPIRADO",
+                  ] as TProviderBudgetResume["status"][]
+                ).includes(data.status)}
               />
             </S.BottomCard>
           </S.Content>

@@ -1,4 +1,8 @@
-import { TBudget, TNewBudget } from "../../../../utils/@types/data/budget"
+import {
+  TBudget,
+  TNewBudget,
+  TProviderBudgetResume,
+} from "../../../../utils/@types/data/budget"
 import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Budgets = {
@@ -30,7 +34,7 @@ export type TApi_Params_Budgets = {
     interact: {
       budgetId: number
       providerId: number
-      status: "ACEITO" | "RECUSADO" | "CANCELADO"
+      status: string // TProviderBudgetResume["status"]
     }
     statistics: {
       providerId: number
