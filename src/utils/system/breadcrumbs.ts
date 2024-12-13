@@ -6,6 +6,7 @@ type TBreadCrumbLink = {
 }
 
 export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
+  documents: [{ title: "Documentação" }],
   panelBudget: [{ title: "Painel" }, { title: "Detalhes do Orçamento" }],
   panelProvider: [
     { title: "Painel" },

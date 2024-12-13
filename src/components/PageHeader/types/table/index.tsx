@@ -12,6 +12,7 @@ type Props = {
 }
 
 const titleRelations: { [key in THeaderFrom]: string } = {
+  documents: "",
   franchiseCities: "",
   panelBudget: "",
   panelProvider: "",

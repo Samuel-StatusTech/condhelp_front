@@ -198,7 +198,7 @@ const FPdocuments = () => {
 
   return (
     <C.Content className="falseSubContentWrapper">
-      <PageHeader type={"breadcrumb"} from={"users"} forForm={true} />
+      <PageHeader type={"breadcrumb"} from={"documents"} forForm={true} />
 
       <Form
         handleField={handleField}
