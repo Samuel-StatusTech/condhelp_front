@@ -6,6 +6,7 @@ import {
 } from "./status"
 import { statesOptions as states } from "./states"
 import { managerTimeOptions } from "./managerTime"
+import { paginationOptions } from "./pagination"
 
 export const systemOptions = {
   accessProfiles: profiles,
@@ -15,4 +16,5 @@ export const systemOptions = {
   errandStatus: errandStatusOptions,
   budgetsStatus: budgetsStatusOptions,
   managerTime: managerTimeOptions,
+  pagination: paginationOptions,
 }

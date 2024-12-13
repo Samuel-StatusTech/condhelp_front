@@ -16,6 +16,8 @@ import Card from "../../components/Card"
 import { TCondominium } from "../../utils/@types/data/condominium"
 import { Icons } from "../../assets/icons/icons"
 import Button from "../../components/Button"
+import initials from "../../utils/initials"
+import { TDefaultFilters } from "../../api/types/params"
 
 const CondosPage = () => {
   const { user, controllers } = getStore()
@@ -26,6 +28,14 @@ const CondosPage = () => {
 
   const [condos, setCondos] = useState<TCondominium[]>([])
   const [search, setSearch] = useState("")
+
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
 
   const [filters, setFilters] = useState({
     states: "",
@@ -53,41 +63,45 @@ const CondosPage = () => {
 
   // Start component
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (params: TDefaultFilters) => {
+      setLoading(true)
 
-    try {
-      const userReq = await Api.persons.getSingle({
-        id: user?.userId as number,
-      })
-
-      if (userReq.ok) {
-        controllers.user.setData(userReq.data)
-      }
-
-      const req = await Api.condos.listAll({ size: 300 })
-
-      if (req.ok) {
-        setCondos(req.data.content)
-      } else {
-        controllers.feedback.setData({
-          visible: true,
-          state: "alert",
-          message: req.error,
+      try {
+        const userReq = await Api.persons.getSingle({
+          id: user?.userId as number,
         })
+
+        if (userReq.ok) {
+          controllers.user.setData(userReq.data)
+        }
+
+        const req = await Api.condos.listAll(params)
+
+        if (req.ok) {
+          setSearchControl(req.data)
+          setCondos(req.data.content)
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
+
+        setLoading(false)
+      } catch (error) {
+        // ...
+
+        setLoading(false)
       }
-
-      setLoading(false)
-    } catch (error) {
-      // ...
-
-      setLoading(false)
-    }
-  }, [controllers.feedback, controllers.user, user?.userId])
+    },
+    [controllers.feedback, controllers.user, user?.userId]
+  )
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(searchFilters)
+  }, [loadData, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -153,6 +167,8 @@ const CondosPage = () => {
         {/* Table content */}
         <Table
           config={tableConfig.condos}
+          searchData={searchControl}
+          setSearchFilters={setSearchFilters}
           data={condos.filter((i) => {
             let ok = true
 

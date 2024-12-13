@@ -17,6 +17,8 @@ import SearchBlock from "../../components/SearchBlock"
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../utils/@types/data/option"
 import { sorts } from "../../utils/tb/parsers/sort"
+import initials from "../../utils/initials"
+import { TDefaultFilters } from "../../api/types/params"
 
 const CategoriesPage = () => {
   const navigate = useNavigate()
@@ -32,6 +34,15 @@ const CategoriesPage = () => {
    */
 
   const [search, setSearch] = useState("")
+
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
+
   const [filters, setFilters] = useState({
     creator: "",
   })
@@ -60,54 +71,57 @@ const CategoriesPage = () => {
 
   // Start component
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (params: TDefaultFilters) => {
+      setLoading(true)
 
-    try {
-      const req = await Api.categories.listAll({ size: 300 })
+      try {
+        const req = await Api.categories.listAll(params)
 
-      if (req.ok) {
-        setCategories(req.data.content)
+        if (req.ok) {
+          setSearchControl(req.data)
+          setCategories(req.data.content)
 
-        let makers: TCategory["user"][] = []
+          let makers: TCategory["user"][] = []
 
-        req.data.content.forEach((c) => {
+          req.data.content.forEach((c) => {
+            const makersIds = makers.map((i) => i.userId)
 
-          const makersIds = makers.map((i) => i.userId)
+            if (!makersIds.includes(c.user.userId)) makers.push(c.user)
+          })
 
-          if (!makersIds.includes(c.user.userId)) makers.push(c.user)
-        })
+          setOptions((opts) => ({
+            ...opts,
+            creator: [
+              { key: "all", value: "Todos" },
+              ...parseOptionList(
+                sorts.alphabetically(makers, "name"),
+                "userId",
+                "name"
+              ),
+            ],
+          }))
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
 
-        setOptions((opts) => ({
-          ...opts,
-          creator: [
-            { key: "all", value: "Todos" },
-            ...parseOptionList(
-              sorts.alphabetically(makers, "name"),
-              "userId",
-              "name"
-            ),
-          ],
-        }))
-      } else {
-        controllers.feedback.setData({
-          visible: true,
-          state: "alert",
-          message: req.error,
-        })
+        setLoading(false)
+      } catch (error) {
+        // ...
+
+        setLoading(false)
       }
-
-      setLoading(false)
-    } catch (error) {
-      // ...
-
-      setLoading(false)
-    }
-  }, [controllers.feedback])
+    },
+    [controllers.feedback]
+  )
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(searchFilters)
+  }, [loadData, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -143,6 +157,8 @@ const CategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.categories}
+        searchData={searchControl}
+        setSearchFilters={setSearchFilters}
         data={categories.filter((i) => {
           let ok = true
 

@@ -19,6 +19,7 @@ export const DataArea = styled.div<{ $disabled?: boolean }>`
   padding: 15px;
   border-radius: 10px;
   transition: background-color 0.3s;
+  gap: 8px;
 
   svg {
     transition: transform 0.3s;
@@ -57,7 +58,7 @@ export const SelectedInfo = styled.span`
 `
 
 export const OptionsArea = styled.div<{
-  $reverse: boolean
+  $reverse?: boolean
   $elevation?: number
 }>`
   display: none;

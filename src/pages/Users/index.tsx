@@ -14,6 +14,8 @@ import { getStore } from "../../store"
 import { TUser } from "../../utils/@types/data/user"
 import { userSubordinates } from "../../utils/system/options/profiles"
 import { TAccess } from "../../utils/@types/data/access"
+import initials from "../../utils/initials"
+import { TDefaultFilters } from "../../api/types/params"
 
 const UsersPage = () => {
   const navigate = useNavigate()
@@ -28,11 +30,21 @@ const UsersPage = () => {
    *  Search control
    */
 
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
+
   const [search, setSearch] = useState("")
+
   const [filters, setFilters] = useState({
     profile: "all",
     status: "all",
   })
+
   const [options, setOptions] = useState({
     profile: systemOptions.profiles,
     status: systemOptions.userStatus,
@@ -59,58 +71,60 @@ const UsersPage = () => {
 
   // Start component
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (searchParams: TDefaultFilters) => {
+      setLoading(true)
 
-    try {
-      const req = await Api.persons.listAll({ size: 300 })
+      try {
+        const req = await Api.persons.listAll(searchParams)
 
-      if (req.ok) {
-        const userAllowed = userSubordinates[user?.profile as TAccess].map(
-          (i) => i.key
-        )
+        if (req.ok) {
+          setSearchControl({ ...req.data, content: [] })
 
-        const filtered = req.data.content.filter((i) =>
-          userAllowed.includes(i.profile)
-        )
+          const userAllowed = userSubordinates[user?.profile as TAccess].map(
+            (i) => i.key
+          )
 
-        setPeople(filtered)
-      } else {
+          const filtered = req.data.content.filter((i) =>
+            userAllowed.includes(i.profile)
+          )
+
+          setPeople(filtered)
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
+
+        setLoading(false)
+      } catch (error) {
         controllers.feedback.setData({
           visible: true,
           state: "alert",
-          message: req.error,
+          message:
+            "Houve um erro ao processar as informações. Tente novamente mais tarde.",
         })
+
+        setLoading(false)
+
+        navigate(-1)
       }
-
-      setLoading(false)
-    } catch (error) {
-      controllers.feedback.setData({
-        visible: true,
-        state: "alert",
-        message:
-          "Houve um erro ao processar as informações. Tente novamente mais tarde.",
-      })
-
-      setLoading(false)
-
-      navigate(-1)
-    }
-  }, [controllers.feedback, navigate, user?.profile])
+    },
+    [controllers.feedback, navigate, user?.profile]
+  )
 
   useEffect(() => {
-    loadData()
+    loadData(searchFilters)
 
     const usersOptions = [
       { key: "all", value: "Todos" },
       ...(userSubordinates[user?.profile as TAccess] ?? []),
     ]
 
-    setOptions((opts) => ({
-      ...opts,
-      profile: usersOptions,
-    }))
-  }, [loadData, user?.profile])
+    setOptions((opts) => ({ ...opts, profile: usersOptions }))
+  }, [loadData, searchFilters, user?.profile])
 
   useEffect(() => {
     controllers.modal.open({
@@ -152,6 +166,8 @@ const UsersPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.users}
+        searchData={searchControl}
+        setSearchFilters={setSearchFilters}
         data={people.filter((i) => {
           let ok = true
 

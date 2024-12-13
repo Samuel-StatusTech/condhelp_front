@@ -3,6 +3,10 @@ import { TConfig } from "../../utils/system/table"
 import { useState } from "react"
 import { TDefaultList } from "../../api/types/responses"
 import Skeleton from "../Skeleton"
+import Input from "../Input"
+import { systemOptions } from "../../utils/system/options"
+import { Icons } from "../../assets/icons/icons"
+import { TDefaultFilters } from "../../api/types/params"
 
 type Props = {
   loading?: boolean
@@ -16,6 +20,7 @@ type Props = {
   search?: string
   searchFields?: string[]
   expandComponent?: (item: any) => JSX.Element
+  setSearchFilters?: React.Dispatch<React.SetStateAction<TDefaultFilters>>
 }
 
 const Table = ({
@@ -28,7 +33,40 @@ const Table = ({
   search,
   searchFields,
   expandComponent,
+  setSearchFilters,
 }: Props) => {
+  const onChangePaginationConfig = (field: string, value: any) => {
+    if (setSearchFilters) {
+      if (field === "size") {
+        setSearchFilters((sf) => ({
+          ...sf,
+          [field]: value,
+          page: 0,
+        }))
+      } else setSearchFilters((sf) => ({ ...sf, [field]: value }))
+    }
+  }
+
+  const renderPagesItems = () => {
+    let content: JSX.Element[] = []
+
+    if (searchData && onChangePaginationConfig) {
+      for (let i = 0; i < searchData.totalPages; i++) {
+        content.push(
+          <S.PageItem
+            $disabled={false}
+            $active={i === searchData.pageable.pageNumber}
+            onClick={() => onChangePaginationConfig("page", i)}
+          >
+            <span>{String(i + 1).padStart(2, "0")}</span>
+          </S.PageItem>
+        )
+      }
+    }
+
+    return content
+  }
+
   return (
     <S.Wrapper>
       <S.Table>
@@ -82,6 +120,44 @@ const Table = ({
           )}
         </S.TableBody>
       </S.Table>
+
+      {searchData && (
+        <S.PaginationWrapper>
+          <S.Showinglabel>
+            Exibindo <strong>{searchData?.numberOfElements}</strong> de{" "}
+            {searchData?.totalElements}
+          </S.Showinglabel>
+
+          <S.Pages>
+            <S.PageItem
+              $disabled={searchData.first}
+              $reverse={true}
+              onClick={() => onChangePaginationConfig("page", 0)}
+            >
+              <Icons.PageControl />
+            </S.PageItem>
+
+            {searchData.totalElements > 0 && renderPagesItems()}
+
+            <S.PageItem
+              $disabled={searchData.last}
+              onClick={() =>
+                onChangePaginationConfig("page", searchData.totalPages - 1)
+              }
+            >
+              <Icons.PageControl />
+            </S.PageItem>
+          </S.Pages>
+
+          <Input.Select
+            field="size"
+            onChange={onChangePaginationConfig}
+            options={systemOptions.pagination}
+            value={String(searchData?.size)}
+            reverse={true}
+          />
+        </S.PaginationWrapper>
+      )}
     </S.Wrapper>
   )
 }

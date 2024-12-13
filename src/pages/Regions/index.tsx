@@ -10,6 +10,8 @@ import SearchBlock from "../../components/SearchBlock"
 import { getStore } from "../../store"
 import { Api } from "../../api"
 import { TRegion } from "../../utils/@types/data/region"
+import { TDefaultFilters } from "../../api/types/params"
+import initials from "../../utils/initials"
 
 const RegionsPage = () => {
   const navigate = useNavigate()
@@ -19,6 +21,14 @@ const RegionsPage = () => {
   const [regions, setRegions] = useState<TRegion[]>([])
 
   const [loading, setLoading] = useState(true)
+
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
 
   /*
    *  Search control
@@ -40,32 +50,36 @@ const RegionsPage = () => {
 
   // Start component
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (params: TDefaultFilters) => {
+      setLoading(true)
 
-    try {
-      const req = await Api.regions.listAll({ size: 300 })
+      try {
+        const req = await Api.regions.listAll(params)
 
-      if (req.ok) {
-        setRegions(req.data.content)
-      } else {
-        controllers.feedback.setData({
-          visible: true,
-          state: "alert",
-          message: req.error,
-        })
+        if (req.ok) {
+          setSearchControl(req.data)
+          setRegions(req.data.content)
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
+
+        setLoading(false)
+      } catch (error) {
+        // ...
+        setLoading(false)
       }
-
-      setLoading(false)
-    } catch (error) {
-      // ...
-      setLoading(false)
-    }
-  }, [controllers.feedback])
+    },
+    [controllers.feedback]
+  )
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(searchFilters)
+  }, [loadData, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -92,6 +106,8 @@ const RegionsPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.regions}
+        searchData={searchControl}
+        setSearchFilters={setSearchFilters}
         data={regions}
         actions={{
           edit: handleEdit,

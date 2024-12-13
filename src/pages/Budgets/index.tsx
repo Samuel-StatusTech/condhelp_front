@@ -15,6 +15,8 @@ import Divider from "../../components/_minimals/Divider"
 import Table from "../../components/Table"
 import { Api } from "../../api"
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
+import initials from "../../utils/initials"
+import { TDefaultFilters } from "../../api/types/params"
 
 const Budgets = () => {
   const { user, controllers } = getStore()
@@ -24,6 +26,14 @@ const Budgets = () => {
    */
 
   const [loading, setLoading] = useState(true)
+
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
 
   const [specificCondo, setSpecificCondo] = useState("")
   const [finishedBudgetsSearch, setFinishedBudgetsSearch] = useState("")
@@ -73,14 +83,15 @@ const Budgets = () => {
     )
   }
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (params: TDefaultFilters) => {
     setLoading(true)
 
     try {
       // Budgets
-      const req = await Api.budgets.listAll({ size: 300 })
+      const req = await Api.budgets.listAll(params)
 
       if (req.ok) {
+        setSearchControl(req.data)
         setBudgets(
           req.data.content.sort((a, b) =>
             !a.endDate || !b.endDate
@@ -117,8 +128,8 @@ const Budgets = () => {
   }, [])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(searchFilters)
+  }, [loadData, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -173,7 +184,12 @@ const Budgets = () => {
             ]}
           />
 
-          <Table data={finishedBudgets} config={tableConfig.finishedBudgets} />
+          <Table
+            config={tableConfig.finishedBudgets}
+            searchData={searchControl}
+            setSearchFilters={setSearchFilters}
+            data={finishedBudgets}
+          />
         </S.BlockArea>
       </S.SubContent>
     </S.Content>

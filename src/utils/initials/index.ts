@@ -13,6 +13,9 @@ import { goalApprove } from "./modals/goalApprove"
 import { goalPoints } from "./modals/goalPoints"
 import { newBudget } from "./modals/newBudget"
 
+// Pagination
+import { initialPagination } from "./table/pagination"
+
 const initials = {
   forms: {
     login: loginForm,
@@ -29,6 +32,7 @@ const initials = {
     goalPoints: goalPoints,
     newBudget: newBudget,
   },
+  pagination: initialPagination,
 }
 
 export default initials

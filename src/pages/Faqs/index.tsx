@@ -9,6 +9,8 @@ import SearchBlock from "../../components/SearchBlock"
 import { TFaq } from "../../utils/@types/data/faq"
 import { Api } from "../../api"
 import { getStore } from "../../store"
+import initials from "../../utils/initials"
+import { TDefaultFilters } from "../../api/types/params"
 
 const FaqsPage = () => {
   const { controllers } = getStore()
@@ -25,6 +27,14 @@ const FaqsPage = () => {
 
   const [search, setSearch] = useState("")
 
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
+
   const handleSearch = async () => {}
 
   // Engine
@@ -39,38 +49,42 @@ const FaqsPage = () => {
 
   // Start component
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (params: TDefaultFilters) => {
+      setLoading(true)
 
-    try {
-      const req = await Api.faqs.listAll({ size: 300 })
+      try {
+        const req = await Api.faqs.listAll(params)
 
-      if (req.ok) {
-        setFaqs(req.data.content)
-      } else {
+        if (req.ok) {
+          setSearchControl(req.data)
+          setFaqs(req.data.content)
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
+
+        setLoading(false)
+      } catch (error) {
         controllers.feedback.setData({
           visible: true,
           state: "alert",
-          message: req.error,
+          message:
+            "Houve um erro ao carregar as informações. Tente novamente mais tarde.",
         })
+
+        setLoading(false)
       }
-
-      setLoading(false)
-    } catch (error) {
-      controllers.feedback.setData({
-        visible: true,
-        state: "alert",
-        message:
-          "Houve um erro ao carregar as informações. Tente novamente mais tarde.",
-      })
-
-      setLoading(false)
-    }
-  }, [controllers.feedback])
+    },
+    [controllers.feedback]
+  )
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData(searchFilters)
+  }, [loadData, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -97,6 +111,8 @@ const FaqsPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.faqs}
+        searchData={searchControl}
+        setSearchFilters={setSearchFilters}
         data={faqs}
         actions={{
           edit: handleEdit,

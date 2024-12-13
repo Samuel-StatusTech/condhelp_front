@@ -14,6 +14,8 @@ import PageHeader from "../../components/PageHeader"
 import SearchBlock from "../../components/SearchBlock"
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../utils/@types/data/option"
+import { TDefaultFilters } from "../../api/types/params"
+import initials from "../../utils/initials"
 
 const SubcategoriesPage = () => {
   const navigate = useNavigate()
@@ -23,6 +25,14 @@ const SubcategoriesPage = () => {
   const [subcategories, setSubcategories] = useState<TSubCategory[]>([])
 
   const [loading, setLoading] = useState(true)
+
+  const [searchControl, setSearchControl] = useState(initials.pagination)
+
+  const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
+    page: initials.pagination.pageable.pageNumber,
+    size: initials.pagination.size,
+    sort: undefined,
+  })
 
   /*
    *  Search control
@@ -59,69 +69,74 @@ const SubcategoriesPage = () => {
 
   // Start component
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (searchParams: TDefaultFilters) => {
+      setLoading(true)
 
-    try {
-      const req = await Api.subcategories.listAll({
-        size: 300,
-        sort: "name,asc",
-      })
+      try {
+        const req = await Api.subcategories.listAll(searchParams)
 
-      if (req.ok) {
-        let cats: TSubCategory["category"][] = []
-        let makers: TSubCategory["user"][] = []
+        if (req.ok) {
+          setSearchControl(req.data)
 
-        req.data.content.forEach((sc) => {
-          const catsIds = cats.map((i) => i.id)
-          const makersIds = makers.map((i) => i.userId)
+          let cats: TSubCategory["category"][] = []
+          let makers: TSubCategory["user"][] = []
 
-          if (!catsIds.includes(sc.category.id)) cats.push(sc.category)
-          if (!makersIds.includes(sc.user.userId)) makers.push(sc.user)
-        })
+          req.data.content.forEach((sc) => {
+            const catsIds = cats.map((i) => i.id)
+            const makersIds = makers.map((i) => i.userId)
 
-        setOptions((opts) => ({
-          ...opts,
-          category: [
-            { key: "all", value: "Todas" },
-            ...parseOptionList(
-              cats.sort((a, b) =>
-                a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+            if (!catsIds.includes(sc.category.id)) cats.push(sc.category)
+            if (!makersIds.includes(sc.user.userId)) makers.push(sc.user)
+          })
+
+          setOptions((opts) => ({
+            ...opts,
+            category: [
+              { key: "all", value: "Todas" },
+              ...parseOptionList(
+                cats.sort((a, b) =>
+                  a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+                ),
+                "id",
+                "name"
               ),
-              "id",
-              "name"
-            ),
-          ],
-          creator: [
-            { key: "all", value: "Todos" },
-            ...parseOptionList(
-              makers.sort((a, b) =>
-                a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+            ],
+            creator: [
+              { key: "all", value: "Todos" },
+              ...parseOptionList(
+                makers.sort((a, b) =>
+                  a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+                ),
+                "userId",
+                "name"
               ),
-              "userId",
-              "name"
-            ),
-          ],
-        }))
+            ],
+          }))
 
-        setSubcategories(req.data.content)
-      } else {
-        controllers.feedback.setData({
-          visible: true,
-          state: "alert",
-          message: req.error,
-        })
+          setSubcategories(req.data.content)
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
+
+        setLoading(false)
+      } catch (error) {
+        setLoading(false)
       }
-
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-    }
-  }, [controllers.feedback])
+    },
+    [controllers.feedback]
+  )
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    loadData({
+      ...searchFilters,
+      sort: "name,asc",
+    })
+  }, [loadData, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -163,6 +178,8 @@ const SubcategoriesPage = () => {
       {/* Table content */}
       <Table
         config={tableConfig.subcategories}
+        searchData={searchControl}
+        setSearchFilters={setSearchFilters}
         data={subcategories.filter((i) => {
           let ok = false
 

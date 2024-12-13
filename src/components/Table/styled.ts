@@ -7,8 +7,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
+  position: relative;
 
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 `
 
 export const TableControl = styled.div`
@@ -363,10 +365,62 @@ export const PaginationWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 64px;
+
+  @media (max-width: 520px) {
+    /* flex-direction: column; */
+    gap: 32px;
+    flex-wrap: wrap;
+  }
 `
 
 export const Showinglabel = styled.span`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.neutral.lightMain};
   font-weight: 300;
+
+  @media (max-width: 520px) {
+  }
+`
+
+export const Pages = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 520px) {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+`
+
+export const PageItem = styled.button<{
+  $disabled?: boolean
+  $reverse?: boolean
+  $active?: boolean
+}>`
+  display: grid;
+  place-items: center;
+  padding: 6px;
+
+  border: none;
+  outline: none;
+  background: none;
+
+  cursor: pointer;
+
+  transform: rotate(${({ $reverse }) => ($reverse ? 180 : 0)}deg);
+
+  span {
+    font-weight: 600;
+    color: ${({ $active, theme }) =>
+      $active ? theme.colors.neutral.main : theme.colors.neutral.lightMain};
+    transition: color 0.3s;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.neutral.main};
+    }
+  }
+
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 `

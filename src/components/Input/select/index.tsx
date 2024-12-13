@@ -13,6 +13,7 @@ export type TInputSelect = {
   disabled?: boolean
   byKey?: boolean
   elevation?: number
+  reverse?: boolean
 }
 
 export type TOption = {
@@ -40,6 +41,7 @@ const SelectDefault = ({
   byKey,
   alignBottom,
   avoidValueShow,
+  reverse,
 }: Props) => {
   // use ref ...
 
@@ -86,7 +88,7 @@ const SelectDefault = ({
           </S.DataArea>
           <S.OptionsArea
             className={showing ? "visible" : ""}
-            $reverse={false}
+            $reverse={reverse}
             $elevation={elevation}
           >
             {options.map((o, k) => (
