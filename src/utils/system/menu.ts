@@ -19,6 +19,27 @@ export const menu: {
       tag: "dash",
     },
     {
+      icon: "budget",
+      text: "Orçamentos",
+      link: "/providerBudgets",
+      tag: "providerBudgets",
+      access: ["PRESTADOR"],
+      subMenus: [
+        {
+          title: "Participar",
+          link: "/available",
+        },
+        {
+          title: "Aguardando síndico",
+          link: "/awaiting",
+        },
+        {
+          title: "Finalizado",
+          link: "/finished",
+        },
+      ],
+    },
+    {
       icon: "document",
       text: "Documentação",
       link: "/documents",

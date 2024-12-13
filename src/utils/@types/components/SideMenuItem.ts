@@ -6,4 +6,10 @@ export type PSideMenuItem = {
   link: string
   tag: string
   access?: TAccess[]
+  subMenus?: SubMenu[]
+}
+
+export type SubMenu = {
+  title: string
+  link: string
 }

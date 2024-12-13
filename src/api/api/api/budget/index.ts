@@ -328,6 +328,57 @@ const statistics: TApi["budgets"]["statistics"] = async ({ providerId }) => {
     }
   })
 }
+const getByStatus: TApi["budgets"]["getByStatus"] = async ({
+  providerId,
+  status,
+  page,
+  size,
+  sort,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/provider/${providerId}`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            status: status,
+            page: page,
+            size: size,
+            sort: sort,
+          },
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
 
 export type TApi_Budgets = {
   listAll: (
@@ -348,6 +399,9 @@ export type TApi_Budgets = {
   statistics: (
     p: TParams["budgets"]["statistics"]
   ) => TResponses["budgets"]["statistics"]
+  getByStatus: (
+    p: TParams["budgets"]["getByStatus"]
+  ) => TResponses["budgets"]["getByStatus"]
 }
 
 export const apiBudgets: TApi["budgets"] = {
@@ -359,4 +413,5 @@ export const apiBudgets: TApi["budgets"] = {
   delete: deleteItem,
   interact: interact,
   statistics: statistics,
+  getByStatus: getByStatus,
 }

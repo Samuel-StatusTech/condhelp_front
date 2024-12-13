@@ -12,6 +12,7 @@ export type TApi_Responses_Budgets = {
     listProviderBudgets: Promise<
       TDefaultRes<TDefaultList<TProviderBudgetResume>>
     >
+    getByStatus: Promise<TDefaultRes<TDefaultList<TProviderBudgetResume>>>
     create: Promise<TDefaultRes<TBudget>>
     getSingle: Promise<TDefaultRes<TBudget>>
     update: Promise<TDefaultRes<TBudget>>

@@ -31,10 +31,14 @@ export type TApi_Params_Budgets = {
     getSingle: {
       id: number
     }
+    getByStatus: TDefaultFilters & {
+      providerId: number
+      status: TProviderBudgetResume["status"]
+    }
     interact: {
       budgetId: number
       providerId: number
-      status: string // TProviderBudgetResume["status"]
+      status: string
     }
     statistics: {
       providerId: number

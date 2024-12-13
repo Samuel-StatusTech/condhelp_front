@@ -13,13 +13,14 @@ type Props = {
   k: number
   data: TProviderBudgetResume
   onPickBudget: (budgetId: number) => void
+  forGrid?: boolean
 }
 
 /*
  *  Approval Resume Component
  */
 
-const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
+const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
   const { user, controllers } = getStore()
 
   const reloadPage = () => {
@@ -41,7 +42,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
       const shouldShow = diff <= 3 && diff > -1
 
       return shouldShow ? (
-        <S.AlertArea>
+        <S.AlertArea $forGrid={forGrid}>
           <span>
             {diff === 0 ? "O prazo se encerra hoje" : `Restam ${diff} dias`}
           </span>
@@ -96,7 +97,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
   }
 
   return (
-    <S.Element $k={k}>
+    <S.Element $k={k} $forGrid={forGrid}>
       <C.HTop>
         <C.Header>
           <C.HPart $k={k}>
@@ -105,8 +106,8 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
         </C.Header>
       </C.HTop>
 
-      <C.MainWrapper $expanded={true}>
-        <C.ContentWrapper>
+      <S.MainWrapper>
+        <S.ContentWrapper>
           <S.Content>
             <S.Info>
               <S.InfoItem>
@@ -128,8 +129,9 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: forGrid ? "column" : "row",
+                  alignItems: forGrid ? "flex-start" : "center",
+                  justifyContent: forGrid ? "unset" : "space-between",
                   position: "relative",
                 }}
               >
@@ -216,8 +218,8 @@ const ManagerBudgetResume = ({ k, data, onPickBudget }: Props) => {
               />
             </S.BottomCard>
           </S.Content>
-        </C.ContentWrapper>
-      </C.MainWrapper>
+        </S.ContentWrapper>
+      </S.MainWrapper>
     </S.Element>
   )
 }

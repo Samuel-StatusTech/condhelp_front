@@ -35,6 +35,7 @@ import FPfaq from "../pages/Forms/Faq"
 import FaqsView from "../pages/Head/Faq"
 import Budgets from "../pages/Budgets"
 import FPdocuments from "../pages/Forms/Documents"
+import ProviderBudgets from "../pages/ProviderBudgets"
 
 const Router = () => {
   return (
@@ -80,6 +81,18 @@ const Router = () => {
               <Route path="single" element={<FPsubcategory />} />
               <Route path="single/:id" element={<FPsubcategory />} />
             </Route>
+            <Route
+              path="providerBudgets/available"
+              element={<ProviderBudgets status="DISPONIVEL" />}
+            />
+            <Route
+              path="providerBudgets/awaiting"
+              element={<ProviderBudgets status="AGUARDANDO_SINDICO" />}
+            />
+            <Route
+              path="providerBudgets/finished"
+              element={<ProviderBudgets status="FINALIZADO" />}
+            />
             <Route path="budgets">
               <Route path="" element={<Budgets />} />
             </Route>

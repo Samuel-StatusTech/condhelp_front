@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-export const Element = styled.div<{ $k?: number }>`
+export const Element = styled.div<{ $k?: number; $forGrid?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-width: 360px;
+  min-width: ${({ $forGrid }) => ($forGrid ? "unset" : "360px")};
   background-color: ${({ theme }) => theme.colors.neutral.white};
   border-radius: 8px;
   align-self: stretch;
@@ -22,7 +22,16 @@ export const Element = styled.div<{ $k?: number }>`
   }
 `
 
+export const MainWrapper = styled.div`
+  flex: 1;
+`
+
+export const ContentWrapper = styled.div`
+  height: 100%;
+`
+
 export const Content = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -52,6 +61,7 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
 `
 
 export const InfoItem = styled.div`
@@ -189,13 +199,15 @@ export const DateArea = styled.div`
   font-size: 14px;
 `
 
-export const AlertArea = styled.div`
+export const AlertArea = styled.div<{ $forGrid?: boolean }>`
   display: flex;
   align-items: center;
   gap: 4px;
   color: ${({ theme }) => theme.colors.red.main};
   font-size: 14px;
 
-  position: absolute;
-  right: 0;
+  position: ${({ $forGrid }) => ($forGrid ? "relative" : "absolute")};
+  right: ${({ $forGrid }) => ($forGrid ? "unset" : 0)};
+  margin-top: ${({ $forGrid }) => ($forGrid ? 8 : 0)}px;
+  align-self: ${({ $forGrid }) => ($forGrid ? "center" : "unset")};
 `

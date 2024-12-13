@@ -23,9 +23,11 @@ const SideMenu = (props: Props) => {
   const [sideOpened, setSideOpened] = useState(false)
 
   const toggleSideMenu = () => {
-    window.document.body.style.overflow = !sideOpened ? "hidden" : "unset"
+    if (window.document.body.clientWidth <= 520) {
+      window.document.body.style.overflow = !sideOpened ? "hidden" : "unset"
 
-    setSideOpened(!sideOpened)
+      setSideOpened(!sideOpened)
+    }
   }
 
   const toggleNewBudgetModal = useCallback(() => {
