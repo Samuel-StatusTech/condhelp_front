@@ -15,7 +15,6 @@ export const managerInitial: TNewUser & TUManager = {
   documentType: "cpf",
   documentNumber: "",
   birthDate: new Date().getTime(),
-  managerSince: new Date().getTime(),
-  experience: "01",
+  managerSince: 1,
   condominiums: [],
 }

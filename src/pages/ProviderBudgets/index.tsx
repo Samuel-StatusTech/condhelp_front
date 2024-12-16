@@ -26,88 +26,7 @@ const ProviderBudgets = ({ status }: Props) => {
   // Engine
 
   const [budget, setBudget] = useState<TProviderBudgetResume | null>(null)
-  const [budgets, setBudgets] = useState<TProviderBudgetResume[]>([
-    {
-      id: 4,
-      title: "Troca de lampadas",
-      condominiumName: "Condomínio X",
-      isUrgent: true,
-      categoryName: "Contábil",
-      subcategoryName: "Contabilidade",
-      description: "Preciso de troca de lampadas",
-      startDate: "2024-12-14T00:00:00",
-      endDate: "2024-12-16T00:00:00",
-      attachmentUrl: "",
-      status: "AGUARDANDO_SINDICO",
-      awaiting: 0,
-      rejected: 0,
-      accepted: 0,
-    },
-    {
-      id: 4,
-      title: "Troca de lampadas",
-      condominiumName: "Condomínio X",
-      isUrgent: false,
-      categoryName: "Contábil",
-      subcategoryName: "Contabilidade",
-      description: "Preciso de troca de lampadas",
-      startDate: "2024-12-14T00:00:00",
-      endDate: "2024-12-16T00:00:00",
-      attachmentUrl: "",
-      status: "AGUARDANDO_SINDICO",
-      awaiting: 0,
-      rejected: 0,
-      accepted: 0,
-    },
-    {
-      id: 4,
-      title: "Troca de lampadas",
-      condominiumName: "Condomínio X",
-      isUrgent: true,
-      categoryName: "Contábil",
-      subcategoryName: "Contabilidade",
-      description: "Preciso de troca de lampadas",
-      startDate: "2024-12-14T00:00:00",
-      endDate: "2024-12-19T00:00:00",
-      attachmentUrl: "",
-      status: "AGUARDANDO_SINDICO",
-      awaiting: 0,
-      rejected: 0,
-      accepted: 0,
-    },
-    {
-      id: 4,
-      title: "Troca de lampadas",
-      condominiumName: "Condomínio X",
-      isUrgent: true,
-      categoryName: "Contábil",
-      subcategoryName: "Contabilidade",
-      description: "Preciso de troca de lampadas",
-      startDate: "2024-12-14T00:00:00",
-      endDate: "2024-12-16T00:00:00",
-      attachmentUrl: "",
-      status: "AGUARDANDO_SINDICO",
-      awaiting: 0,
-      rejected: 0,
-      accepted: 0,
-    },
-    {
-      id: 4,
-      title: "Troca de lampadas",
-      condominiumName: "Condomínio X",
-      isUrgent: true,
-      categoryName: "Contábil",
-      subcategoryName: "Contabilidade",
-      description: "Preciso de troca de lampadas",
-      startDate: "2024-12-14T00:00:00",
-      endDate: "2024-12-16T00:00:00",
-      attachmentUrl: "",
-      status: "AGUARDANDO_SINDICO",
-      awaiting: 0,
-      rejected: 0,
-      accepted: 0,
-    },
-  ])
+  const [budgets, setBudgets] = useState<TProviderBudgetResume[]>([])
 
   // Cards
 
@@ -135,7 +54,7 @@ const ProviderBudgets = ({ status }: Props) => {
       // Budgets
       const req = await Api.budgets.getByStatus({
         size: 300,
-        providerId: user?.id as number,
+        providerId: user?.userAccountId as number,
         status: status,
       })
 
@@ -155,7 +74,7 @@ const ProviderBudgets = ({ status }: Props) => {
     } catch (error) {
       setLoading(false)
     }
-  }, [status, user?.id])
+  }, [status, user?.userAccountId])
 
   useEffect(() => {
     loadData()

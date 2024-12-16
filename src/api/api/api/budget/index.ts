@@ -15,7 +15,8 @@ const listAll: TApi["budgets"]["listAll"] = async (filters) => {
         .get(`${url}`, {
           params: {
             userId: filters.managerId,
-            condominiumId: filters.condominiumId,
+            condominiumId:
+              filters.condominiumId !== 0 ? filters.condominiumId : undefined,
             subsidiaryId: filters.branchId,
             page: filters.page,
             size: filters.size,

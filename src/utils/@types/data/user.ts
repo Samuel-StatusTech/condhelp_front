@@ -103,8 +103,7 @@ export type TUManager = {
 
   birthDate: string | number
 
-  managerSince: number
-  experience?: TExperience
+  managerSince: TExperience
 
   condominiums: TCondominium[]
 }

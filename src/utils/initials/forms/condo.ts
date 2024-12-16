@@ -33,7 +33,7 @@ export const condoForm: TNewCondominium = {
 
     birthDate: "",
 
-    managerSince: new Date().getTime(),
+    managerSince: 1,
 
     condominiums: [],
   },

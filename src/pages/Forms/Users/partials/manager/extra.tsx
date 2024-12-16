@@ -74,8 +74,8 @@ export const extraManager = (
             {
               type: "select",
               label: "Tempo na função como síndico",
-              field: "experience",
-              value: form.experience as string,
+              field: "managerSince",
+              value: String(form.managerSince),
               options: systemOptions.managerTime,
               gridSizes: { big: 12 },
             },

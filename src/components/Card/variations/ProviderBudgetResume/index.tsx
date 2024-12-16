@@ -149,7 +149,12 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
             <Divider />
 
             <S.ResumeArea>
-              {data.status === "DISPONIVEL" && (
+              {(
+                [
+                  "DISPONIVEL",
+                  "CANCELADO_PRESTADOR",
+                ] as TProviderBudgetResume["status"][]
+              ).includes(data.status) && (
                 <S.Available>Disponível para participação</S.Available>
               )}
               {data.status === "AGUARDANDO_SINDICO" && (

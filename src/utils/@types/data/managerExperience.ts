@@ -1,1 +1,1 @@
-export type TExperience = "01" | "13" | "35" | "50"
+export type TExperience = 1 | 2 | 3 | 4
