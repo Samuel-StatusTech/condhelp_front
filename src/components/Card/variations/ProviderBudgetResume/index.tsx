@@ -27,22 +27,29 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
     window.location.reload()
   }
 
+  const getDateDiff = () => {
+    const d = new Date()
+
+    const todayTime = new Date(
+      d.getFullYear(),
+      d.getMonth(),
+      d.getDate()
+    ).getTime()
+    const budgetTime = new Date(data.endDate as string).getTime()
+
+    const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
+
+    return diff
+  }
+
   const renderDateAlert = () => {
     if (data.endDate) {
-      const d = new Date()
+      const diff = getDateDiff()
 
-      const todayTime = new Date(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getDate()
-      ).getTime()
-      const budgetTime = new Date(data.endDate).getTime()
-
-      const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
       const shouldShow = diff <= 3 && diff > -1
 
       return shouldShow ? (
-        <S.AlertArea $forGrid={forGrid}>
+        <S.AlertArea $forGrid={forGrid} $column={diff === 0}>
           <span>
             {diff === 0 ? "O prazo se encerra hoje" : `Restam ${diff} dias`}
           </span>
@@ -126,15 +133,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
                 <Icons.Subcategory />
                 <span>{data.subcategoryName}</span>
               </S.InfoItem>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: forGrid ? "column" : "row",
-                  alignItems: forGrid ? "flex-start" : "center",
-                  justifyContent: forGrid ? "unset" : "space-between",
-                  position: "relative",
-                }}
-              >
+              <S.LastInfo $column={getDateDiff() === 0}>
                 <S.InfoItem>
                   <Icons.Calendar />
                   <span>
@@ -144,7 +143,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
                 </S.InfoItem>
 
                 {renderDateAlert()}
-              </div>
+              </S.LastInfo>
             </S.Info>
 
             <Divider />

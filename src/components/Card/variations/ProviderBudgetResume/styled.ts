@@ -4,7 +4,7 @@ export const Element = styled.div<{ $k?: number; $forGrid?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-width: ${({ $forGrid }) => ($forGrid ? "unset" : "360px")};
+  min-width: ${({ $forGrid }) => ($forGrid ? "unset" : "380px")};
   background-color: ${({ theme }) => theme.colors.neutral.white};
   border-radius: 8px;
   align-self: stretch;
@@ -62,6 +62,15 @@ export const Info = styled.div`
   flex-direction: column;
   gap: 4px;
   flex: 1;
+`
+
+export const LastInfo = styled.div<{ $forGrid?: boolean; $column?: boolean }>`
+  display: "flex";
+  flex-direction: ${({ $column, $forGrid }) =>
+    $column ? "column" : $forGrid ? "column" : "row"};
+  align-items: ${({ $forGrid }) => ($forGrid ? "flex-start" : "center")};
+  justify-content: ${({ $forGrid }) => ($forGrid ? "unset" : "space-between")};
+  position: "relative";
 `
 
 export const InfoItem = styled.div`
@@ -199,14 +208,17 @@ export const DateArea = styled.div`
   font-size: 14px;
 `
 
-export const AlertArea = styled.div<{ $forGrid?: boolean }>`
+export const AlertArea = styled.div<{ $forGrid?: boolean; $column?: boolean }>`
   display: flex;
   align-items: center;
   gap: 4px;
   color: ${({ theme }) => theme.colors.red.main};
   font-size: 14px;
+  width: ${({ $column }) => ($column ? "100%" : "unset")};
+  justify-content: ${({ $column }) => ($column ? "center" : "unset")};
 
-  position: ${({ $forGrid }) => ($forGrid ? "relative" : "absolute")};
+  position: ${({ $column, $forGrid }) =>
+    $column || $forGrid ? "relative" : "absolute"};
   right: ${({ $forGrid }) => ($forGrid ? "unset" : 0)};
   margin-top: ${({ $forGrid }) => ($forGrid ? 8 : 0)}px;
   align-self: ${({ $forGrid }) => ($forGrid ? "center" : "unset")};
