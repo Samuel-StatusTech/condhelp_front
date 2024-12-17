@@ -63,7 +63,7 @@ const FPcondo = () => {
       neighborhood: form.neighborhood,
       city: form.city,
       federateUnit: form.federateUnit,
-      electionDate: getDateStr(form.manager.managerSince, "javaDateTime"),
+      electionDate: getDateStr(form.electionDate, "javaDateTime"),
       managerId: Number(
         form.manager.userId ?? (form as TNewCondominium).managerId
       ),
@@ -206,17 +206,46 @@ const FPcondo = () => {
     else setForm((f: any) => ({ ...f, [field]: value }))
   }
 
+  const getCityId = useCallback(
+    async (cityName: string) => {
+      try {
+        const req = await Api.cities.searchByName({ search: cityName })
+
+        if (req.ok) {
+          const specific = req.data.content.find((c) => c.name === cityName)
+
+          if (specific) setPickedCity(specific)
+          else throw new Error()
+        } else throw new Error()
+      } catch (error) {
+        controllers.feedback.setData({
+          state: "alert",
+          message: "Cidade não encontrada.",
+          visible: true,
+        })
+      }
+    },
+    [controllers.feedback]
+  )
+
   const loadEditInfo = useCallback(async () => {
     if (params.id && !Number.isNaN(params.id)) {
       const infoReq = await Api.condos.getSingle({ id: Number(params.id) })
 
       if (infoReq.ok) {
+        getCityId(infoReq.data.city)
+
         setForm((frm) => ({ ...frm, ...infoReq.data }))
       } else {
-        throw new Error()
+        controllers.feedback.setData({
+          state: "alert",
+          message:
+            "Não foi possível carregar as informações do condomínio. Tente novamente mais tarde.",
+          visible: true,
+        })
       }
     }
-  }, [params.id])
+  }, [controllers.feedback, getCityId, params.id])
 
   const handleSelectCity = (city: TCity) => {
     setPickedCity(city)
@@ -444,8 +473,8 @@ const FPcondo = () => {
                         {
                           type: "date",
                           label: "Data da eleição",
-                          field: "managerSince",
-                          value: new Date(form.manager.managerSince),
+                          field: "electionDate",
+                          value: new Date(form.electionDate),
                           gridSizes: { big: 3, small: 6 },
                           maxDate: new Date(),
                         },

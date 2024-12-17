@@ -89,7 +89,7 @@ export type TUFranchise = {
 export type TPendency = "none" | "free" | "has"
 
 export type TUManager = {
-  franchiseId: number
+  franqId: number
   profile: "SINDICO"
   name: string
   surname: string

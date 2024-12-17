@@ -39,7 +39,7 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     (!Number.isNaN(data.manager.userId) && Number(data.manager.userId) < 1)
   )
     state = getInvalidCheck(state, "manager")
-  if (!data.manager.managerSince) state = getInvalidCheck(state, "managerSince")
+  if (!data.electionDate) state = getInvalidCheck(state, "electionDate")
 
   // photo
   // file

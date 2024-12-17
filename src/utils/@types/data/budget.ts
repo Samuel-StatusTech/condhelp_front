@@ -66,6 +66,9 @@ export type TBudgetResume = {
 export type TProviderBudgetResume = {
   id: number
   title: string
+  condominiumCity: number
+  condominiumState: number
+  condominiumUnities: number
   condominiumName: string
   isUrgent: boolean
   categoryName: string

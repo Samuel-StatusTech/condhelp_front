@@ -119,7 +119,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
             <S.Info>
               <S.InfoItem>
                 <Icons.Location />
-                <span>São José - SC</span>
+                <span>{`${data.condominiumCity} - ${data.condominiumState}`}</span>
               </S.InfoItem>
               <S.InfoItem>
                 <Icons.Conds />
@@ -127,7 +127,10 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
               </S.InfoItem>
               <S.InfoItem>
                 <Icons.User />
-                <span>25 unidades</span>
+                <span>
+                  {data.condominiumUnities} unidade
+                  {data.condominiumUnities > 1 ? "s" : ""}
+                </span>
               </S.InfoItem>
               <S.InfoItem>
                 <Icons.Subcategory />

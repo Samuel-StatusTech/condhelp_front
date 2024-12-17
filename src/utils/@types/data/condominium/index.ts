@@ -6,7 +6,6 @@ export type TNewCondominium = {
   cnpj: string
   image: null | string
 
-  
   address: string
   addressNumber: string
   zipCode: string
@@ -16,6 +15,8 @@ export type TNewCondominium = {
   subsidiaryId?: number
   manager: TUserTypes["SINDICO"]
   managerId?: number
+
+  electionDate: string | number | Date
 
   electionFile: null | any
 }
@@ -27,7 +28,6 @@ export type TCondominium = {
   cnpj: string
   image: null | string
 
-  
   address: string
   addressNumber: string
   zipCode: string
@@ -36,6 +36,8 @@ export type TCondominium = {
   federateUnit: string
   subsidiaryId?: number
   manager: TUserTypes["SINDICO"]
+
+  electionDate: string | number | Date
 
   electionFile: null | any
 }

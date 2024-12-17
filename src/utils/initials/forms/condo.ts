@@ -12,11 +12,14 @@ export const condoForm: TNewCondominium = {
   city: "",
   federateUnit: "",
   subsidiaryId: 0,
+
+  electionDate: new Date(new Date().setHours(-24)).getTime(),
+
   manager: {
     userAccountId: 0,
     id: 0,
     userId: 0,
-    franchiseId: 0,
+    franqId: 0,
     photo: "",
     status: "ATIVO",
 

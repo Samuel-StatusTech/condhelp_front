@@ -1,8 +1,9 @@
 import { TNewUser, TUManager } from "../../../@types/data/user"
+import { getMajorityDate } from "../../../tb/helpers/getMajorityDate"
 
 export const managerInitial: TNewUser & TUManager = {
   id: 0,
-  franchiseId: 0,
+  franqId: 0,
   userId: 0,
   status: "ATIVO",
   photo: null,
@@ -14,7 +15,7 @@ export const managerInitial: TNewUser & TUManager = {
   phone2: "",
   documentType: "cpf",
   documentNumber: "",
-  birthDate: new Date().getTime(),
+  birthDate: getMajorityDate().getTime(),
   managerSince: 1,
   condominiums: [],
 }

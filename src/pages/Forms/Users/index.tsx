@@ -731,9 +731,9 @@ const FPpeople = () => {
                             {
                               type: "select",
                               label: "Franquia",
-                              field: "franchiseId",
+                              field: "franqId",
                               options: options.franchise,
-                              value: form.franchiseId,
+                              value: form.franqId,
                               gridSizes: { big: 12 },
                             } as FormField,
                           ]

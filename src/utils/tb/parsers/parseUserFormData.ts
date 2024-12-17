@@ -98,6 +98,7 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
     id: user.userId,
     userId: user.userId,
     userAccountId: user.userId,
+    franqId: user.franqId,
     name: user.name,
     email: user.email,
     profile: user.profile,

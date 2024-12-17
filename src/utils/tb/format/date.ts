@@ -15,7 +15,7 @@ export const getTime = (date: string | Date, withSeconds?: boolean) => {
 
 export const getDateStr = (
   date: string | Date | number,
-  format: "dmy" | "pureDate" | "time" | "javaTime" | "javaDateTime"
+  format: "dmy" | "pureDate" | "time" | "javaTime" | "javaDateTime" | "iso"
 ) => {
   let str = ""
 
@@ -34,6 +34,9 @@ export const getDateStr = (
       break
     case "javaDateTime":
       str = getJavaDateTimeStr(new Date(date))
+      break
+    case "iso":
+      str = getIsoDateStr(new Date(date))
       break
     default:
       break
@@ -93,6 +96,12 @@ const getJavaDateTimeStr = (date: Date) => {
   const seconds = String(date.getSeconds()).padStart(2, "0")
 
   str = `${day}-${month}-${year} ${hour}:${minutes}:${seconds}`
+
+  return str
+}
+
+const getIsoDateStr = (date: Date) => {
+  let str = date.toISOString()
 
   return str
 }
