@@ -43,5 +43,10 @@ export type TApi_Params_Budgets = {
     statistics: {
       providerId: number
     }
+    finished: {
+      manager: {
+        id: number
+      }
+    }
   }
 }

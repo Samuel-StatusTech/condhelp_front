@@ -12,7 +12,7 @@ export const subcategoryTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    serviceCategory: (item: TSubCategory) => item.category.name,
+    serviceCategory: (item: TSubCategory) => item.serviceCategory.name,
     name: (item: TSubCategory) => item.name,
     creator: (item: TSubCategory) => (
       <ColorTextIndicator

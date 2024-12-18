@@ -329,6 +329,7 @@ const statistics: TApi["budgets"]["statistics"] = async ({ providerId }) => {
     }
   })
 }
+
 const getByStatus: TApi["budgets"]["getByStatus"] = async ({
   providerId,
   status,
@@ -349,6 +350,47 @@ const getByStatus: TApi["budgets"]["getByStatus"] = async ({
             sort: sort,
           },
         })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const getManagerFinished: TApi["budgets"]["finished"]["manager"] = async ({
+  id,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/manager/finished/${id}`
+
+      await service
+        .get(`${url}`)
         .then((res) => {
           const info = res.data
 
@@ -403,6 +445,11 @@ export type TApi_Budgets = {
   getByStatus: (
     p: TParams["budgets"]["getByStatus"]
   ) => TResponses["budgets"]["getByStatus"]
+  finished: {
+    manager: (
+      p: TParams["budgets"]["finished"]["manager"]
+    ) => TResponses["budgets"]["finished"]["manager"]
+  }
 }
 
 export const apiBudgets: TApi["budgets"] = {
@@ -415,4 +462,7 @@ export const apiBudgets: TApi["budgets"] = {
   interact: interact,
   statistics: statistics,
   getByStatus: getByStatus,
+  finished: {
+    manager: getManagerFinished,
+  },
 }

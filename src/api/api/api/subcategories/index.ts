@@ -96,7 +96,7 @@ const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
         .put(`${baseURL}/${subcategory.id}`, {
           id: subcategory.id,
           name: subcategory.name,
-          serviceCategoryId: subcategory.category.id,
+          serviceCategoryId: subcategory.serviceCategory.id,
         })
         .then((res) => {
           const info = res.data

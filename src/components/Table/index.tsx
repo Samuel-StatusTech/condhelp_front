@@ -89,25 +89,6 @@ const Table = ({
             <Skeleton role="table" columns={config.columns.length} rows={10} />
           ) : (
             data
-              .filter((item) => {
-                let ok = false
-
-                if (!!search) {
-                  searchFields?.forEach((sf) => {
-                    if (!ok) {
-                      const v = sf.includes(".")
-                        ? item[sf.split(".")[0]][sf.split(".")[1]]
-                        : item[sf]
-
-                      ok = String(v)
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                    }
-                  })
-                } else ok = true
-
-                return ok
-              })
               .map((item, k) => (
                 <RowItem
                   key={k}
@@ -124,8 +105,12 @@ const Table = ({
       {searchData && (
         <S.PaginationWrapper>
           <S.Showinglabel>
-            Exibindo <strong>{searchData?.numberOfElements}</strong> de{" "}
-            {searchData?.totalElements}
+            Exibindo{" "}
+            <strong>
+              {searchData.pageable.pageNumber * searchData.size +
+                searchData?.numberOfElements}
+            </strong>{" "}
+            de {searchData?.totalElements}
           </S.Showinglabel>
 
           <S.Pages>

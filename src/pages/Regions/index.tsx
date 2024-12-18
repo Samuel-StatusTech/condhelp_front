@@ -12,6 +12,7 @@ import { Api } from "../../api"
 import { TRegion } from "../../utils/@types/data/region"
 import { TDefaultFilters } from "../../api/types/params"
 import initials from "../../utils/initials"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const RegionsPage = () => {
   const navigate = useNavigate()
@@ -108,7 +109,15 @@ const RegionsPage = () => {
         config={tableConfig.regions}
         searchData={searchControl}
         setSearchFilters={setSearchFilters}
-        data={regions}
+        data={regions.filter((i) => {
+          const fields = [i.name, i.country.name, i.state.name]
+
+          let ok = !!search
+            ? fields.some((val) => matchSearch(val, search))
+            : true
+
+          return ok
+        })}
         actions={{
           edit: handleEdit,
         }}

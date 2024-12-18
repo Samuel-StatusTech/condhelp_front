@@ -16,6 +16,7 @@ import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import { TOption } from "../../utils/@types/data/option"
 import { TDefaultFilters } from "../../api/types/params"
 import initials from "../../utils/initials"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const SubcategoriesPage = () => {
   const navigate = useNavigate()
@@ -40,11 +41,11 @@ const SubcategoriesPage = () => {
 
   const [search, setSearch] = useState("")
   const [filters, setFilters] = useState({
-    category: "",
+    serviceCategory: "",
     creator: "",
   })
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
-    category: [],
+    serviceCategory: [],
     creator: [],
   })
 
@@ -79,20 +80,21 @@ const SubcategoriesPage = () => {
         if (req.ok) {
           setSearchControl(req.data)
 
-          let cats: TSubCategory["category"][] = []
+          let cats: TSubCategory["serviceCategory"][] = []
           let makers: TSubCategory["user"][] = []
 
           req.data.content.forEach((sc) => {
             const catsIds = cats.map((i) => i.id)
             const makersIds = makers.map((i) => i.userId)
 
-            if (!catsIds.includes(sc.category.id)) cats.push(sc.category)
+            if (!catsIds.includes(sc.serviceCategory.id))
+              cats.push(sc.serviceCategory)
             if (!makersIds.includes(sc.user.userId)) makers.push(sc.user)
           })
 
           setOptions((opts) => ({
             ...opts,
-            category: [
+            serviceCategory: [
               { key: "all", value: "Todas" },
               ...parseOptionList(
                 cats.sort((a, b) =>
@@ -160,9 +162,9 @@ const SubcategoriesPage = () => {
         filters={[
           {
             label: "Categoria",
-            name: "category",
-            options: options.category,
-            value: filters.category,
+            name: "serviceCategory",
+            options: options.serviceCategory,
+            value: filters.serviceCategory,
           },
           {
             label: "Criada por",
@@ -188,15 +190,13 @@ const SubcategoriesPage = () => {
           let creatorOk = true
 
           if (!!search) {
-            searchOk = [i.name, i.category.name, i.user.name]
-              .flat()
-              .some((val) =>
-                String(val).toLowerCase().includes(search.toLowerCase())
-              )
+            searchOk = [i.name, i.serviceCategory.name, i.user.name].some(
+              (val) => matchSearch(val, search)
+            )
           }
 
-          if (filters.category && filters.category !== "all") {
-            categoryOk = i.category.id === +filters.category
+          if (filters.serviceCategory && filters.serviceCategory !== "all") {
+            categoryOk = i.serviceCategory.id === +filters.serviceCategory
           }
 
           if (filters.creator && filters.creator !== "all") {

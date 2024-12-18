@@ -95,7 +95,10 @@ const SearchSelect = ({
       >
         <S.Left>
           <S.SelectedInfo>
-            {selected && selected.key && selected.value
+            {selected &&
+            selected.key &&
+            selected.value &&
+            selected.key !== "all"
               ? byKey
                 ? selected.key
                 : selected.value

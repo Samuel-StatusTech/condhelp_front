@@ -19,5 +19,8 @@ export type TApi_Responses_Budgets = {
     delete: Promise<TDefaultRes<{}>>
     interact: Promise<TDefaultRes<{}>>
     statistics: Promise<TDefaultRes<TBudgetStatistics>>
+    finished: {
+      manager: Promise<TDefaultRes<TBudgetStatistics>>
+    }
   }
 }

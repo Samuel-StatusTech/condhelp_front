@@ -18,6 +18,7 @@ import { Icons } from "../../assets/icons/icons"
 import Button from "../../components/Button"
 import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const CondosPage = () => {
   const { user, controllers } = getStore()
@@ -172,10 +173,10 @@ const CondosPage = () => {
           data={condos.filter((i) => {
             let ok = true
 
+            const fields = [i.name, i.city, i.manager.name]
+
             const searchOk = !!search
-              ? Object.values(i).some((val) =>
-                  String(val).toLowerCase().includes(search.toLowerCase())
-                )
+              ? fields.some((val) => matchSearch(val, search))
               : true
 
             const stateOk =

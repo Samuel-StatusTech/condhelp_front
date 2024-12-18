@@ -32,7 +32,7 @@ const shortsFranchise: PDashboardShortcut[] = [
     link: "/dashboard/users/single",
   },
   {
-    title: "Cadastrar Sídico",
+    title: "Cadastrar Síndico",
     registers: 0,
     icon: "SINDICO",
     link: "/dashboard/users/single",

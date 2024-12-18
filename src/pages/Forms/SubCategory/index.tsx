@@ -141,7 +141,7 @@ const FPsubcategory = () => {
         const req = await Api.subcategories.getSingle({ id: Number(params.id) })
 
         if (req.ok) {
-          setForm({ ...req.data, serviceCategory: req.data.category.id })
+          setForm({ ...req.data, serviceCategory: req.data.serviceCategory.id })
         } else {
           controllers.feedback.setData({
             message: req.error,

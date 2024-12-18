@@ -16,6 +16,7 @@ import { userSubordinates } from "../../utils/system/options/profiles"
 import { TAccess } from "../../utils/@types/data/access"
 import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const UsersPage = () => {
   const navigate = useNavigate()
@@ -171,10 +172,10 @@ const UsersPage = () => {
         data={people.filter((i) => {
           let ok = true
 
+          const fields = [i.name, i.email]
+
           const searchOk = !!search
-            ? Object.values(i).some((val) =>
-                String(val).toLowerCase().includes(search.toLowerCase())
-              )
+            ? fields.some((val) => matchSearch(val, search))
             : true
 
           const profileOk =

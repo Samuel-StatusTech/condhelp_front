@@ -10,7 +10,7 @@ export type TNewSubCategory = {
 export type TSubCategory = {
   id: number
   name: string
-  category: {
+  serviceCategory: {
     id: number
     name: string
     description: string

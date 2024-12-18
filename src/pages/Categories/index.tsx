@@ -19,6 +19,7 @@ import { TOption } from "../../utils/@types/data/option"
 import { sorts } from "../../utils/tb/parsers/sort"
 import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const CategoriesPage = () => {
   const navigate = useNavigate()
@@ -162,16 +163,14 @@ const CategoriesPage = () => {
         data={categories.filter((i) => {
           let ok = true
 
+          const fields = [
+            i.name,
+            ...(i.serviceSubcategories ?? []).map((sc) => sc.name),
+            i.user.name,
+          ]
+
           const searchOk = !!search
-            ? [
-                i.name,
-                (i.serviceSubcategories ?? []).map((sc) => sc.name),
-                i.user.name,
-              ]
-                .flat()
-                .some((val) =>
-                  String(val).toLowerCase().includes(search.toLowerCase())
-                )
+            ? fields.some((val) => matchSearch(val, search))
             : true
 
           const creatorOk =
