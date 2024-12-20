@@ -115,6 +115,7 @@ const DashboardProvider = () => {
             b.status !== "CANCELADO_SINDICO" &&
             b.status !== "CANCELADO_PRESTADOR" &&
             b.status !== "RECUSADO_PRESTADOR" &&
+            b.status !== "RECUSADO_SINDICO" &&
             b.status !== "FINALIZADO" &&
             b.status !== "EXPIRADO"
         )
