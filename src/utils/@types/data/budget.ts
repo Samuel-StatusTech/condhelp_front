@@ -1,4 +1,6 @@
+import { TProviderOnBudget } from "./_user/provider"
 import { TCondominium } from "./condominium"
+import { TBudgetStatus } from "./status"
 
 export type TNewBudget = {
   title: string
@@ -11,7 +13,7 @@ export type TNewBudget = {
   serviceCategoryId: number
   serviceSubcategoryId: number
   userId: number
-  status: string
+  status: TBudgetStatus
   providerIds: number[]
 }
 
@@ -25,9 +27,9 @@ export type TBudget = {
   dataInicio: string
   dataFim: string
   urlAnexo: string
-  prestadores: any[]
+  prestadores: TProviderOnBudget[]
 
-  id: string
+  id: number
   title: string
   condominiumName: string
   condominium?: TCondominium
@@ -60,7 +62,7 @@ export type TBudgetResume = {
   awaiting: number
   rejected: number
   accepted: number
-  status?: string
+  status?: TBudgetStatus
 }
 
 export type TProviderBudgetResume = {
@@ -80,17 +82,7 @@ export type TProviderBudgetResume = {
   awaiting: number
   rejected: number
   accepted: number
-  status:
-    | "DISPONIVEL"
-    | "AGUARDANDO_SINDICO"
-    | "APROVADO_SINDICO"
-    | "RECUSADO_SINDICO"
-    | "RECUSADO_PRESTADOR"
-    | "CANCELADO_SINDICO"
-    | "CANCELADO_PRESTADOR"
-    | "CONTRATADO"
-    | "FINALIZADO"
-    | "EXPIRADO"
+  status: TBudgetStatus
 }
 
 export type TContact = {

@@ -36,7 +36,7 @@ export const providerInitial: TNewUserDefault & TUProvider = {
     date: new Date().toISOString(),
   },
   cnpjCard: null,
-  category: "",
+  categories: [],
 
   stateRegistration: "",
   municipalRegistration: "",

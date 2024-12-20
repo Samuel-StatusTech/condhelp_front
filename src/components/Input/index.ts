@@ -12,6 +12,7 @@ import Radio from "./radio"
 import SearchSelect from "./searchSelect"
 import CityInput from "./cityInput"
 import Select from "./select"
+import MultipleSelect from "./multipleSelect"
 import TextArea from "./textarea"
 import Toggler from "./toggler"
 import ReadonlyField from "./readonly"
@@ -30,6 +31,7 @@ const Input = {
   ReadonlyField,
   CityInput,
   Select,
+  MultipleSelect,
   CondoSelect,
   SearchSelect,
   TextArea,

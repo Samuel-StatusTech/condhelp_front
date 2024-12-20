@@ -13,43 +13,30 @@ import { getStore } from "../../../../store"
 import { useEffect, useState } from "react"
 import { Api } from "../../../../api"
 import ProviderDetails from "./provider"
+import { TProviderOnBudget } from "../../../../utils/@types/data/_user/provider"
+import { TBudgetStatus } from "../../../../utils/@types/data/status"
 
 type Props = {
   budget: TBudget
   handleBack: () => void
+  handleCancel: (budgetId: number) => void
+  handleRefresh: (budgetId: number) => void
 }
 
-const BudgetDetails = ({ budget, handleBack }: Props) => {
+const BudgetDetails = ({
+  budget,
+  handleBack,
+  handleCancel,
+  handleRefresh,
+}: Props) => {
   const { controllers } = getStore()
+
+  const [budgetData, setBudgetData] = useState<TBudget>(budget)
 
   const [loading, setLoading] = useState(false)
   const [provider, setProvider] = useState<TUserTypes["PRESTADOR"] | null>(null)
 
-  budget.prestadores = [
-    {
-      name: "Nome do prestador",
-      phone1: "47988889988",
-      email: "julio.ferramentas@gmail.com",
-      id: 5,
-      status: "AGUARDANDO",
-    },
-    {
-      name: "Nome do prestador",
-      phone1: "47988889988",
-      email: "julio.ferramentas@gmail.com",
-      id: 5,
-      status: "ATIVO",
-    },
-    {
-      name: "Nome do prestador",
-      phone1: "47988889988",
-      email: "julio.ferramentas@gmail.com",
-      id: 5,
-      status: "INATIVO",
-    },
-  ] as Partial<TUserTypes["PRESTADOR"]>[]
-
-  const handlePickProvider = async (prov: Partial<TUserTypes["PRESTADOR"]>) => {
+  const handlePickProvider = async (prov: TProviderOnBudget) => {
     if (prov.id) {
       setLoading(true)
 
@@ -76,12 +63,97 @@ const BudgetDetails = ({ budget, handleBack }: Props) => {
     }
   }
 
+  const handleContract = async (providerId: number) => {
+    setLoading(true)
+
+    try {
+      const req = await Api.budgets.contract({
+        budgetId: budget.id,
+        providerId,
+      })
+
+      if (req.ok) {
+        setBudgetData({
+          ...budget,
+          prestadores: budget.prestadores.map((p) =>
+            p.userId !== providerId
+              ? p
+              : {
+                  ...p,
+                  status: "CONTRATADO",
+                }
+          ),
+        })
+
+        setLoading(false)
+      } else throw new Error()
+    } catch (error) {
+      setLoading(false)
+
+      controllers.feedback.setData({
+        state: "error",
+        message:
+          "Não foi possível realizar o contrato. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
+  }
+
+  const handleResponseProvider = async (
+    providerId: number,
+    status: TBudgetStatus
+  ) => {
+    try {
+      if (status === "CONTRATADO") handleContract(providerId)
+      else {
+        setLoading(true)
+
+        const req = await Api.budgets.interact({
+          budgetId: budget.id,
+          providerId: providerId,
+          status: status,
+        })
+
+        if (req.ok) {
+          setBudgetData({
+            ...budget,
+            prestadores: budget.prestadores.map((p) =>
+              p.userId !== providerId
+                ? p
+                : {
+                    ...p,
+                    status: status,
+                  }
+            ),
+          })
+
+          setLoading(false)
+
+          controllers.feedback.setData({
+            state: "success",
+            message: "Resposta enviada ao prestador.",
+            visible: true,
+          })
+        } else throw new Error()
+      }
+    } catch (error) {
+      setLoading(false)
+
+      controllers.feedback.setData({
+        state: "alert",
+        message:
+          "Não foi possível responder o prestador no momento. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
+  }
+
   useEffect(() => {
     controllers.modal.open({
       role: "loading",
       visible: loading,
     })
-  }, [controllers.modal, loading])
+  }, [controllers.modal, loading, budget])
 
   return !provider ? (
     <C.SubContent>
@@ -97,7 +169,7 @@ const BudgetDetails = ({ budget, handleBack }: Props) => {
               <Button
                 type="quaternary"
                 text="Cancelar orçamento"
-                action={() => {}}
+                action={() => handleCancel(Number(budget.id))}
                 fit={true}
               />
             </S.BlockHeader>
@@ -160,13 +232,18 @@ const BudgetDetails = ({ budget, handleBack }: Props) => {
                 type="green"
                 text="REABRIR"
                 action={() => {}}
-                disabled={true}
+                disabled={budget.prestadores.every(
+                  (p) => p.status !== "CONTRATADO"
+                )}
               />
               <Button
                 type="main"
                 text="FINALIZAR"
                 icon={<Icons.CheckCircle />}
                 action={() => {}}
+                disabled={budget.prestadores.some(
+                  (p) => p.status === "CONTRATADO"
+                )}
               />
             </S.ButtonsArea>
 
@@ -192,13 +269,15 @@ const BudgetDetails = ({ budget, handleBack }: Props) => {
           </S.Block>
         </S.Column>
         <S.Column>
-          {budget.prestadores.length > 0 ? (
-            budget.prestadores.map((p, pk) => (
+          {budgetData.prestadores.length > 0 ? (
+            budgetData.prestadores.map((p, pk) => (
               <Card.ProviderResume
                 key={pk}
                 k={pk}
                 data={p}
                 onPick={() => handlePickProvider(p)}
+                budgetId={budget.id}
+                handleResponseProvider={handleResponseProvider}
               />
             ))
           ) : (

@@ -81,7 +81,7 @@ const ManagerBudgetResume = ({
       ).getTime()
       const budgetTime = new Date(data.endDate).getTime()
 
-      const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
+      const diff = Math.floor((budgetTime - todayTime) / 1000 / 60 / 60 / 24)
       const shouldShow = diff <= 3
 
       return shouldShow ? (
@@ -113,8 +113,8 @@ const ManagerBudgetResume = ({
         </C.Header>
       </C.HTop>
 
-      <C.MainWrapper $expanded={true}>
-        <C.ContentWrapper>
+      <S.MainWrapper>
+        <S.ContentWrapper>
           <S.Content>
             <S.Info>
               {forBranch && (
@@ -163,8 +163,8 @@ const ManagerBudgetResume = ({
               {renderDateAlert()}
             </S.BottomCard>
           </S.Content>
-        </C.ContentWrapper>
-      </C.MainWrapper>
+        </S.ContentWrapper>
+      </S.MainWrapper>
     </S.Element>
   )
 }

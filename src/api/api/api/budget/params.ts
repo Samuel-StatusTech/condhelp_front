@@ -3,6 +3,7 @@ import {
   TNewBudget,
   TProviderBudgetResume,
 } from "../../../../utils/@types/data/budget"
+import { TBudgetStatus } from "../../../../utils/@types/data/status"
 import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Budgets = {
@@ -38,13 +39,23 @@ export type TApi_Params_Budgets = {
     interact: {
       budgetId: number
       providerId: number
-      status: string
+      status: TBudgetStatus
     }
     statistics: {
       providerId: number
     }
+    cancelBudget: {
+      budgetId: number
+    }
+    contract: {
+      budgetId: number
+      providerId: number
+    }
     finished: {
-      manager: {
+      manager: TDefaultFilters & {
+        id: number
+      }
+      provider: TDefaultFilters & {
         id: number
       }
     }

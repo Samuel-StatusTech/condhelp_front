@@ -5,29 +5,46 @@ import { Icons } from "../../../../assets/icons/icons"
 
 import Divider from "../../../_minimals/Divider"
 import Button from "../../../Button"
-import { TUserTypes } from "../../../../utils/@types/data/user"
 import { formatPhone } from "../../../../utils/tb/format/phone"
+import { TProviderOnBudget } from "../../../../utils/@types/data/_user/provider"
+import { TBudgetStatus } from "../../../../utils/@types/data/status"
 
 type Props = {
   k: number
-  data: TUserTypes["PRESTADOR"]
+  data: TProviderOnBudget
   onPick: (providerId: number) => void
+  budgetId: number
+  handleResponseProvider: (providerId: number, status: TBudgetStatus) => void
 }
 
 /*
  *  Approval Resume Component
  */
 
-const ProviderResume = ({ k, data, onPick }: Props) => {
-  const handleReject = () => {
-    // ...
+const ProviderResume = ({
+  k,
+  data,
+  onPick,
+  budgetId,
+  handleResponseProvider,
+}: Props) => {
+  const handleReject = (providerId: number) => {
+    handleResponseProvider(providerId, "RECUSADO_SINDICO")
   }
 
   const renderStatusIndicator = () => {
     let content: any = null
 
     switch (data.status) {
-      case "AGUARDANDO":
+      case "CONTRATADO":
+        content = (
+          <S.StatusArea $status={data.status}>
+            <Icons.CheckFill />
+            <span>CONTRATADO</span>
+          </S.StatusArea>
+        )
+        break
+      case "AGUARDANDO_SINDICO":
         content = (
           <S.StatusArea $status={data.status}>
             <Icons.Alert />
@@ -35,7 +52,7 @@ const ProviderResume = ({ k, data, onPick }: Props) => {
           </S.StatusArea>
         )
         break
-      case "ATIVO":
+      case "APROVADO_SINDICO":
         content = (
           <S.StatusArea $status={data.status}>
             <Icons.CheckFill />
@@ -43,7 +60,9 @@ const ProviderResume = ({ k, data, onPick }: Props) => {
           </S.StatusArea>
         )
         break
-      case "INATIVO":
+      case "RECUSADO_SINDICO":
+      case "RECUSADO_PRESTADOR":
+      case "CANCELADO_PRESTADOR":
         content = (
           <S.StatusArea $status={data.status}>
             <Icons.Close />
@@ -56,18 +75,25 @@ const ProviderResume = ({ k, data, onPick }: Props) => {
     return content
   }
 
+  const handleApprove = async () => {
+    const status: TBudgetStatus =
+      data.status === "AGUARDANDO_SINDICO" ? "APROVADO_SINDICO" : "CONTRATADO"
+
+    handleResponseProvider(data.userId, status)
+  }
+
   return (
     <S.Element $k={k}>
       <C.Header>
         <C.HPart $k={k}>
-          <S.CardTitle>{data.name}</S.CardTitle>
+          <S.CardTitle>{data.nome}</S.CardTitle>
         </C.HPart>
 
         <Button
           greenText={true}
           type="quaternary"
           text={"Ver mais"}
-          action={() => onPick(data.id)}
+          action={() => onPick(data.userId)}
           fit={true}
           icon={<Icons.Expand width={16} height={16} />}
         />
@@ -79,7 +105,7 @@ const ProviderResume = ({ k, data, onPick }: Props) => {
             <S.Info>
               <S.InfoItem>
                 <Icons.Phone />
-                <span>{formatPhone(data.phone1)}</span>
+                <span>{formatPhone(data.contato)}</span>
               </S.InfoItem>
               <S.InfoItem>
                 <Icons.Mail />
@@ -92,24 +118,48 @@ const ProviderResume = ({ k, data, onPick }: Props) => {
             <S.BottomCard>
               {renderStatusIndicator()}
 
-              <S.ButtonsArea>
-                <Button
-                  type="quaternary"
-                  greenText={data.status === "INATIVO"}
-                  text={data.status === "INATIVO" ? "Aceitar" : "Recusar"}
-                  action={handleReject}
-                  fit={true}
-                  red={true}
-                />
+              {data.status !== "CONTRATADO" && (
+                <S.ButtonsArea>
+                  <Button
+                    type="quaternary"
+                    greenText={[
+                      "RECUSADO_SINDICO",
+                      "RECUSADO_PRESTADOR",
+                      "CANCELADO_PRESTADOR",
+                    ].includes(data.status)}
+                    text={
+                      [
+                        "RECUSADO_SINDICO",
+                        "RECUSADO_PRESTADOR",
+                        "CANCELADO_PRESTADOR",
+                      ].includes(data.status)
+                        ? "Aceitar"
+                        : "Recusar"
+                    }
+                    action={handleReject}
+                    fit={true}
+                    red={true}
+                  />
 
-                <Button
-                  type={data.status === "AGUARDANDO" ? "green" : "main"}
-                  text={data.status === "AGUARDANDO" ? "ACEITAR" : "CONTRATAR"}
-                  action={() => {}}
-                  iconLeft={true}
-                  disabled={data.status === "INATIVO"}
-                />
-              </S.ButtonsArea>
+                  <Button
+                    type={
+                      data.status === "AGUARDANDO_SINDICO" ? "green" : "main"
+                    }
+                    text={
+                      data.status === "AGUARDANDO_SINDICO"
+                        ? "ACEITAR"
+                        : "CONTRATAR"
+                    }
+                    action={handleApprove}
+                    iconLeft={true}
+                    disabled={[
+                      "RECUSADO_SINDICO",
+                      "RECUSADO_PRESTADOR",
+                      "CANCELADO_PRESTADOR",
+                    ].includes(data.status)}
+                  />
+                </S.ButtonsArea>
+              )}
             </S.BottomCard>
           </S.Content>
         </C.ContentWrapper>

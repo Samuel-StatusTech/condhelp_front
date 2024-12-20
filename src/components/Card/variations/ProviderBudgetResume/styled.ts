@@ -30,11 +30,23 @@ export const ContentWrapper = styled.div`
   height: 100%;
 `
 
-export const Content = styled.div`
+export const Content = styled.div<{ $fillBottom?: boolean }>`
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  ${({ $fillBottom }) =>
+    $fillBottom
+      ? `
+    &::after {
+      display: block;
+      content: "";
+      position: relative;
+      flex: 1;
+    }
+  `
+      : ""}
 `
 
 export const CardTitle = styled.div`

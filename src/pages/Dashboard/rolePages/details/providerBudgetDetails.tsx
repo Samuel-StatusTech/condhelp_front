@@ -29,7 +29,7 @@ const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
       const req = await Api.budgets.interact({
         budgetId: +budget.id,
         providerId: user?.id as number,
-        status: "CANCELADO",
+        status: "CANCELADO_PRESTADOR",
       })
 
       if (req.ok) handleBack()

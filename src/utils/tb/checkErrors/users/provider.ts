@@ -26,10 +26,11 @@ export const providerCheck = (
       state = getInvalidCheck(state, "document.register")
     if (!data.document.date) state = getInvalidCheck(state, "document.date")
     if (
-      !data.category ||
-      (!Number.isNaN(data.category) && +data.category === 0)
+      !data.categories ||
+      !Array.isArray(data.categories) ||
+      (Array.isArray(data.categories) && data.categories.length === 0)
     )
-      state = getInvalidCheck(state, "category")
+      state = getInvalidCheck(state, "categories")
 
     if (data.address) {
       if (data.address.cep.replace(/\D/g, "").length < 8)

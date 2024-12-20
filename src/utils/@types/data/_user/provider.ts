@@ -1,5 +1,15 @@
 import { TAddress } from "../address"
+import { TBudgetStatus } from "../status"
 import { TDocument } from "./document"
+
+export type TProviderOnBudget = {
+  id: number
+  userId: number
+  nome: string
+  contato: string
+  status: TBudgetStatus
+  email: string
+}
 
 export type TUProvider = {
   profile: "PRESTADOR"
@@ -18,7 +28,7 @@ export type TUProvider = {
   socialRole: string
   document: TDocument["cnpj"]
   cnpjCard: any
-  category: string
+  categories: number[]
 
   stateRegistration: string
   municipalRegistration: string

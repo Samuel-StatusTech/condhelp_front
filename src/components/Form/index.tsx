@@ -35,13 +35,13 @@ const getElement = (
       return <Input.ReadonlyField {...field} onChange={handleField} key={key} />
     case "select":
       return <Input.Select {...field} onChange={handleField} key={key} />
+    case "multipleSelect":
+      return (
+        <Input.MultipleSelect {...field} onChange={handleField} key={key} />
+      )
     case "cityInput":
       return (
-        <Input.CityInput
-          {...(field as any)}
-          onChange={handleField}
-          key={key}
-        />
+        <Input.CityInput {...(field as any)} onChange={handleField} key={key} />
       )
     case "radio":
       return <Input.Radio {...field} onChange={handleField} key={key} />

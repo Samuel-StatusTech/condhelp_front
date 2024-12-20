@@ -5,10 +5,7 @@ import Card from "../../../components/Card"
 import Divider from "../../../components/_minimals/Divider"
 import PageRow from "../../../components/_minimals/PageRow"
 import { getStore } from "../../../store"
-import {
-  TBudgetResume,
-  TProviderBudgetResume,
-} from "../../../utils/@types/data/budget"
+import { TProviderBudgetResume } from "../../../utils/@types/data/budget"
 import { useCallback, useEffect, useState } from "react"
 import { DataResumeItem } from "../../../components/Card/variations/ApprovalResume"
 import Table from "../../../components/Table"
@@ -20,6 +17,9 @@ import { TOption } from "../../../components/Input/points"
 import { Api } from "../../../api"
 import ProviderBudgetDetails from "./details/providerBudgetDetails"
 import { TBudgetStatistics } from "../../../utils/@types/data/budgetResume"
+import { TFinishedBudgets } from "../../../utils/@types/data/budget/finished"
+import { getDateStr } from "../../../utils/tb/format/date"
+import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
 
 const DashboardProvider = () => {
   const { user, controllers } = getStore()
@@ -60,7 +60,7 @@ const DashboardProvider = () => {
     inProgressPercentage: 0,
     canceledPercentage: 0,
   })
-  const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
+  const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
 
   const loadBudgetInfo = async (pickedBudget: TProviderBudgetResume) => {
     setBudget(pickedBudget)
@@ -120,9 +120,29 @@ const DashboardProvider = () => {
         )
 
         setBudgets(visible)
-        setFinishedBudgets(
-          budgetsReq.data.content.filter((b) => b.status === "FINALIZADO")
-        )
+
+        /*
+         * Finished table content
+         */
+
+        const finishedsReq = await Api.budgets.finished.provider({
+          size: 300,
+          id: user?.userId as number,
+        })
+
+        if (finishedsReq.ok) {
+          setFinishedBudgets(
+            finishedsReq.data.content.sort((a, b) =>
+              a.endDate && b.endDate
+                ? new Date(a.endDate).getTime() > new Date(b.endDate).getTime()
+                  ? 1
+                  : -1
+                : a.endDate && !b.endDate
+                ? 1
+                : -1
+            )
+          )
+        } else throw new Error()
 
         let resumeReq = await Api.budgets.statistics({
           providerId: user?.userAccountId as number,
@@ -219,7 +239,36 @@ const DashboardProvider = () => {
           ]}
         />
 
-        <Table data={finishedBudgets} config={tableConfig.finishedBudgets} />
+        <Table
+          data={finishedBudgets.filter((i) => {
+            const fields = [
+              i.title,
+              i.condominiumName,
+              getDateStr(i.endDate, "dmy"),
+            ]
+
+            let ok = true
+            let searchOk = true
+            let statusOk = true
+
+            searchOk = !!finishedBudgetsSearch
+              ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+              : true
+
+            if (filters.status && filters.status !== "all") {
+              statusOk = i.status === filters.status
+            }
+
+            statusOk = !!finishedBudgetsSearch
+              ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+              : true
+
+            ok = searchOk && statusOk
+
+            return ok
+          })}
+          config={tableConfig.finishedBudgets}
+        />
       </S.BlockArea>
     </S.SubContent>
   ) : (

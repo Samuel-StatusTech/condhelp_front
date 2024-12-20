@@ -55,7 +55,7 @@ const FPpeople = () => {
   )
   const [regions, setRegions] = useState<TRegion[]>([])
   const [franchises, setFranchises] = useState<TUser[]>([])
-  const [, setCategories] = useState<TCategory[]>([])
+  const [categories, setCategories] = useState<TCategory[]>([])
 
   const [form, setForm] = useState<any>(initials.forms.person[personType])
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
@@ -174,18 +174,18 @@ const FPpeople = () => {
               }))
               break
 
-            case "franchises":
+            case "categories":
               const shouldInclude =
-                Array.isArray(form.franchises) &&
-                !form.franchises.includes(value as number)
+                Array.isArray(form.categories) &&
+                !form.categories.includes(value as number)
 
               const newList = shouldInclude
-                ? [...form.franchises, value]
-                : form.franchises.filter((i: number) => i !== value)
+                ? [...form.categories, value]
+                : form.categories.filter((i: number) => i !== value)
 
               setForm((p: any) => ({
                 ...p,
-                franchises: newList,
+                categories: newList,
               }))
               break
 
@@ -386,12 +386,11 @@ const FPpeople = () => {
               ...initialRoleInfo,
               ...{
                 ...reqInfo,
-                address: {
+                address: !!reqInfo.address ? {
                   ...reqInfo.address,
                   country: +reqInfo.address.country,
                   state: +reqInfo.address.state,
-                },
-                category: +reqInfo.category,
+                } : undefined,
               },
             }
 
@@ -496,7 +495,7 @@ const FPpeople = () => {
       // • Categories
       proms.push(
         Api.categories
-          .listAll({})
+          .listAll({ size: 300 })
           .then((res) => {
             if (res.ok) {
               const list = res.data.content
@@ -669,7 +668,12 @@ const FPpeople = () => {
         break
 
       case "PRESTADOR":
-        content = formPartials.provider.extra(form, formSubmitFields, options)
+        content = formPartials.provider.extra(
+          form,
+          formSubmitFields,
+          options,
+          categories
+        )
         break
 
       default:

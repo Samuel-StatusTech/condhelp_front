@@ -23,7 +23,7 @@ export const managerCheck = (
       state = getInvalidCheck(state, "email")
     if (data.phone1?.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone1")
-    if (!data.phone2 || data.phone2.replace(/\D/g, "").length < 10)
+    if (data.phone2 && data.phone2.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone2")
     if (!data.documentType?.trim())
       state = getInvalidCheck(state, "documentType")

@@ -8,6 +8,7 @@ import Divider from "../../../_minimals/Divider"
 import Button from "../../../Button"
 import { Api } from "../../../../api"
 import { getStore } from "../../../../store"
+import { TBudgetStatus } from "../../../../utils/@types/data/status"
 
 type Props = {
   k: number
@@ -37,7 +38,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
     ).getTime()
     const budgetTime = new Date(data.endDate as string).getTime()
 
-    const diff = (budgetTime - todayTime) / 1000 / 60 / 60 / 24
+    const diff = Math.floor((budgetTime - todayTime) / 1000 / 60 / 60 / 24)
 
     return diff
   }
@@ -64,7 +65,9 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
       const req = await Api.budgets.interact({
         budgetId: data.id,
         providerId: user?.id as number,
-        status: !data.status ? "RECUSADO_PRESTADOR" : "CANCELADO_PRESTADOR",
+        status: (["DISPONIVEL"] as TBudgetStatus[]).includes(data.status)
+          ? "RECUSADO_PRESTADOR"
+          : "CANCELADO_PRESTADOR",
       })
 
       if (req.ok) reloadPage()
@@ -115,7 +118,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
 
       <S.MainWrapper>
         <S.ContentWrapper>
-          <S.Content>
+          <S.Content $fillBottom={data.status === "CONTRATADO"}>
             <S.Info>
               <S.InfoItem>
                 <Icons.Location />
@@ -160,6 +163,9 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
               ).includes(data.status) && (
                 <S.Available>Disponível para participação</S.Available>
               )}
+              {(["CONTRATADO"] as TProviderBudgetResume["status"][]).includes(
+                data.status
+              ) && <S.Available>CONTRATADO</S.Available>}
               {data.status === "AGUARDANDO_SINDICO" && (
                 <S.AwaitingManager>
                   <Icons.Alert />
@@ -188,42 +194,43 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
 
             <Divider />
 
-            <S.BottomCard>
-              <Button
-                type="quaternary"
-                text={
-                  (
-                    [
-                      "DISPONIVEL",
-                      "AGUARDANDO_SINDICO",
-                    ] as TProviderBudgetResume["status"][]
-                  ).includes(data.status)
-                    ? "Recusar"
-                    : "Cancelar Participação"
-                }
-                action={handleReject}
-                fit={true}
-                red={true}
-              />
+            {!["CONTRATADO"].includes(data.status) && (
+              <S.BottomCard>
+                <Button
+                  type="quaternary"
+                  text={
+                    (
+                      [
+                        "DISPONIVEL",
+                        "AGUARDANDO_SINDICO",
+                      ] as TProviderBudgetResume["status"][]
+                    ).includes(data.status)
+                      ? "Recusar"
+                      : "Cancelar Participação"
+                  }
+                  action={handleReject}
+                  fit={true}
+                  red={true}
+                />
 
-              <Button
-                type="green"
-                text={"PARTICIPAR"}
-                action={handleGetIn}
-                fit={true}
-                disabled={(
-                  [
-                    "AGUARDANDO_SINDICO",
-                    "APROVADO_SINDICO",
-                    "RECUSADO_SINDICO",
-                    "CANCELADO_SINDICO",
-                    "CONTRATADO",
-                    "FINALIZADO",
-                    "EXPIRADO",
-                  ] as TProviderBudgetResume["status"][]
-                ).includes(data.status)}
-              />
-            </S.BottomCard>
+                <Button
+                  type="green"
+                  text={"PARTICIPAR"}
+                  action={handleGetIn}
+                  fit={true}
+                  disabled={(
+                    [
+                      "AGUARDANDO_SINDICO",
+                      "APROVADO_SINDICO",
+                      "RECUSADO_SINDICO",
+                      "CANCELADO_SINDICO",
+                      "FINALIZADO",
+                      "EXPIRADO",
+                    ] as TProviderBudgetResume["status"][]
+                  ).includes(data.status)}
+                />
+              </S.BottomCard>
+            )}
           </S.Content>
         </S.ContentWrapper>
       </S.MainWrapper>

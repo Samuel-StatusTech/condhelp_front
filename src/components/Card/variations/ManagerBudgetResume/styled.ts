@@ -20,7 +20,16 @@ export const Element = styled.div<{ $k?: number }>`
     theme.animations.delays.main($k)}
 `
 
+export const MainWrapper = styled.div`
+  flex: 1;
+`
+
+export const ContentWrapper = styled.div`
+  height: 100%;
+`
+
 export const Content = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -50,6 +59,7 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
 `
 
 export const InfoItem = styled.div`

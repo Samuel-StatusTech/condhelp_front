@@ -13,7 +13,7 @@ export const parseUserProvider = (
       userId: backProvider.id,
       openingDate: backProvider.openingDate,
 
-      category: String(backProvider.serviceCategories[0].id),
+      categories: backProvider.serviceCategories.map((i) => i.id),
       cnpjCard: backProvider.cardCnpjUrl,
 
       address: {

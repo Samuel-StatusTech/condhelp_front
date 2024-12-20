@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { TBudgetStatus } from "../../../../utils/@types/data/status"
 
 export const Element = styled.div<{ $k?: number }>`
   display: flex;
@@ -174,15 +175,15 @@ export const BottomCard = styled.div`
   gap: 24px;
 `
 
-export const StatusArea = styled.div<{ $status: string }>`
+export const StatusArea = styled.div<{ $status: TBudgetStatus }>`
   display: flex;
   align-items: center;
   gap: 8px;
 
   color: ${({ $status, theme }) =>
-    $status === "AGUARDANDO"
+    $status === "AGUARDANDO_SINDICO"
       ? theme.colors.yellow.dark
-      : $status === "ATIVO"
+      : ($status === "APROVADO_SINDICO" || $status === "CONTRATADO")
       ? theme.colors.green.medium
       : theme.colors.red.main};
 `

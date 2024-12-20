@@ -32,6 +32,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   const [form, setForm] = useState<TNewBudget>(initials.modals.newBudget)
 
+  const [submitting, setSubmitting] = useState(false)
   const [categories, setCategories] = useState<TCategory[]>([])
   const [, setCondos] = useState<TCondominium[]>([])
 
@@ -64,6 +65,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   const handleSubmit = async () => {
     // TODO: check errors
+    setSubmitting(true)
 
     const creation = await budgetCreate()
 
@@ -71,12 +73,16 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       if (handleOp) handleOp(form)
 
       onClose()
+
+      setSubmitting(false)
     } else {
       controllers.feedback.setData({
         state: "error",
         message: creation.error,
         visible: true,
       })
+
+      setSubmitting(false)
     }
   }
 
@@ -243,7 +249,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           placeholder="Título do orçamento"
         />
 
-        <Input.Default
+        <Input.TextArea
           field={"description"}
           onChange={handleField}
           value={form.description}
@@ -283,7 +289,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           <Button
             type="main"
             text="Solicitar"
-            action={handleSubmit}
+            action={!submitting ? handleSubmit : () => {}}
             disabled={errors().has}
           />
         </S.Bottom>

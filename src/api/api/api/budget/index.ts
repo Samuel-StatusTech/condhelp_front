@@ -263,7 +263,7 @@ const interact: TApi["budgets"]["interact"] = async ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let statusStr = status.toLowerCase()
+      let statusStr = status
 
       await service
         .put(`/providers/${providerId}/budgets/${budgetId}?status=${statusStr}`)
@@ -288,6 +288,71 @@ const interact: TApi["budgets"]["interact"] = async ({
       reject({
         error:
           "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const cancelBudget: TApi["budgets"]["cancel"] = async ({ budgetId }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`/budgets/${budgetId}/cancel`)
+        .then((res) => {
+          if (res.status === 200) resolve({ ok: true, data: {} })
+          else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível cancelar o orçamento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível cancelar o orçamento. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível cancelar o orçamento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const contract: TApi["budgets"]["contract"] = async ({
+  budgetId,
+  providerId,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`/budgets/${budgetId}/contract/${providerId}`)
+        .then((res) => {
+          if (res.status === 200) resolve({ ok: true, data: {} })
+          else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível cancelar o orçamento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível cancelar o orçamento. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível cancelar o orçamento. Tente novamente mais tarde.",
       })
     }
   })
@@ -382,15 +447,72 @@ const getByStatus: TApi["budgets"]["getByStatus"] = async ({
   })
 }
 
-const getManagerFinished: TApi["budgets"]["finished"]["manager"] = async ({
-  id,
-}) => {
+const getManagerFinished: TApi["budgets"]["finished"]["manager"] = async (
+  filters
+) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const { id } = filters
+
       const url = `${baseURL}/manager/finished/${id}`
 
       await service
-        .get(`${url}`)
+        .get(`${url}`, {
+          params: {
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const getProviderFinished: TApi["budgets"]["finished"]["provider"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { id } = filters
+
+      const url = `${baseURL}/provider/finished/${id}`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
         .then((res) => {
           const info = res.data
 
@@ -445,10 +567,19 @@ export type TApi_Budgets = {
   getByStatus: (
     p: TParams["budgets"]["getByStatus"]
   ) => TResponses["budgets"]["getByStatus"]
+  cancel: (
+    p: TParams["budgets"]["cancelBudget"]
+  ) => TResponses["budgets"]["cancelBudget"]
+  contract: (
+    p: TParams["budgets"]["contract"]
+  ) => TResponses["budgets"]["contract"]
   finished: {
     manager: (
       p: TParams["budgets"]["finished"]["manager"]
     ) => TResponses["budgets"]["finished"]["manager"]
+    provider: (
+      p: TParams["budgets"]["finished"]["provider"]
+    ) => TResponses["budgets"]["finished"]["provider"]
   }
 }
 
@@ -462,7 +593,10 @@ export const apiBudgets: TApi["budgets"] = {
   interact: interact,
   statistics: statistics,
   getByStatus: getByStatus,
+  cancel: cancelBudget,
+  contract: contract,
   finished: {
     manager: getManagerFinished,
+    provider: getProviderFinished,
   },
 }

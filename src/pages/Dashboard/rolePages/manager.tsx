@@ -20,6 +20,9 @@ import { TUserTypes } from "../../../utils/@types/data/user"
 import { Api } from "../../../api"
 
 import BudgetDetails from "./details/budget"
+import { TFinishedBudgets } from "../../../utils/@types/data/budget/finished"
+import { getDateStr } from "../../../utils/tb/format/date"
+import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
 
 const DashboardManager = () => {
   const { user, controllers } = getStore((store) => ({
@@ -56,7 +59,7 @@ const DashboardManager = () => {
   // Engine
 
   const [budgets, setBudgets] = useState<TBudgetResume[]>([])
-  const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
+  const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
 
   const handlePickBudget = async (id: number) => {
     setLoading(true)
@@ -64,7 +67,7 @@ const DashboardManager = () => {
     try {
       const req = await Api.budgets.getSingle({ id: id })
 
-      if (req.ok) setBudget(req.data)
+      if (req.ok) setBudget({ ...req.data, id: id })
       else throw new Error()
     } catch {}
 
@@ -93,6 +96,30 @@ const DashboardManager = () => {
       </PageRow>
     )
   }
+
+  const handleCancelBudget = useCallback((budgetId: number) => {
+    return new Promise(async (resolve) => {
+      try {
+        setLoading(true)
+
+        const req = await Api.budgets.cancel({ budgetId: budgetId })
+
+        if (req.ok) {
+          setLoading(false)
+          setBudget(null)
+
+          resolve(true)
+        } else throw new Error()
+      } catch (error) {
+        setLoading(true)
+        resolve(false)
+      }
+    })
+  }, [])
+
+  const handleRefreshBudgetData = useCallback((budgetId: number) => {
+    handlePickBudget(budgetId)
+  }, [])
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -124,9 +151,29 @@ const DashboardManager = () => {
               : -1
           )
         )
-        setFinishedBudgets(
-          budgetsReq.data.content.filter((b) => b.status === "approved")
-        )
+
+        /*
+         * Finished table content
+         */
+
+        const finishedsReq = await Api.budgets.finished.manager({
+          size: 300,
+          id: user?.userId,
+        })
+
+        if (finishedsReq.ok) {
+          setFinishedBudgets(
+            finishedsReq.data.content.sort((a, b) =>
+              a.endDate && b.endDate
+                ? new Date(a.endDate).getTime() > new Date(b.endDate).getTime()
+                  ? 1
+                  : -1
+                : a.endDate && !b.endDate
+                ? 1
+                : -1
+            )
+          )
+        } else throw new Error()
       } else throw new Error()
     } catch (error) {
       controllers.feedback.setData({
@@ -227,11 +274,45 @@ const DashboardManager = () => {
           ]}
         />
 
-        <Table data={finishedBudgets} config={tableConfig.finishedBudgets} />
+        <Table
+          config={tableConfig.finishedBudgets}
+          data={finishedBudgets.filter((i) => {
+            const fields = [
+              i.title,
+              i.condominiumName,
+              getDateStr(i.endDate, "dmy"),
+            ]
+
+            let ok = true
+            let searchOk = true
+            let statusOk = true
+
+            searchOk = !!finishedBudgetsSearch
+              ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+              : true
+
+            if (filters.status && filters.status !== "all") {
+              statusOk = i.status === filters.status
+            }
+
+            statusOk = !!finishedBudgetsSearch
+              ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+              : true
+
+            ok = searchOk && statusOk
+
+            return ok
+          })}
+        />
       </S.BlockArea>
     </S.SubContent>
   ) : (
-    <BudgetDetails budget={budget} handleBack={() => setBudget(null)} />
+    <BudgetDetails
+      budget={budget}
+      handleBack={() => setBudget(null)}
+      handleCancel={handleCancelBudget}
+      handleRefresh={handleRefreshBudgetData}
+    />
   )
 }
 

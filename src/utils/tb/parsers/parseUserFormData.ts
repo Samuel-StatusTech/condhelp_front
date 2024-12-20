@@ -191,7 +191,7 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
       state: user.address.state,
       country: user.address.country,
     },
-    serviceCategoryIds: [user.category],
+    serviceCategoryIds: user.categories,
   }
 
   return info

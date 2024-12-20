@@ -1,12 +1,15 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { TCategory } from "../../../../../utils/@types/data/category"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 
 export const extraProvider = (
   form: any,
   formSubmitFields: TBlock["groups"][number],
-  options: { [key: string]: TOption[] }
+  options: { [key: string]: TOption[] },
+  categories: TCategory[]
 ): TBlock[] => {
+
   const content: TBlock[] = [
     {
       title: "Informações Comerciais",
@@ -53,10 +56,14 @@ export const extraProvider = (
           type: "fields",
           fields: [
             {
-              type: "select",
+              type: "multipleSelect",
               label: "Categorias de serviço prestado",
-              field: "category",
-              value: form.category,
+              placeholder: "Selecione as categorias",
+              field: "categories",
+              value: form.categories,
+              selecteds: categories
+                .filter((c) => form.categories.includes(c.id))
+                .map((c) => c.name),
               options: options.category,
               gridSizes: { big: 12 },
             },
