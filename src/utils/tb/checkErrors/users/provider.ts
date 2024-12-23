@@ -2,6 +2,7 @@ import { getInvalidCheck } from ".."
 import { TUProvider } from "../../../@types/data/_user/provider"
 import { TNewUserDefault } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { validEmail } from "../email"
 
 type Params = (TNewUserDefault & TUProvider) | null
 
@@ -16,7 +17,8 @@ export const providerCheck = (
 
   if (data) {
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
-    if (!data.email?.trim()) state = getInvalidCheck(state, "email")
+    if (!data.email || !data.email?.trim() || !validEmail(data.email))
+      state = getInvalidCheck(state, "email")
     if (data.phone1?.replace(/\D/g, "").length < 11)
       state = getInvalidCheck(state, "phone1")
     if (!data.franqId) state = getInvalidCheck(state, "franchise")

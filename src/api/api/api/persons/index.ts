@@ -9,7 +9,7 @@ import { parseUserBranch } from "../../../../utils/tb/parsers/api/user/branch"
 
 const baseURL = "/user-accounts"
 
-const rolesUrlRelations: { [key in TAccess]: string } = {
+export const rolesUrlRelations: { [key in TAccess]: string } = {
   SINDICO: "/managers",
   ADMIN: "",
   USUARIO: "",
@@ -17,7 +17,7 @@ const rolesUrlRelations: { [key in TAccess]: string } = {
   PRESTADOR: "/providers",
   FILIAL: "/subsidiaries",
   MONITOR: "",
-  FRANQUEADO: "",
+  FRANQUEADO: "franchisees",
   CONDOMINIO: "",
 }
 
@@ -85,7 +85,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           return
         }
 
-        if (["ADMIN", "FRANQUEADO"].includes(newPerson.profile)) {
+        if (["ADMIN"].includes(newPerson.profile)) {
           resolve({
             ok: true,
             data: userAccountRegister.data,
@@ -231,7 +231,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
           if (info) {
             const userProfile = info.profile as TAccess
 
-            if (!["ADMIN", "FRANQUEADO"].includes(userProfile)) {
+            if (!["ADMIN"].includes(userProfile)) {
               const url =
                 userProfile === "FILIAL"
                   ? `${rolesUrlRelations[userProfile]}/useraccount`

@@ -48,7 +48,7 @@ const FPpeople = () => {
     [user?.profile]
   )
 
-  const [, setPickedCity] = useState<TCity | null>(null)
+  const [pickedCity, setPickedCity] = useState<TCity | null>(null)
 
   const [personType, setPersonType] = useState<TAccess>(
     userAlloweds[0].key as TAccess
@@ -212,7 +212,14 @@ const FPpeople = () => {
       photo: null,
     }
 
-    let info = getUserObj({ ...form, userId }, (form as TNewUser).profile)
+    let info = getUserObj(
+      {
+        ...form,
+        userId,
+        address: { ...(form.address ?? {}), city: pickedCity?.id },
+      },
+      (form as TNewUser).profile
+    )
 
     if (params.id && !Number.isNaN(params.id) && form.profile !== "PRESTADOR") {
       info = { ...info, id: Number(params.id) }
@@ -386,11 +393,13 @@ const FPpeople = () => {
               ...initialRoleInfo,
               ...{
                 ...reqInfo,
-                address: !!reqInfo.address ? {
-                  ...reqInfo.address,
-                  country: +reqInfo.address.country,
-                  state: +reqInfo.address.state,
-                } : undefined,
+                address: !!reqInfo.address
+                  ? {
+                      ...reqInfo.address,
+                      country: +reqInfo.address.country,
+                      state: +reqInfo.address.state,
+                    }
+                  : undefined,
               },
             }
 

@@ -21,6 +21,20 @@ export type TCity = {
   notPicked?: boolean
 }
 
+export type TBackCity = {
+  id: number
+  name: string
+  state: {
+    id: number
+    name: string
+    initials: string
+    country: {
+      id: number
+      name: string
+    }
+  }
+}
+
 export type TNewCity = {
   name: string
   stateId: number

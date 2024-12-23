@@ -1,5 +1,6 @@
 import { TUBranch } from "./_user/branch"
 import { TDocument } from "./_user/document"
+import { TUFranchise } from "./_user/franchise"
 import { TUProvider } from "./_user/provider"
 import { TAccess } from "./access"
 import { TAddress } from "./address"
@@ -66,24 +67,6 @@ export type TResponsableTypes = {
   personName: string
   cpf: string
   responsibleStatus: string
-}
-
-export type TUFranchise = {
-  branchId: number
-
-  profile: "FRANQUEADO"
-  name: string
-  address: TAddress
-
-  phone1: string
-  phone2: string
-  email: string
-
-  // Responsable
-  responsible: TResponsableTypes
-
-  region: number
-  cities: TRegion["cities"][] | number[]
 }
 
 export type TPendency = "none" | "free" | "has"

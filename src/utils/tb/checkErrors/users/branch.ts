@@ -2,6 +2,7 @@ import { getInvalidCheck } from ".."
 import { TUBranch } from "../../../@types/data/_user/branch"
 import { TNewUserDefault } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { validEmail } from "../email"
 
 type Params = (TNewUserDefault & TUBranch) | null
 
@@ -16,7 +17,8 @@ export const branchCheck = (
 
   if (data) {
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
-    if (!data.email?.trim()) state = getInvalidCheck(state, "email")
+    if (!data.email || !data.email?.trim() || !validEmail(data.email))
+      state = getInvalidCheck(state, "email")
     if (data.phone1.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone1")
 

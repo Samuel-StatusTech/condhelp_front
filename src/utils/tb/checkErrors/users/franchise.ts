@@ -1,6 +1,8 @@
 import { getInvalidCheck } from ".."
-import { TNewUserDefault, TUFranchise } from "../../../@types/data/user"
+import { TUFranchise } from "../../../@types/data/_user/franchise"
+import { TNewUserDefault } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { validEmail } from "../email"
 
 type Params = (TNewUserDefault & TUFranchise) | null
 
@@ -15,8 +17,11 @@ export const franchiseCheck = (
 
   if (data) {
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
-    if (!data.email?.trim()) state = getInvalidCheck(state, "email")
-    if (data.phone1?.replace(/\D/g, "").length < 11)
+    if (!data.email || !data.email?.trim() || !validEmail(data.email))
+      state = getInvalidCheck(state, "email")
+    if (data.phone1?.replace(/\D/g, "").length < 10)
+      state = getInvalidCheck(state, "phone1")
+    if (!!data.phone2 && data.phone2.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone1")
     if (!data.branchId) state = getInvalidCheck(state, "branchId")
     if (!data.region) state = getInvalidCheck(state, "region")

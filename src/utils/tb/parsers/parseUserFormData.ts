@@ -82,13 +82,49 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
 const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
   const info = {
     id: user.userId,
+    nome: user.name,
+    contato: user.contato,
+    userAccountId: user.userId,
+    filialId: user.branchId,
+    countryId: user.address.country,
+    state: {
+      id: user.address.state,
+    },
+    city: {
+      id: user.address.city,
+    },
+    address: user.address.street,
+    number: user.address.number,
+    complement: user.address.complement,
+    postalCode: user.address.cep,
+    phone1: user.phone1,
+    phone2: user.phone2,
+    email: user.email,
+    typePerson: user.responsible.responsibleType === "CNPJ" ? "PJ" : "CPF",
+
+    // Responsable
+    corporateName: user.responsible.companyName,
+    tradeName: user.responsible.fantasyName,
+    cnpj: user.responsible.cnpj,
+    stateRegistration: user.responsible.stateRegistration,
+    municipalRegistration: user.responsible.municipalRegistration,
+    firstName: user.responsible.personName,
+    lastName: "-",
+    cpf: user.responsible.cpf,
+    dateOfBirth: new Date().toISOString(),
+    regionId: user.region,
+    cityIds: user.cities,
+  }
+
+  /*
+    id: user.userId,
     userId: user.userId,
     photo: user.photo,
     email: user.email,
     profile: user.profile,
     status: user.status,
     name: user.name,
-  }
+  */
 
   return info
 }

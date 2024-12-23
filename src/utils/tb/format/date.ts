@@ -15,13 +15,23 @@ export const getTime = (date: string | Date, withSeconds?: boolean) => {
 
 export const getDateStr = (
   date: string | Date | number,
-  format: "dmy" | "pureDate" | "time" | "javaTime" | "javaDateTime" | "iso"
+  format:
+    | "dmy"
+    | "usa"
+    | "pureDate"
+    | "time"
+    | "javaTime"
+    | "javaDateTime"
+    | "iso"
 ) => {
   let str = ""
 
   switch (format) {
     case "dmy":
       str = getDMY(date)
+      break
+    case "usa":
+      str = getUsa(date)
       break
     case "pureDate":
       str = getPureDateStr(date as Date)
@@ -52,6 +62,17 @@ const getDMY = (date: string | Date | number) => {
   str = String(d.getDate()).padStart(2, "0")
   str += `/${String(d.getMonth() + 1).padStart(2, "0")}`
   str += `/${String(d.getFullYear())}`
+
+  return str
+}
+
+const getUsa = (date: string | Date | number) => {
+  let str = ""
+  const d = new Date(date)
+
+  str = `${String(d.getFullYear())}`
+  str += `-${String(d.getMonth() + 1).padStart(2, "0")}`
+  str += `-${String(d.getDate()).padStart(2, "0")}`
 
   return str
 }

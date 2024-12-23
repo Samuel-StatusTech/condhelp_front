@@ -1,9 +1,11 @@
-import { TNewUserDefault, TUFranchise } from "../../../@types/data/user"
+import { TUFranchise } from "../../../@types/data/_user/franchise"
+import { TNewUserDefault } from "../../../@types/data/user"
 
 export const franchiseInitial: TNewUserDefault & TUFranchise = {
   id: 0,
   branchId: 0,
   userId: 0,
+  contato: "-",
   status: "ATIVO",
   photo: null,
   address: {
