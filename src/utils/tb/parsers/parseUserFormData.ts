@@ -83,6 +83,7 @@ const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
   const info = {
     id: user.userId,
     nome: user.name,
+    name: user.name,
     contato: user.contato,
     userAccountId: user.userId,
     filialId: user.branchId,
@@ -115,16 +116,6 @@ const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
     regionId: user.region,
     cityIds: user.cities,
   }
-
-  /*
-    id: user.userId,
-    userId: user.userId,
-    photo: user.photo,
-    email: user.email,
-    profile: user.profile,
-    status: user.status,
-    name: user.name,
-  */
 
   return info
 }

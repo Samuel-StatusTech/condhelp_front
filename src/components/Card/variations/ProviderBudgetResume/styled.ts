@@ -9,6 +9,7 @@ export const Element = styled.div<{ $k?: number; $forGrid?: boolean }>`
   border-radius: 8px;
   align-self: stretch;
   padding: 20px;
+  position: relative;
 
   opacity: 0;
   ${({ $k, theme }) =>
@@ -231,7 +232,7 @@ export const AlertArea = styled.div<{ $forGrid?: boolean; $column?: boolean }>`
 
   position: ${({ $column, $forGrid }) =>
     $column || $forGrid ? "relative" : "absolute"};
-  right: ${({ $forGrid }) => ($forGrid ? "unset" : 0)};
-  margin-top: ${({ $forGrid }) => ($forGrid ? 8 : 0)}px;
+  right: ${({ $forGrid }) => ($forGrid ? "unset" : "18px")};
+  margin-top: ${({ $forGrid }) => ($forGrid ? 8 : -16)}px;
   align-self: ${({ $forGrid }) => ($forGrid ? "center" : "unset")};
 `

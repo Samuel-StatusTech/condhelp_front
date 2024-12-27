@@ -187,7 +187,7 @@ export const basicProvider = ({
             field: "email",
             label: "Email",
             value: form.email,
-            placeholder: "00 00000-0000",
+            placeholder: "email.responsavel@condhelp.com",
             gridSizes: { big: 6, small: 12 },
           },
         ],

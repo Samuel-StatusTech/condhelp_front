@@ -15,6 +15,7 @@ export type TNewBudget = {
   userId: number
   status: TBudgetStatus
   providerIds: number[]
+  franqId: number
 }
 
 export type TBudget = {
@@ -28,6 +29,7 @@ export type TBudget = {
   dataFim: string
   urlAnexo: string
   prestadores: TProviderOnBudget[]
+  franqId: number
 
   id: number
   title: string

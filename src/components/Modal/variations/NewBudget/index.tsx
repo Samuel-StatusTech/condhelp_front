@@ -20,6 +20,7 @@ import { checkErrors } from "../../../../utils/tb/checkErrors"
 import { TDefaultRes } from "../../../../api/types/responses"
 
 import { getDateStr } from "../../../../utils/tb/format/date"
+import { TUserTypes } from "../../../../utils/@types/data/user"
 
 type Props = {
   data?: any
@@ -125,6 +126,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     try {
       let categoriesList: TCategory[] = []
       let condosList: TCondominium[] = []
+      let franchisesList: TUserTypes["FRANQUEADO"][] = []
 
       let proms: Promise<any>[] = []
 
@@ -158,16 +160,40 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           })
       )
 
+      if (user?.profile === "FRANQUEADO") {
+        setForm((frm) => ({
+          ...frm,
+          franqId: user?.id,
+        }))
+      } else if (user?.profile === "SINDICO") {
+        setForm((frm) => ({
+          ...frm,
+          franqId: user?.franqId,
+        }))
+      }
+
       await Promise.allSettled(proms)
 
       setCategories(categoriesList)
       setCondos(condosList)
 
-      setOptions((opts: any) => ({
-        ...opts,
+      const newOptions = {
         condo: parseOptionList(condosList, "id", "name"),
         category: parseOptionList(categoriesList, "id", "name"),
+        franchise: parseOptionList(franchisesList, "id", "name"),
+      }
+
+      setOptions((opts: any) => ({
+        ...opts,
+        ...newOptions,
       }))
+
+      if (condosList.length === 1) {
+        setForm((frm) => ({
+          ...frm,
+          condominiumId: condosList[0].id,
+        }))
+      }
     } catch (error) {
       controllers.feedback.setData({
         state: "error",

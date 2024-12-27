@@ -16,6 +16,7 @@ export type TApi_Params_Persons = {
     }
     getSingle: {
       id: number
+      profile?: TAccess
     }
     getSelfData: {
       id: number

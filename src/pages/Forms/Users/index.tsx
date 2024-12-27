@@ -443,7 +443,7 @@ const FPpeople = () => {
 
       // For Regions select
       proms.push(
-        Api.regions.listAll({}).then((res) => {
+        Api.regions.listAll({ size: 300 }).then((res) => {
           if (res.ok) {
             setRegions(res.data.content)
             setOptions((opts) => ({
@@ -464,7 +464,7 @@ const FPpeople = () => {
 
       // For Countries select
       proms.push(
-        Api.countries.listAll({}).then((res) => {
+        Api.countries.listAll({ size: 300 }).then((res) => {
           if (res.ok) {
             setOptions((opts) => ({
               ...opts,
@@ -484,7 +484,7 @@ const FPpeople = () => {
 
       // For States select
       proms.push(
-        Api.states.listAll({}).then((res) => {
+        Api.states.listAll({ size: 300 }).then((res) => {
           if (res.ok) {
             const results = res.data.content
 

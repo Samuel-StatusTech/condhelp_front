@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom"
 import { getStore } from "../../store"
 import { checkErrors } from "../../utils/tb/checkErrors"
 import { Api } from "../../api"
+import { getTokenData } from "../../utils/tb/helpers/getTokenData"
+import { TAccess } from "../../utils/@types/data/access"
 
 const Login = () => {
   const navigate = useNavigate()
@@ -94,8 +96,11 @@ const Login = () => {
             })
 
             if (auth.ok) {
+              const tokenData = getTokenData(auth.data.token)
+
               const userDataReq = await Api.persons.getSingle({
                 id: auth.data.userId,
+                profile: tokenData.userType as TAccess,
               })
 
               if (userDataReq.ok) {

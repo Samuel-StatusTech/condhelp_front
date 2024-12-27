@@ -220,75 +220,108 @@ const deleteItem: TApi["persons"]["delete"] = async ({ person }) => {
   })
 }
 
-const getSingle: TApi["persons"]["getSingle"] = async ({ id }) => {
+const getSingle: TApi["persons"]["getSingle"] = async ({
+  id,
+  profile = "USUARIO",
+}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await service
-        .get(`${baseURL}/${id}`)
-        .then(async (res) => {
-          const info = res.data
+      if (["SINDICO"].includes(profile)) {
+        await service
+          .get(`${rolesUrlRelations[profile]}/${id}`)
+          .then(async (res) => {
+            const info = res.data
 
-          if (info) {
-            const userProfile = info.profile as TAccess
-
-            if (!["ADMIN"].includes(userProfile)) {
-              const url =
-                userProfile === "FILIAL"
-                  ? `${rolesUrlRelations[userProfile]}/useraccount`
-                  : userProfile === "PRESTADOR"
-                  ? `${rolesUrlRelations[userProfile]}/useraccount`
-                  : rolesUrlRelations[userProfile] ?? baseURL
-
-              const extraDataReq = await service.get(`${url}/${info.id}`)
-
-              if (extraDataReq.data) {
-                let extraInfo = extraDataReq.data
-
-                if (userProfile === "PRESTADOR") {
-                  extraInfo = parseUserProvider({
-                    ...info,
-                    ...extraDataReq.data,
-                  })
-                  if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
-                    extraInfo.address.cep = extraInfo.address.zipCode
-                } else if (userProfile === "FILIAL") {
-                  extraInfo = parseUserBranch({
-                    ...info,
-                    ...extraDataReq.data,
-                  })
-                  if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
-                    extraInfo.address.cep = extraInfo.address.zipCode
-                }
-
-                resolve({
-                  ok: true,
-                  data: {
-                    ...info,
-                    ...extraInfo,
-                  },
-                })
-              } else throw new Error()
-            } else {
+            if (info) {
               resolve({
                 ok: true,
                 data: info,
               })
+            } else {
+              resolve({
+                ok: false,
+                error:
+                  "Não foi possível carregar as informações. Tente novamente mais tarde.",
+              })
             }
-          } else {
+          })
+          .catch((err: AxiosError) => {
             resolve({
               ok: false,
               error:
                 "Não foi possível carregar as informações. Tente novamente mais tarde.",
             })
-          }
-        })
-        .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error:
-              "Não foi possível carregar as informações. Tente novamente mais tarde.",
           })
-        })
+      } else {
+        await service
+          .get(`${baseURL}/${id}`)
+          .then(async (res) => {
+            const info = res.data
+
+            if (info) {
+              const userProfile = info.profile as TAccess
+
+              if (!["ADMIN"].includes(userProfile)) {
+                const url =
+                  userProfile === "FILIAL"
+                    ? `${rolesUrlRelations[userProfile]}/useraccount`
+                    : userProfile === "PRESTADOR"
+                    ? `${rolesUrlRelations[userProfile]}/useraccount`
+                    : userProfile === "FRANQUEADO"
+                    ? `${rolesUrlRelations[userProfile]}/useraccount`
+                    : rolesUrlRelations[userProfile] ?? baseURL
+
+                const extraDataReq = await service.get(`${url}/${info.id}`)
+
+                if (extraDataReq.data) {
+                  let extraInfo = extraDataReq.data
+
+                  if (userProfile === "PRESTADOR") {
+                    extraInfo = parseUserProvider({
+                      ...info,
+                      ...extraDataReq.data,
+                    })
+                    if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
+                      extraInfo.address.cep = extraInfo.address.zipCode
+                  } else if (userProfile === "FILIAL") {
+                    extraInfo = parseUserBranch({
+                      ...info,
+                      ...extraDataReq.data,
+                    })
+                    if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
+                      extraInfo.address.cep = extraInfo.address.zipCode
+                  }
+
+                  resolve({
+                    ok: true,
+                    data: {
+                      ...info,
+                      ...extraInfo,
+                    },
+                  })
+                } else throw new Error()
+              } else {
+                resolve({
+                  ok: true,
+                  data: info,
+                })
+              }
+            } else {
+              resolve({
+                ok: false,
+                error:
+                  "Não foi possível carregar as informações. Tente novamente mais tarde.",
+              })
+            }
+          })
+          .catch((err: AxiosError) => {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          })
+      }
     } catch (error) {
       reject({
         error:

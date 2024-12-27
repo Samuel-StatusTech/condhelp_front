@@ -74,7 +74,9 @@ const listProviderBudgets: TApi["budgets"]["listProviderBudgets"] = async (
           },
         })
         .then((res) => {
-          const info = res.data
+          const info = res.data.filter(
+            (b: any) => !["EXPIRADO"].includes(b.status)
+          )
 
           if (info) {
             resolve({
@@ -109,10 +111,7 @@ const create: TApi["budgets"]["create"] = async ({ newBudget }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .post(`${baseURL}`, {
-          ...newBudget,
-          franqId: 3,
-        })
+        .post(`${baseURL}`, newBudget)
         .then((res) => {
           const info = res.data
 
