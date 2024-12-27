@@ -19,8 +19,9 @@ export const branchCheck = (
     if (!data.name?.trim()) state = getInvalidCheck(state, "name")
     if (!data.email || !data.email?.trim() || !validEmail(data.email))
       state = getInvalidCheck(state, "email")
-    if (data.phone1.replace(/\D/g, "").length < 10)
+    if (data.phone1?.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone1")
+    if (data.phone2 && data.phone2.replace(/\D/g, "").length < 10)
 
     if (data.address.cep.replace(/\D/g, "").length < 8)
       state = getInvalidCheck(state, "address.cep")

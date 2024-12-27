@@ -172,7 +172,7 @@ const Budgets = () => {
             search={finishedBudgetsSearch}
             onSearchChange={setFinishedBudgetsSearch}
             onSearch={handleFinishedBudgetsSearch}
-            searchPlaceholder="Pesquisar por id, data, título, condomínio..."
+            searchPlaceholder="Pesquisar por data, título, condomínio..."
             onFilterChange={handleFilters}
             filters={[
               {

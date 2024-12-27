@@ -229,7 +229,10 @@ const getSingle: TApi["budgets"]["getSingle"] = async ({ id }) => {
           if (info) {
             resolve({
               ok: true,
-              data: info,
+              data: {
+                ...info,
+                prestadores: info.providers,
+              },
             })
           } else {
             resolve({

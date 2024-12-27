@@ -9,7 +9,6 @@ export const extraProvider = (
   options: { [key: string]: TOption[] },
   categories: TCategory[]
 ): TBlock[] => {
-
   const content: TBlock[] = [
     {
       title: "Informações Comerciais",
@@ -49,6 +48,7 @@ export const extraProvider = (
               label: "Cartão CNPJ",
               value: form.cnpjCard,
               gridSizes: { big: 12, small: 12 },
+              allowsPdf: true,
             },
           ],
         },
@@ -115,6 +115,7 @@ export const extraProvider = (
                 field: "federalCndDocument",
                 value: form.federalCndDocument,
                 gridSizes: { big: 8, small: 12 },
+                allowsPdf: true,
               },
             ],
           ],
@@ -161,6 +162,7 @@ export const extraProvider = (
                 field: "stateCndDocument",
                 value: form.stateCndDocument,
                 gridSizes: { big: 8, small: 12 },
+                allowsPdf: true,
               },
             ],
           ],
@@ -207,6 +209,7 @@ export const extraProvider = (
                 field: "cityCndDocument",
                 value: form.cityCndDocument,
                 gridSizes: { big: 8, small: 12 },
+                allowsPdf: true,
               },
             ],
           ],
@@ -253,6 +256,7 @@ export const extraProvider = (
                 field: "fgtsCndDocument",
                 value: form.fgtsCndDocument,
                 gridSizes: { big: 8, small: 12 },
+                allowsPdf: true,
               },
             ],
           ],

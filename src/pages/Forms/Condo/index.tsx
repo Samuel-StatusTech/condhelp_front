@@ -490,6 +490,7 @@ const FPcondo = () => {
                         field: "electionFile",
                         value: form.electionFile,
                         gridSizes: { big: 12 },
+                        allowsPdf: true
                       },
                     ],
                   },

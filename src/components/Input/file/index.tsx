@@ -12,6 +12,7 @@ export type TInputFile = {
   field: string
   value: string | File | null
   singleComponent?: boolean
+  allowsPdf?: boolean
 }
 
 type Props = TInputFile & {
@@ -22,7 +23,7 @@ type Props = TInputFile & {
 const InputFile = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { singleComponent, height, label, field, value, onChange } = props
+  const { allowsPdf, singleComponent, height, label, field, value, onChange } = props
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -95,7 +96,9 @@ const InputFile = (props: Props) => {
 
         <input
           type="file"
-          accept="image/png,image/jpeg,image/jpg"
+          accept={`image/png,image/jpeg,image/jpg${
+            allowsPdf ? ",application/pdf" : ""
+          }`}
           onChange={handleInputChange}
           ref={inputRef}
           hidden={true}

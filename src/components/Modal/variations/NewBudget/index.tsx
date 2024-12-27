@@ -281,7 +281,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           value={form.description}
           gridSizes={{ big: 12 }}
           placeholder="Descrição"
-          limit={100}
+          limit={1000}
         />
 
         <Input.Date
@@ -309,6 +309,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
           gridSizes={{ big: 12 }}
           label="Anexar um arquivo"
           singleComponent={true}
+          allowsPdf={true}
         />
 
         <S.Bottom>
