@@ -377,6 +377,9 @@ const FPpeople = () => {
     try {
       // user info
 
+      if (user?.profile === "FRANQUEADO")
+        setForm((frm: any) => ({ ...frm, franqId: user?.userId as number }))
+
       if (params.id) {
         const req = await Api.persons.getSingle({ id: Number(params.id) })
 
