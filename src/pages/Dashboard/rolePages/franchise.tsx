@@ -14,6 +14,7 @@ import { TUser } from "../../../utils/@types/data/user"
 type TGridInfo = {
   PRESTADOR: number
   SINDICO: number
+  condo: number
   chat: number
   faq: number
   category: number
@@ -25,6 +26,7 @@ type TGridInfo = {
 const gridInitial: TGridInfo = {
   PRESTADOR: 0,
   SINDICO: 0,
+  condo: 0,
   chat: 0,
   faq: 0,
   category: 0,
@@ -38,7 +40,7 @@ const DashboardFranchise = () => {
 
   const [loading, setLoading] = useState(true)
 
-  const [, setGridData] = useState<any>(gridInitial)
+  const [gridData, setGridData] = useState<any>(gridInitial)
 
   const [, setBudgetsDetails] = useState<{
     [key: string]: number
@@ -105,7 +107,7 @@ const DashboardFranchise = () => {
           k={5 + (sk + 1) / 2}
           title={s.title}
           icon={s.icon}
-          registers={s.registers}
+          registers={gridData[s.icon as keyof TGridInfo]}
           link={s.link}
         />
       )
@@ -157,6 +159,7 @@ const DashboardFranchise = () => {
       let gridInfo: TGridInfo = {
         PRESTADOR: 0,
         SINDICO: 0,
+        condo: 0,
         chat: 0,
         faq: 0,
         category: 0,
@@ -205,6 +208,7 @@ const DashboardFranchise = () => {
 
             if (req.ok) {
               condoCount = req.data.totalElements
+              gridInfo.condo = req.data.totalElements
             }
 
             resolve(true)
@@ -218,7 +222,7 @@ const DashboardFranchise = () => {
       proms.push(
         new Promise(async (resolve, reject) => {
           try {
-            const req = await Api.budgets.listAll({})
+            const req = await Api.budgets.listAll({ size: 0 })
 
             if (req.ok) {
               budgetCount = req.data.totalElements
