@@ -262,7 +262,7 @@ const FPpeople = () => {
     } catch (error) {
       controllers.feedback.setData({
         visible: true,
-        state: "success",
+        state: "alert",
         message:
           "Houve um erro ao atualizar o usuário. Verifique as informações e tente novamente.",
       })
@@ -560,10 +560,12 @@ const FPpeople = () => {
         ...frm,
         branchId: user?.branchId,
         franchiseId: user?.userAccountId,
-        franqId: user?.userId as number
+        franqId: user?.userId as number,
       }))
     }
+  }, [user])
 
+  useEffect(() => {
     if (location.state && location.state.role) {
       const hasForm = initials.forms.person[location.state.role as TAccess]
 
