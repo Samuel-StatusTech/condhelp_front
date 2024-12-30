@@ -77,7 +77,14 @@ const UsersPage = () => {
       setLoading(true)
 
       try {
-        const req = await Api.persons.listAll(searchParams)
+        const listFn =
+          user?.profile === "FILIAL"
+            ? Api.persons.getBranchUsers(searchParams)
+            : user?.profile === "FRANQUEADO"
+            ? Api.persons.getFranchiseUsers(searchParams)
+            : Api.persons.listAll(searchParams)
+
+        const req = await listFn
 
         if (req.ok) {
           setSearchControl({ ...req.data, content: [] })

@@ -560,6 +560,7 @@ const FPpeople = () => {
         ...frm,
         branchId: user?.branchId,
         franchiseId: user?.userAccountId,
+        franqId: user?.userId as number
       }))
     }
 

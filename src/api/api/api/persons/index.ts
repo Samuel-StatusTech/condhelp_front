@@ -66,7 +66,6 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
       // Other profile
       if (!["SINDICO"].includes(newPerson.profile)) {
         const userAccountRegister = await service.post(`${baseURL}`, {
-          id: newPerson.userId,
           userId: newPerson.userId,
           photo: newPerson.photo,
           name: newPerson.name,
@@ -491,6 +490,80 @@ const getAllBranches: TApi["persons"]["getAllBranches"] = async () => {
   })
 }
 
+const getBranchUsers: TApi["persons"]["getBranchUsers"] = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${rolesUrlRelations.FILIAL}/myusers`)
+        .then(async (res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível carregar as informações. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const getFranchiseUsers: TApi["persons"]["getFranchiseUsers"] = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${rolesUrlRelations.FRANQUEADO}/myusers`)
+        .then(async (res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível carregar as informações. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível carregar as informações. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export type TApi_Persons = {
   listAll: (
     p: TParams["persons"]["listAll"]
@@ -510,6 +583,14 @@ export type TApi_Persons = {
   getAllBranches: (
     p: TParams["persons"]["getAllBranches"]
   ) => TResponses["persons"]["getAllBranches"]
+
+  // Own list
+  getBranchUsers: (
+    p: TParams["persons"]["getBranchUsers"]
+  ) => TResponses["persons"]["getBranchUsers"]
+  getFranchiseUsers: (
+    p: TParams["persons"]["getFranchiseUsers"]
+  ) => TResponses["persons"]["getFranchiseUsers"]
 }
 
 export const apiPersons: TApi["persons"] = {
@@ -521,4 +602,7 @@ export const apiPersons: TApi["persons"] = {
   delete: deleteItem,
   getByRole: getByRole,
   getAllBranches: getAllBranches,
+
+  getBranchUsers: getBranchUsers,
+  getFranchiseUsers: getFranchiseUsers,
 }

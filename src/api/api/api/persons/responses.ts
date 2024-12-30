@@ -11,5 +11,8 @@ export type TApi_Responses_Persons = {
     delete: Promise<TDefaultRes<{}>>
     getByRole: Promise<TDefaultRes<TDefaultList<TUser>>>
     getAllBranches: Promise<TDefaultRes<TDefaultList<TUser>>>
+
+    getBranchUsers: Promise<TDefaultRes<TDefaultList<TUser>>>
+    getFranchiseUsers: Promise<TDefaultRes<TDefaultList<TUser>>>
   }
 }

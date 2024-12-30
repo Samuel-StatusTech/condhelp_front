@@ -25,5 +25,8 @@ export type TApi_Params_Persons = {
       role: TAccess
     }
     getAllBranches: {}
+
+    getBranchUsers: TDefaultFilters
+    getFranchiseUsers: TDefaultFilters
   }
 }
