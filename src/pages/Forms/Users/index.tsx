@@ -210,6 +210,8 @@ const FPpeople = () => {
       userId: userId,
       email: form.email,
       photo: null,
+      branchId: form.branchId,
+      franchiseId: form.franchiseId,
     }
 
     let info = getUserObj(
@@ -551,8 +553,15 @@ const FPpeople = () => {
   }, [controllers.feedback, navigate, params.id])
 
   useEffect(() => {
-    if (user?.profile === "FILIAL")
-      setForm((frm: any) => ({ ...frm, branchId: user?.subsidiaryId }))
+    if (user?.profile === "FILIAL") {
+      setForm((frm: any) => ({ ...frm, branchId: user?.userAccountId }))
+    } else if (user?.profile === "FRANQUEADO") {
+      setForm((frm: any) => ({
+        ...frm,
+        branchId: user?.branchId,
+        franchiseId: user?.userAccountId,
+      }))
+    }
 
     if (location.state && location.state.role) {
       const hasForm = initials.forms.person[location.state.role as TAccess]

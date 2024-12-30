@@ -5,6 +5,7 @@ export const parseUserProvider = (
   backProvider: T_Back_Provider
 ): TUserTypes["PRESTADOR"] => {
   try {
+    // @ts-ignore
     let user: TUserTypes["PRESTADOR"] = {
       id: backProvider.id,
       photo: null,

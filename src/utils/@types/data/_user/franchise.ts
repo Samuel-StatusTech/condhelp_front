@@ -3,7 +3,6 @@ import { TBackCity, TRegion } from "../region"
 import { TResponsableTypes } from "../user"
 
 export type TUFranchise = {
-  branchId: number
   contato: string
 
   profile: "FRANQUEADO"

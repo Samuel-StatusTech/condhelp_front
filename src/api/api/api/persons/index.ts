@@ -73,6 +73,8 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           email: newPerson.email,
           profile: newPerson.profile,
           status: newPerson.status,
+          branchId: newPerson.branchId,
+          franchiseId: newPerson.franchiseId,
         })
 
         if (!userAccountRegister.data) {
@@ -98,11 +100,17 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
       // Manager start here
       const roleUrl = rolesUrlRelations[newPerson.profile]
 
+      let additionalData: any = {
+        ...newPerson,
+        id: newPerson.userId,
+      }
+
+      if (newPerson.profile === "FILIAL") {
+        additionalData.subsidiaryId = newPerson.userId
+      }
+
       await service
-        .post(`${roleUrl}`, {
-          ...newPerson,
-          id: newPerson.userId,
-        })
+        .post(`${roleUrl}`, additionalData)
         .then((res) => {
           const info = res.data
 
@@ -140,11 +148,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
       const roleUrl = rolesUrlRelations[person.profile]
 
       const id =
-        person.profile === "FILIAL"
-          ? person.subsidiaryId
-          : person.profile === "PRESTADOR"
-          ? person.id
-          : person.userAccountId
+        person.profile === "PRESTADOR" ? person.id : person.userAccountId
 
       await service
         .put(`${roleUrl}/${id}`, person)
@@ -271,7 +275,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                     ? `${rolesUrlRelations[userProfile]}/useraccount`
                     : rolesUrlRelations[userProfile] ?? baseURL
 
-                const extraDataReq = await service.get(`${url}/${info.id}`)
+                const extraDataReq = await service.get(`${url}/${info.userId}`)
 
                 if (extraDataReq.data) {
                   let extraInfo = extraDataReq.data

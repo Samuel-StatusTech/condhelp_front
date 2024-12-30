@@ -3,10 +3,8 @@ import { TDocument } from "./_user/document"
 import { TUFranchise } from "./_user/franchise"
 import { TUProvider } from "./_user/provider"
 import { TAccess } from "./access"
-import { TAddress } from "./address"
 import { TCondominium } from "./condominium"
 import { TExperience } from "./managerExperience"
-import { TRegion } from "./region"
 
 export type TUDefault = {
   id: number
@@ -14,6 +12,8 @@ export type TUDefault = {
   userId: number
   status: "ATIVO" | "INATIVO" | "AGUARDANDO"
   photo: null | string
+  branchId: number | null
+  franchiseId: number | null
 }
 
 export type TNewUserDefault = {
@@ -22,6 +22,8 @@ export type TNewUserDefault = {
   status: "ATIVO" | "INATIVO" | "AGUARDANDO"
   email: string
   photo: null | string
+  branchId: number | null
+  franchiseId: number | null
 }
 
 export type TUserTypes = {

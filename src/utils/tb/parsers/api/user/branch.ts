@@ -9,10 +9,10 @@ export const parseUserBranch = (
   backUser: TUDefault & T_Back_Branch
 ): TUserTypes["FILIAL"] => {
   try {
+    // @ts-ignore
     let user: TUserTypes["FILIAL"] = {
       profile: "FILIAL",
 
-      subsidiaryId: backUser.subsidiaryId,
       id: backUser.id,
       photo: null,
       status: backUser.status as any,

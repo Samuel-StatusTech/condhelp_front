@@ -2,6 +2,9 @@ import { TNewUser, TUManager } from "../../../@types/data/user"
 import { getMajorityDate } from "../../../tb/helpers/getMajorityDate"
 
 export const managerInitial: TNewUser & TUManager = {
+  branchId: null,
+  franchiseId: null,
+
   id: 0,
   franqId: 0,
   userId: 0,

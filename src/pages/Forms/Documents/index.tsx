@@ -44,6 +44,8 @@ const FPdocuments = () => {
       userId: userId,
       email: form.email,
       photo: null,
+      branchId: user?.branchId as number,
+      franchiseId: user?.franchiseId as number,
     }
 
     let info = getUserObj({ ...form, userId }, (form as TNewUser).profile)

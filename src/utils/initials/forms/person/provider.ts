@@ -2,6 +2,9 @@ import { TUProvider } from "../../../@types/data/_user/provider"
 import { TNewUserDefault } from "../../../@types/data/user"
 
 export const providerInitial: TNewUserDefault & TUProvider = {
+  branchId: null,
+  franchiseId: null,
+
   id: 0,
   userId: 0,
   profile: "PRESTADOR",

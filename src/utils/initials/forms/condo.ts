@@ -15,6 +15,7 @@ export const condoForm: TNewCondominium = {
 
   electionDate: new Date(new Date().setHours(-24)).getTime(),
 
+  // @ts-ignore
   manager: {
     userAccountId: 0,
     id: 0,
