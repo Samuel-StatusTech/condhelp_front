@@ -28,6 +28,12 @@ const ProviderResume = ({
   budgetId,
   handleResponseProvider,
 }: Props) => {
+  const isRefusedOrRejected = [
+    "RECUSADO_SINDICO",
+    "RECUSADO_PRESTADOR",
+    "CANCELADO_PRESTADOR",
+  ].includes(data.status)
+
   const handleReject = (providerId: number) => {
     handleResponseProvider(providerId, "RECUSADO_SINDICO")
   }
@@ -77,7 +83,9 @@ const ProviderResume = ({
 
   const handleApprove = async () => {
     const status: TBudgetStatus =
-      data.status === "AGUARDANDO_SINDICO" ? "APROVADO_SINDICO" : "CONTRATADO"
+      isRefusedOrRejected || data.status === "AGUARDANDO_SINDICO"
+        ? "APROVADO_SINDICO"
+        : "CONTRATADO"
 
     handleResponseProvider(data.userId, status)
   }
@@ -118,48 +126,45 @@ const ProviderResume = ({
             <S.BottomCard>
               {renderStatusIndicator()}
 
-              {data.status !== "CONTRATADO" && (
-                <S.ButtonsArea>
-                  <Button
-                    type="quaternary"
-                    greenText={[
-                      "RECUSADO_SINDICO",
-                      "RECUSADO_PRESTADOR",
-                      "CANCELADO_PRESTADOR",
-                    ].includes(data.status)}
-                    text={
-                      [
+              {data.status !== "CONTRATADO" &&
+                !(
+                  [
+                    "CANCELADO_SINDICO",
+                    "EXPIRADO",
+                    "FINALIZADO",
+                  ] as TBudgetStatus[]
+                ).includes(data.status) && (
+                  <S.ButtonsArea>
+                    <Button
+                      type="quaternary"
+                      greenText={isRefusedOrRejected}
+                      text={isRefusedOrRejected ? "Aceitar" : "Recusar"}
+                      action={
+                        isRefusedOrRejected ? handleApprove : handleReject
+                      }
+                      fit={true}
+                      red={true}
+                    />
+
+                    <Button
+                      type={
+                        data.status === "AGUARDANDO_SINDICO" ? "green" : "main"
+                      }
+                      text={
+                        data.status === "AGUARDANDO_SINDICO"
+                          ? "ACEITAR"
+                          : "CONTRATAR"
+                      }
+                      action={handleApprove}
+                      iconLeft={true}
+                      disabled={[
                         "RECUSADO_SINDICO",
                         "RECUSADO_PRESTADOR",
                         "CANCELADO_PRESTADOR",
-                      ].includes(data.status)
-                        ? "Aceitar"
-                        : "Recusar"
-                    }
-                    action={handleReject}
-                    fit={true}
-                    red={true}
-                  />
-
-                  <Button
-                    type={
-                      data.status === "AGUARDANDO_SINDICO" ? "green" : "main"
-                    }
-                    text={
-                      data.status === "AGUARDANDO_SINDICO"
-                        ? "ACEITAR"
-                        : "CONTRATAR"
-                    }
-                    action={handleApprove}
-                    iconLeft={true}
-                    disabled={[
-                      "RECUSADO_SINDICO",
-                      "RECUSADO_PRESTADOR",
-                      "CANCELADO_PRESTADOR",
-                    ].includes(data.status)}
-                  />
-                </S.ButtonsArea>
-              )}
+                      ].includes(data.status)}
+                    />
+                  </S.ButtonsArea>
+                )}
             </S.BottomCard>
           </S.Content>
         </C.ContentWrapper>
