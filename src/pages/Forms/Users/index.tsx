@@ -563,7 +563,7 @@ const FPpeople = () => {
         franqId: user?.userId as number,
       }))
     }
-  }, [user])
+  }, [user, personType])
 
   useEffect(() => {
     if (location.state && location.state.role) {
