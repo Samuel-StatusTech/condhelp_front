@@ -74,9 +74,20 @@ const listProviderBudgets: TApi["budgets"]["listProviderBudgets"] = async (
           },
         })
         .then((res) => {
-          const info = res.data.filter(
-            (b: any) => !["EXPIRADO"].includes(b.status)
-          )
+          const info = {
+            ...res.data,
+            content: res.data.content.filter(
+              (b: any) =>
+                ![
+                  "CANCELADO_SINDICO",
+                  "CANCELADO_PRESTADOR",
+                  "RECUSADO_PRESTADOR",
+                  "RECUSADO_SINDICO",
+                  "FINALIZADO",
+                  "EXPIRADO",
+                ].includes(b.status)
+            ),
+          }
 
           if (info) {
             resolve({
@@ -231,7 +242,7 @@ const getSingle: TApi["budgets"]["getSingle"] = async ({ id }) => {
               ok: true,
               data: {
                 ...info,
-                prestadores: info.providers,
+                prestadores: info.providers ?? info.prestadores,
               },
             })
           } else {

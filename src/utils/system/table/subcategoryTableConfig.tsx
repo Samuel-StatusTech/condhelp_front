@@ -26,6 +26,7 @@ export const subcategoryTableConfig: TConfig = {
         id={item.id}
         content={[
           {
+            userId: item.user.userId,
             role: "edit",
             type: "icon",
             action: callbacks?.edit as (id: string | number) => void | any,

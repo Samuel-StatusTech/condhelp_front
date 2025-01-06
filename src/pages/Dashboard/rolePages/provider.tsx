@@ -110,17 +110,7 @@ const DashboardProvider = () => {
           resume.rejected = resume.rejected + b.rejected
         })
 
-        const visible = budgetsReq.data.content.filter(
-          (b) =>
-            b.status !== "CANCELADO_SINDICO" &&
-            b.status !== "CANCELADO_PRESTADOR" &&
-            b.status !== "RECUSADO_PRESTADOR" &&
-            b.status !== "RECUSADO_SINDICO" &&
-            b.status !== "FINALIZADO" &&
-            b.status !== "EXPIRADO"
-        )
-
-        setBudgets(visible)
+        setBudgets(budgetsReq.data.content)
 
         /*
          * Finished table content

@@ -554,7 +554,7 @@ const FPpeople = () => {
 
   useEffect(() => {
     if (user?.profile === "FILIAL") {
-      setForm((frm: any) => ({ ...frm, branchId: user?.userAccountId }))
+      setForm((frm: any) => ({ ...frm, branchId: user?.userId }))
     } else if (user?.profile === "FRANQUEADO") {
       setForm((frm: any) => ({
         ...frm,
