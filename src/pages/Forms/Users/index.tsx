@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import * as C from "../styled"
 
 import initials from "../../../utils/initials"
-import Form from "../../../components/Form"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import PageHeader from "../../../components/PageHeader"
 
 import { TBlock } from "../../../utils/@types/components/Form"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
@@ -23,12 +20,13 @@ import { TOption } from "../../../utils/@types/data/option"
 import { formPartials } from "./partials"
 import { TCity, TRegion, TState } from "../../../utils/@types/data/region"
 import { checkErrors } from "../../../utils/tb/checkErrors"
-import { FormField } from "../../../utils/@types/components/FormFields"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 import { TCategory } from "../../../utils/@types/data/category"
 import { userSubordinates } from "../../../utils/system/options/profiles"
-import FranchiseCities from "./partials/franchiseCities"
-import ProviderLegalization from "../../../components/ProviderLegalization"
+
+import { UserFormContent } from "./content"
+import { handleField } from "./helpers/handleField"
+import { renderBasic } from "./helpers/renderBasic"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -75,132 +73,6 @@ const FPpeople = () => {
 
   const handleCancel = () => {
     navigate(-1)
-  }
-
-  const handleField = async (field: string, value: any) => {
-    if (field === "status") {
-      setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
-    } else if (field === "profile") {
-      setForm(initials.forms.person[value as TAccess])
-      setPersonType(value)
-    } else if (
-      [
-        "country",
-        "state",
-        "city",
-        "street",
-        "number",
-        "complement",
-        "cep",
-      ].includes(field)
-    ) {
-      setForm((p: any) => ({
-        ...p,
-        // @ts-ignore
-        address: { ...p.address, [field]: value },
-      }))
-    } else {
-      switch (form.profile) {
-        case "ADMIN":
-          switch (field) {
-            case "documentRegister":
-              setForm((p: any) => ({
-                ...p,
-                // @ts-ignore
-                document: { ...p.document, register: value },
-              }))
-              break
-            case "documentDate":
-              setForm((p: any) => ({
-                ...p,
-                // @ts-ignore
-                document: { ...p.document, date: value },
-              }))
-              break
-
-            default:
-              setForm((p: any) => ({ ...p, [field]: value }))
-              break
-          }
-
-          if (Object.keys(form.document).includes(field)) {
-          }
-          break
-
-        case "FILIAL":
-        case "FRANQUEADO":
-          const responsableKeys = [
-            "responsablePersonName",
-            "responsableResponsibleType",
-            "responsableFantasyName",
-            "responsableCompanyName",
-            "responsableCnpj",
-            "responsableStateRegistration",
-            "responsableMunicipalRegistration",
-            "responsableCpf",
-          ]
-
-          if (responsableKeys.includes(field)) {
-            const fieldKey = field.split("responsable")[1]
-
-            const fieldName =
-              fieldKey.charAt(0).toLowerCase() + fieldKey.slice(1)
-
-            setForm((p: any) => ({
-              ...p,
-              responsible: { ...p.responsible, [fieldName]: value },
-            }))
-          } else setForm((p: any) => ({ ...p, [field]: value }))
-          break
-
-        case "SINDICO":
-          setForm((p: any) => ({ ...p, [field]: value }))
-          break
-
-        case "PRESTADOR":
-          switch (field) {
-            case "documentRegister":
-              setForm((p: any) => ({
-                ...p,
-                // @ts-ignore
-                document: { ...p.document, register: value },
-              }))
-              break
-
-            case "documentDate":
-              setForm((p: any) => ({
-                ...p,
-                document: { ...p.document, date: value },
-              }))
-              break
-
-            case "categories":
-              const shouldInclude =
-                Array.isArray(form.categories) &&
-                !form.categories.includes(value as number)
-
-              const newList = shouldInclude
-                ? [...form.categories, value]
-                : form.categories.filter((i: number) => i !== value)
-
-              setForm((p: any) => ({
-                ...p,
-                categories: newList,
-              }))
-              break
-
-            default:
-              setForm((p: any) => ({ ...p, [field]: value }))
-              break
-          }
-
-          break
-
-        default:
-          setForm((p: any) => ({ ...p, [field]: value }))
-          break
-      }
-    }
   }
 
   const getObj = (userId: number) => {
@@ -615,53 +487,8 @@ const FPpeople = () => {
     ),
   }
 
-  const renderBasic = () => {
-    let content: TBlock["groups"] = []
-
-    switch (form.profile) {
-      case "ADMIN":
-        content = formPartials.admin.basic({ form })
-        break
-
-      case "FILIAL":
-        content = formPartials.branch.basic({
-          form,
-          options,
-          states,
-          handleSelectCity,
-        })
-        break
-
-      case "FRANQUEADO":
-        content = formPartials.franchise.basic({
-          form,
-          options,
-          userProfile: user?.profile as any,
-          handleSelectCity,
-        })
-        break
-
-      case "SINDICO":
-        content = formPartials.manager.basic({ form })
-        break
-
-      case "PRESTADOR":
-        content = formPartials.provider.basic({
-          form,
-          options,
-          handleField,
-          franchises: franchises,
-          personType: user?.profile as TAccess,
-          franchiseName: user?.name,
-          handleSelectCity,
-        })
-        break
-
-      default:
-        break
-    }
-
-    return content
+  const onHandleField = (field: string, value: any) => {
+    handleField(field, value, form, setForm, setPersonType)
   }
 
   const renderExtra = () => {
@@ -681,7 +508,7 @@ const FPpeople = () => {
           form,
           regions,
           options,
-          handleField,
+          onHandleField,
           formSubmitFields,
           setIsManagingFranchiseCities
         )
@@ -707,119 +534,31 @@ const FPpeople = () => {
     return content
   }
 
-  return form.profile === "FRANQUEADO" && isManagingFranchiseCities ? (
-    <C.Content>
-      <FranchiseCities
-        cities={form.cities}
-        region={regions.find((r) => r.id === form.region) as TRegion}
-        handleBack={() => setIsManagingFranchiseCities(false)}
-        handleList={(list) => handleField("cities", list)}
-      />
-    </C.Content>
-  ) : (
-    <C.Content className="falseSubContentWrapper">
-      <PageHeader type={"breadcrumb"} from={"users"} forForm={true} />
-
-      <Form
-        handleField={handleField}
-        handleCancel={handleCancel}
-        handleSave={handleSave}
-        columns={[
-          {
-            blocks: [
-              {
-                title: "Informações básicas",
-                groups: [
-                  {
-                    type: "fields",
-                    // eslint-disable-next-line no-sparse-arrays
-                    fields: [
-                      [
-                        {
-                          type: "select",
-                          label: "Perfil",
-                          field: "profile",
-                          options: options.profile,
-                          value: form.profile,
-                          gridSizes: { big: 10, small: 7 },
-                        },
-                        {
-                          type: "toggler",
-                          label: "Ativo",
-                          field: "status",
-                          value: form.status === "ATIVO",
-                          hasTopSpace: true,
-                        },
-                      ],
-                      ...(personType === "SINDICO" &&
-                      (["ADMIN", "FILIAL"] as TAccess[]).includes(
-                        user?.profile as TAccess
-                      )
-                        ? [
-                            {
-                              type: "select",
-                              label: "Franquia",
-                              field: "franqId",
-                              options: options.franchise,
-                              value: form.franqId,
-                              gridSizes: { big: 12 },
-                            } as FormField,
-                          ]
-                        : []),
-                    ],
-                  },
-                  ...renderBasic(),
-                ],
-              },
-              ...((form.profile === "PRESTADOR"
-                ? [
-                    {
-                      title: "STATUS DA DOCUMENTAÇÃO (INTEGRAÇÃO API)",
-                      isWhite: true,
-                      groups: [
-                        {
-                          type: "custom",
-                          element: (() => {
-                            return (
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  maxWidth: 320,
-                                }}
-                              >
-                                <ProviderLegalization
-                                  label={"CND Federal"}
-                                  value={"free"}
-                                />
-                                <ProviderLegalization
-                                  label={"CND Estadual"}
-                                  value={"free"}
-                                />
-                                <ProviderLegalization
-                                  label={"CND Municipal"}
-                                  value={"free"}
-                                />
-                                <ProviderLegalization
-                                  label={"FGTS"}
-                                  value={"free"}
-                                />
-                              </div>
-                            )
-                          })(),
-                        },
-                      ],
-                    },
-                  ]
-                : []) as TBlock[]),
-            ],
-          },
-          {
-            blocks: [...renderExtra()],
-          },
-        ]}
-      />
-    </C.Content>
+  return (
+    <UserFormContent
+      info={{
+        handleField: onHandleField,
+        handleCancel,
+        handleSave,
+        options,
+        form,
+        personType,
+        renderBasic: () =>
+          renderBasic({
+            user: user as TUser,
+            form,
+            handleSelectCity,
+            options,
+            states,
+            onHandleField,
+            franchises,
+          }),
+        renderExtra,
+        isManagingFranchiseCities,
+        regions,
+        setIsManagingFranchiseCities,
+      }}
+    />
   )
 }
 

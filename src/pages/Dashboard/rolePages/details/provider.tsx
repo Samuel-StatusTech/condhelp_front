@@ -123,7 +123,9 @@ const ProviderDetails = ({ data, handleBack }: Props) => {
                 <S.DetailName>CNPJ:</S.DetailName>
                 <S.DetailValue>
                   {/* @ts-ignore */}
-                  {data.cnpj ? formatCNPJ(data.cnpj) : "-"}
+                  {data.document.register
+                    ? formatCNPJ(data.document.register)
+                    : "-"}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
