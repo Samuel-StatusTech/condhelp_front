@@ -37,11 +37,11 @@ const BudgetDetails = ({
   const [provider, setProvider] = useState<TUserTypes["PRESTADOR"] | null>(null)
 
   const handlePickProvider = async (prov: TProviderOnBudget) => {
-    if (prov.id) {
+    if (prov.userId) {
       setLoading(true)
 
       try {
-        const req = await Api.persons.getSingle({ id: prov.id })
+        const req = await Api.persons.getSingle({ id: prov.userId })
 
         if (req.ok) {
           let info = req.data as TUserTypes["PRESTADOR"]
@@ -118,7 +118,7 @@ const BudgetDetails = ({
           setBudgetData({
             ...budget,
             prestadores: budget.prestadores.map((p) =>
-              p.userId !== providerId
+              p.id !== providerId
                 ? p
                 : {
                     ...p,
@@ -275,7 +275,7 @@ const BudgetDetails = ({
                 key={pk}
                 k={pk}
                 data={p}
-                onPick={() => handlePickProvider(p)}
+                onPick={handlePickProvider}
                 budgetId={budget.id}
                 handleResponseProvider={handleResponseProvider}
               />

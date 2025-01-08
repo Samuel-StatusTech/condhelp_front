@@ -12,7 +12,7 @@ import { TBudgetStatus } from "../../../../utils/@types/data/status"
 type Props = {
   k: number
   data: TProviderOnBudget
-  onPick: (providerId: number) => void
+  onPick: (provider: TProviderOnBudget) => void
   budgetId: number
   handleResponseProvider: (providerId: number, status: TBudgetStatus) => void
 }
@@ -87,7 +87,7 @@ const ProviderResume = ({
         ? "APROVADO_SINDICO"
         : "CONTRATADO"
 
-    handleResponseProvider(data.userId, status)
+    handleResponseProvider(data.id, status)
   }
 
   return (
@@ -101,7 +101,7 @@ const ProviderResume = ({
           greenText={true}
           type="quaternary"
           text={"Ver mais"}
-          action={() => onPick(data.userId)}
+          action={() => onPick(data)}
           fit={true}
           icon={<Icons.Expand width={16} height={16} />}
         />
