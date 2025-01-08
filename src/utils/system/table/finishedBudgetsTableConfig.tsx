@@ -23,13 +23,7 @@ export const finishedBudgetsTableConfig: TConfig = {
     actions: (item: TBudget, { callbacks }) => (
       <TableActions
         id={item.id}
-        content={[
-          {
-            role: "edit",
-            type: "icon",
-            action: callbacks?.edit as (id: string | number) => void | any,
-          },
-        ]}
+        content={[]}
       />
     ),
   },

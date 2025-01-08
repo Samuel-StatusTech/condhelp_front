@@ -10,6 +10,9 @@ import { TDefaultList, TDefaultRes } from "../../../types/responses"
 export type TApi_Responses_Budgets = {
   budgets: {
     listAll: Promise<TDefaultRes<TDefaultList<TBudgetResume>>>
+    listManagerBudgets: Promise<
+      TDefaultRes<TDefaultList<TBudgetResume>>
+    >
     listProviderBudgets: Promise<
       TDefaultRes<TDefaultList<TProviderBudgetResume>>
     >

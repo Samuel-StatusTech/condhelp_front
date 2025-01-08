@@ -55,6 +55,58 @@ const listAll: TApi["budgets"]["listAll"] = async (filters) => {
   })
 }
 
+const listManagerBudgets: TApi["budgets"]["listManagerBudgets"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/manager/${filters.managerId}`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            userId: filters.managerId,
+            condominiumId: filters.condominiumId,
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = {
+            ...res.data,
+            content: res.data.content,
+          }
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const listProviderBudgets: TApi["budgets"]["listProviderBudgets"] = async (
   filters
 ) => {
@@ -562,6 +614,9 @@ export type TApi_Budgets = {
   listAll: (
     p: TParams["budgets"]["listAll"]
   ) => TResponses["budgets"]["listAll"]
+  listManagerBudgets: (
+    p: TParams["budgets"]["listManagerBudgets"]
+  ) => TResponses["budgets"]["listManagerBudgets"]
   listProviderBudgets: (
     p: TParams["budgets"]["listProviderBudgets"]
   ) => TResponses["budgets"]["listProviderBudgets"]
@@ -599,6 +654,7 @@ export type TApi_Budgets = {
 export const apiBudgets: TApi["budgets"] = {
   listAll: listAll,
   listProviderBudgets: listProviderBudgets,
+  listManagerBudgets: listManagerBudgets,
   create: create,
   getSingle: getSingle,
   update: update,

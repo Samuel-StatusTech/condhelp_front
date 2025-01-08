@@ -34,8 +34,8 @@ const ProviderResume = ({
     "CANCELADO_PRESTADOR",
   ].includes(data.status)
 
-  const handleReject = (providerId: number) => {
-    handleResponseProvider(providerId, "RECUSADO_SINDICO")
+  const handleReject = () => {
+    handleResponseProvider(data.id, "RECUSADO_SINDICO")
   }
 
   const renderStatusIndicator = () => {
@@ -87,7 +87,7 @@ const ProviderResume = ({
         ? "APROVADO_SINDICO"
         : "CONTRATADO"
 
-    handleResponseProvider(data.id, status)
+    handleResponseProvider(data.userId, status)
   }
 
   return (

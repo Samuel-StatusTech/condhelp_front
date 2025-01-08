@@ -14,6 +14,10 @@ export type TApi_Params_Budgets = {
       branchId?: number
       providerId?: number
     }
+    listManagerBudgets: TDefaultFilters & {
+      managerId?: number
+      condominiumId?: number
+    }
     listProviderBudgets: TDefaultFilters & {
       managerId?: number
       condominiumId?: number

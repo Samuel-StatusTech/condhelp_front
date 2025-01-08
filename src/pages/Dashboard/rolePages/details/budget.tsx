@@ -75,14 +75,10 @@ const BudgetDetails = ({
       if (req.ok) {
         setBudgetData({
           ...budget,
-          prestadores: budget.prestadores.map((p) =>
-            p.userId !== providerId
-              ? p
-              : {
-                  ...p,
-                  status: "CONTRATADO",
-                }
-          ),
+          prestadores: budget.prestadores.map((p) => ({
+            ...p,
+            status: p.id !== providerId ? "RECUSADO_SINDICO" : "CONTRATADO",
+          })),
         })
 
         setLoading(false)
