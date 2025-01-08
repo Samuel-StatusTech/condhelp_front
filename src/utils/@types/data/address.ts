@@ -15,7 +15,7 @@ export type TAddress = {
   street: string
   number: string
   complement: string
-  cep: string
+  zipCode: string
 }
 
 export type TCondominiumAddress = {

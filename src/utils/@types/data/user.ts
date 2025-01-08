@@ -59,7 +59,7 @@ export type TUAdmin = {
 }
 
 export type TResponsableTypes = {
-  id: number
+  id?: number
   responsibleType: "CNPJ" | "CPF"
   companyName: string
   fantasyName: string
@@ -68,13 +68,14 @@ export type TResponsableTypes = {
   municipalRegistration: string
   personName: string
   cpf: string
-  responsibleStatus: string
+  responsibleStatus?: string
 }
 
 export type TPendency = "none" | "free" | "has"
 
 export type TUManager = {
   franqId: number
+  managerId: number
   profile: "SINDICO"
   name: string
   surname: string

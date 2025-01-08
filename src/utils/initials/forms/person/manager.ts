@@ -7,6 +7,7 @@ export const managerInitial: TNewUser & TUManager = {
 
   id: 0,
   franqId: 0,
+  managerId: 0,
   userId: 0,
   status: "ATIVO",
   photo: null,

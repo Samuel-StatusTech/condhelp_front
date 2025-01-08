@@ -17,7 +17,7 @@ export const initialPagination: TDefaultList<any> = {
   },
   first: false,
   last: false,
-  size: 10,
+  size: 50,
   content: [],
   number: 0,
   sort: {

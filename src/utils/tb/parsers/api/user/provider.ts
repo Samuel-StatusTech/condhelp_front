@@ -8,6 +8,8 @@ export const parseUserProvider = (
     // @ts-ignore
     let user: TUserTypes["PRESTADOR"] = {
       id: backProvider.id,
+      franchiseId: backProvider.franqId,
+      branchId: backProvider.branchId,
       photo: null,
       status: backProvider.status as any,
       userAccountId: backProvider.userAccountId,
@@ -24,7 +26,7 @@ export const parseUserProvider = (
         street: backProvider.address.street,
         number: String(backProvider.address.number),
         complement: backProvider.address.complement,
-        cep: backProvider.address.zipCode,
+        zipCode: backProvider.address.zipCode,
       },
 
       profile: "PRESTADOR",

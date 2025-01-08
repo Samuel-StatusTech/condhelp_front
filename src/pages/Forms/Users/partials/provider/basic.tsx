@@ -141,9 +141,9 @@ export const basicProvider = ({
           },
           {
             type: "input",
-            field: "cep",
+            field: "zipCode",
             label: "CEP",
-            value: formatCep(form.address?.cep ?? ""),
+            value: formatCep(form.address?.zipCode ?? ""),
             placeholder: "00000-000",
             gridSizes: { big: 4, small: 5 },
           },

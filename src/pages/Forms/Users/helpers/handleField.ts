@@ -1,4 +1,5 @@
 import { TAccess } from "../../../../utils/@types/data/access"
+import { TUser } from "../../../../utils/@types/data/user"
 import initials from "../../../../utils/initials"
 
 export const handleField = async (
@@ -6,7 +7,8 @@ export const handleField = async (
   value: any,
   form: any,
   setForm: (newData: any) => void,
-  setPersonType: (personType: TAccess) => void
+  setPersonType: (personType: TAccess) => void,
+  franchises: TUser[]
 ) => {
   if (field === "status") {
     setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
@@ -21,7 +23,7 @@ export const handleField = async (
       "street",
       "number",
       "complement",
-      "cep",
+      "zipCode",
     ].includes(field)
   ) {
     setForm((p: any) => ({
@@ -83,11 +85,29 @@ export const handleField = async (
         break
 
       case "SINDICO":
-        setForm((p: any) => ({ ...p, [field]: value }))
+        if (field === "franqId") {
+          const f = franchises.find((franchise) => franchise.id === value)
+
+          setForm((p: any) => ({
+            ...p,
+            franqId: value,
+            branchId: f?.branchId,
+          }))
+        } else setForm((p: any) => ({ ...p, [field]: value }))
         break
 
       case "PRESTADOR":
         switch (field) {
+          case "franqId":
+            const f = franchises.find((franchise) => franchise.id === value)
+
+            setForm((p: any) => ({
+              ...p,
+              franqId: value,
+              branchId: f?.branchId,
+            }))
+            break
+
           case "documentRegister":
             setForm((p: any) => ({
               ...p,

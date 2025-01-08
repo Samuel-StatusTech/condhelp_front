@@ -70,6 +70,7 @@ export type TUProvider = {
 
 export type T_Back_Provider = {
   id: number
+  branchId: number
   userId: number
   userAccountId: number
   photo: null

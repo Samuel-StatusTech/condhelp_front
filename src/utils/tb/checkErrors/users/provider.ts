@@ -39,8 +39,8 @@ export const providerCheck = (
       state = getInvalidCheck(state, "categories")
 
     if (data.address) {
-      if (data.address.cep.replace(/\D/g, "").length < 8)
-        state = getInvalidCheck(state, "address.cep")
+      if (data.address.zipCode.replace(/\D/g, "").length < 8)
+        state = getInvalidCheck(state, "address.zipCode")
       if (!String(data.address.city).trim())
         state = getInvalidCheck(state, "address.city")
       if (!data.address.country)

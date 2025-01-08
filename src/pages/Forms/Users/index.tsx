@@ -127,10 +127,8 @@ const FPpeople = () => {
           setLoading(false)
 
           navigate("/dashboard/users")
-        }
-        throw new Error()
-      }
-      throw new Error()
+        } else throw new Error()
+      } else throw new Error()
     } catch (error) {
       controllers.feedback.setData({
         visible: true,
@@ -488,7 +486,7 @@ const FPpeople = () => {
   }
 
   const onHandleField = (field: string, value: any) => {
-    handleField(field, value, form, setForm, setPersonType)
+    handleField(field, value, form, setForm, setPersonType, franchises)
   }
 
   const renderExtra = () => {

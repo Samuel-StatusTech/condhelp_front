@@ -158,7 +158,7 @@ const ProviderDetails = ({ data, handleBack }: Props) => {
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>CEP:</S.DetailName>
-                <S.DetailValue>{formatCep(data.address.cep)}</S.DetailValue>
+                <S.DetailValue>{formatCep(data.address.zipCode)}</S.DetailValue>
               </S.DetailItem>
             </S.DetailsList>
           </S.Block>

@@ -49,7 +49,7 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
       street: user.address.street,
       number: user.address.number,
       complement: user.address.complement,
-      zipCode: user.address.cep,
+      zipCode: user.address.zipCode,
       city: user.address.city,
       state: user.address.state,
       country: user.address.country,
@@ -83,17 +83,18 @@ const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
     contato: user.contato,
     userAccountId: user.userId,
     filialId: user.branchId,
-    countryId: user.address.country,
-    state: {
-      id: user.address.state,
+    address: {
+      street: user.address.street,
+      number: user.address.number,
+      complement: user.address.complement,
+      zipCode: user.address.zipCode,
+      city: user.address.city,
+      state: user.address.state,
+      country: user.address.country,
     },
-    city: {
-      id: user.address.city,
-    },
-    address: user.address.street,
     number: user.address.number,
     complement: user.address.complement,
-    postalCode: user.address.cep,
+    postalCode: user.address.zipCode,
     phone1: user.phone1,
     phone2: user.phone2,
     email: user.email,
@@ -117,10 +118,12 @@ const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
 }
 
 const getManagerObj = (user: TUserTypes["SINDICO"]) => {
-  const info = {
+  let info: any = {
     id: user.userId,
     userId: user.userId,
     userAccountId: user.userId,
+    branchId: user.branchId,
+    franchiseId: user.franqId,
     franqId: user.franqId,
     name: user.name,
     email: user.email,
@@ -132,11 +135,11 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
     documentType: user.documentType,
     documentNumber: user.documentNumber,
     condominiumIds: user.condominiums.map((c) => c.id),
-    managerSince: +Math.floor(
-      +new Date(user.managerSince).getTime() / 1000
-    ).toFixed(0),
+    managerSince: user.managerSince,
     birthDate: getDateStr(user.birthDate, "javaDateTime"),
   }
+
+  if (user.managerId !== 0) info.managerId = user.managerId
 
   return info
 }
@@ -147,9 +150,10 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
     userAccountId: user.userId,
     name: user.name,
     contact: "-",
+    branchId: user.branchId,
+    franchiseId: user.franqId,
     franqId: user.franqId,
-    // status: user.status,
-    status: "AGUARDANDO",
+    status: user.status,
     email: user.email,
     site: user.website,
     logoUrl: "",
@@ -209,7 +213,7 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
       street: user.address.street,
       number: user.address.number,
       complement: user.address.complement,
-      zipCode: user.address.cep,
+      zipCode: user.address.zipCode,
       city: user.address.city,
       state: user.address.state,
       country: user.address.country,

@@ -27,7 +27,7 @@ export const parseUserBranch = (
         street: backUser.address.street,
         number: String(backUser.address.number),
         complement: backUser.address.complement,
-        cep: backUser.address.zipCode,
+        zipCode: backUser.address.zipCode,
       },
       addressId: backUser.address.id,
       phone1: backUser.phone1,

@@ -6,6 +6,9 @@ import { TApi_Responses_Persons as TResponses } from "./responses"
 import { TAccess } from "../../../../utils/@types/data/access"
 import { parseUserProvider } from "../../../../utils/tb/parsers/api/user/provider"
 import { parseUserBranch } from "../../../../utils/tb/parsers/api/user/branch"
+import { apiCities } from "../cities"
+import { TCity } from "../../../../utils/@types/data/region"
+import { parseUserFranchise } from "../../../../utils/tb/parsers/api/user/franchise"
 
 const baseURL = "/user-accounts"
 
@@ -102,6 +105,8 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
       let additionalData: any = {
         ...newPerson,
         id: newPerson.userId,
+        status:
+          newPerson.profile === "PRESTADOR" ? "AGUARDANDO" : newPerson.status,
       }
 
       if (newPerson.profile === "FILIAL") {
@@ -144,13 +149,60 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
 const update: TApi["persons"]["update"] = async ({ person }) => {
   return new Promise(async (resolve) => {
     try {
+      if (!["SINDICO"].includes(person.profile)) {
+        const userAccountRegister = await service.put(
+          `${baseURL}/${person.userId}`,
+          {
+            userId: person.userId,
+            photo: person.photo,
+            name: person.name,
+            email: person.email,
+            profile: person.profile,
+            status: person.status,
+            branchId: person.branchId,
+            franchiseId: person.franchiseId,
+          }
+        )
+
+        if (!userAccountRegister.data) {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
+          })
+
+          return
+        }
+
+        if (["ADMIN"].includes(person.profile)) {
+          resolve({
+            ok: true,
+            data: userAccountRegister.data,
+          })
+
+          return
+        }
+      }
+
       const roleUrl = rolesUrlRelations[person.profile]
 
       const id =
-        person.profile === "PRESTADOR" ? person.id : person.userAccountId
+        person.profile === "SINDICO"
+          ? person.managerId
+          : person.profile === "PRESTADOR"
+          ? person.id
+          : person.userAccountId
+
+      const parsed =
+        person.profile === "PRESTADOR"
+          ? {
+              ...person,
+              status: "AGUARDANDO",
+            }
+          : person
 
       await service
-        .put(`${roleUrl}/${id}`, person)
+        .put(`${roleUrl}/${id}`, parsed)
         .then((res) => {
           const info = res.data
 
@@ -279,20 +331,44 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                 if (extraDataReq.data) {
                   let extraInfo = extraDataReq.data
 
+                  let city: TCity | null = null
+
+                  if (
+                    extraInfo.address &&
+                    extraInfo.address.city &&
+                    (
+                      ["FILIAL", "FRANQUEADO", "PRESTADOR"] as TAccess[]
+                    ).includes(userProfile)
+                  ) {
+                    const cityReq = await apiCities.getSingle({
+                      id: +extraInfo.address.city,
+                    })
+
+                    if (cityReq.ok) city = cityReq.data
+                  }
+
                   if (userProfile === "PRESTADOR") {
                     extraInfo = parseUserProvider({
                       ...info,
                       ...extraDataReq.data,
+                      status: info.status,
                     })
-                    if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
-                      extraInfo.address.cep = extraInfo.address.zipCode
+
+                    extraInfo.address.city = city?.name
                   } else if (userProfile === "FILIAL") {
                     extraInfo = parseUserBranch({
                       ...info,
                       ...extraDataReq.data,
                     })
-                    if (!extraInfo?.address.cep && extraInfo?.address.zipCode)
-                      extraInfo.address.cep = extraInfo.address.zipCode
+
+                    extraInfo.address.city = city?.name
+                  } else if (userProfile === "FRANQUEADO") {
+                    extraInfo = parseUserFranchise({
+                      ...info,
+                      ...extraDataReq.data,
+                    })
+
+                    extraInfo.address.city = city?.name
                   }
 
                   resolve({

@@ -17,7 +17,7 @@ export const providerInitial: TNewUserDefault & TUProvider = {
   address: {
     street: "",
     number: "",
-    cep: "",
+    zipCode: "",
     complement: "",
     country: "",
     city: "",

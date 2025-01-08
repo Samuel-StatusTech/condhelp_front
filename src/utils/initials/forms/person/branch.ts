@@ -13,7 +13,7 @@ export const branchInitial: TNewUser & TUBranch = {
   status: "ATIVO",
   photo: null,
   address: {
-    cep: "",
+    zipCode: "",
     city: "",
     complement: "",
     country: "",

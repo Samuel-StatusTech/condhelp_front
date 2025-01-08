@@ -11,7 +11,7 @@ export const franchiseInitial: TNewUserDefault & TUFranchise = {
   status: "ATIVO",
   photo: null,
   address: {
-    cep: "",
+    zipCode: "",
     city: "",
     complement: "",
     country: "br",
