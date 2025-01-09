@@ -101,7 +101,7 @@ const FPdocuments = () => {
     try {
       // user info
 
-      const req = await Api.persons.getSingle({ id: Number(user?.id) })
+      const req = await Api.persons.getSingle({ id: Number(user?.userAccountId) })
 
       if (req.ok) {
         const hasInfo = req.data.profile && req.data.email
