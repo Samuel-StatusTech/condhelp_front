@@ -173,7 +173,7 @@ const CondosPage = () => {
           data={condos.filter((i) => {
             let ok = true
 
-            const fields = [i.name, i.city, i.manager.name]
+            const fields = [i.name, i.city]
 
             const searchOk = !!search
               ? fields.some((val) => matchSearch(val, search))

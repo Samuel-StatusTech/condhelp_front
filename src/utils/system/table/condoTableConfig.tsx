@@ -6,7 +6,7 @@ import { TCondominium } from "../../@types/data/condominium"
 export const condoTableConfig: TConfig = {
   columns: [
     { title: "Nome", field: "name" },
-    { title: "Sìndico", field: "manager" },
+    { title: "Síndico", field: "manager" },
     { title: "Cidade", field: "city" },
     { title: "Estado", field: "federateUnit" },
     { title: "", field: "actions", align: "right" },
@@ -14,7 +14,7 @@ export const condoTableConfig: TConfig = {
   specialFields: {
     name: (item: TCondominium) => item.name,
     manager: (item: TCondominium) =>
-      `${item.manager.name} ${item.manager.surname ?? ""}`,
+      item.manager ? `${item.manager.name} ${item.manager.surname ?? ""}` : "",
     actions: (item: TCondominium, { callbacks }) => (
       <TableActions
         id={item.id}
