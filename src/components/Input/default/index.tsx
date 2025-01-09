@@ -8,6 +8,7 @@ export type TInputDefault = {
   field: string | number
   value: string
   limit?: number
+  fixedWidth?: number
 }
 
 type Props = TInputDefault & {
@@ -16,7 +17,7 @@ type Props = TInputDefault & {
 }
 
 const InputDefault = (props: Props) => {
-  const { label, field, value, placeholder, limit, onChange } = props
+  const { label, field, value, placeholder, limit, onChange, fixedWidth } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = limit ? e.target.value.slice(0, limit) : e.target.value
@@ -24,7 +25,7 @@ const InputDefault = (props: Props) => {
   }
 
   return (
-    <S.Wrapper $gridSizes={props.gridSizes}>
+    <S.Wrapper $gridSizes={props.gridSizes} $fixedWidth={fixedWidth}>
       <S.Area>
         {label && <S.Label>{label}</S.Label>}
         <S.Input

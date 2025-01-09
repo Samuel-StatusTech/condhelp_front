@@ -4,13 +4,29 @@ import { FormField } from "../../../utils/@types/components/FormFields"
 export const Wrapper = styled.div<{
   $hasTopSpace?: boolean
   $gridSizes?: FormField["gridSizes"]
+  $fixedWidth?: number
 }>`
-  grid-column: span ${({ $gridSizes }) => $gridSizes?.big ?? "unset"};
+  /* grid-column: span ${({ $gridSizes }) => $gridSizes?.big ?? "unset"}; */
+  flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   display: flex;
   margin-top: ${({ $hasTopSpace }) => ($hasTopSpace ? "24px" : "unset")};
 
+  ${({ $fixedWidth }) =>
+    $fixedWidth
+      ? `
+  min-width: ${$fixedWidth}px;
+  max-width: ${$fixedWidth}px;
+  width: ${$fixedWidth}px;
+`
+      : ""}
+
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    grid-column: span ${({ $gridSizes }) => $gridSizes?.small ?? "unset"};
+    /* grid-column: span ${({ $gridSizes }) => $gridSizes?.small ?? "unset"}; */
+    flex: ${({ $gridSizes }) => $gridSizes?.small ?? 1};
+
+    min-width: unset;
+    max-width: unset;
+    width: unset;
   }
 `
 

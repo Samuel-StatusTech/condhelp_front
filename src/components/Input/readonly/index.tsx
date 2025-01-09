@@ -5,6 +5,7 @@ export type TReadonlyField = {
   label?: string
   field: string
   value: string
+  fixedWidth?: number
 }
 
 type Props = TReadonlyField & {
@@ -16,7 +17,7 @@ const ReadonlyField = (props: Props) => {
   const { label, value } = props
 
   return (
-    <S.Wrapper $gridSizes={props.gridSizes}>
+    <S.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <S.Area>
         {label && <S.Label>{label}</S.Label>}
         <S.DataArea>{value}</S.DataArea>

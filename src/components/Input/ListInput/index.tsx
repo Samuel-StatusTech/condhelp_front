@@ -13,6 +13,7 @@ export type TInputSelect = {
   options?: TOption[]
   onEnter?: () => void
   onSelectOption?: (id: any, params: any) => any
+  fixedWidth?: number
 }
 
 type Props = TInputSelect & {
@@ -53,7 +54,7 @@ const ListInput = (props: Props) => {
   }
 
   return (
-    <S.Wrapper $gridSizes={props.gridSizes}>
+    <S.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <S.Item $k={0}>
         <S.Input
           id={String(props.id)}

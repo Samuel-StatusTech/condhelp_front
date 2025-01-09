@@ -6,6 +6,7 @@ export type TInputToggler = {
   field: string
   value: boolean
   hasTopSpace?: boolean
+  fixedWidth?: number
 }
 
 type Props = TInputToggler & {
@@ -21,7 +22,11 @@ const InputToggler = (props: Props) => {
   }
 
   return (
-    <S.Wrapper $gridSizes={gridSizes} $hasTopSpace={hasTopSpace}>
+    <S.Wrapper
+      $gridSizes={gridSizes}
+      $hasTopSpace={hasTopSpace}
+      $fixedWidth={props.fixedWidth}
+    >
       <S.Area onClick={toggle}>
         <S.Box $state={value}>
           <S.Dot $state={value} />

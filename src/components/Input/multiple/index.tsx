@@ -9,6 +9,7 @@ export type TInputMultiple = {
   label?: string
   value: string[]
   options: TOption[]
+  fixedWidth?: number
 }
 
 type Props = TInputMultiple & {
@@ -24,7 +25,7 @@ const InputMultiple = (props: Props) => {
   }
 
   return (
-    <S.Wrapper $gridSizes={props.gridSizes}>
+    <S.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <S.Area>
         {label && <S.Label>{label}</S.Label>}
         <S.Main>

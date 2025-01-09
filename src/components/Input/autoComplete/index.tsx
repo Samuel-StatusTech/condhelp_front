@@ -7,6 +7,7 @@ export type TInputDefault = {
   label?: string
   placeholder?: string
   value: string
+  fixedWidth?: number
 }
 
 type Props = TInputDefault & {
@@ -31,7 +32,7 @@ const InputAutoComplete = (props: Props) => {
   }
 
   return (
-    <S.Wrapper $gridSizes={props.gridSizes}>
+    <S.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <S.Item $k={0}>
         <S.Input
           id={String(props.id)}

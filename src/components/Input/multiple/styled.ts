@@ -1,17 +1,35 @@
 import styled from "styled-components"
 import { FormField } from "../../../utils/@types/components/FormFields"
 
-export const Wrapper = styled.div<{ $gridSizes?: FormField["gridSizes"] }>`
-  grid-column: span
-    ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.big : "unset")};
+export const Wrapper = styled.div<{
+  $gridSizes?: FormField["gridSizes"]
+  $fixedWidth?: number
+}>`
+  /* grid-column: span
+    ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.big : "unset")}; */
+  flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   flex: ${({ $gridSizes }) => (!$gridSizes ? 1 : "unset")};
   display: flex;
   min-width: unset;
   overflow: hidden;
 
+  ${({ $fixedWidth }) =>
+    $fixedWidth
+      ? `
+  min-width: ${$fixedWidth}px;
+  max-width: ${$fixedWidth}px;
+  width: ${$fixedWidth}px;
+`
+      : ""}
+
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    grid-column: span
-      ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.small : "unset")};
+    /* grid-column: span
+      ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.small : "unset")}; */
+    flex: ${({ $gridSizes }) => $gridSizes?.small ?? 1};
+
+    min-width: unset;
+    max-width: unset;
+    width: unset;
   }
 `
 

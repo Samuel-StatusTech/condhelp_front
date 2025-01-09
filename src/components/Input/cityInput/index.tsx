@@ -16,6 +16,7 @@ export type TCityInput = {
   placeholder?: string
   value: string
   onSelectCity?: (id: any) => any
+  fixedWidth?: number
 }
 
 type Props = TCityInput & {
@@ -86,7 +87,7 @@ const CityInput = (props: Props) => {
   }
 
   return (
-    <C.Wrapper $gridSizes={props.gridSizes}>
+    <C.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <C.Area>
         {label && <S.Label>{label}</S.Label>}
         <S.Item $k={0}>

@@ -13,6 +13,7 @@ export type TInputDate = {
   disabled?: boolean
   minDate?: Date | string | number
   maxDate?: Date | string | number
+  fixedWidth?: number
 }
 
 type Props = TInputDate & {
@@ -29,6 +30,7 @@ const InputDate = ({
   onChange,
   minDate,
   maxDate,
+  fixedWidth
 }: Props) => {
   const pickerRef = useRef<any>(null)
 
@@ -58,7 +60,7 @@ const InputDate = ({
     <>
       {/* Calendar */}
 
-      <C.Wrapper $gridSizes={gridSizes}>
+      <C.Wrapper $gridSizes={gridSizes} $fixedWidth={fixedWidth}>
         <S.DatePickerWrapper>
           <DatePicker
             ref={pickerRef}

@@ -372,6 +372,7 @@ const FPcondo = () => {
                       },
                       {
                         type: "image",
+                        label: "Foto do condomínio",
                         field: "image",
                         value: form.image,
                         gridSizes: { big: 12 },
@@ -415,6 +416,7 @@ const FPcondo = () => {
                           placeholder: "Digite aqui",
                           value: formatCep(form.zipCode),
                           gridSizes: { big: 2, small: 6 },
+                          fixedWidth: 112
                         },
                       ],
                       [
@@ -446,6 +448,7 @@ const FPcondo = () => {
                           gridSizes: { big: 2, small: 6 },
                           options: options.state,
                           byKey: true,
+                          fixedWidth: 112
                         },
                       ],
                       [
@@ -477,6 +480,7 @@ const FPcondo = () => {
                           value: new Date(form.electionDate),
                           gridSizes: { big: 3, small: 6 },
                           maxDate: new Date(),
+                          fixedWidth: 138
                         },
                       ],
                     ],

@@ -9,6 +9,7 @@ export type TInputRadio = {
   label?: string
   value: string
   options: TOption[]
+  fixedWidth?: number
 }
 
 type Props = TInputRadio & {
@@ -24,7 +25,7 @@ const InputRadio = (props: Props) => {
   }
 
   return (
-    <S.Wrapper $gridSizes={gridSizes}>
+    <S.Wrapper $gridSizes={gridSizes} $fixedWidth={props.fixedWidth}>
       <S.Area>
         {label && <S.Label>{label}</S.Label>}
         <S.Main>

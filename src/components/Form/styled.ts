@@ -67,8 +67,11 @@ export const FormArea = styled.div`
 `
 
 export const FormLine = styled.div<{ $k: number }>`
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  /* display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr)); */
+
+  display: flex;
+
   gap: 10px;
   align-items: center;
   max-width: 100%;

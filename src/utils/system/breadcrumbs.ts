@@ -19,7 +19,7 @@ export const breadcrumbs: { [key in THeaderFrom]: TBreadCrumbLink[] } = {
   ],
   condos: [
     { title: "Condomínios", to: "/dashboard/condos" },
-    { title: "Detalhes" },
+    { title: "Detalhes do condomínio" },
   ],
   errands: [
     { title: "Recados", to: "/dashboard/errands" },

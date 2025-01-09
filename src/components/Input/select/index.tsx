@@ -14,6 +14,7 @@ export type TInputSelect = {
   byKey?: boolean
   elevation?: number
   reverse?: boolean
+  fixedWidth?: number
 }
 
 export type TOption = {
@@ -42,6 +43,7 @@ const SelectDefault = ({
   alignBottom,
   avoidValueShow,
   reverse,
+  fixedWidth
 }: Props) => {
   // use ref ...
 
@@ -66,7 +68,7 @@ const SelectDefault = ({
   }, [options, value, selected, options.length])
 
   return (
-    <C.Wrapper $gridSizes={gridSizes} $alignBottom={alignBottom}>
+    <C.Wrapper $gridSizes={gridSizes} $alignBottom={alignBottom} $fixedWidth={fixedWidth}>
       <C.Area $elevation={elevation}>
         <S.SelectArea>
           {label && <S.Label>{label}</S.Label>}

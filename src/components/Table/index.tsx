@@ -140,6 +140,7 @@ const Table = ({
             options={systemOptions.pagination}
             value={String(searchData?.size)}
             reverse={true}
+            fixedWidth={148}
           />
         </S.PaginationWrapper>
       )}
