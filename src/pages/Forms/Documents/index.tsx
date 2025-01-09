@@ -101,7 +101,9 @@ const FPdocuments = () => {
     try {
       // user info
 
-      const req = await Api.persons.getSingle({ id: Number(user?.userAccountId) })
+      const req = await Api.persons.getSingle({
+        id: Number(user?.userAccountId),
+      })
 
       if (req.ok) {
         const hasInfo = req.data.profile && req.data.email
@@ -142,7 +144,7 @@ const FPdocuments = () => {
 
       navigate(-1)
     }
-  }, [controllers.feedback, navigate, user?.id])
+  }, [controllers.feedback, navigate, user?.userAccountId])
 
   useEffect(() => {
     loadData()

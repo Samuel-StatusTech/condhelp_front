@@ -28,8 +28,7 @@ export const extraFranchise = (
           element: (() => (
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(12, minmax(0, 1fr))",
+                display: "flex",
                 width: "100%",
                 alignItems: "end",
                 gap: 16,
@@ -50,6 +49,7 @@ export const extraFranchise = (
                   text="Editar franquia"
                   icon={<Icons.Edit />}
                   iconLeft={true}
+                  disabled={!form.region || form.region === 0}
                 />
               </div>
             </div>

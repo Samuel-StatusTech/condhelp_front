@@ -65,10 +65,11 @@ export const Content = styled.div`
 
 export const Row = styled.div`
   grid-column: span 12;
-  display: grid;
+
+  display: flex;
+
+  gap: 10px;
   align-items: center;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 16px;
 `
 
 export const HeaderLeft = styled.div`

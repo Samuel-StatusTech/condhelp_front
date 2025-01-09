@@ -228,89 +228,104 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       </C.Header>
 
       <S.Content>
-        {/* For Branches and Managers */}
-        <Input.Select
-          field={"condominiumId"}
-          onChange={handleField}
-          value={form.condominiumId as any}
-          options={options.condo}
-          gridSizes={{ big: 8 }}
-          placeholder="Condomínio"
-          elevation={2}
-        />
+        <S.Row>
+          {/* For Branches and Managers */}
+          <Input.Select
+            field={"condominiumId"}
+            onChange={handleField}
+            value={form.condominiumId as any}
+            options={options.condo}
+            gridSizes={{ big: 8 }}
+            placeholder="Condomínio"
+            elevation={2}
+          />
 
-        <Input.Toggler
-          field={"urgent"}
-          onChange={handleField}
-          value={form.urgent}
-          gridSizes={{ big: 4 }}
-          label="Urgente"
-        />
+          <Input.Toggler
+            field={"urgent"}
+            onChange={handleField}
+            value={form.urgent}
+            gridSizes={{ big: 4 }}
+            label="Urgente"
+          />
+        </S.Row>
+        <S.Row>
+          <Input.Select
+            field={"serviceCategoryId"}
+            onChange={handleField}
+            value={form.serviceCategoryId as any}
+            options={options.category}
+            gridSizes={{ big: 12 }}
+            placeholder="Categoria"
+            elevation={3}
+          />
+        </S.Row>
 
-        <Input.Select
-          field={"serviceCategoryId"}
-          onChange={handleField}
-          value={form.serviceCategoryId as any}
-          options={options.category}
-          gridSizes={{ big: 12 }}
-          placeholder="Categoria"
-          elevation={3}
-        />
+        <S.Row>
+          <Input.Select
+            field={"serviceSubcategoryId"}
+            onChange={handleField}
+            value={form.serviceSubcategoryId as any}
+            options={options.subcategory}
+            gridSizes={{ big: 12 }}
+            placeholder="Subcategoria"
+            elevation={4}
+          />
+        </S.Row>
 
-        <Input.Select
-          field={"serviceSubcategoryId"}
-          onChange={handleField}
-          value={form.serviceSubcategoryId as any}
-          options={options.subcategory}
-          gridSizes={{ big: 12 }}
-          placeholder="Subcategoria"
-          elevation={4}
-        />
+        <S.Row>
+          <Input.Default
+            field={"title"}
+            onChange={handleField}
+            value={form.title}
+            gridSizes={{ big: 12 }}
+            placeholder="Título do orçamento"
+          />
+        </S.Row>
 
-        <Input.Default
-          field={"title"}
-          onChange={handleField}
-          value={form.title}
-          gridSizes={{ big: 12 }}
-          placeholder="Título do orçamento"
-        />
+        <S.Row>
+          <Input.TextArea
+            field={"description"}
+            onChange={handleField}
+            value={form.description}
+            gridSizes={{ big: 12 }}
+            placeholder="Descrição"
+            limit={1000}
+          />
+        </S.Row>
 
-        <Input.TextArea
-          field={"description"}
-          onChange={handleField}
-          value={form.description}
-          gridSizes={{ big: 12 }}
-          placeholder="Descrição"
-          limit={1000}
-        />
+        <S.Row>
+          <Input.Date
+            field={"startDate"}
+            onChange={handleField}
+            value={form.startDate}
+            gridSizes={{ big: 6 }}
+            label="Data de Início"
+            minDate={new Date()}
+          />
+        </S.Row>
 
-        <Input.Date
-          field={"startDate"}
-          onChange={handleField}
-          value={form.startDate}
-          gridSizes={{ big: 6 }}
-          label="Data de Início"
-          minDate={new Date()}
-        />
+        <S.Row>
+          <Input.Date
+            field={"finishDate"}
+            onChange={handleField}
+            value={form.finishDate}
+            gridSizes={{ big: 6 }}
+            label="Data fim"
+            minDate={new Date(form.startDate)}
+          />
+        </S.Row>
 
-        <Input.Date
-          field={"finishDate"}
-          onChange={handleField}
-          value={form.finishDate}
-          gridSizes={{ big: 6 }}
-          label="Data fim"
-          minDate={new Date(form.startDate)}
-        />
-
-        <Input.File
-          field={"attachedUrl"}
-          onChange={handleField}
-          value={form.attachedUrl}
-          gridSizes={{ big: 12 }}
-          label="Anexar um arquivo"
-          singleComponent={true}
-          allowsPdf={true}
-        />
+        <S.Row>
+          <Input.File
+            field={"attachedUrl"}
+            onChange={handleField}
+            value={form.attachedUrl}
+            gridSizes={{ big: 12 }}
+            label="Anexar um arquivo"
+            singleComponent={true}
+            allowsPdf={true}
+          />
+        </S.Row>
 
         <S.Bottom>
           <Button
