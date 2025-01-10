@@ -90,17 +90,23 @@ const ProviderBudgets = ({ status }: Props) => {
   return !budget ? (
     <S.Content>
       <S.SubContent>
-        <S.BlockArea className="falseSubContentWrapper">
-          <S.BlockHeader>
-            <S.BlockTitle $k={2}>
-              <span>Orçamentos em andamento:</span>
-            </S.BlockTitle>
-          </S.BlockHeader>
+        {!loading && budgets.length === 0 ? (
+          <S.EmptyMessage>
+            <span>Nenhum orçamento encontrado</span>
+          </S.EmptyMessage>
+        ) : !loading && budgets.length > 0 ? (
+          <S.BlockArea className="falseSubContentWrapper">
+            <S.BlockHeader>
+              <S.BlockTitle $k={2}>
+                <span>Seus orçamentos:</span>
+              </S.BlockTitle>
+            </S.BlockHeader>
 
-          <Divider />
+            <Divider />
 
-          {renderCardsContent()}
-        </S.BlockArea>
+            {renderCardsContent()}
+          </S.BlockArea>
+        ) : null}
       </S.SubContent>
     </S.Content>
   ) : (

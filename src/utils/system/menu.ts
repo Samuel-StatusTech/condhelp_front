@@ -26,15 +26,15 @@ export const menu: {
       access: ["PRESTADOR"],
       subMenus: [
         {
-          title: "Participar",
+          title: "Orçamentos para Participar",
           link: "/available",
         },
         {
-          title: "Aguardando síndico",
+          title: "Orçamentos aguardando Síndico",
           link: "/awaiting",
         },
         {
-          title: "Finalizado",
+          title: "Orçamentos Finalizados",
           link: "/finished",
         },
       ],
