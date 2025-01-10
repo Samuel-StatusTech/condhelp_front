@@ -188,7 +188,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
 
       const id =
         person.profile === "SINDICO"
-          ? person.managerId
+          ? person.userId
           : person.profile === "PRESTADOR"
           ? person.id
           : person.userAccountId

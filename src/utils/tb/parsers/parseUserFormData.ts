@@ -135,7 +135,7 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
     documentType: user.documentType,
     documentNumber: user.documentNumber,
     condominiumIds: user.condominiums.map((c) => c.id),
-    managerSince: user.managerSince,
+    managerSince: !Number.isNaN(+user.managerSince) ? +user.managerSince : 1,
     birthDate: getDateStr(user.birthDate, "javaDateTime"),
   }
 
