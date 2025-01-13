@@ -66,6 +66,36 @@ const DashboardProvider = () => {
     setBudget(pickedBudget)
   }
 
+  const reloadPage = () => {
+    window.location.reload()
+  }
+
+  const handleReparticipate = async (budgetId: number) => {
+    try {
+      setLoading(true)
+
+      const req = await Api.budgets.interact({
+        budgetId: budgetId,
+        providerId: user?.userAccountId as number,
+        status: "AGUARDANDO_SINDICO",
+      })
+
+      if (req.ok) {
+        setLoading(false)
+        reloadPage()
+      } else throw new Error()
+    } catch {
+      controllers.feedback.setData({
+        state: "error",
+        message:
+          "Não foi possível confirmar sua participação. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
+
+    setLoading(false)
+  }
+
   // Cards
 
   const renderCardsContent = () => {
@@ -231,6 +261,10 @@ const DashboardProvider = () => {
         />
 
         <Table
+          config={tableConfig.finishedBudgets}
+          actions={{
+            reparticipate: handleReparticipate,
+          }}
           data={finishedBudgets.filter((i) => {
             const fields = [
               i.title,
@@ -258,7 +292,6 @@ const DashboardProvider = () => {
 
             return ok
           })}
-          config={tableConfig.finishedBudgets}
         />
       </S.BlockArea>
     </S.SubContent>

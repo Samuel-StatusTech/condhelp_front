@@ -7,8 +7,8 @@ import { getStore } from "../../store"
 
 type TActionButton = {
   userId?: number
-  role: "edit" | "delete"
-  type: "icon" | "outlined"
+  role: "edit" | "delete" | "reparticipate"
+  type: "icon" | "outlined" | "textonly"
   action: (id: string | number) => void | any
 }
 
@@ -32,15 +32,26 @@ const TableActions = ({ id, content }: Props) => {
 
           return ok
         })
-        .map((c, ck) => (
-          <Button
-            key={ck}
-            type="tertiary"
-            icon={<Icons.Edit />}
-            action={() => c.action(id)}
-            fit={true}
-          />
-        ))}
+        .map((c, ck) =>
+          c.role === "reparticipate" ? (
+            <Button
+              key={ck}
+              type="quaternary"
+              text="Participar"
+              action={() => c.action(id)}
+              fit={true}
+              greenText={true}
+            />
+          ) : (
+            <Button
+              key={ck}
+              type="tertiary"
+              icon={<Icons.Edit />}
+              action={() => c.action(id)}
+              fit={true}
+            />
+          )
+        )}
     </S.Wrapper>
   )
 }

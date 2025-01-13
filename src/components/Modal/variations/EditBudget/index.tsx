@@ -89,7 +89,10 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
       data: {
         message: `Seu orçamento foi atualizado!`,
       },
-      handleOp: () => onClose(),
+      handleOp: () => {
+        onClose()
+        window.location.reload()
+      },
     })
   }
 

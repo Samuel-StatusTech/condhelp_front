@@ -41,9 +41,6 @@ export const budgetEditCheck = (data: Params): TErrorsCheck => {
   if (!data.description.trim()) state = getInvalidCheck(state, "description")
   if (!data.finishDate) state = getInvalidCheck(state, "finishDate")
 
-
-    console.log(data)
-    
   // photo
   // file
 
