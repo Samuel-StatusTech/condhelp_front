@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import * as C from "../styled"
 import * as S from "./styles"
 import { Icons } from "../../../assets/icons/icons"
@@ -43,12 +43,17 @@ const SelectDefault = ({
   alignBottom,
   avoidValueShow,
   reverse,
-  fixedWidth
+  fixedWidth,
 }: Props) => {
   // use ref ...
 
   const [showing, setShowing] = useState(false)
   const [selected, setSelected] = useState<any>({ value: "" })
+
+  // # Refs
+  const wrapperRef = useRef<null | HTMLDivElement>(null)
+  const dataRef = useRef<null | HTMLDivElement>(null)
+  const dropRef = useRef<HTMLDivElement>(null)
 
   const toggleDropdown = () => {
     setShowing(!showing)
@@ -67,10 +72,39 @@ const SelectDefault = ({
     else if (options.length === 0) setSelected(options[0])
   }, [options, value, selected, options.length])
 
+  useEffect(() => {
+    const collapseOwnDropdown = () => {
+      setShowing(false)
+    }
+
+    const handleClickOutside = (e: any) => {
+      if (e.target !== document.children[0]) {
+        if (
+          !wrapperRef.current?.contains(e.target) &&
+          !dataRef.current?.contains(e.target) &&
+          !dropRef.current?.contains(e.target) &&
+          showing
+        )
+          collapseOwnDropdown()
+      }
+    }
+
+    if (showing) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside)
+      }
+    }
+  }, [dropRef, showing])
+
   return (
-    <C.Wrapper $gridSizes={gridSizes} $alignBottom={alignBottom} $fixedWidth={fixedWidth}>
+    <C.Wrapper
+      $gridSizes={gridSizes}
+      $alignBottom={alignBottom}
+      $fixedWidth={fixedWidth}
+    >
       <C.Area $elevation={elevation}>
-        <S.SelectArea>
+        <S.SelectArea ref={wrapperRef}>
           {label && <S.Label>{label}</S.Label>}
           <S.DataArea
             onClick={!disabled ? toggleDropdown : undefined}

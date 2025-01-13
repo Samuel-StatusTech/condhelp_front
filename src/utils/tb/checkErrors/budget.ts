@@ -15,7 +15,8 @@ export const budgetCheck = (data: Params): TErrorsCheck => {
     state = getInvalidCheck(state, "serviceCategoryId")
   if (!data.serviceSubcategoryId)
     state = getInvalidCheck(state, "serviceSubcategoryId")
-  if (!data.title.trim()) state = getInvalidCheck(state, "title")
+  if (!(data.title ?? (data as any).titulo).trim())
+    state = getInvalidCheck(state, "title")
   if (!data.description.trim()) state = getInvalidCheck(state, "description")
   if (!data.startDate) state = getInvalidCheck(state, "startDate")
   if (!data.finishDate) state = getInvalidCheck(state, "finishDate")
@@ -23,6 +24,26 @@ export const budgetCheck = (data: Params): TErrorsCheck => {
   if (!data.startDate) state = getInvalidCheck(state, "startDate")
   if (!data.finishDate) state = getInvalidCheck(state, "finishDate")
 
+  // photo
+  // file
+
+  return state
+}
+
+export const budgetEditCheck = (data: Params): TErrorsCheck => {
+  let state: TErrorsCheck = {
+    has: false,
+    fields: [],
+  }
+
+  if (!(data.title ?? (data as any).titulo).trim())
+    state = getInvalidCheck(state, "title")
+  if (!data.description.trim()) state = getInvalidCheck(state, "description")
+  if (!data.finishDate) state = getInvalidCheck(state, "finishDate")
+
+
+    console.log(data)
+    
   // photo
   // file
 

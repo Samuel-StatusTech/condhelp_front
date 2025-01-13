@@ -4,14 +4,14 @@ import { FormField } from "../../../utils/@types/components/FormFields"
 export const Wrapper = styled.div<{
   $gridSizes?: FormField["gridSizes"]
   $fixedWidth?: number
+  $disabled?: boolean
 }>`
-  /* grid-column: span
-    ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.big : "unset")};
-  flex: ${({ $gridSizes }) => (!$gridSizes ? 1 : "unset")}; */
   flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   display: flex;
   min-width: unset;
   overflow: hidden;
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  transition: opacity 0.3s;
 
   ${({ $fixedWidth }) =>
     $fixedWidth
@@ -23,8 +23,6 @@ export const Wrapper = styled.div<{
       : ""}
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    /* grid-column: span
-      ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.small : "unset")}; */
     flex: ${({ $gridSizes }) => $gridSizes?.small ?? 1};
 
     min-width: unset;

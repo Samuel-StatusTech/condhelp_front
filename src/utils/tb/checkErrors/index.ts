@@ -5,7 +5,7 @@ import { subcategoriesCheck } from "./subcategories"
 import { regionsCheck } from "./regions"
 import { condosCheck } from "./condos"
 import { usersCheck } from "./users"
-import { budgetCheck } from "./budget"
+import { budgetCheck, budgetEditCheck } from "./budget"
 import { documentationCheck } from "./documentation"
 
 export const checkErrors = {
@@ -16,6 +16,7 @@ export const checkErrors = {
   condos: condosCheck,
   users: usersCheck,
   budget: budgetCheck,
+  budgetEdit: budgetEditCheck,
   documentation: documentationCheck,
 }
 

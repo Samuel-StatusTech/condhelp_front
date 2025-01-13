@@ -44,6 +44,12 @@ export const BlockTitle = styled.span`
   text-transform: uppercase;
 `
 
+export const ButtonsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`
+
 export const BlockRow = styled.span<{ $small?: boolean }>`
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

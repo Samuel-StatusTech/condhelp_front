@@ -52,6 +52,19 @@ const DashboardManagerBudget = () => {
     })
   }, [])
 
+  const handleEdit = useCallback(
+    (budgetId: number) => {
+      controllers.modal.open({
+        role: "editBudget",
+        visible: true,
+        data: {
+          id: budgetId,
+        },
+      })
+    },
+    [controllers.modal]
+  )
+
   const handlePickProvider = async (prov: TProviderOnBudget) => {
     if (prov.userId) {
       setLoading(true)
@@ -169,7 +182,7 @@ const DashboardManagerBudget = () => {
     try {
       setLoading(true)
       if (params.budgetId && !Number.isNaN(+params.budgetId)) {
-        Api.budgets
+        await Api.budgets
           .getSingle({
             id: +params.budgetId,
           })
@@ -212,12 +225,20 @@ const DashboardManagerBudget = () => {
           <S.Block>
             <S.BlockHeader>
               <S.BlockTitle>Orçamento nº{budgetData?.id}</S.BlockTitle>
-              <Button
-                type="quaternary"
-                text="Cancelar orçamento"
-                action={() => handleCancel(Number(budgetData?.id))}
-                fit={true}
-              />
+              <S.ButtonsHeader>
+                <Button
+                  type="quaternary"
+                  text="Cancelar orçamento"
+                  action={() => handleCancel(Number(budgetData?.id))}
+                  fit={true}
+                />
+                <Button
+                  type="tertiary"
+                  icon={<Icons.Edit />}
+                  action={() => handleEdit(Number(budgetData?.id))}
+                  fit={true}
+                />
+              </S.ButtonsHeader>
             </S.BlockHeader>
 
             <Divider />

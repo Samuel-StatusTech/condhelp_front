@@ -36,16 +36,28 @@ export type TBudget = {
   condominiumName: string
   condominium?: TCondominium
   isUrgent: boolean
+  urgent: boolean
   categoryName: string
   subcategoryName: string
   description: string
   startDate: string
+  finishDate: string
   endDate: string
   attachmentUrl: string
   awaiting: number
   rejected: number
   accepted: number
   status?: string
+
+  condominiumId?: number
+  serviceCategoryId?: number
+  serviceSubcategoryId?: number
+  userId?: number
+  providerIds?: number[]
+
+  idCondominio?: number
+  idCategoria?: number
+  idSubCategoria?: number
 
   contacts: TContact[]
 }

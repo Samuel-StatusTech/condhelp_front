@@ -64,7 +64,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
     try {
       const req = await Api.budgets.interact({
         budgetId: data.id,
-        providerId: user?.id as number,
+        providerId: user?.userAccountId as number,
         status: (["DISPONIVEL"] as TBudgetStatus[]).includes(data.status)
           ? "RECUSADO_PRESTADOR"
           : "CANCELADO_PRESTADOR",
@@ -86,7 +86,7 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
     try {
       const req = await Api.budgets.interact({
         budgetId: data.id,
-        providerId: user?.id as number,
+        providerId: user?.userAccountId as number,
         status: "AGUARDANDO_SINDICO",
       })
 

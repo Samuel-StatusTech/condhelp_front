@@ -12,6 +12,7 @@ import SuccessFeedback from "./variations/SuccessFeedback"
 import DeleteConfirm from "./variations/DeleteConfirm"
 import ContactInfo from "./variations/ContactInfo"
 import LoadingModal from "../LoadingModal"
+import EditBudget from "./variations/EditBudget"
 
 export type ModalProps = {
   width?: DialogProps["maxWidth"]
@@ -26,6 +27,7 @@ export type ModalProps = {
 export type TModals =
   | "loading"
   | "newBudget"
+  | "editBudget"
   | "newErrand"
   | "successFeedback"
   | "confirmDelete"
@@ -47,6 +49,11 @@ const Modal = () => {
     switch (role) {
       case "newBudget":
         el = <NewBudget data={data} onClose={handleClose} handleOp={handleOp} />
+        break
+      case "editBudget":
+        el = (
+          <EditBudget data={data} onClose={handleClose} handleOp={handleOp} />
+        )
         break
       case "newErrand":
         el = <NewErrand data={data} onClose={handleClose} handleOp={handleOp} />
