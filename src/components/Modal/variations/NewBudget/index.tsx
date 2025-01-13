@@ -21,6 +21,10 @@ import { TDefaultRes } from "../../../../api/types/responses"
 
 import { getDateStr } from "../../../../utils/tb/format/date"
 import { TUserTypes } from "../../../../utils/@types/data/user"
+import { useNavigate } from "react-router-dom"
+import Lottie from "lottie-react"
+
+import lottieData from "../../../../assets/animations/loading.json"
 
 type Props = {
   data?: any
@@ -33,6 +37,9 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   const [form, setForm] = useState<TNewBudget>(initials.modals.newBudget)
 
+  const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [categories, setCategories] = useState<TCategory[]>([])
   const [, setCondos] = useState<TCondominium[]>([])
@@ -64,6 +71,18 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     })
   }
 
+  const showSuccessFeedback = ({ newBudgetId }: { newBudgetId: number }) => {
+    controllers.modal.open({
+      role: "successFeedback",
+      visible: true,
+      width: "sm",
+      data: {
+        message: `Seu pedido de orçamento nº ${newBudgetId} foi enviado!`,
+      },
+      handleOp: () => navigate(`/dashboard/budget/${newBudgetId}`),
+    })
+  }
+
   const handleSubmit = async () => {
     // TODO: check errors
     setSubmitting(true)
@@ -76,6 +95,8 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       onClose()
 
       setSubmitting(false)
+
+      showSuccessFeedback({ newBudgetId: creation.data.id })
     } else {
       controllers.feedback.setData({
         state: "error",
@@ -124,6 +145,8 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   const loadData = useCallback(async () => {
     try {
+      setLoading(true)
+
       let categoriesList: TCategory[] = []
       let condosList: TCondominium[] = []
       let franchisesList: TUserTypes["FRANQUEADO"][] = []
@@ -204,6 +227,8 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
       onClose()
     }
+
+    setLoading(false)
   }, [controllers.feedback, onClose, user])
 
   useEffect(() => {
@@ -216,6 +241,12 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
 
   return (
     <S.Element>
+      {loading && (
+        <S.LoadingContainer>
+          <Lottie animationData={lottieData} width={64} height={64} />
+        </S.LoadingContainer>
+      )}
+
       <C.Header>
         <C.HeaderDefault>
           <C.HeaderMain>

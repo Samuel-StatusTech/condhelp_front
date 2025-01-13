@@ -36,6 +36,7 @@ import FaqsView from "../pages/Head/Faq"
 import Budgets from "../pages/Budgets"
 import FPdocuments from "../pages/Forms/Documents"
 import ProviderBudgets from "../pages/ProviderBudgets"
+import DashboardManagerBudget from "../pages/DashboardManagerBudget"
 
 const Router = () => {
   return (
@@ -60,6 +61,10 @@ const Router = () => {
           </Route>
           <Route path="/dashboard" element={<DashTemplate />}>
             <Route path="" element={<Dashboard />} />
+            <Route
+              path="budget/:budgetId"
+              element={<DashboardManagerBudget />}
+            />
             <Route path="documents" element={<FPdocuments />} />
             <Route path="users">
               <Route path="" element={<UsersPage />} />

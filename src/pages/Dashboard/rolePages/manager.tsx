@@ -23,12 +23,15 @@ import BudgetDetails from "./details/budget"
 import { TFinishedBudgets } from "../../../utils/@types/data/budget/finished"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
+import { useNavigate } from "react-router-dom"
 
 const DashboardManager = () => {
   const { user, controllers } = getStore((store) => ({
     controllers: store.controllers,
     user: store.user as TUserTypes["SINDICO"],
   }))
+
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(true)
 
@@ -62,16 +65,7 @@ const DashboardManager = () => {
   const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
 
   const handlePickBudget = async (id: number) => {
-    setLoading(true)
-
-    try {
-      const req = await Api.budgets.getSingle({ id: id })
-
-      if (req.ok) setBudget({ ...req.data, id: id })
-      else throw new Error()
-    } catch {}
-
-    setLoading(false)
+    navigate(`/dashboard/budget/${id}`)
   }
 
   // Cards

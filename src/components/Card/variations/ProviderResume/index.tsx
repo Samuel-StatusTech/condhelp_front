@@ -35,7 +35,7 @@ const ProviderResume = ({
   ].includes(data.status)
 
   const handleReject = () => {
-    handleResponseProvider(data.id, "RECUSADO_SINDICO")
+    handleResponseProvider(data.userId, "RECUSADO_SINDICO")
   }
 
   const renderStatusIndicator = () => {

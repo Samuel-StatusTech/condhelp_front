@@ -54,13 +54,25 @@ export const UserPoints = styled.span`
 `
 
 export const Content = styled.div`
+  position: relative;
   display: grid;
   align-items: center;
   grid-template-columns: repeat(12, minmax(0, 1fr));
 
   width: 100%;
   gap: 16px;
-  /* padding-top: 20px; */
+`
+
+export const LoadingContainer = styled.div`
+  position: absolute;
+  z-index: 100;
+  margin: -14px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
 `
 
 export const Row = styled.div`

@@ -31,7 +31,9 @@ const DashTemplate = ({ withoutSidebar }: Props) => {
     const token = localStorage.getItem("token")
 
     if (token && user) {
-      if (location.pathname.includes("dashboard")) {
+      if (location.pathname.includes("dashboard/budget/")) {
+        setPage("dash")
+      } else if (location.pathname.includes("dashboard")) {
         const splitted = location.pathname.split("/dashboard")
         const isSubPage = splitted[1].slice(1).split("/").length > 1
 
