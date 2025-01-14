@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
+import { getStore } from "../store"
 
 // Pages
 import Login from "../pages/Login"
@@ -37,8 +38,11 @@ import Budgets from "../pages/Budgets"
 import FPdocuments from "../pages/Forms/Documents"
 import ProviderBudgets from "../pages/ProviderBudgets"
 import DashboardManagerBudget from "../pages/DashboardManagerBudget"
+import DashboardProviderBudget from "../pages/DashboardProviderBudget"
 
 const Router = () => {
+  const { user } = getStore()
+
   return (
     <BrowserRouter>
       <Routes>
@@ -63,7 +67,13 @@ const Router = () => {
             <Route path="" element={<Dashboard />} />
             <Route
               path="budget/:budgetId"
-              element={<DashboardManagerBudget />}
+              element={
+                user?.profile === "SINDICO" ? (
+                  <DashboardManagerBudget />
+                ) : (
+                  <DashboardProviderBudget />
+                )
+              }
             />
             <Route path="documents" element={<FPdocuments />} />
             <Route path="users">

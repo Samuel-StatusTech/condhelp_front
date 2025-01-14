@@ -20,9 +20,12 @@ import { TBudgetStatistics } from "../../../utils/@types/data/budgetResume"
 import { TFinishedBudgets } from "../../../utils/@types/data/budget/finished"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
+import { useNavigate } from "react-router-dom"
 
 const DashboardProvider = () => {
   const { user, controllers } = getStore()
+
+  const navigate = useNavigate()
 
   /*
    *  Search control
@@ -62,10 +65,6 @@ const DashboardProvider = () => {
   })
   const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
 
-  const loadBudgetInfo = async (pickedBudget: TProviderBudgetResume) => {
-    setBudget(pickedBudget)
-  }
-
   const reloadPage = () => {
     window.location.reload()
   }
@@ -103,7 +102,12 @@ const DashboardProvider = () => {
       <Card.ProviderBudgetResume
         k={2}
         data={budget}
-        onPickBudget={() => loadBudgetInfo(budget)}
+        onPickBudget={() => {
+          // loadBudgetInfo(budget)
+          navigate(`/dashboard/budget/${budget.id}`, {
+            state: budget,
+          })
+        }}
       />
     ))
 

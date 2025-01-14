@@ -118,7 +118,7 @@ const CondosPage = () => {
           <S.EmptyListWrapper>
             <Icons.Conds />
             <span>
-              Você ainda possui
+              Você ainda não possui
               <br />
               condomínios cadastrados...
             </span>
