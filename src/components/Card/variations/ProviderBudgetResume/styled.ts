@@ -233,6 +233,6 @@ export const AlertArea = styled.div<{ $forGrid?: boolean; $column?: boolean }>`
   position: ${({ $column, $forGrid }) =>
     $column || $forGrid ? "relative" : "absolute"};
   right: ${({ $forGrid }) => ($forGrid ? "unset" : "18px")};
-  margin-top: ${({ $forGrid }) => ($forGrid ? 8 : -16)}px;
+  margin-top: ${({ $forGrid }) => ($forGrid ? 8 : 0)}px;
   align-self: ${({ $forGrid }) => ($forGrid ? "center" : "unset")};
 `

@@ -23,13 +23,23 @@ export const finishedBudgetsTableConfig: TConfig = {
     actions: (item: TBudget, { callbacks }) => (
       <TableActions
         id={item.id}
-        content={[
-          {
-            role: "reparticipate",
-            action: callbacks?.reparticipate as (budgetId: any) => void,
-            type: "textonly",
-          },
-        ]}
+        content={
+          callbacks?.reparticipate
+            ? [
+                {
+                  role: "reparticipate",
+                  action: callbacks?.reparticipate as (budgetId: any) => void,
+                  type: "textonly",
+                },
+              ]
+            : [
+                {
+                  role: "edit",
+                  action: callbacks?.edit as (budgetId: any) => void,
+                  type: "icon",
+                },
+              ]
+        }
       />
     ),
   },

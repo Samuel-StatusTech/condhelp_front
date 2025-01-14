@@ -65,6 +65,52 @@ const DashboardManagerBudget = () => {
     [controllers.modal]
   )
 
+  const handleFinish = async () => {
+    if (budgetData) {
+      setLoading(true)
+
+      try {
+        const obj: any = {
+          id: budgetData.id,
+          title: budgetData.titulo,
+          description: budgetData.descricao,
+          startDate: getDateStr(budgetData.dataInicio, "javaDateTime"),
+          finishDate: getDateStr(budgetData.dataFim, "javaDateTime"),
+          attachmentUrl: budgetData.urlAnexo,
+          urgent: budgetData.urgent,
+          condominiumId: budgetData.idCondominio,
+          serviceCategoryId: budgetData.idCategoria,
+          serviceSubcategoryId: budgetData.idSubCategoria,
+          userId: budgetData.userId as number,
+          status: "FINALIZADO" as TBudgetStatus,
+          providerIds: budgetData.prestadores.map((p) => p.id) as number[],
+          // @ts-ignore
+          franqId: budgetData.franqId,
+        }
+
+        const req = await Api.budgets.update({ budget: obj })
+
+        if (req.ok) {
+          controllers.feedback.setData({
+            state: "success",
+            message: "Orçamento finalizado com sucesso",
+            visible: true,
+          })
+
+          loadData()
+        } else throw new Error()
+      } catch (error) {
+        controllers.feedback.setData({
+          state: "alert",
+          message: "Não foi possível finalizar o orçamento.",
+          visible: true,
+        })
+      }
+
+      setLoading(false)
+    }
+  }
+
   const handlePickProvider = async (prov: TProviderOnBudget) => {
     if (prov.userId) {
       setLoading(true)
@@ -181,6 +227,9 @@ const DashboardManagerBudget = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true)
+      setBudgetData(null)
+      setProvider(null)
+
       if (params.budgetId && !Number.isNaN(+params.budgetId)) {
         await Api.budgets
           .getSingle({
@@ -301,18 +350,22 @@ const DashboardManagerBudget = () => {
                 type="green"
                 text="REABRIR"
                 action={() => {}}
-                disabled={budgetData?.prestadores.every(
-                  (p) => p.status !== "CONTRATADO"
-                )}
+                disabled={
+                  budgetData?.status === "FINALIZADO" ||
+                  budgetData?.prestadores.every(
+                    (p) => p.status !== "CONTRATADO"
+                  )
+                }
               />
               <Button
                 type="main"
                 text="FINALIZAR"
                 icon={<Icons.CheckCircle />}
-                action={() => {}}
-                disabled={budgetData?.prestadores.some(
-                  (p) => p.status === "CONTRATADO"
-                )}
+                action={handleFinish}
+                disabled={
+                  budgetData?.status === "FINALIZADO" ||
+                  budgetData?.prestadores.some((p) => p.status === "CONTRATADO")
+                }
               />
             </S.ButtonsArea>
 

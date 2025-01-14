@@ -115,6 +115,19 @@ const DashboardManager = () => {
     handlePickBudget(budgetId)
   }, [])
 
+  const handleEdit = useCallback(
+    (budgetId: number) => {
+      controllers.modal.open({
+        role: "editBudget",
+        visible: true,
+        data: {
+          id: budgetId,
+        },
+      })
+    },
+    [controllers.modal]
+  )
+
   const loadData = useCallback(async () => {
     setLoading(true)
 
@@ -271,6 +284,9 @@ const DashboardManager = () => {
 
         <Table
           config={tableConfig.finishedBudgets}
+          actions={{
+            edit: handleEdit,
+          }}
           data={finishedBudgets.filter((i) => {
             const fields = [
               i.title,
