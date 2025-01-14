@@ -97,7 +97,7 @@ const DashboardManagerBudget = () => {
             visible: true,
           })
 
-          loadData()
+          navigate("/dashboard")
         } else throw new Error()
       } catch (error) {
         controllers.feedback.setData({
@@ -275,12 +275,20 @@ const DashboardManagerBudget = () => {
             <S.BlockHeader>
               <S.BlockTitle>Orçamento nº{budgetData?.id}</S.BlockTitle>
               <S.ButtonsHeader>
-                <Button
-                  type="quaternary"
-                  text="Cancelar orçamento"
-                  action={() => handleCancel(Number(budgetData?.id))}
-                  fit={true}
-                />
+                {!(
+                  [
+                    "FINALIZADO",
+                    "CANCELADO_SINDICO",
+                    "EXPIRADO",
+                  ] as TBudgetStatus[]
+                ).includes(budgetData?.status as TBudgetStatus) && (
+                  <Button
+                    type="quaternary"
+                    text="Cancelar orçamento"
+                    action={() => handleCancel(Number(budgetData?.id))}
+                    fit={true}
+                  />
+                )}
                 <Button
                   type="tertiary"
                   icon={<Icons.Edit />}
@@ -352,17 +360,12 @@ const DashboardManagerBudget = () => {
                 action={() => {}}
                 disabled={
                   !(
-                    (
-                      [
-                        "FINALIZADO",
-                        "CANCELADO_SINDICO",
-                        "EXPIRADO",
-                      ] as TBudgetStatus[]
-                    ).includes(budgetData?.status as TBudgetStatus) ||
-                    budgetData?.prestadores.every(
-                      (p) => p.status !== "CONTRATADO"
-                    )
-                  )
+                    [
+                      "FINALIZADO",
+                      "CANCELADO_SINDICO",
+                      "EXPIRADO",
+                    ] as TBudgetStatus[]
+                  ).includes(budgetData?.status as TBudgetStatus)
                 }
               />
               <Button
