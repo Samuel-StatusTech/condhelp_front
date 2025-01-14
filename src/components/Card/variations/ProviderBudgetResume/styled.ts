@@ -228,7 +228,7 @@ export const AlertArea = styled.div<{ $forGrid?: boolean; $column?: boolean }>`
   color: ${({ theme }) => theme.colors.red.main};
   font-size: 14px;
   width: ${({ $column }) => ($column ? "100%" : "unset")};
-  justify-content: ${({ $column }) => ($column ? "center" : "unset")};
+  justify-content: ${({ $column }) => ($column ? "flex-end" : "unset")};
 
   position: ${({ $column, $forGrid }) =>
     $column || $forGrid ? "relative" : "absolute"};
