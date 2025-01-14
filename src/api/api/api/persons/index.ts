@@ -392,6 +392,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                     })
 
                     extraInfo.address.city = city?.name
+                    extraInfo.address.cityId = city?.id
                   } else if (userProfile === "FILIAL") {
                     extraInfo = parseUserBranch({
                       ...info,

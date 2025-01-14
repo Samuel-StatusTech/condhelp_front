@@ -351,9 +351,17 @@ const DashboardManagerBudget = () => {
                 text="REABRIR"
                 action={() => {}}
                 disabled={
-                  budgetData?.status === "FINALIZADO" ||
-                  budgetData?.prestadores.every(
-                    (p) => p.status !== "CONTRATADO"
+                  !(
+                    (
+                      [
+                        "FINALIZADO",
+                        "CANCELADO_SINDICO",
+                        "EXPIRADO",
+                      ] as TBudgetStatus[]
+                    ).includes(budgetData?.status as TBudgetStatus) ||
+                    budgetData?.prestadores.every(
+                      (p) => p.status !== "CONTRATADO"
+                    )
                   )
                 }
               />
@@ -363,7 +371,13 @@ const DashboardManagerBudget = () => {
                 icon={<Icons.CheckCircle />}
                 action={handleFinish}
                 disabled={
-                  budgetData?.status === "FINALIZADO" ||
+                  (
+                    [
+                      "FINALIZADO",
+                      "CANCELADO_SINDICO",
+                      "EXPIRADO",
+                    ] as TBudgetStatus[]
+                  ).includes(budgetData?.status as TBudgetStatus) ||
                   budgetData?.prestadores.some((p) => p.status === "CONTRATADO")
                 }
               />

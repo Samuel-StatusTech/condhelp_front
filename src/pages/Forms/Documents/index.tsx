@@ -129,8 +129,8 @@ const FPdocuments = () => {
         if (hasInfo) {
           const initialRoleInfo = initials.forms.person[req.data.profile]
 
-          setForm((fm: any) => ({
-            ...fm,
+          const frm = {
+            ...form,
             ...initialRoleInfo,
             ...(hasInfo
               ? req.data
@@ -138,7 +138,9 @@ const FPdocuments = () => {
                   ...req.data,
                   profile: "ADMIN",
                 }),
-          }))
+          }
+
+          setForm(frm)
         }
       } else {
         controllers.feedback.setData({

@@ -32,6 +32,14 @@ export const finishedBudgetsTableConfig: TConfig = {
                   type: "textonly",
                 },
               ]
+            : callbacks?.redirect
+            ? [
+                {
+                  role: "redirect",
+                  action: callbacks?.redirect as (budgetId: any) => void,
+                  type: "icon",
+                },
+              ]
             : [
                 {
                   role: "edit",
