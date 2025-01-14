@@ -8,10 +8,13 @@ import PageHeader from "../../../components/PageHeader"
 
 import { TBlock } from "../../../utils/@types/components/Form"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
-import { TAccess } from "../../../utils/@types/data/access"
 
 import { Api } from "../../../api"
-import { TNewUser, TNewUserDefault } from "../../../utils/@types/data/user"
+import {
+  TNewUser,
+  TNewUserDefault,
+  TUserTypes,
+} from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 
 import { formPartials } from "./partials"
@@ -44,18 +47,28 @@ const FPdocuments = () => {
       userId: userId,
       email: form.email,
       photo: null,
-      branchId: user?.branchId as number,
-      franchiseId: user?.franchiseId as number,
+      branchId: form.branchId,
+      franchiseId: form.franchiseId,
     }
 
-    let info = getUserObj({ ...form, userId }, (form as TNewUser).profile)
+    let info = getUserObj(
+      {
+        ...form,
+        userId,
+        address: {
+          ...(form.address ?? {}),
+          city: (user as TUserTypes["PRESTADOR"])?.address.city,
+        },
+      },
+      (form as TNewUser).profile
+    )
 
-    if (params.id && !Number.isNaN(params.id)) {
+    if (params.id && !Number.isNaN(params.id) && form.profile !== "PRESTADOR") {
       info = { ...info, id: Number(params.id) }
     }
 
     return {
-      profile: user?.profile as TAccess,
+      profile: form.profile,
       ...baseInfo,
       ...info,
     }
@@ -65,8 +78,8 @@ const FPdocuments = () => {
     setLoading(true)
 
     try {
-      if (user?.id && !Number.isNaN(user?.id)) {
-        const obj = getObj(Number(user?.id))
+      if (user?.userAccountId && !Number.isNaN(user?.userAccountId)) {
+        const obj = getObj(Number(user?.userAccountId))
 
         const req = await Api.persons.update({
           person: obj as any,
@@ -82,10 +95,15 @@ const FPdocuments = () => {
           setLoading(false)
 
           navigate(-1)
-        }
-      }
+        } else throw new Error()
+      } else throw new Error()
     } catch (error) {
       // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message: "Nao foi possível atualizar a documentação.",
+      })
 
       setLoading(false)
     }
