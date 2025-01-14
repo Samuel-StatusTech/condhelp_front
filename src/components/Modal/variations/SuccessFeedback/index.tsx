@@ -29,12 +29,12 @@ const SuccessFeedback = ({ data, onClose, handleOp }: Props) => {
     <S.Element>
       <C.Header>
         <C.HeaderDefault>
-          <C.HeaderMain>
-            <C.ModalTitle>Sucesso!</C.ModalTitle>
+          <S.HeaderMain>
+            <S.ModalTitle>Sucesso!</S.ModalTitle>
             <C.CloseBtn onClick={handleClose}>
               <CloseIcon />
             </C.CloseBtn>
-          </C.HeaderMain>
+          </S.HeaderMain>
         </C.HeaderDefault>
       </C.Header>
 

@@ -12,6 +12,8 @@ import { useState } from "react"
 type Props = {
   data: {
     title: string
+    deleteTextDescriptor?: string
+    deleteBtnText?: string
   }
   onClose: () => void
   handleOp?: () => void
@@ -46,7 +48,8 @@ const DeleteConfirm = ({ data, onClose, handleOp }: Props) => {
         <S.ContentArea>
           <Icons.AlertThin />
           <S.Message>
-            Tem certeza que deseja excluir? Esta ação não pode ser desfeita.
+            Tem certeza que deseja {data.deleteTextDescriptor ?? "excluir"}?
+            Esta ação não pode ser desfeita.
           </S.Message>
         </S.ContentArea>
 
@@ -54,14 +57,14 @@ const DeleteConfirm = ({ data, onClose, handleOp }: Props) => {
           field="confirm"
           value={confirm ? ["confirm"] : []}
           onChange={() => setConfirm(!confirm)}
-          options={[{ key: "confirm", value: "Sim tenho certeza" }]}
+          options={[{ key: "confirm", value: "Sim, tenho certeza." }]}
         />
 
         <S.Bottom>
           <Button
             disabled={!confirm}
             type="main"
-            text="Excluir"
+            text={data.deleteBtnText ?? "Excluir"}
             action={handleSubmit}
             fit={true}
           />

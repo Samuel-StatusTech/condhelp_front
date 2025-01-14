@@ -4,6 +4,21 @@ export const Element = styled.div`
   padding: 14px 14px;
 `
 
+export const HeaderMain = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  color: ${({ theme }) => theme.colors.neutral.lightMain};
+`
+
+export const ModalTitle = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+`
+
 export const HeaderSubInfo = styled.span`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.neutral.lightMain};
@@ -28,7 +43,7 @@ export const Content = styled.div`
 export const ContentArea = styled.div`
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   color: ${({ theme }) => theme.colors.green.light};
 `
 

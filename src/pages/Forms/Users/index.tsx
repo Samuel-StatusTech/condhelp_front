@@ -197,13 +197,15 @@ const FPpeople = () => {
     setLoading(true)
 
     try {
-      const req = await Api.persons.delete({ person: form.userId })
+      const req = await Api.persons.inactivate({
+        id: +(params?.id as string),
+      })
 
       if (req.ok) {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Usuário excluído",
+          message: "Usuário inativado",
         })
 
         setLoading(false)
@@ -213,8 +215,8 @@ const FPpeople = () => {
     } catch (error) {
       controllers.feedback.setData({
         visible: true,
-        state: "success",
-        message: "Usuário excluído com sucesso",
+        state: "error",
+        message: "Houve um erro ao inativar o usuário",
       })
 
       setLoading(false)
@@ -480,7 +482,9 @@ const FPpeople = () => {
         handleCancel={handleCancel}
         handleSave={handleSave}
         disabled={errors().has}
-        deleteModalTitle={"Excluir Usuário"}
+        deleteModalTitle={"Desativar Usuário"}
+        deleteBtnText={"Desativar"}
+        deleteModalInactivate={true}
       />
     ),
   }

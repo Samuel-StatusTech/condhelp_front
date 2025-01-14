@@ -11,8 +11,14 @@ export type TApi_Params_Persons = {
     update: {
       person: TUser
     }
+    inactivate: {
+      id: number
+    }
     delete: {
-      person: TUser
+      person: {
+        profile: TAccess
+        id: number
+      }
     }
     getSingle: {
       id: number

@@ -87,7 +87,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
       visible: true,
       width: "sm",
       data: {
-        message: `Seu orçamento foi atualizado!`,
+        message: `Seu orçamento nº ${budgetData?.id} foi atualizado!`,
       },
       handleOp: () => {
         onClose()

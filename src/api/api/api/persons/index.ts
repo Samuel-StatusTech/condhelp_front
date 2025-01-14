@@ -236,6 +236,43 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
   })
 }
 
+const inactivate: TApi["persons"]["inactivate"] = async ({ id }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`${baseURL}/inactivate/${id}`)
+        .then((res) => {
+          const info = res.data
+
+          if (res.status === 204) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível desativar o usuário. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível desativar o usuário. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível excluir o usuário. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const deleteItem: TApi["persons"]["delete"] = async ({ person }) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -653,6 +690,9 @@ export type TApi_Persons = {
   ) => TResponses["persons"]["getSelfData"]
   update: (p: TParams["persons"]["update"]) => TResponses["persons"]["update"]
   delete: (p: TParams["persons"]["delete"]) => TResponses["persons"]["delete"]
+  inactivate: (
+    p: TParams["persons"]["inactivate"]
+  ) => TResponses["persons"]["inactivate"]
   getByRole: (
     p: TParams["persons"]["getByRole"]
   ) => TResponses["persons"]["getByRole"]
@@ -676,6 +716,7 @@ export const apiPersons: TApi["persons"] = {
   getSelfData: getSelfData,
   update: update,
   delete: deleteItem,
+  inactivate: inactivate,
   getByRole: getByRole,
   getAllBranches: getAllBranches,
 

@@ -11,6 +11,8 @@ type Props = {
   handleSave: (params: any) => void
   disabled?: boolean
   deleteModalTitle?: string
+  deleteBtnText?: string
+  deleteModalInactivate?: boolean
 }
 
 const FormDefaultButtons = ({
@@ -19,6 +21,8 @@ const FormDefaultButtons = ({
   handleSave,
   disabled,
   deleteModalTitle,
+  deleteBtnText,
+  deleteModalInactivate,
 }: Props) => {
   const { controllers } = getStore()
 
@@ -32,6 +36,8 @@ const FormDefaultButtons = ({
       width: "xs",
       data: {
         title: deleteModalTitle,
+        deleteTextDescriptor: deleteModalInactivate ? "desativar" : "excluir",
+        deleteBtnText: deleteBtnText,
       },
     })
   }
@@ -42,7 +48,7 @@ const FormDefaultButtons = ({
         <Button
           type="quaternary"
           action={handlePressDelete}
-          text="Excluir"
+          text={deleteBtnText ?? "Excluir"}
           icon={<Icons.Trash />}
           iconLeft={true}
           fit={true}

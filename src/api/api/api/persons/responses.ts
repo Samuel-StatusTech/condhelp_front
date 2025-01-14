@@ -9,6 +9,7 @@ export type TApi_Responses_Persons = {
     getSelfData: Promise<TDefaultRes<TUser>>
     update: Promise<TDefaultRes<TUser>>
     delete: Promise<TDefaultRes<{}>>
+    inactivate: Promise<TDefaultRes<{}>>
     getByRole: Promise<TDefaultRes<TDefaultList<TUser>>>
     getAllBranches: Promise<TDefaultRes<TDefaultList<TUser>>>
 
