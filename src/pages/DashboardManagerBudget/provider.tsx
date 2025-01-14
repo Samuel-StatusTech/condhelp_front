@@ -13,13 +13,15 @@ import { formatCep } from "../../utils/tb/format/cep"
 import { Icons } from "../../assets/icons/icons"
 import { formatPhone } from "../../utils/tb/format/phone"
 import ProviderLegalization from "../../components/ProviderLegalization"
+import { TBudgetStatus } from "../../utils/@types/data/status"
 
 type Props = {
   data: TUserTypes["PRESTADOR"]
   handleBack: () => void
+  interactionStatus: TBudgetStatus
 }
 
-const ProviderDetails = ({ data, handleBack }: Props) => {
+const ProviderDetails = ({ data, handleBack, interactionStatus }: Props) => {
   const { controllers } = getStore()
 
   const [loading] = useState(false)
@@ -40,26 +42,32 @@ const ProviderDetails = ({ data, handleBack }: Props) => {
   const renderStatusIndicator = () => {
     let content: any = null
 
-    switch (data.status) {
-      case "AGUARDANDO":
+    switch (interactionStatus) {
+      case "AGUARDANDO_SINDICO":
         content = (
-          <S.StatusArea $status={data.status}>
+          <S.StatusArea $status={interactionStatus}>
             <Icons.Alert />
             <span>Aguardando Síndico</span>
           </S.StatusArea>
         )
         break
-      case "ATIVO":
+      case "APROVADO_SINDICO":
+      case "CONTRATADO":
         content = (
-          <S.StatusArea $status={data.status}>
+          <S.StatusArea $status={interactionStatus}>
             <Icons.CheckFill />
-            <span>PARTICIPANDO</span>
+            <span>
+              {interactionStatus === "APROVADO_SINDICO"
+                ? "PARTICIPANDO"
+                : "CONTRATADO"}
+            </span>
           </S.StatusArea>
         )
         break
-      case "INATIVO":
+      case "RECUSADO_PRESTADOR":
+      case "RECUSADO_SINDICO":
         content = (
-          <S.StatusArea $status={data.status}>
+          <S.StatusArea $status={interactionStatus}>
             <Icons.Close />
             <span>RECUSADO</span>
           </S.StatusArea>

@@ -361,7 +361,14 @@ const DashboardManagerBudget = () => {
       </S.SubContent>
     </C.SubContent>
   ) : (
-    <ProviderDetails data={provider} handleBack={() => setProvider(null)} />
+    <ProviderDetails
+      data={provider}
+      handleBack={() => setProvider(null)}
+      interactionStatus={
+        budgetData?.prestadores.find((p) => p.userId === provider.userAccountId)
+          ?.status as TBudgetStatus
+      }
+    />
   )
 }
 
