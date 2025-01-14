@@ -71,7 +71,11 @@ const FPcondo = () => {
 
     return params.id && !Number.isNaN(params.id)
       ? { ...obj, id: params.id }
-      : obj
+      : {
+        ...obj,
+        branchId: user?.branchId,
+        franchiseId: user?.franchiseId,
+      }
   }
 
   const handleUpdate = async () => {
