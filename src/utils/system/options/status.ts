@@ -11,7 +11,8 @@ export const errandStatusOptions = [
 ]
 
 export const budgetsStatusOptions = [
-  { key: "approved", value: "Finalizado" },
-  { key: "awaiting", value: "Aguardando" },
-  { key: "rejected", value: "Rejeitado" },
+  { key: "all", value: "Todos" },
+  { key: "CANCELADO_SINDICO", value: "Cancelado" },
+  { key: "FINALIZADO", value: "Finalizado" },
+  { key: "EXPIRADO", value: "Expirado" },
 ]

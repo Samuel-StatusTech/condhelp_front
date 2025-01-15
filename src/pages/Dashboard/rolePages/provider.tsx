@@ -284,12 +284,10 @@ const DashboardProvider = () => {
               ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
               : true
 
-            if (filters.status && filters.status !== "all") {
-              statusOk = i.status === filters.status
-            }
-
             statusOk = !!finishedBudgetsSearch
               ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+              : filters.status && filters.status !== "all"
+              ? i.status === filters.status
               : true
 
             ok = searchOk && statusOk

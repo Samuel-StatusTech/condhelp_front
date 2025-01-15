@@ -19,6 +19,19 @@ export const relations = {
     send: "Enviado",
   },
 
+  budgetStatus: {
+    DISPONIVEL: "Disponível",
+    AGUARDANDO_SINDICO: "Aguardando Síndico",
+    APROVADO_SINDICO: "Aprovado pelo Síndico",
+    RECUSADO_SINDICO: "Recusado pelo Síndico",
+    RECUSADO_PRESTADOR: "Recusado",
+    CANCELADO_SINDICO: "Cancelado",
+    CANCELADO_PRESTADOR: "Cancelado",
+    CONTRATADO: "Contratado",
+    FINALIZADO: "Finalizado",
+    EXPIRADO: "Expirado",
+  },
+
   pendencies: {
     has: "Pendente",
     free: "Isento",

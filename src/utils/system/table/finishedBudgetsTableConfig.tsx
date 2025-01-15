@@ -4,6 +4,8 @@ import TableActions from "../../../components/TableActions"
 import { TBudget } from "../../@types/data/budget"
 import ColorTextIndicator from "../../../components/ColorTextIndicator"
 import { getDateStr } from "../../tb/format/date"
+import { relations } from "../relations"
+import { TBudgetStatus } from "../../@types/data/status"
 
 export const finishedBudgetsTableConfig: TConfig = {
   columns: [
@@ -17,38 +19,53 @@ export const finishedBudgetsTableConfig: TConfig = {
     condo: (item: TBudget) => item.condominiumName,
     endDate: (item: TBudget) => getDateStr(item.endDate, "dmy"),
     status: (item: TBudget) => (
-      <ColorTextIndicator role="status" data={"active"} text="Finalizado" />
-    ),
-
-    actions: (item: TBudget, { callbacks }) => (
-      <TableActions
-        id={item.id}
-        content={
-          callbacks?.reparticipate
-            ? [
-                {
-                  role: "reparticipate",
-                  action: callbacks?.reparticipate as (budgetId: any) => void,
-                  type: "textonly",
-                },
-              ]
-            : callbacks?.redirect
-            ? [
-                {
-                  role: "redirect",
-                  action: callbacks?.redirect as (budgetId: any) => void,
-                  type: "icon",
-                },
-              ]
-            : [
-                {
-                  role: "edit",
-                  action: callbacks?.edit as (budgetId: any) => void,
-                  type: "icon",
-                },
-              ]
-        }
+      <ColorTextIndicator
+        role="status"
+        data={"active"}
+        text={relations.budgetStatus[item.status as TBudgetStatus]}
       />
     ),
+
+    actions: (item: TBudget, { callbacks }) => {
+      return (
+        <TableActions
+          id={item.id}
+          content={
+            callbacks?.reparticipate
+              ? (
+                  [
+                    "RECUSADO_PRESTADOR",
+                    "CANCELADO_PRESTADOR",
+                  ] as TBudgetStatus[]
+                ).includes(item.status as TBudgetStatus)
+                ? [
+                    {
+                      role: "reparticipate",
+                      action: callbacks?.reparticipate as (
+                        budgetId: any
+                      ) => void,
+                      type: "textonly",
+                    },
+                  ]
+                : []
+              : callbacks?.redirect
+              ? [
+                  {
+                    role: "redirect",
+                    action: callbacks?.redirect as (budgetId: any) => void,
+                    type: "icon",
+                  },
+                ]
+              : [
+                  {
+                    role: "edit",
+                    action: callbacks?.edit as (budgetId: any) => void,
+                    type: "icon",
+                  },
+                ]
+          }
+        />
+      )
+    },
   },
 }

@@ -261,7 +261,7 @@ const DashboardManager = () => {
           search={finishedBudgetsSearch}
           onSearchChange={setFinishedBudgetsSearch}
           onSearch={handleFinishedBudgetsSearch}
-          searchPlaceholder="Pesquisar por id, data, título, condomínio..."
+          searchPlaceholder="Pesquisar por data, título, condomínio..."
           onFilterChange={handleFilters}
           filters={[
             {
@@ -293,12 +293,10 @@ const DashboardManager = () => {
               ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
               : true
 
-            if (filters.status && filters.status !== "all") {
-              statusOk = i.status === filters.status
-            }
-
             statusOk = !!finishedBudgetsSearch
               ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+              : filters.status && filters.status !== "all"
+              ? i.status === filters.status
               : true
 
             ok = searchOk && statusOk
