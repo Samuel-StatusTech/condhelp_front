@@ -22,6 +22,7 @@ import { initialDashboard } from "./dashboards"
 const initials = {
   dashboards: {
     admin: initialDashboard,
+    branch: initialDashboard,
   },
   forms: {
     login: loginForm,

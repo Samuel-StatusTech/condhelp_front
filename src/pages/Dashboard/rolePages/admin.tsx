@@ -39,15 +39,11 @@ const DashboardAdmin = () => {
         }}
       />,
       <Card.Dashboard
-        title="USUÁRIOS"
+        title="SÍNDICOS"
         k={4}
         data={{
           role: "superavit",
-          mainValue:
-            data.totalProviders +
-            data.totalManagers +
-            data.totalFranchises +
-            data.totalBranches,
+          mainValue: data.totalManagers,
         }}
       />,
       <Card.Dashboard
@@ -116,7 +112,7 @@ const DashboardAdmin = () => {
     setLoading(true)
 
     try {
-      const req = await Api.dashboards.admin({})
+      const req = await Api.dashboards.main({})
 
       if (req.ok) {
         setData(req.data)

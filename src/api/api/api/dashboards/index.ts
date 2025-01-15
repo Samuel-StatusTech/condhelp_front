@@ -6,7 +6,7 @@ import { TApi_Responses_Dashboards as TResponses } from "./responses"
 
 const baseURL = "/dashboard"
 
-const adminDashboard: TApi["dashboards"]["admin"] = async (filters) => {
+const mainDashboard: TApi["dashboards"]["main"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
       const url = baseURL
@@ -45,11 +45,9 @@ const adminDashboard: TApi["dashboards"]["admin"] = async (filters) => {
 }
 
 export type TApi_Dashboards = {
-  admin: (
-    p: TParams["dashboards"]["admin"]
-  ) => TResponses["dashboards"]["admin"]
+  main: (p: TParams["dashboards"]["main"]) => TResponses["dashboards"]["main"]
 }
 
 export const apiDashboards: TApi["dashboards"] = {
-  admin: adminDashboard,
+  main: mainDashboard,
 }

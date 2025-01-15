@@ -7,51 +7,16 @@ import PageRow from "../../../components/_minimals/PageRow"
 import { dashboardShortcuts } from "../../../utils/system/dashboardShortcuts"
 import { useCallback, useEffect, useState } from "react"
 import { Api } from "../../../api"
-import { TUser } from "../../../utils/@types/data/user"
-
-type TGridInfo = {
-  condo: number
-  FRANQUEADO: number
-  PRESTADOR: number
-  SINDICO: number
-  chat: number
-  faq: number
-  category: number
-  subcategory: number
-  user: number
-  settings: number
-}
-
-const gridInitial: TGridInfo = {
-  condo: 0,
-  FRANQUEADO: 0,
-  PRESTADOR: 0,
-  SINDICO: 0,
-  chat: 0,
-  faq: 0,
-  category: 0,
-  subcategory: 0,
-  user: 0,
-  settings: 0,
-}
+import { TDashboardBranch } from "../../../utils/@types/data/dashboards/branch"
+import initials from "../../../utils/initials"
+import { getStore } from "../../../store"
 
 const DashboardBranch = () => {
-  const [data, setData] = useState({
-    franchises: 0,
-    providers: 0,
-    condos: 0,
-    budgets: 0,
-  })
+  const { controllers } = getStore()
 
-  const [budgetsDetails, setBudgetsDetails] = useState<{
-    [key: string]: number
-  }>({
-    approved: 0,
-    awaiting: 0,
-    rejected: 0,
-  })
+  const [data, setData] = useState<TDashboardBranch>(initials.dashboards.admin)
 
-  const [gridData, setGridData] = useState(gridInitial)
+  const [loading, setLoading] = useState(true)
 
   // Cards
 
@@ -62,7 +27,7 @@ const DashboardBranch = () => {
         k={2}
         data={{
           role: "superavit",
-          mainValue: data.franchises,
+          mainValue: data.totalFranchises,
           percentage: 12,
           indicatorText: "este mês",
         }}
@@ -72,7 +37,7 @@ const DashboardBranch = () => {
         k={3}
         data={{
           role: "deficit",
-          mainValue: data.providers,
+          mainValue: data.totalProviders,
           percentage: 4,
           indicatorText: "este mês",
         }}
@@ -82,7 +47,7 @@ const DashboardBranch = () => {
         k={4}
         data={{
           role: "superavit",
-          mainValue: data.condos,
+          mainValue: data.totalCondominiums,
           percentage: 7,
           indicatorText: "de aumento",
         }}
@@ -92,7 +57,7 @@ const DashboardBranch = () => {
         k={5}
         data={{
           role: "deficit",
-          mainValue: data.budgets,
+          mainValue: data.totalBudgets,
           percentage: 2,
           indicatorText: "de redução",
         }}
@@ -102,207 +67,81 @@ const DashboardBranch = () => {
     return <PageRow>{content}</PageRow>
   }
 
-  const renderGridContent = () => {
+  const renderGridContent = useCallback(() => {
     let content: any[] = []
 
+    const totalUsers =
+      data.totalProviders +
+      data.totalManagers +
+      data.totalFranchises +
+      data.totalBranches
+
     dashboardShortcuts.FILIAL.forEach((s, sk) => {
+      const keyValue: { [key: string]: keyof typeof data } = {
+        FILIAL: "totalBranches",
+        FRANQUEADO: "totalFranchises",
+        region: "totalRegions",
+        PRESTADOR: "totalProviders",
+        SINDICO: "totalManagers",
+        condo: "totalCondominiums",
+        chat: "totalErrands" as any,
+        faq: "totalFaqs",
+        category: "totalCategories",
+        subcategory: "totalSubCategories",
+        user: "totalUsers" as any,
+        settings: "total" as any,
+      }
+
       content.push(
         <Card.DashboardShortcut
           k={5 + (sk + 1) / 2}
           title={s.title}
           icon={s.icon}
-          registers={gridData[s.icon as keyof TGridInfo]}
+          registers={
+            s.icon === "user"
+              ? totalUsers
+              : s.icon === "settings"
+              ? 0
+              : (data[keyValue[s.icon]] as number)
+          }
           link={s.link}
         />
       )
     })
 
     return content
-  }
+  }, [data])
 
   /*
    *  Load data
    */
 
-  const getGridResume = (info: TUser[], gridRef: TGridInfo) => {
-    let gridInfo: TGridInfo = gridRef
+  const loadData = useCallback(async () => {
+    setLoading(true)
 
     try {
-      info.forEach((u) => {
-        switch (u.profile) {
-          case "FRANQUEADO":
-            gridInfo.FRANQUEADO += 1
-            break
-          case "PRESTADOR":
-            gridInfo.PRESTADOR += 1
-            break
-          case "SINDICO":
-            gridInfo.SINDICO += 1
-            break
-          default:
-            break
-        }
-      })
-    } catch (error) {}
+      const req = await Api.dashboards.main({})
 
-    gridInfo.user = gridInfo.FRANQUEADO + gridInfo.PRESTADOR + gridInfo.SINDICO
-
-    return gridInfo
-  }
-
-  const loadData = useCallback(async () => {
-    let condoCount = 0
-    let providerCount = 0
-    let budgetCount = 0
-
-    let budgetsInfo: { [key: string]: number } = {
-      approved: 0,
-      awaiting: 0,
-      rejected: 0,
+      if (req.ok) {
+        setData(req.data)
+      } else throw new Error()
+    } catch (error) {
+      // ...
     }
 
-    let gridInfo: TGridInfo = {
-      condo: 0,
-      FRANQUEADO: 0,
-      PRESTADOR: 0,
-      SINDICO: 0,
-      chat: 0,
-      faq: 0,
-      category: 0,
-      subcategory: 0,
-      user: 0,
-      settings: 0,
-    }
-
-    let proms: Promise<any>[] = []
-
-    // Categories
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.categories.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.category = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Subcategories
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.subcategories.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.subcategory = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Condos
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.condos.listAll({ size: 1 })
-
-          if (req.ok) {
-            condoCount = req.data.totalElements
-            gridInfo.condo = req.data.totalElements
-          }
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Budgets
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.budgets.listAll({})
-
-          if (req.ok) {
-            budgetCount = req.data.totalElements
-            budgetsInfo = req.data.content.reduce(
-              (prev, b) => ({
-                approved: prev.approved + b.accepted,
-                awaiting: prev.awaiting + b.awaiting,
-                rejected: prev.rejected + b.rejected,
-              }),
-              budgetsInfo
-            )
-          }
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // Providers and users
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.persons.listAll({ size: 300 })
-
-          if (req.ok) {
-            // Providers
-            providerCount = req.data.content.filter(
-              (u) => u.profile === "PRESTADOR"
-            ).length
-
-            gridInfo = getGridResume(req.data.content, gridInfo)
-          }
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    // FAQ's
-    proms.push(
-      new Promise(async (resolve, reject) => {
-        try {
-          const req = await Api.faqs.listAll({ size: 1 })
-
-          if (req.ok) gridInfo.faq = req.data.totalElements
-
-          resolve(true)
-        } catch (error) {
-          reject()
-        }
-      })
-    )
-
-    await Promise.all(proms)
-
-    setData({
-      condos: condoCount,
-      providers: providerCount,
-      franchises: gridInfo.FRANQUEADO,
-      budgets: budgetCount,
-    })
-
-    setBudgetsDetails(budgetsInfo)
-
-    setGridData(gridInfo)
+    setLoading(false)
   }, [])
 
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.SubContent>
@@ -318,14 +157,22 @@ const DashboardBranch = () => {
         <Card.ApprovalResume
           k={1}
           title="Estatísticas gerais de orçamentos"
-          data={budgetsDetails}
+          data={{
+            approved: data.totalBudgetsCompleted,
+            awaiting: data.totalBudgetsInProgress,
+            rejected: data.totalBudgetsCancelled,
+          }}
           role="budgets"
           doubledCard={true}
         />
         <Card.ApprovalResume
           k={1}
           title="Estatísticas gerais de prestadores"
-          data={budgetsDetails}
+          data={{
+            approved: data.providerPercentage?.totalProvideActive ?? 0,
+            awaiting: data.providerPercentage?.totalProvideInative ?? 0,
+            rejected: data.providerPercentage?.totalProvideCancelled ?? 0,
+          }}
           role="providers"
           doubledCard={true}
         />
