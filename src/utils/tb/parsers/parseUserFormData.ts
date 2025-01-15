@@ -31,6 +31,10 @@ const getAdminObj = (user: TUserTypes["ADMIN"]) => {
   const info = {
     id: user.userId,
     userId: user.userId,
+
+    franqId: null,
+    branchId: null,
+
     photo: user.photo,
     email: user.email,
     profile: user.profile,

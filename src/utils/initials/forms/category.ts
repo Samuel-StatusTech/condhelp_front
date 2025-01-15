@@ -5,4 +5,7 @@ export const categoryForm: TNewCategory = {
   name: "",
   description: "",
   serviceSubcategories: [],
+
+  franqId: 0,
+  branchId: 0,
 }

@@ -54,6 +54,9 @@ export type TUAdmin = {
   surname: string
   email: string
 
+  franqId?: number | null
+  branchId?: number | null
+
   // Profile info
   document: TDocument["cpf"] | TDocument["cnpj"]
 }

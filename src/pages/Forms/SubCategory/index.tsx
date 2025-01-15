@@ -23,7 +23,7 @@ const FPsubcategory = () => {
 
   const params = useParams()
 
-  const { controllers } = getStore()
+  const { user, controllers } = getStore()
 
   const [loading, setLoading] = useState(true)
 
@@ -67,6 +67,22 @@ const FPsubcategory = () => {
     }
   }
 
+  const getObj = () => {
+    const obj: TNewSubCategory = {
+      name: form.name,
+      serviceCategory: !Number.isNaN(form.serviceCategory)
+        ? form.serviceCategory
+        : // @ts-ignore
+          form.serviceCategory.id,
+      // @ts-ignore
+      branchId: ((user?.branchId ?? user?.subsidiaryId) as number) ?? null,
+      // @ts-ignore
+      franqId: ((user?.franqId ?? user?.franchiseId) as number) ?? null,
+    }
+
+    return obj
+  }
+
   const handleUpdate = async () => {
     setLoading(true)
 
@@ -92,9 +108,9 @@ const FPsubcategory = () => {
   const handleCreate = async () => {
     setLoading(true)
 
-    const req = await Api.subcategories.create({
-      newSubcategory: form as TNewSubCategory,
-    })
+    const obj = getObj()
+
+    const req = await Api.subcategories.create({ newSubcategory: obj })
 
     if (req.ok) {
       controllers.feedback.setData({

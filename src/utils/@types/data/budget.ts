@@ -16,6 +16,7 @@ export type TNewBudget = {
   status: TBudgetStatus
   providerIds: number[]
   franqId: number
+  branchId: number
 }
 
 export type TBudget = {

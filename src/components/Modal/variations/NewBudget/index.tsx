@@ -55,6 +55,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     const obj: TNewBudget = {
       ...form,
       userId: user?.userId as number,
+      branchId: user?.branchId as number,
       startDate: getDateStr(form.startDate, "javaDateTime"),
       finishDate: getDateStr(form.finishDate, "javaDateTime"),
     }
@@ -192,6 +193,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
         setForm((frm) => ({
           ...frm,
           franqId: user?.franqId,
+          branchId: user?.branchId as number,
         }))
       }
 

@@ -5,6 +5,9 @@ export type TNewSubCategory = {
   serviceCategory: number
 
   isNew?: boolean
+
+  franqId: number | null
+  branchId: number | null
 }
 
 export type TSubCategory = {
@@ -23,4 +26,7 @@ export type TSubCategory = {
     profile: TAccess
   }
   isNew?: boolean
+
+  franqId: number | null
+  branchId: number | null
 }

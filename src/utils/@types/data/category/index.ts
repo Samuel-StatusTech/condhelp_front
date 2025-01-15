@@ -6,6 +6,8 @@ export type TNewCategory = {
   name: string
   description: string
   serviceSubcategories: TSubCategory[]
+  franqId: number | null
+  branchId: number | null
 }
 
 export type TCategory = {
@@ -21,4 +23,6 @@ export type TCategory = {
     name: string
   }
   serviceSubcategories: TSubCategory[]
+  franqId: number | null
+  branchId: number | null
 }

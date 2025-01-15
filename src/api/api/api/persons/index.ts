@@ -318,127 +318,103 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (["SINDICO"].includes(profile)) {
-        await service
-          .get(`${rolesUrlRelations[profile]}/${id}`)
-          .then(async (res) => {
-            const info = res.data
+      await service
+        .get(`${baseURL}/${id}`)
+        .then(async (res) => {
+          const info = res.data
 
-            if (info) {
+          if (info) {
+            const userProfile = info.profile as TAccess
+
+            if (!["ADMIN"].includes(userProfile)) {
+              const url =
+                userProfile === "FILIAL"
+                  ? `${rolesUrlRelations[userProfile]}/useraccount`
+                  : userProfile === "PRESTADOR"
+                  ? `${rolesUrlRelations[userProfile]}/useraccount`
+                  : userProfile === "FRANQUEADO"
+                  ? `${rolesUrlRelations[userProfile]}/useraccount`
+                  : userProfile === "SINDICO"
+                  ? `${rolesUrlRelations[userProfile]}/useraccount`
+                  : rolesUrlRelations[userProfile] ?? baseURL
+
+              const extraDataReq = await service.get(
+                `${url}/${userProfile === "SINDICO" ? info.id : info.userId}`
+              )
+
+              if (extraDataReq.data) {
+                let extraInfo = extraDataReq.data
+
+                let city: TCity | null = null
+
+                if (
+                  extraInfo.address &&
+                  extraInfo.address.city &&
+                  (["FILIAL", "FRANQUEADO", "PRESTADOR"] as TAccess[]).includes(
+                    userProfile
+                  )
+                ) {
+                  const cityReq = await apiCities.getSingle({
+                    id: +extraInfo.address.city,
+                  })
+
+                  if (cityReq.ok) city = cityReq.data
+                }
+
+                if (userProfile === "PRESTADOR") {
+                  extraInfo = parseUserProvider({
+                    ...info,
+                    ...extraDataReq.data,
+                    status: info.status,
+                  })
+
+                  extraInfo.address.city = city?.name
+                  extraInfo.address.cityId = city?.id
+                } else if (userProfile === "FILIAL") {
+                  extraInfo = parseUserBranch({
+                    ...info,
+                    ...extraDataReq.data,
+                  })
+
+                  extraInfo.address.city = city?.name
+                } else if (userProfile === "FRANQUEADO") {
+                  extraInfo = parseUserFranchise({
+                    ...info,
+                    ...extraDataReq.data,
+                  })
+
+                  extraInfo.address.city = city?.name
+                }
+
+                resolve({
+                  ok: true,
+                  data: {
+                    ...info,
+                    ...extraInfo,
+                  },
+                })
+              } else throw new Error()
+            } else {
               resolve({
                 ok: true,
                 data: info,
               })
-            } else {
-              resolve({
-                ok: false,
-                error:
-                  "Não foi possível carregar as informações. Tente novamente mais tarde.",
-              })
             }
-          })
-          .catch((err: AxiosError) => {
+          } else {
             resolve({
               ok: false,
               error:
                 "Não foi possível carregar as informações. Tente novamente mais tarde.",
             })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível carregar as informações. Tente novamente mais tarde.",
           })
-      } else {
-        await service
-          .get(`${baseURL}/${id}`)
-          .then(async (res) => {
-            const info = res.data
-
-            if (info) {
-              const userProfile = info.profile as TAccess
-
-              if (!["ADMIN"].includes(userProfile)) {
-                const url =
-                  userProfile === "FILIAL"
-                    ? `${rolesUrlRelations[userProfile]}/useraccount`
-                    : userProfile === "PRESTADOR"
-                    ? `${rolesUrlRelations[userProfile]}/useraccount`
-                    : userProfile === "FRANQUEADO"
-                    ? `${rolesUrlRelations[userProfile]}/useraccount`
-                    : rolesUrlRelations[userProfile] ?? baseURL
-
-                const extraDataReq = await service.get(`${url}/${info.userId}`)
-
-                if (extraDataReq.data) {
-                  let extraInfo = extraDataReq.data
-
-                  let city: TCity | null = null
-
-                  if (
-                    extraInfo.address &&
-                    extraInfo.address.city &&
-                    (
-                      ["FILIAL", "FRANQUEADO", "PRESTADOR"] as TAccess[]
-                    ).includes(userProfile)
-                  ) {
-                    const cityReq = await apiCities.getSingle({
-                      id: +extraInfo.address.city,
-                    })
-
-                    if (cityReq.ok) city = cityReq.data
-                  }
-
-                  if (userProfile === "PRESTADOR") {
-                    extraInfo = parseUserProvider({
-                      ...info,
-                      ...extraDataReq.data,
-                      status: info.status,
-                    })
-
-                    extraInfo.address.city = city?.name
-                    extraInfo.address.cityId = city?.id
-                  } else if (userProfile === "FILIAL") {
-                    extraInfo = parseUserBranch({
-                      ...info,
-                      ...extraDataReq.data,
-                    })
-
-                    extraInfo.address.city = city?.name
-                  } else if (userProfile === "FRANQUEADO") {
-                    extraInfo = parseUserFranchise({
-                      ...info,
-                      ...extraDataReq.data,
-                    })
-
-                    extraInfo.address.city = city?.name
-                  }
-
-                  resolve({
-                    ok: true,
-                    data: {
-                      ...info,
-                      ...extraInfo,
-                    },
-                  })
-                } else throw new Error()
-              } else {
-                resolve({
-                  ok: true,
-                  data: info,
-                })
-              }
-            } else {
-              resolve({
-                ok: false,
-                error:
-                  "Não foi possível carregar as informações. Tente novamente mais tarde.",
-              })
-            }
-          })
-          .catch((err: AxiosError) => {
-            resolve({
-              ok: false,
-              error:
-                "Não foi possível carregar as informações. Tente novamente mais tarde.",
-            })
-          })
-      }
+        })
     } catch (error) {
       reject({
         error:

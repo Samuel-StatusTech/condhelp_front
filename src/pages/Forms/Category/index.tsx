@@ -23,7 +23,7 @@ const FPcategory = () => {
 
   const params = useParams()
 
-  const { controllers } = getStore()
+  const { user, controllers } = getStore()
 
   const [loading, setLoading] = useState(false)
 
@@ -98,6 +98,19 @@ const FPcategory = () => {
     }
   }
 
+  const generateNewSubCategory = (name: string, categoryId: number) => {
+    const obj: TNewSubCategory = {
+      name,
+      serviceCategory: categoryId,
+      // @ts-ignore
+      branchId: ((user?.branchId ?? user?.subsidiaryId) as number) ?? null,
+      // @ts-ignore
+      franqId: ((user?.franqId ?? user?.franchiseId) as number) ?? null,
+    }
+
+    return obj
+  }
+
   const subcategoriesTreat = async (catId: number) => {
     try {
       let proms: Promise<any>[] = []
@@ -105,10 +118,7 @@ const FPcategory = () => {
       form.serviceSubcategories.forEach((item) => {
         if (!!item.name?.trim()) {
           if (item.isNew) {
-            const newSubCat: TNewSubCategory = {
-              name: item.name,
-              serviceCategory: catId,
-            }
+            const newSubCat = generateNewSubCategory(item.name, catId)
 
             proms.push(
               Api.subcategories
@@ -148,11 +158,28 @@ const FPcategory = () => {
     }
   }
 
+  const getCategoryObj = () => {
+    const obj: TNewCategory = {
+      active: true,
+      // @ts-ignore
+      branchId: ((user?.branchId ?? user?.subsidiaryId) as number) ?? null,
+      // @ts-ignore
+      franqId: ((user?.franqId ?? user?.franchiseId) as number) ?? null,
+      description: form.description,
+      name: form.name,
+      serviceSubcategories: [],
+    }
+
+    return obj
+  }
+
   const handleCreate = async () => {
     setLoading(true)
 
     try {
-      const req = await Api.categories.create({ newCategory: form })
+      const obj = getCategoryObj()
+
+      const req = await Api.categories.create({ newCategory: obj })
 
       if (req.ok) {
         await subcategoriesTreat(req.data.id)

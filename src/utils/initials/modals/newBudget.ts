@@ -13,5 +13,6 @@ export const newBudget: TNewBudget = {
   userId: 0,
   status: "DISPONIVEL",
   providerIds: [],
-  franqId: 0
+  franqId: 0,
+  branchId: 0
 }
