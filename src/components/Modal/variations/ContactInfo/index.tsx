@@ -18,8 +18,10 @@ import { TCategory } from "../../../../utils/@types/data/category"
 import { TSubCategory } from "../../../../utils/@types/data/category/subcategories"
 import { Api } from "../../../../api"
 
+type ContactExt = any // TBudget["contacts"]
+
 type Props = {
-  data: TBudget & TBudget["contacts"][number]
+  data: TBudget & ContactExt
   onClose: () => void
   handleOp?: (newBudget: TNewBudget) => void
 }

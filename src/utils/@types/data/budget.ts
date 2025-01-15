@@ -20,47 +20,38 @@ export type TNewBudget = {
 }
 
 export type TBudget = {
-  titulo: string
-  nomeCondominio: string
-  isUrgente: boolean
-  nomeCategoria: string
-  nomeSubcategoria: string
-  descricao: string
-  dataInicio: string
-  dataFim: string
-  urlAnexo: string
-  prestadores: TProviderOnBudget[]
-  franqId: number
-
   id: number
   title: string
   condominiumName: string
   condominium?: TCondominium
-  isUrgent: boolean
-  urgent: boolean
+
   categoryName: string
   subcategoryName: string
   description: string
   startDate: string
-  finishDate: string
   endDate: string
+
+  condominiumId: number
+  condominiumUnities: number
+  condominiumCity: string
+  condominiumState: string
+  condominiumZipcode: string
+  condominiumAddress: string
+  condominiumCnpj: string
+  condominiumManager: string
+  phone: string
+  neighborhood: string
+  email: string
+  isUrgent: boolean
+
+  categoryId: number
+  subcategoryId: number
   attachmentUrl: string
-  awaiting: number
-  rejected: number
-  accepted: number
-  status?: string
+  status: TBudgetStatus
+  providers: TProviderOnBudget[]
 
-  condominiumId?: number
-  serviceCategoryId?: number
-  serviceSubcategoryId?: number
   userId?: number
-  providerIds?: number[]
-
-  idCondominio?: number
-  idCategoria?: number
-  idSubCategoria?: number
-
-  contacts: TContact[]
+  contacts?: any[]
 }
 
 export type TBudgetResume = {

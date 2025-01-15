@@ -17,9 +17,12 @@ import { Api } from "../../api"
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
+import { useNavigate } from "react-router-dom"
 
 const Budgets = () => {
   const { user, controllers } = getStore()
+
+  const navigate = useNavigate()
 
   /*
    *  Search control
@@ -59,6 +62,10 @@ const Budgets = () => {
   const [budgets, setBudgets] = useState<TBudgetResume[]>([])
   const [finishedBudgets, setFinishedBudgets] = useState<TBudget[]>([])
 
+  const handlePickBudget = async (id: number) => {
+    navigate(`/dashboard/budgets/budget/${id}`)
+  }
+
   // Cards
 
   const renderCardsContent = () => {
@@ -72,7 +79,7 @@ const Budgets = () => {
           awaiting: budget.awaiting,
           rejected: budget.rejected,
         }}
-        handlePick={() => {}}
+        handlePick={handlePickBudget}
       />
     ))
 

@@ -14,7 +14,7 @@ import { Api } from "../../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { formatCNPJ } from "../../utils/tb/format/cnpj"
 
-const DashboardProviderBudget = () => {
+const DashboardBudgetsBudget = () => {
   const { user, controllers } = getStore()
 
   const params = useParams()
@@ -191,18 +191,6 @@ const DashboardProviderBudget = () => {
                 <Icons.Share />
               </S.RoundButton>
             </S.PrintArea>
-
-            <Divider />
-
-            <S.ButtonsArea>
-              <Button
-                type="quaternary"
-                text={"Cancelar Participação"}
-                action={handleReject}
-                fit={true}
-                red={true}
-              />
-            </S.ButtonsArea>
           </S.Block>
         </S.Column>
         <S.Column>
@@ -284,4 +272,4 @@ const DashboardProviderBudget = () => {
   )
 }
 
-export default DashboardProviderBudget
+export default DashboardBudgetsBudget

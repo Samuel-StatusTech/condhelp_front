@@ -72,18 +72,18 @@ const DashboardManagerBudget = () => {
       try {
         const obj: any = {
           id: budgetData.id,
-          title: budgetData.titulo,
-          description: budgetData.descricao,
-          startDate: getDateStr(budgetData.dataInicio, "javaDateTime"),
-          finishDate: getDateStr(budgetData.dataFim, "javaDateTime"),
-          attachmentUrl: budgetData.urlAnexo,
-          urgent: budgetData.urgent,
-          condominiumId: budgetData.idCondominio,
-          serviceCategoryId: budgetData.idCategoria,
-          serviceSubcategoryId: budgetData.idSubCategoria,
+          title: budgetData.title,
+          description: budgetData.description,
+          startDate: getDateStr(budgetData.startDate, "javaDateTime"),
+          finishDate: getDateStr(budgetData.endDate, "javaDateTime"),
+          attachmentUrl: budgetData.attachmentUrl,
+          urgent: budgetData.isUrgent,
+          condominiumId: budgetData.condominiumId,
+          serviceCategoryId: budgetData.categoryName,
+          serviceSubcategoryId: budgetData.subcategoryName,
           userId: budgetData.userId as number,
           status: "FINALIZADO" as TBudgetStatus,
-          providerIds: budgetData.prestadores.map((p) => p.id) as number[],
+          providerIds: budgetData.providers.map((p) => p.id) as number[],
           // @ts-ignore
           franqId: budgetData.franqId,
         }
@@ -151,7 +151,7 @@ const DashboardManagerBudget = () => {
         if (req.ok) {
           setBudgetData({
             ...budgetData,
-            prestadores: budgetData.prestadores.map((p) => ({
+            providers: budgetData.providers.map((p) => ({
               ...p,
               status:
                 p.userId !== providerId ? "RECUSADO_SINDICO" : "CONTRATADO",
@@ -192,7 +192,7 @@ const DashboardManagerBudget = () => {
           if (req.ok) {
             setBudgetData({
               ...budgetData,
-              prestadores: budgetData.prestadores.map((p) =>
+              providers: budgetData.providers.map((p) =>
                 p.userId !== providerId
                   ? p
                   : {
@@ -303,50 +303,68 @@ const DashboardManagerBudget = () => {
             <S.DetailsList>
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
-                <S.DetailValue>{budgetData?.titulo}</S.DetailValue>
+                <S.DetailValue>
+                  {budgetData?.title ?? "Carregando..."}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Condomínio:</S.DetailName>
-                <S.DetailValue>{budgetData?.nomeCondominio}</S.DetailValue>
+                <S.DetailValue>
+                  {budgetData?.condominiumName ?? "Carregando..."}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Urgente:</S.DetailName>
                 <S.DetailValue>
-                  {budgetData?.isUrgente ? "Sim" : "Não"}
+                  {budgetData
+                    ? budgetData.isUrgent
+                      ? "Sim"
+                      : "Não"
+                    : "Carregando..."}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Categoria:</S.DetailName>
-                <S.DetailValue>{budgetData?.nomeCategoria}</S.DetailValue>
+                <S.DetailValue>
+                  {budgetData?.categoryName ?? "Carregando..."}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Subcategoria:</S.DetailName>
-                <S.DetailValue>{budgetData?.nomeSubcategoria}</S.DetailValue>
+                <S.DetailValue>
+                  {budgetData?.subcategoryName ?? "Carregando..."}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Descrição:</S.DetailName>
-                <S.DetailValue>{budgetData?.descricao}</S.DetailValue>
+                <S.DetailValue>
+                  {budgetData?.description ?? "Carregando..."}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Data de início:</S.DetailName>
                 <S.DetailValue>
-                  {budgetData?.dataInicio
-                    ? getDateStr(budgetData?.dataInicio, "dmy")
-                    : "-"}
+                  {budgetData?.startDate
+                    ? getDateStr(budgetData?.startDate, "dmy")
+                    : "Carregando..."}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Data fim:</S.DetailName>
                 <S.DetailValue>
-                  {budgetData?.dataFim
-                    ? getDateStr(budgetData?.dataFim, "dmy")
-                    : "-"}
+                  {budgetData?.endDate
+                    ? getDateStr(budgetData?.endDate, "dmy")
+                    : "Carregando..."}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Anexo:</S.DetailName>
                 <S.DetailValue>
-                  {!!budgetData?.urlAnexo ? "Baixar anexo" : "-"}
+                  {budgetData
+                    ? !!budgetData?.attachmentUrl
+                      ? "Baixar anexo"
+                      : "-"
+                    : "Carregando..."}
                 </S.DetailValue>
               </S.DetailItem>
             </S.DetailsList>
@@ -381,7 +399,7 @@ const DashboardManagerBudget = () => {
                       "EXPIRADO",
                     ] as TBudgetStatus[]
                   ).includes(budgetData?.status as TBudgetStatus) ||
-                  budgetData?.prestadores.some((p) => p.status === "CONTRATADO")
+                  budgetData?.providers.some((p) => p.status === "CONTRATADO")
                 }
               />
             </S.ButtonsArea>
@@ -408,8 +426,8 @@ const DashboardManagerBudget = () => {
           </S.Block>
         </S.Column>
         <S.Column>
-          {budgetData && budgetData.prestadores.length > 0 ? (
-            budgetData.prestadores.map((p, pk) => (
+          {budgetData && budgetData.providers.length > 0 ? (
+            budgetData.providers.map((p, pk) => (
               <Card.ProviderResume
                 key={pk}
                 k={pk}
@@ -435,7 +453,7 @@ const DashboardManagerBudget = () => {
       data={provider}
       handleBack={() => setProvider(null)}
       interactionStatus={
-        budgetData?.prestadores.find((p) => p.userId === provider.userAccountId)
+        budgetData?.providers.find((p) => p.userId === provider.userAccountId)
           ?.status as TBudgetStatus
       }
     />

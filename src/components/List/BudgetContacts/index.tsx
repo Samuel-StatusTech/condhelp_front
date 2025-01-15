@@ -15,7 +15,7 @@ const BudgetContactsList = ({ list }: Props) => {
 
   return (
     <S.Wrapper>
-      {list.map((item, sk) => (
+      {list?.map((item, sk) => (
         <S.Item $k={sk} key={sk} onClick={() => handleClick(item.id)}>
           <S.ItemData>{getDateStr(item.date, "dmy")}</S.ItemData>
           <S.ItemData>{getDateStr(item.date, "time")}</S.ItemData>

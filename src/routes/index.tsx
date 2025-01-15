@@ -39,6 +39,7 @@ import FPdocuments from "../pages/Forms/Documents"
 import ProviderBudgets from "../pages/ProviderBudgets"
 import DashboardManagerBudget from "../pages/DashboardManagerBudget"
 import DashboardProviderBudget from "../pages/DashboardProviderBudget"
+import DashboardBudgetsBudget from "../pages/DashboardBudgetsBudget"
 
 const Router = () => {
   const { user } = getStore()
@@ -110,6 +111,10 @@ const Router = () => {
             />
             <Route path="budgets">
               <Route path="" element={<Budgets />} />
+              <Route
+                path="budget/:budgetId"
+                element={<DashboardBudgetsBudget />}
+              />
             </Route>
             <Route path="regions">
               <Route path="" element={<RegionsPage />} />

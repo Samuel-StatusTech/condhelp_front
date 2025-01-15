@@ -75,7 +75,7 @@ const BudgetDetails = ({
       if (req.ok) {
         setBudgetData({
           ...budget,
-          prestadores: budget.prestadores.map((p) => ({
+          providers: budget.providers.map((p) => ({
             ...p,
             status: p.id !== providerId ? "RECUSADO_SINDICO" : "CONTRATADO",
           })),
@@ -113,7 +113,7 @@ const BudgetDetails = ({
         if (req.ok) {
           setBudgetData({
             ...budget,
-            prestadores: budget.prestadores.map((p) =>
+            providers: budget.providers.map((p) =>
               p.id !== providerId
                 ? p
                 : {
@@ -175,48 +175,50 @@ const BudgetDetails = ({
             <S.DetailsList>
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
-                <S.DetailValue>{budget.titulo}</S.DetailValue>
+                <S.DetailValue>{budgetData?.title}</S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Condomínio:</S.DetailName>
-                <S.DetailValue>{budget.nomeCondominio}</S.DetailValue>
+                <S.DetailValue>{budgetData?.condominiumName}</S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Urgente:</S.DetailName>
                 <S.DetailValue>
-                  {budget.isUrgente ? "Sim" : "Não"}
+                  {budgetData?.isUrgent ? "Sim" : "Não"}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Categoria:</S.DetailName>
-                <S.DetailValue>{budget.nomeCategoria}</S.DetailValue>
+                <S.DetailValue>{budgetData?.categoryName}</S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Subcategoria:</S.DetailName>
-                <S.DetailValue>{budget.nomeSubcategoria}</S.DetailValue>
+                <S.DetailValue>{budgetData?.subcategoryName}</S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Descrição:</S.DetailName>
-                <S.DetailValue>{budget.descricao}</S.DetailValue>
+                <S.DetailValue>{budgetData?.description}</S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Data de início:</S.DetailName>
                 <S.DetailValue>
-                  {budget.dataInicio
-                    ? getDateStr(budget.dataInicio, "dmy")
+                  {budgetData?.startDate
+                    ? getDateStr(budgetData?.startDate, "dmy")
                     : "-"}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Data fim:</S.DetailName>
                 <S.DetailValue>
-                  {budget.dataFim ? getDateStr(budget.dataFim, "dmy") : "-"}
+                  {budgetData?.endDate
+                    ? getDateStr(budgetData?.endDate, "dmy")
+                    : "-"}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Anexo:</S.DetailName>
                 <S.DetailValue>
-                  {!!budget.urlAnexo ? "Baixar anexo" : "-"}
+                  {!!budgetData?.attachmentUrl ? "Baixar anexo" : "-"}
                 </S.DetailValue>
               </S.DetailItem>
             </S.DetailsList>
@@ -228,7 +230,7 @@ const BudgetDetails = ({
                 type="green"
                 text="REABRIR"
                 action={() => {}}
-                disabled={budget.prestadores.every(
+                disabled={budget.providers.every(
                   (p) => p.status !== "CONTRATADO"
                 )}
               />
@@ -237,7 +239,7 @@ const BudgetDetails = ({
                 text="FINALIZAR"
                 icon={<Icons.CheckCircle />}
                 action={() => {}}
-                disabled={budget.prestadores.some(
+                disabled={budget.providers.some(
                   (p) => p.status === "CONTRATADO"
                 )}
               />
@@ -265,8 +267,8 @@ const BudgetDetails = ({
           </S.Block>
         </S.Column>
         <S.Column>
-          {budgetData.prestadores.length > 0 ? (
-            budgetData.prestadores.map((p, pk) => (
+          {budgetData.providers.length > 0 ? (
+            budgetData.providers.map((p, pk) => (
               <Card.ProviderResume
                 key={pk}
                 k={pk}

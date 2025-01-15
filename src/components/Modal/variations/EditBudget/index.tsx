@@ -59,12 +59,12 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
       finishDate: getDateStr(form.finishDate, "javaDateTime"),
       attachmentUrl: form.attachedUrl,
       urgent: form.urgent,
-      condominiumId: budgetData?.idCondominio,
-      serviceCategoryId: budgetData?.idCategoria,
-      serviceSubcategoryId: budgetData?.idSubCategoria,
+      condominiumId: budgetData?.condominiumId,
+      serviceCategoryId: budgetData?.categoryId,
+      serviceSubcategoryId: budgetData?.subcategoryId,
       userId: user?.userId as number,
       status: "DISPONIVEL",
-      providerIds: budgetData?.prestadores.map((p) => p.id) as number[],
+      providerIds: budgetData?.providers.map((p) => p.id) as number[],
       // @ts-ignore
       franqId: user?.franqId,
     }
@@ -211,18 +211,18 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
               setBudgetData(bdg)
 
               const obj: any = {
-                title: bdg.titulo,
-                description: bdg.descricao,
-                startDate: new Date(bdg.dataInicio).getTime(),
-                finishDate: new Date(bdg.dataFim).getTime(),
-                attachedUrl: bdg.urlAnexo,
-                urgent: bdg.isUrgente,
-                condominiumId: bdg.idCondominio,
-                serviceCategoryId: bdg.idCategoria,
-                serviceSubcategoryId: bdg.idSubCategoria,
+                title: bdg.title,
+                description: bdg.description,
+                startDate: new Date(bdg.startDate).getTime(),
+                finishDate: new Date(bdg.endDate).getTime(),
+                attachedUrl: bdg.attachmentUrl,
+                urgent: bdg.isUrgent,
+                condominiumId: bdg.condominiumId,
+                serviceCategoryId: bdg.categoryId,
+                serviceSubcategoryId: bdg.subcategoryId,
                 userId: user?.userId as number,
                 status: bdg.status as TBudgetStatus,
-                providerIds: bdg.prestadores.map((p) => p.id),
+                providerIds: bdg.providers.map((p) => p.id),
                 // @ts-ignore
                 franqId: user?.franqId,
               }
@@ -317,7 +317,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             <Input.ReadonlyField
               field="nomeCondominio"
               onChange={() => {}}
-              value={budgetData?.nomeCondominio ?? "Nome do condomínio"}
+              value={budgetData?.condominiumName ?? "Nome do condomínio"}
               gridSizes={{ big: 8 }}
               disabled={true}
             />
@@ -346,7 +346,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             <Input.ReadonlyField
               field="nomeCategoria"
               onChange={() => {}}
-              value={budgetData?.nomeCategoria ?? "Categoria"}
+              value={budgetData?.categoryName ?? "Categoria"}
               gridSizes={{ big: 12 }}
               disabled={true}
             />
@@ -368,7 +368,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             <Input.ReadonlyField
               field="nomeSubCategoria"
               onChange={() => {}}
-              value={budgetData?.nomeSubcategoria ?? "Subcategoria"}
+              value={budgetData?.subcategoryName ?? "Subcategoria"}
               gridSizes={{ big: 12 }}
               disabled={true}
             />
@@ -391,7 +391,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
               field="titulo"
               label="Título do orçamento"
               onChange={() => {}}
-              value={budgetData?.titulo ?? "Título do orçamento"}
+              value={budgetData?.title ?? "Título do orçamento"}
               gridSizes={{ big: 12 }}
               disabled={true}
             />
@@ -424,7 +424,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
               label="Data de Início"
               onChange={() => {}}
               value={
-                getDateStr(new Date(budgetData?.dataInicio as any), "dmy") ??
+                getDateStr(new Date(budgetData?.startDate as any), "dmy") ??
                 "Data de Início"
               }
               gridSizes={{ big: 6 }}
