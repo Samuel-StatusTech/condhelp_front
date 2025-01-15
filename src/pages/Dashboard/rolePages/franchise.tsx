@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as S from "../styled"
-import { fdata } from "../../../utils/_dev/falseData"
 
 import Card from "../../../components/Card"
 import Divider from "../../../components/_minimals/Divider"
@@ -9,53 +8,17 @@ import { dashboardShortcuts } from "../../../utils/system/dashboardShortcuts"
 import { useCallback, useEffect, useState } from "react"
 import { getStore } from "../../../store"
 import { Api } from "../../../api"
-import { TUser } from "../../../utils/@types/data/user"
-
-type TGridInfo = {
-  PRESTADOR: number
-  SINDICO: number
-  condo: number
-  chat: number
-  faq: number
-  category: number
-  subcategory: number
-  user: number
-  settings: number
-}
-
-const gridInitial: TGridInfo = {
-  PRESTADOR: 0,
-  SINDICO: 0,
-  condo: 0,
-  chat: 0,
-  faq: 0,
-  category: 0,
-  subcategory: 0,
-  user: 0,
-  settings: 0,
-}
+import initials from "../../../utils/initials"
+import { TDashboardFranchise } from "../../../utils/@types/data/dashboards/franchise"
 
 const DashboardFranchise = () => {
   const { controllers } = getStore()
 
+  const [data, setData] = useState<TDashboardFranchise>(
+    initials.dashboards.admin
+  )
+
   const [loading, setLoading] = useState(true)
-
-  const [gridData, setGridData] = useState<any>(gridInitial)
-
-  const [, setBudgetsDetails] = useState<{
-    [key: string]: number
-  }>({
-    approved: 0,
-    awaiting: 0,
-    rejected: 0,
-  })
-
-  const [cardsData, setCardsData] = useState({
-    managers: 0,
-    providers: 0,
-    condos: 0,
-    budgets: 0,
-  })
 
   // Cards
 
@@ -66,7 +29,7 @@ const DashboardFranchise = () => {
         k={2}
         data={{
           role: "superavit",
-          mainValue: cardsData.managers,
+          mainValue: data.totalManagers,
         }}
       />,
       <Card.Dashboard
@@ -74,7 +37,7 @@ const DashboardFranchise = () => {
         k={3}
         data={{
           role: "deficit",
-          mainValue: cardsData.providers,
+          mainValue: data.totalProviders,
         }}
       />,
       <Card.Dashboard
@@ -82,7 +45,7 @@ const DashboardFranchise = () => {
         k={4}
         data={{
           role: "superavit",
-          mainValue: cardsData.condos,
+          mainValue: data.totalCondominiums,
         }}
       />,
       <Card.Dashboard
@@ -90,7 +53,7 @@ const DashboardFranchise = () => {
         k={5}
         data={{
           role: "deficit",
-          mainValue: cardsData.budgets,
+          mainValue: data.totalBudgets,
         }}
       />,
     ]
@@ -98,196 +61,67 @@ const DashboardFranchise = () => {
     return <PageRow>{content}</PageRow>
   }
 
-  const renderGridContent = () => {
+  const renderGridContent = useCallback(() => {
     let content: any[] = []
 
+    const totalUsers =
+      data.totalProviders +
+      data.totalManagers +
+      data.totalFranchises +
+      data.totalBranches
+
     dashboardShortcuts.FRANQUEADO.forEach((s, sk) => {
+      const keyValue: { [key: string]: keyof typeof data } = {
+        FILIAL: "totalBranches",
+        FRANQUEADO: "totalFranchises",
+        region: "totalRegions",
+        PRESTADOR: "totalProviders",
+        SINDICO: "totalManagers",
+        condo: "totalCondominiums",
+        chat: "totalErrands" as any,
+        faq: "totalFaqs",
+        category: "totalCategories",
+        subcategory: "totalSubCategories",
+        user: "totalUsers" as any,
+        settings: "total" as any,
+      }
+
       content.push(
         <Card.DashboardShortcut
           k={5 + (sk + 1) / 2}
           title={s.title}
           icon={s.icon}
-          registers={gridData[s.icon as keyof TGridInfo]}
+          registers={
+            s.icon === "user"
+              ? totalUsers
+              : s.icon === "settings"
+              ? 0
+              : (data[keyValue[s.icon]] as number)
+          }
           link={s.link}
         />
       )
     })
 
     return content
-  }
+  }, [data])
 
   /*
    *  Load data
    */
 
-  const getGridResume = (info: TUser[], gridRef: TGridInfo) => {
-    let gridInfo: TGridInfo = gridRef
-
-    try {
-      info.forEach((u) => {
-        switch (u.profile) {
-          case "PRESTADOR":
-            gridInfo.PRESTADOR += 1
-            break
-          case "SINDICO":
-            gridInfo.SINDICO += 1
-            break
-          default:
-            break
-        }
-      })
-    } catch (error) {}
-
-    gridInfo.user = gridInfo.PRESTADOR + gridInfo.SINDICO
-
-    return gridInfo
-  }
-
   const loadData = useCallback(async () => {
     setLoading(true)
 
     try {
-      let condoCount = 0
-      let budgetCount = 0
+      const req = await Api.dashboards.main({})
 
-      let budgetsInfo: { [key: string]: number } = {
-        approved: 0,
-        awaiting: 0,
-        rejected: 0,
-      }
-
-      let gridInfo: TGridInfo = {
-        PRESTADOR: 0,
-        SINDICO: 0,
-        condo: 0,
-        chat: 0,
-        faq: 0,
-        category: 0,
-        subcategory: 0,
-        user: 0,
-        settings: 0,
-      }
-
-      let proms: Promise<any>[] = []
-
-      // Categories
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.categories.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.category = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Subcategories
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.subcategories.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.subcategory = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Condos
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.condos.listAll({ size: 1 })
-
-            if (req.ok) {
-              condoCount = req.data.totalElements
-              gridInfo.condo = req.data.totalElements
-            }
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Budgets
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.budgets.listAll({ size: 0 })
-
-            if (req.ok) {
-              budgetCount = req.data.totalElements
-              budgetsInfo = req.data.content.reduce(
-                (prev, b) => ({
-                  approved: prev.approved + b.accepted,
-                  awaiting: prev.awaiting + b.awaiting,
-                  rejected: prev.rejected + b.rejected,
-                }),
-                budgetsInfo
-              )
-            }
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Providers and users
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.persons.listAll({ size: 300 })
-
-            if (req.ok) {
-              gridInfo = getGridResume(req.data.content, gridInfo)
-            }
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // FAQ's
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.faqs.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.faq = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      await Promise.all(proms)
-
-      setCardsData({
-        managers: gridInfo.SINDICO,
-        providers: gridInfo.PRESTADOR,
-        condos: condoCount,
-        budgets: budgetCount,
-      } as any)
-
-      setBudgetsDetails(budgetsInfo)
-
-      setGridData(gridInfo as any)
-    } catch (error) {}
+      if (req.ok) {
+        setData(req.data)
+      } else throw new Error()
+    } catch (error) {
+      // ...
+    }
 
     setLoading(false)
   }, [])
@@ -317,14 +151,22 @@ const DashboardFranchise = () => {
         <Card.ApprovalResume
           k={1}
           title="Estatísticas gerais de orçamentos"
-          data={fdata.cards.approval as any}
+          data={{
+            approved: data.totalBudgetsCompleted,
+            awaiting: data.totalBudgetsInProgress,
+            rejected: data.totalBudgetsCancelled,
+          }}
           role="budgets"
           doubledCard={true}
         />
         <Card.ApprovalResume
           k={1}
           title="Estatísticas gerais de prestadores"
-          data={fdata.cards.approval as any}
+          data={{
+            approved: data.providerPercentage?.totalProvideActive ?? 0,
+            awaiting: data.providerPercentage?.totalProvideInative ?? 0,
+            rejected: data.providerPercentage?.totalProvideCancelled ?? 0,
+          }}
           role="providers"
           doubledCard={true}
         />
