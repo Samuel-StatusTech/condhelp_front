@@ -3,7 +3,6 @@ import * as S from "./contentStyles"
 
 import BreadcrumbPageHeader from "../../components/PageHeader/types/breadcrumb"
 import { TBudget } from "../../utils/@types/data/budget"
-import Button from "../../components/Button"
 import { Icons } from "../../assets/icons/icons"
 import { getDateStr } from "../../utils/tb/format/date"
 import Divider from "../../components/_minimals/Divider"
@@ -15,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { formatCNPJ } from "../../utils/tb/format/cnpj"
 
 const DashboardBudgetsBudget = () => {
-  const { user, controllers } = getStore()
+  const { controllers } = getStore()
 
   const params = useParams()
   const navigate = useNavigate()
@@ -23,30 +22,6 @@ const DashboardBudgetsBudget = () => {
   const [budget, setBudgetData] = useState<TBudget | null>(null)
 
   const [loading, setLoading] = useState(false)
-
-  const handleReject = async () => {
-    setLoading(true)
-
-    try {
-      const req = await Api.budgets.interact({
-        budgetId: +(params.id as string),
-        providerId: user?.id as number,
-        status: "CANCELADO_PRESTADOR",
-      })
-
-      if (req.ok) handleBack()
-      else throw new Error()
-    } catch {
-      controllers.feedback.setData({
-        state: "error",
-        message:
-          "Não foi possível recusar sua participação. Tente novamente mais tarde.",
-        visible: true,
-      })
-    }
-
-    setLoading(false)
-  }
 
   const loadData = useCallback(async () => {
     try {
@@ -101,7 +76,7 @@ const DashboardBudgetsBudget = () => {
           <S.Block>
             <S.BlockHeader>
               <S.BlockTitle>
-                Orçamento nº{params?.id as string} - prestador
+                Orçamento nº{params?.budgetId as string}
               </S.BlockTitle>
             </S.BlockHeader>
 

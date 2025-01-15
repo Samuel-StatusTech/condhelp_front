@@ -29,7 +29,7 @@ const DashboardProviderBudget = () => {
 
     try {
       const req = await Api.budgets.interact({
-        budgetId: +(params.id as string),
+        budgetId: +(params.budgetId as string),
         providerId: user?.id as number,
         status: "CANCELADO_PRESTADOR",
       })
@@ -101,7 +101,7 @@ const DashboardProviderBudget = () => {
           <S.Block>
             <S.BlockHeader>
               <S.BlockTitle>
-                Orçamento nº{params?.id as string} - prestador
+                Orçamento nº{params?.budgetId as string} - prestador
               </S.BlockTitle>
             </S.BlockHeader>
 
