@@ -15,6 +15,7 @@ import { apiPersons } from "./api/api/persons"
 import { apiBudgets } from "./api/api/budget"
 import { apiCondos } from "./api/api/condos"
 import { apiFaqs } from "./api/api/faqs"
+import { apiDashboards } from "./api/api/dashboards"
 
 const backUrl = process.env.REACT_APP_API_BASE_URL
 
@@ -64,6 +65,7 @@ export const service = axios
 
 export const Api: TApi = {
   auth: apiAuth,
+  dashboards: apiDashboards,
   budgets: apiBudgets,
   condos: apiCondos,
   categories: apiCategories,

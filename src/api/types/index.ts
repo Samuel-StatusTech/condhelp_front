@@ -9,9 +9,11 @@ import { TApi_Persons } from "../api/api/persons"
 import { TApi_Budgets } from "../api/api/budget"
 import { TApi_Condos } from "../api/api/condos"
 import { TApi_Faqs } from "../api/api/faqs"
+import { TApi_Dashboards } from "../api/api/dashboards"
 
 export type TApi = {
   auth: TApi_Auth
+  dashboards: TApi_Dashboards
   budgets: TApi_Budgets
   condos: TApi_Condos
   categories: TApi_Categories

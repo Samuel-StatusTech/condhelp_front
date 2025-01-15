@@ -7,58 +7,14 @@ import PageRow from "../../../components/_minimals/PageRow"
 import { dashboardShortcuts } from "../../../utils/system/dashboardShortcuts"
 import { useCallback, useEffect, useState } from "react"
 import { Api } from "../../../api"
-import { TUser } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
-
-type TGridInfo = {
-  region: number
-  condo: number
-  FILIAL: number
-  FRANQUEADO: number
-  PRESTADOR: number
-  SINDICO: number
-  chat: number
-  faq: number
-  category: number
-  subcategory: number
-  user: number
-  settings: number
-}
-
-const gridInitial: TGridInfo = {
-  region: 0,
-  condo: 0,
-  FILIAL: 0,
-  FRANQUEADO: 0,
-  PRESTADOR: 0,
-  SINDICO: 0,
-  chat: 0,
-  faq: 0,
-  category: 0,
-  subcategory: 0,
-  user: 0,
-  settings: 0,
-}
+import { TDashboardAdmin } from "../../../utils/@types/data/dashboards/admin"
+import initials from "../../../utils/initials"
 
 const DashboardAdmin = () => {
   const { controllers } = getStore()
 
-  const [data, setData] = useState({
-    condos: 0,
-    providers: 0,
-    users: 0,
-    budgets: 0,
-  })
-
-  const [budgetsDetails, setBudgetsDetails] = useState<{
-    [key: string]: number
-  }>({
-    approved: 0,
-    awaiting: 0,
-    rejected: 0,
-  })
-
-  const [gridData, setGridData] = useState(gridInitial)
+  const [data, setData] = useState<TDashboardAdmin>(initials.dashboards.admin)
 
   const [loading, setLoading] = useState(true)
 
@@ -71,7 +27,7 @@ const DashboardAdmin = () => {
         k={2}
         data={{
           role: "superavit",
-          mainValue: data.condos,
+          mainValue: data.totalCondominiums,
         }}
       />,
       <Card.Dashboard
@@ -79,7 +35,7 @@ const DashboardAdmin = () => {
         k={3}
         data={{
           role: "deficit",
-          mainValue: data.providers,
+          mainValue: data.totalProviders,
         }}
       />,
       <Card.Dashboard
@@ -87,7 +43,11 @@ const DashboardAdmin = () => {
         k={4}
         data={{
           role: "superavit",
-          mainValue: data.users,
+          mainValue:
+            data.totalProviders +
+            data.totalManagers +
+            data.totalFranchises +
+            data.totalBranches,
         }}
       />,
       <Card.Dashboard
@@ -95,7 +55,7 @@ const DashboardAdmin = () => {
         k={5}
         data={{
           role: "deficit",
-          mainValue: data.budgets,
+          mainValue: data.totalBudgets,
         }}
       />,
     ]
@@ -106,53 +66,47 @@ const DashboardAdmin = () => {
   const renderGridContent = useCallback(() => {
     let content: any[] = []
 
+    const totalUsers =
+      data.totalProviders +
+      data.totalManagers +
+      data.totalFranchises +
+      data.totalBranches
+
     dashboardShortcuts.ADMIN.forEach((s, sk) => {
+      const keyValue: { [key: string]: keyof typeof data } = {
+        FILIAL: "totalBranches",
+        FRANQUEADO: "totalFranchises",
+        region: "totalRegions",
+        PRESTADOR: "totalProviders",
+        SINDICO: "totalManagers",
+        condo: "totalCondominiums",
+        chat: "totalErrands" as any,
+        faq: "totalFaqs",
+        category: "totalCategories",
+        subcategory: "totalSubCategories",
+        user: "totalUsers" as any,
+        settings: "total" as any,
+      }
+
       content.push(
         <Card.DashboardShortcut
           k={5 + (sk + 1) / 2}
           title={s.title}
           icon={s.icon}
-          registers={gridData[s.icon]}
+          registers={
+            s.icon === "user"
+              ? totalUsers
+              : s.icon === "settings"
+              ? 0
+              : (data[keyValue[s.icon]] as number)
+          }
           link={s.link}
         />
       )
     })
 
     return content
-  }, [gridData])
-
-  const getGridResume = (info: TUser[], gridRef: TGridInfo) => {
-    let gridInfo: TGridInfo = gridRef
-
-    try {
-      info.forEach((u) => {
-        switch (u.profile) {
-          case "FILIAL":
-            gridInfo.FILIAL += 1
-            break
-          case "FRANQUEADO":
-            gridInfo.FRANQUEADO += 1
-            break
-          case "PRESTADOR":
-            gridInfo.PRESTADOR += 1
-            break
-          case "SINDICO":
-            gridInfo.SINDICO += 1
-            break
-          default:
-            break
-        }
-      })
-    } catch (error) {}
-
-    gridInfo.user =
-      gridInfo.FILIAL +
-      gridInfo.FRANQUEADO +
-      gridInfo.PRESTADOR +
-      gridInfo.SINDICO
-
-    return gridInfo
-  }
+  }, [data])
 
   /*
    *  Load data
@@ -162,172 +116,12 @@ const DashboardAdmin = () => {
     setLoading(true)
 
     try {
-      let condoCount = 0
-      let providerCount = 0
-      let budgetCount = 0
+      const req = await Api.dashboards.admin({})
 
-      let budgetsInfo: { [key: string]: number } = {
-        approved: 0,
-        awaiting: 0,
-        rejected: 0,
-      }
-
-      let gridInfo: TGridInfo = {
-        condo: 0,
-        FILIAL: 0,
-        FRANQUEADO: 0,
-        PRESTADOR: 0,
-        SINDICO: 0,
-        region: 0,
-        chat: 0,
-        faq: 0,
-        category: 0,
-        subcategory: 0,
-        user: 0,
-        settings: 0,
-      }
-
-      let proms: Promise<any>[] = []
-
-      // Categories
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.categories.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.category = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Subcategories
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.subcategories.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.subcategory = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Condos
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.condos.listAll({ size: 1 })
-
-            if (req.ok) {
-              condoCount = req.data.totalElements
-              gridInfo.condo = req.data.totalElements
-            }
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Budgets
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.budgets.listAll({})
-
-            if (req.ok) {
-              budgetCount = req.data.totalElements
-              budgetsInfo = req.data.content.reduce(
-                (prev, b) => ({
-                  approved: prev.approved + b.accepted,
-                  awaiting: prev.awaiting + b.awaiting,
-                  rejected: prev.rejected + b.rejected,
-                }),
-                budgetsInfo
-              )
-            }
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Providers and users
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.persons.listAll({ size: 300 })
-
-            if (req.ok) {
-              // Providers
-              providerCount = req.data.content.filter(
-                (u) => u.profile === "PRESTADOR"
-              ).length
-
-              gridInfo = getGridResume(req.data.content, gridInfo)
-            }
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // Regions
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.regions.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.region = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      // FAQ's
-      proms.push(
-        new Promise(async (resolve, reject) => {
-          try {
-            const req = await Api.faqs.listAll({ size: 1 })
-
-            if (req.ok) gridInfo.faq = req.data.totalElements
-
-            resolve(true)
-          } catch (error) {
-            reject()
-          }
-        })
-      )
-
-      await Promise.all(proms)
-
-      setData({
-        condos: condoCount,
-        providers: providerCount,
-        users: gridInfo.user,
-        budgets: budgetCount,
-      })
-
-      setBudgetsDetails(budgetsInfo)
-
-      setGridData(gridInfo)
-
-      setLoading(false)
+      if (req.ok) {
+        setData(req.data)
+        setLoading(false)
+      } else throw new Error()
     } catch (error) {
       setLoading(false)
     }
@@ -358,7 +152,11 @@ const DashboardAdmin = () => {
         <Card.ApprovalResume
           k={1}
           title="Todos os Orçamentos"
-          data={budgetsDetails}
+          data={{
+            approved: data.totalBudgetsCompleted,
+            awaiting: data.totalBudgetsInProgress,
+            rejected: data.totalBudgetsCancelled,
+          }}
           role="budgets"
         />
       </PageRow>

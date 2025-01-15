@@ -16,7 +16,13 @@ import { newBudget } from "./modals/newBudget"
 // Pagination
 import { initialPagination } from "./table/pagination"
 
+// Dashboard
+import { initialDashboard } from "./dashboards"
+
 const initials = {
+  dashboards: {
+    admin: initialDashboard,
+  },
   forms: {
     login: loginForm,
     person: personForm,
