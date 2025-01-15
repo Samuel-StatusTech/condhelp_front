@@ -335,12 +335,10 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                   : userProfile === "FRANQUEADO"
                   ? `${rolesUrlRelations[userProfile]}/useraccount`
                   : userProfile === "SINDICO"
-                  ? `${rolesUrlRelations[userProfile]}/useraccount`
+                  ? `${rolesUrlRelations[userProfile]}`
                   : rolesUrlRelations[userProfile] ?? baseURL
 
-              const extraDataReq = await service.get(
-                `${url}/${userProfile === "SINDICO" ? info.id : info.userId}`
-              )
+              const extraDataReq = await service.get(`${url}/${info.userId}`)
 
               if (extraDataReq.data) {
                 let extraInfo = extraDataReq.data

@@ -65,6 +65,18 @@ const DashboardManagerBudget = () => {
     [controllers.modal]
   )
 
+  const handleReopen = useCallback(() => {
+    if (budgetData) {
+      controllers.modal.open({
+        role: "reopenBudget",
+        visible: true,
+        data: {
+          id: budgetData.id,
+        },
+      })
+    }
+  }, [controllers.modal, budgetData])
+
   const handleFinish = async () => {
     if (budgetData) {
       setLoading(true)
@@ -274,28 +286,29 @@ const DashboardManagerBudget = () => {
           <S.Block>
             <S.BlockHeader>
               <S.BlockTitle>Orçamento nº{budgetData?.id}</S.BlockTitle>
-              <S.ButtonsHeader>
-                {!(
-                  [
-                    "FINALIZADO",
-                    "CANCELADO_SINDICO",
-                    "EXPIRADO",
-                  ] as TBudgetStatus[]
-                ).includes(budgetData?.status as TBudgetStatus) && (
+              {!(
+                [
+                  "FINALIZADO",
+                  "CANCELADO_SINDICO",
+                  "EXPIRADO",
+                ] as TBudgetStatus[]
+              ).includes(budgetData?.status as TBudgetStatus) && (
+                <S.ButtonsHeader>
                   <Button
                     type="quaternary"
                     text="Cancelar orçamento"
                     action={() => handleCancel(Number(budgetData?.id))}
                     fit={true}
                   />
-                )}
-                <Button
-                  type="tertiary"
-                  icon={<Icons.Edit />}
-                  action={() => handleEdit(Number(budgetData?.id))}
-                  fit={true}
-                />
-              </S.ButtonsHeader>
+
+                  <Button
+                    type="tertiary"
+                    icon={<Icons.Edit />}
+                    action={() => handleEdit(Number(budgetData?.id))}
+                    fit={true}
+                  />
+                </S.ButtonsHeader>
+              )}
             </S.BlockHeader>
 
             <Divider />
@@ -375,7 +388,7 @@ const DashboardManagerBudget = () => {
               <Button
                 type="green"
                 text="REABRIR"
-                action={() => {}}
+                action={handleReopen}
                 disabled={
                   !(
                     [
