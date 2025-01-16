@@ -438,8 +438,8 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
               gridSizes={{ big: 6 }}
               label="Data de Início"
               minDate={new Date()}
-            />
-          )}
+              />
+            )}
         </S.Row>
 
         <S.Row>
@@ -449,7 +449,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             value={form.finishDate}
             gridSizes={{ big: 6 }}
             label="Data fim"
-            minDate={new Date(form.startDate)}
+            minDate={new Date()}
           />
         </S.Row>
 
