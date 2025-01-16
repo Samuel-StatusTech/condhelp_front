@@ -21,6 +21,12 @@ const Header = () => {
           ) : null
         )}
 
+        {user?.profile !== "ADMIN" ? (
+          <S.MenuItem $k={system.menu.nav.length}>
+            <Link to={"/myaccount"}>Minha conta</Link>
+          </S.MenuItem>
+        ) : null}
+
         <S.MenuItem $k={system.menu.nav.length}>
           <Link to={"/login"}>Sair</Link>
         </S.MenuItem>
