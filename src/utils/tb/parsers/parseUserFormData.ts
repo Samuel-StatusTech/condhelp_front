@@ -59,7 +59,7 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
       country: user.address.country,
     },
 
-    userAccountId: user.userId,
+    userAccountId: user.userAccountId,
     responsible: {
       responsibleType: user.responsible.responsibleType,
       companyName: user.responsible.companyName,
