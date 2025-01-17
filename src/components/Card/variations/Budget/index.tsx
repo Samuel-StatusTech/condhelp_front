@@ -6,6 +6,8 @@ import { TMonitorItem } from "../../../../utils/@types/data/monitoring"
 
 import Divider from "../../../_minimals/Divider"
 import Button from "../../../Button"
+import { Api } from "../../../../api"
+import { getStore } from "../../../../store"
 
 type Props = {
   k: number
@@ -15,9 +17,57 @@ type Props = {
 }
 
 const BudgetCard = ({ k, data, onPick, selected = false }: Props) => {
-  const handleOpen = () => {}
+  const { controllers } = getStore()
 
-  const handleClose = () => {}
+  const reloadPage = () => {
+    window.location.reload()
+  }
+
+  const handleOpen = async () => {
+    try {
+      const req = await Api.monitoring.attendSingle({ id: data.budgetId })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Orçamento aberto com sucesso.",
+          state: "success",
+          visible: true,
+        })
+
+        reloadPage()
+      } else throw new Error()
+    } catch {
+      controllers.feedback.setData({
+        message:
+          "Houve um erro ao abrir o orçamento. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
+  }
+
+  const handleClose = async () => {
+    try {
+      const req = await Api.monitoring.closeRequest({ id: data.budgetId })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Orçamento fechado com sucesso.",
+          state: "success",
+          visible: true,
+        })
+
+        reloadPage()
+      } else throw new Error()
+    } catch {
+      controllers.feedback.setData({
+        message:
+          "Houve um erro ao fechar o orçamento. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
+  }
 
   const renderButton = () => {
     const haveButton =

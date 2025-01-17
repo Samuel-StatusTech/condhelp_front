@@ -27,15 +27,21 @@ export const Item = styled.div<{ $k: number }>`
   background-color: ${({ theme }) => theme.colors.neutral.white};
   border-radius: 8px;
 
+  overflow: auto;
+
   transition: opacity 0.3s;
 
   svg {
-    width: 24px;
+    min-width: 24px;
     height: 24px;
 
     path {
       fill: ${({ theme }) => theme.colors.green.light};
     }
+  }
+
+  span {
+    white-space: nowrap;
   }
 
   opacity: 0;

@@ -14,7 +14,7 @@ export const Column = styled.div<{ $small?: boolean }>`
   gap: 20px;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    grid-column: span ${({ $small }) => ($small ? 6 : 12)};
+    grid-column: span 12;
   }
 `
 
@@ -49,6 +49,10 @@ export const BlockRow = styled.span<{ $small?: boolean }>`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: flex-start;
   gap: 20px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
 `
 
 export const EmptyMessage = styled.div`
