@@ -1,26 +1,39 @@
 import * as S from "./styled"
-import { TBudget } from "../../../utils/@types/data/budget"
 import { getDateStr } from "../../../utils/tb/format/date"
 
 import { Icons } from "../../../assets/icons/icons"
+import { TMonitorContactResume } from "../../../utils/@types/data/monitoring"
+import { getStore } from "../../../store"
 
 type Props = {
-  list: TBudget["contacts"]
+  list: TMonitorContactResume[]
+  subCategoryName: string
 }
 
-const BudgetContactsList = ({ list }: Props) => {
-  const handleClick = (id: number) => {
-    // TODO: show modal
+const BudgetContactsList = ({ list, subCategoryName }: Props) => {
+  const { controllers } = getStore()
+
+  const handleClick = (item: TMonitorContactResume) => {
+    controllers.modal.open({
+      role: "contactInfo",
+      visible: true,
+      data: {
+        ...item,
+        subCategoryName,
+      },
+      width: "md",
+      onClose: () => {},
+    })
   }
 
   return (
     <S.Wrapper>
       {list?.map((item, sk) => (
-        <S.Item $k={sk} key={sk} onClick={() => handleClick(item.id)}>
-          <S.ItemData>{getDateStr(item.date, "dmy")}</S.ItemData>
-          <S.ItemData>{getDateStr(item.date, "time")}</S.ItemData>
-          <S.ItemData>{item.category.name}</S.ItemData>
-          <S.ItemData>{item.PRESTADOR.name}</S.ItemData>
+        <S.Item $k={sk} key={sk} onClick={() => handleClick(item)}>
+          <S.ItemData>{getDateStr(item.openingDate, "dmy")}</S.ItemData>
+          <S.ItemData>{getDateStr(item.openingDate, "time")}</S.ItemData>
+          <S.ItemData>{item.categoryName}</S.ItemData>
+          <S.ItemData>{item.providerName}</S.ItemData>
           <Icons.Expand />
         </S.Item>
       ))}

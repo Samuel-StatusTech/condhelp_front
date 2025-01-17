@@ -173,9 +173,8 @@ export const ContactInfo = styled.div`
 `
 
 export const ContactDescriptionArea = styled.div`
-  display: grid;
-  align-items: end;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
+  align-items: flex-end;
   gap: 12px;
 
   & div:has(button) {

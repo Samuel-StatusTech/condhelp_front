@@ -1,28 +1,65 @@
 import styled from "styled-components"
+import { TMonitorCardStatus } from "../../../../utils/@types/data/monitoring"
 
 export const Element = styled.div<{
   $k?: number
-  $role?: "openedCalled" | "opened" | "running" | "runningSigned"
+  $role: TMonitorCardStatus
 }>`
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  gap: 6px;
   width: 100%;
   cursor: pointer;
+  align-self: stretch;
+  padding: 20px;
+
+  opacity: 0;
+  ${({ $k, theme }) =>
+    theme.animations.types.fade +
+    theme.animations.durations.main +
+    theme.animations.delays.main($k)}
+`
+
+export const PickedIndicator = styled.div`
+  width: 18px;
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.orange.main};
+  min-height: 100%;
+`
+
+export const MainWrapper = styled.div<{
+  $expanded: boolean
+  $selected: boolean
+  $role: TMonitorCardStatus
+}>`
+  flex: 1;
+  display: grid;
+  grid-template-rows: ${({ $expanded }) => ($expanded ? 1 : 0)}fr;
+  overflow: hidden;
+  transition: grid-template-rows 0.3s;
+  padding: 20px;
+
+  border: 6px solid
+    ${({ $selected, theme }) =>
+      $selected ? theme.colors.orange.main : "transparent"};
+
   background-color: ${({ $role, theme }) => {
     let color = ""
 
     switch ($role) {
-      case "opened":
+      case "BLUE_BUTTON_ENABLED":
+      case "BLUE_BUTTON_DISABLED":
         color = theme.colors.blue.cyan
         break
-      case "openedCalled":
+      case "RED_BUTTON_ENABLED":
+      case "RED_BUTTON_DISABLED":
         color = theme.colors.red.dark
         break
-      case "running":
+      case "PURPLE_BUTTON_ENABLED":
+      case "PURPLE_BUTTON_DISABLED":
         color = theme.colors.blue.purple
         break
-      case "runningSigned":
+      case "GREEN_BUTTON_ENABLED":
+      case "GREEN_BUTTON_DISABLED":
         color = theme.colors.green.medium
         break
 
@@ -34,14 +71,6 @@ export const Element = styled.div<{
     return color
   }};
   border-radius: 8px;
-  align-self: stretch;
-  padding: 20px;
-
-  opacity: 0;
-  ${({ $k, theme }) =>
-    theme.animations.types.fade +
-    theme.animations.durations.main +
-    theme.animations.delays.main($k)}
 `
 
 export const Content = styled.div`

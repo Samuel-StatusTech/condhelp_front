@@ -1,18 +1,21 @@
 import * as S from "./styled"
 import { Icons } from "../../../assets/icons/icons"
 import { TOption } from "../../../utils/@types/data/option"
-import { TUserTypes } from "../../../utils/@types/data/user"
 
 import ProviderLegalization from "../../../components/ProviderLegalization"
 import Divider from "../../../components/_minimals/Divider"
 import Button from "../../../components/Button"
 import Input from "../../../components/Input"
+import { TMonitorItemDetails } from "../../../utils/@types/data/monitoring"
+import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
+import { checkProviderPendencyStatus } from "../../../utils/tb/helpers/checkProviderPendencyStatus"
 
 type Props = {
-  provider: TUserTypes["PRESTADOR"] | null
+  data: TMonitorItemDetails
+  provider: TMonitorItemDetails["providers"][number] | null
   newContact: {
     category: string
-    provider: string
+    provider: number
     description: string
   }
   options: { [key: string]: TOption[] }
@@ -22,6 +25,7 @@ type Props = {
 }
 
 const NewContactBlock = ({
+  data,
   provider,
   newContact,
   options,
@@ -36,10 +40,9 @@ const NewContactBlock = ({
       <Divider />
 
       <S.BlockRow>
-        <Input.Select
+        <Input.ReadonlyField
           field="category"
-          value={newContact.category}
-          options={options.category}
+          value={data.categoryName}
           onChange={handleField}
           gridSizes={{ big: 2, small: 4 }}
           label="Categoria"
@@ -47,8 +50,9 @@ const NewContactBlock = ({
 
         <Input.Select
           field="provider"
+          // @ts-ignore
           value={newContact.provider}
-          options={options.provider}
+          options={parseOptionList(data.providers, "id", "name")}
           onChange={handleField}
           gridSizes={{ big: 2, small: 4 }}
           label="Prestador"
@@ -57,71 +61,103 @@ const NewContactBlock = ({
 
       <Divider />
 
-      <S.DataResumeArea>
-        <S.ContactInfoArea>
-          <S.ContactInfo>
-            <Icons.Telephone />
-            <span className="label">Principal:</span>
-            <span>48 9999-9999</span>
-          </S.ContactInfo>
-          <S.ContactInfo>
-            <Icons.Telephone />
-            <span className="label">Comercial:</span>
-            <span>48 9999-9999</span>
-          </S.ContactInfo>
-          <S.ContactInfo>
-            <Icons.Telephone />
-            <span className="label">Contato:</span>
-            <span>48 9999-9999</span>
-          </S.ContactInfo>
-          <S.ContactInfo>
-            <Icons.Web />
-            <span>www.superjardins.com.br</span>
-          </S.ContactInfo>
-          <S.ContactInfo>
-            <Icons.Mail />
-            <span>comercial@superjardins.com.br</span>
-          </S.ContactInfo>
-        </S.ContactInfoArea>
+      {provider && (
+        <S.DataResumeArea>
+          <S.ContactInfoArea>
+            <S.ContactInfo>
+              <Icons.Telephone />
+              <span className="label">Principal:</span>
+              <span>{provider?.phone1 ?? "-"}</span>
+            </S.ContactInfo>
+            <S.ContactInfo>
+              <Icons.Telephone />
+              <span className="label">Comercial:</span>
+              <span>{provider?.phone2 ?? "-"}</span>
+            </S.ContactInfo>
+            <S.ContactInfo>
+              <Icons.Telephone />
+              <span className="label">Contato:</span>
+              <span>{provider?.phone3 ?? "-"}</span>
+            </S.ContactInfo>
+            <S.ContactInfo>
+              <Icons.Web />
+              <span>{provider?.site}</span>
+            </S.ContactInfo>
+            <S.ContactInfo>
+              <Icons.Mail />
+              <span>{provider?.email}</span>
+            </S.ContactInfo>
+          </S.ContactInfoArea>
 
-        <S.ContactInfoArea>
-          <ProviderLegalization
-            label={"CND Federal"}
-            value={provider?.pendencies.federalCnd ?? "free"}
-          />
-          <ProviderLegalization
-            label={"CND Estadual"}
-            value={provider?.pendencies.stateCnd ?? "free"}
-          />
-          <ProviderLegalization
-            label={"CND Municipal"}
-            value={provider?.pendencies.cityCnd ?? "free"}
-          />
-          <ProviderLegalization
-            label={"FGTS"}
-            value={provider?.pendencies.fgts ?? "free"}
-          />
-        </S.ContactInfoArea>
-      </S.DataResumeArea>
+          <S.ContactInfoArea>
+            <ProviderLegalization
+              label={"CND Federal"}
+              value={
+                checkProviderPendencyStatus({
+                  isent: provider?.federalCndFree,
+                  register: provider?.federalCnd,
+                  end: provider?.federalCndEnd,
+                  start: provider?.federalCndStart,
+                }) ?? "free"
+              }
+            />
+            <ProviderLegalization
+              label={"CND Estadual"}
+              value={
+                checkProviderPendencyStatus({
+                  isent: provider?.stateCndFree,
+                  register: provider?.stateCnd,
+                  end: provider?.stateCndEnd,
+                  start: provider?.stateCndStart,
+                }) ?? "free"
+              }
+            />
+            <ProviderLegalization
+              label={"CND Municipal"}
+              value={
+                checkProviderPendencyStatus({
+                  isent: provider?.cityCndFree,
+                  register: provider?.cityCnd,
+                  end: provider?.cityCndEnd,
+                  start: provider?.cityCndStart,
+                }) ?? "free"
+              }
+            />
+            <ProviderLegalization
+              label={"FGTS"}
+              value={
+                checkProviderPendencyStatus({
+                  isent: provider?.fgtsCndFree,
+                  register: provider?.fgtsCnd,
+                  end: provider?.fgtsCndEnd,
+                  start: provider?.fgtsCndStart,
+                }) ?? "free"
+              }
+            />
+          </S.ContactInfoArea>
+        </S.DataResumeArea>
+      )}
 
-      <Divider />
+      {provider && <Divider />}
 
-      <S.ContactDescriptionArea>
-        <Input.TextArea
-          field="description"
-          label="Informações do contato realizado:"
-          onChange={handleField}
-          value={newContact.description}
-          gridSizes={{ big: 3, small: 4 }}
-        />
-        <div>
-          <Button
-            type="main"
-            action={handleContact}
-            text={contacting ? "Registrando..." : "Registrar contato"}
+      {provider && (
+        <S.ContactDescriptionArea>
+          <Input.TextArea
+            field="description"
+            label="Informações do contato realizado:"
+            onChange={handleField}
+            value={newContact.description}
+            gridSizes={{ big: 6, small: 4 }}
           />
-        </div>
-      </S.ContactDescriptionArea>
+          <div>
+            <Button
+              type="main"
+              action={handleContact}
+              text={contacting ? "Registrando..." : "Registrar contato"}
+            />
+          </div>
+        </S.ContactDescriptionArea>
+      )}
     </S.Block>
   )
 }

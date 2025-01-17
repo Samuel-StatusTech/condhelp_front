@@ -16,6 +16,7 @@ import MultipleSelect from "./multipleSelect"
 import TextArea from "./textarea"
 import Toggler from "./toggler"
 import ReadonlyField from "./readonly"
+import ReadonlyTextArea from "./readonlyTextarea"
 
 const Input = {
   Date,
@@ -29,6 +30,7 @@ const Input = {
   Profile,
   Radio,
   ReadonlyField,
+  ReadonlyTextArea,
   CityInput,
   Select,
   MultipleSelect,

@@ -8,6 +8,7 @@ export type TInputTextArea = {
   value: string
   placeholder?: string
   limit?: number
+  disabled?: boolean
 }
 
 type Props = TInputTextArea & {
@@ -16,7 +17,16 @@ type Props = TInputTextArea & {
 }
 
 const InputTextArea = (props: Props) => {
-  const { limit, gridSizes, label, field, value, placeholder, onChange } = props
+  const {
+    limit,
+    gridSizes,
+    label,
+    field,
+    value,
+    placeholder,
+    onChange,
+    disabled,
+  } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.currentTarget.style.height = `auto`
@@ -35,6 +45,7 @@ const InputTextArea = (props: Props) => {
           value={value}
           onChange={handleChange}
           rows={4}
+          $disabled={disabled}
         />
 
         {limit && (

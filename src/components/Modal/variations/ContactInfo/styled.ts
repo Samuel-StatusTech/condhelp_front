@@ -16,12 +16,11 @@ export const Content = styled.div`
 export const DataResumeArea = styled.div`
   grid-column: span 12;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 `
 
 export const DataInfo = styled.div`
-  grid-column: span 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -45,9 +44,9 @@ export const DIValue = styled.span`
 
 export const Row = styled.div`
   grid-column: span 12;
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  justify-content: space-between;
   gap: 16px;
 `
 
@@ -63,7 +62,7 @@ export const Bottom = styled.div`
   grid-column: span 12;
   padding-top: 48px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 `
 
 export const PointsArea = styled.div`

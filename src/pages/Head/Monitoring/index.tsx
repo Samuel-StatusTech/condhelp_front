@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react"
 import * as S from "./styled"
 
 import { TOption } from "../../../utils/@types/data/option"
-import { TUserTypes } from "../../../utils/@types/data/user"
-import { TBudgetResume } from "../../../utils/@types/data/budget"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 
 import Card from "../../../components/Card"
@@ -14,6 +12,10 @@ import { List } from "../../../components/List"
 import { getStore } from "../../../store"
 import { Api } from "../../../api"
 import { useNavigate } from "react-router-dom"
+import {
+  TMonitorItem,
+  TMonitorItemDetails,
+} from "../../../utils/@types/data/monitoring"
 
 const MonitoringPage = () => {
   const { controllers } = getStore()
@@ -22,16 +24,18 @@ const MonitoringPage = () => {
 
   const [loading, setLoading] = useState(true)
 
-  const [openeds, setOpeneds] = useState<TBudgetResume[]>([])
-  const [running, setRunning] = useState<TBudgetResume[]>([])
+  const [openeds, setOpeneds] = useState<TMonitorItem[]>([])
+  const [running, setRunning] = useState<TMonitorItem[]>([])
 
-  const [contacting, setContacting] = useState(false)
+  const [contacting] = useState(false)
 
-  const [budget, setBudget] = useState<any>(null)
-  const [provider, setProvider] = useState<TUserTypes["PRESTADOR"] | null>(null)
-  const [actualProviders, setActualProviders] = useState<
-    TUserTypes["PRESTADOR"][]
-  >([])
+  const [budget, setBudget] = useState<TMonitorItemDetails | null>(null)
+  const [provider, setProvider] = useState<
+    TMonitorItemDetails["providers"][number] | null
+  >(null)
+  const [, setActualProviders] = useState<TMonitorItemDetails["providers"][]>(
+    []
+  )
 
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     category: parseOptionList([], "id", "name"),
@@ -39,20 +43,21 @@ const MonitoringPage = () => {
   })
   const [newContact, setNewContact] = useState({
     category: "",
-    provider: "",
+    provider: 0,
     description: "",
   })
 
-  const handlePick = async (selectedBudget: TBudgetResume) => {
+  const handlePick = async (
+    selectedBudget: TMonitorItem | { budgetId: number }
+  ) => {
     setLoading(true)
 
     try {
-      const budgetReq = await Api.budgets.getSingle({ id: selectedBudget.id })
+      const budgetReq = await Api.monitoring.getSingle({
+        id: selectedBudget.budgetId,
+      })
       if (budgetReq.ok) {
-        setBudget({
-          ...budgetReq.data,
-          id: selectedBudget.id
-        })
+        setBudget(budgetReq.data)
       } else {
         controllers.feedback.setData({
           visible: true,
@@ -75,54 +80,54 @@ const MonitoringPage = () => {
   }
 
   const handleContact = async () => {
-    setContacting(true)
-    setTimeout(() => {
-      setContacting(false)
-    }, 1000)
+    if (budget && provider) {
+      setLoading(true)
+
+      const req = await Api.monitoring.registerRequest({
+        budgetId: budget.budgetId,
+        description: budget.budgetDescription,
+        providerId: provider.id,
+        providerName: provider.name,
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          state: "success",
+          visible: true,
+          message: "Contato registrado com sucesso.",
+        })
+
+        setProvider(null)
+        setNewContact({
+          category: "",
+          provider: 0,
+          description: "",
+        })
+        handlePick({ budgetId: budget.budgetId })
+      }
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
-    const pv = actualProviders.find((p) => p.id === Number(newContact.provider))
+    const pv = budget?.providers.find((p) => p.id === newContact.provider)
 
     if (pv) {
       setProvider(pv)
     } else {
       setProvider(null)
     }
-  }, [actualProviders, newContact.provider])
-
-  useEffect(() => {
-    setNewContact((nct) => ({ ...nct, provider: "" }))
-
-    const providersList: any[] = [] //  category's providers
-
-    setActualProviders(providersList)
-
-    setOptions((opts) => ({
-      ...opts,
-      provider: parseOptionList(providersList, "id", "name"),
-    }))
-  }, [newContact.category])
+  }, [budget?.providers, newContact.provider])
 
   const loadData = useCallback(async () => {
     setLoading(true)
 
     try {
-      const req = await Api.budgets.listAll({ size: 1000 })
+      const req = await Api.monitoring.getList({ size: 1000 })
 
       if (req.ok) {
-        let openedsList: TBudgetResume[] = []
-        let runningList: TBudgetResume[] = []
-
-        req.data.content.forEach((b) => {
-          const interactions = b.accepted + b.awaiting + b.rejected
-
-          if (interactions > 0) runningList.push(b)
-          else openedsList.push(b)
-        })
-
-        setOpeneds(openedsList)
-        setRunning(runningList)
+        setRunning(req.data.inService)
+        setOpeneds(req.data.openRequests)
       } else {
         controllers.feedback.setData({
           visible: true,
@@ -146,7 +151,7 @@ const MonitoringPage = () => {
   }, [loadData])
 
   useEffect(() => {
-    setNewContact((nct) => ({ ...nct, provider: "" }))
+    setNewContact((nct) => ({ ...nct, provider: 0 }))
 
     const providersList: any[] = [] //  category's providers
 
@@ -171,7 +176,13 @@ const MonitoringPage = () => {
         <S.Block>
           <S.BlockTitle>Em aberto</S.BlockTitle>
           {openeds.map((i, k) => (
-            <Card.Budget k={k} key={k} data={i} onPick={handlePick} />
+            <Card.Budget
+              k={k}
+              key={k}
+              data={i}
+              onPick={handlePick}
+              selected={budget?.budgetId === i.budgetId}
+            />
           ))}
         </S.Block>
       </S.Column>
@@ -179,7 +190,13 @@ const MonitoringPage = () => {
         <S.Block>
           <S.BlockTitle>Em atendimento</S.BlockTitle>
           {running.map((i, k) => (
-            <Card.Budget k={k} key={k} data={i} onPick={handlePick} />
+            <Card.Budget
+              k={k}
+              key={k}
+              data={i}
+              onPick={handlePick}
+              selected={budget?.budgetId === i.budgetId}
+            />
           ))}
         </S.Block>
       </S.Column>
@@ -189,6 +206,7 @@ const MonitoringPage = () => {
           <BudgetResumeBlock budget={budget} />
 
           <NewContactBlock
+            data={budget}
             provider={provider}
             newContact={newContact}
             options={options}
@@ -199,7 +217,10 @@ const MonitoringPage = () => {
 
           <S.Block>
             <S.BlockTitle>Contatos realizados</S.BlockTitle>
-            <List.BudgetContact list={[]} />
+            <List.BudgetContact
+              list={budget.performedContacts}
+              subCategoryName={budget.subCategoryName}
+            />
           </S.Block>
         </S.Column>
       ) : (

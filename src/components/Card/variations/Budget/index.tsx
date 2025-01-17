@@ -2,42 +2,47 @@ import * as C from "../../styled"
 import * as S from "./styled"
 
 import { Icons } from "../../../../assets/icons/icons"
-import { TBudgetResume } from "../../../../utils/@types/data/budget"
+import { TMonitorItem } from "../../../../utils/@types/data/monitoring"
 
 import Divider from "../../../_minimals/Divider"
 import Button from "../../../Button"
 
 type Props = {
   k: number
-  data: TBudgetResume
-  onPick: (budget: TBudgetResume) => void
+  data: TMonitorItem
+  onPick: (budget: TMonitorItem) => void
+  selected?: boolean
 }
 
-const BudgetCard = ({ k, data, onPick }: Props) => {
-  const getRole = () => {
-    let role: string = "opened"
+const BudgetCard = ({ k, data, onPick, selected = false }: Props) => {
+  const handleOpen = () => {}
 
-    return role as "openedCalled" | "opened" | "running" | "runningSigned"
-  }
+  const handleClose = () => {}
 
   const renderButton = () => {
-    const role = getRole()
-
-    const haveButton = role === "openedCalled" || role === "runningSigned"
+    const haveButton =
+      (data.statusCard.startsWith("RED") ||
+        data.statusCard.startsWith("GREEN")) &&
+      data.statusCard.endsWith("ENABLED")
 
     return haveButton ? (
       <Button
         type="main"
-        text={role === "openedCalled" ? "Atender" : "Fechar"}
-        action={() => {}}
+        text={data.statusCard.startsWith("RED") ? "Atender" : "Fechar"}
+        action={data.statusCard.startsWith("RED") ? handleOpen : handleClose}
         fit={true}
       />
     ) : null
   }
 
   return (
-    <S.Element $role={getRole()} $k={k} onClick={() => onPick(data)}>
-      <C.MainWrapper $expanded={true}>
+    <S.Element $role={data.statusCard} $k={k} onClick={() => onPick(data)}>
+      {selected && <S.PickedIndicator />}
+      <S.MainWrapper
+        $role={data.statusCard}
+        $selected={selected}
+        $expanded={true}
+      >
         <C.ContentWrapper>
           <S.Content>
             {data.isUrgent && (
@@ -47,14 +52,16 @@ const BudgetCard = ({ k, data, onPick }: Props) => {
             )}
 
             <S.Info>
-              <S.BudgetNumber>Nº {Number(data.id)}</S.BudgetNumber>
+              <S.BudgetNumber>
+                Nº {Number(data.budgetId)} {selected && "(SELECIONADO)"}
+              </S.BudgetNumber>
               <S.InfoItem>{data.condominiumName}</S.InfoItem>
             </S.Info>
 
             <Divider />
 
             <S.Info>
-              <S.InfoItem $bold={true}>{data.title}</S.InfoItem>
+              <S.InfoItem $bold={true}>{data.budgetTitle}</S.InfoItem>
               <S.InfoItem>{data.categoryName}</S.InfoItem>
               <S.InfoItem>{data.subcategoryName}</S.InfoItem>
             </S.Info>
@@ -62,7 +69,7 @@ const BudgetCard = ({ k, data, onPick }: Props) => {
             {renderButton()}
           </S.Content>
         </C.ContentWrapper>
-      </C.MainWrapper>
+      </S.MainWrapper>
     </S.Element>
   )
 }

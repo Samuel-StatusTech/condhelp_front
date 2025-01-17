@@ -19,10 +19,11 @@ export const Label = styled.label`
   width: fit-content;
 `
 
-export const Textarea = styled.textarea`
+export const Textarea = styled.textarea<{ $disabled?: boolean }>`
   padding: 10px;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
+  background-color: ${({ $disabled, theme }) =>
+    !$disabled ? theme.colors.neutral.white : theme.colors.neutral.medium};
   border: none;
   outline: none;
   resize: vertical;

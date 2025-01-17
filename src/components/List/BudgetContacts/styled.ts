@@ -46,6 +46,7 @@ export const Item = styled.div<{ $k: number }>`
 `
 
 export const ItemData = styled.span`
+  flex: 1;
   font-size: 14px;
   color: ${({ theme }) => theme.colors.neutral.lightMain};
 `
