@@ -111,6 +111,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
 
       if (newPerson.profile === "FILIAL") {
         additionalData.subsidiaryId = newPerson.userId
+        additionalData.userAccountId = newPerson.userId
       }
 
       await service
