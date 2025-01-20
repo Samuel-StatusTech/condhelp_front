@@ -9,6 +9,7 @@ import Button from "../../../Button"
 import { Api } from "../../../../api"
 import { getStore } from "../../../../store"
 import { TBudgetStatus } from "../../../../utils/@types/data/status"
+import { useEffect, useState } from "react"
 
 type Props = {
   k: number
@@ -23,6 +24,8 @@ type Props = {
 
 const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
   const { user, controllers } = getStore()
+
+  const [loading, setLoading] = useState(false)
 
   const reloadPage = () => {
     window.location.reload()
@@ -61,6 +64,8 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
   }
 
   const handleReject = async () => {
+    setLoading(true)
+
     try {
       const req = await Api.budgets.interact({
         budgetId: data.id,
@@ -80,6 +85,8 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
         visible: true,
       })
     }
+
+    setLoading(false)
   }
 
   const handleGetIn = async () => {
@@ -105,6 +112,13 @@ const ManagerBudgetResume = ({ k, data, onPickBudget, forGrid }: Props) => {
   const handleSeeDetails = () => {
     onPickBudget(data.id)
   }
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Element $k={k} $forGrid={forGrid}>

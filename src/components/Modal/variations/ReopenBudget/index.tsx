@@ -407,7 +407,7 @@ const ReopenBudget = ({ data, onClose, handleOp }: Props) => {
             type="main"
             text="Reabrir"
             action={!submitting ? handleSubmit : () => {}}
-            disabled={errors().has}
+            disabled={errors().has || submitting}
           />
         </S.Bottom>
       </S.Content>
