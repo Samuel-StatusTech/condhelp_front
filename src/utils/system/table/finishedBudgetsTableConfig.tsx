@@ -22,7 +22,7 @@ export const finishedBudgetsTableConfig: TConfig = {
       <ColorTextIndicator
         role="status"
         data={"active"}
-        text={relations.budgetStatus[item.status as TBudgetStatus]}
+        text={relations.budgetStatus[item.statusProvider as TBudgetStatus]}
       />
     ),
 
@@ -37,7 +37,7 @@ export const finishedBudgetsTableConfig: TConfig = {
                     "RECUSADO_PRESTADOR",
                     "CANCELADO_PRESTADOR",
                   ] as TBudgetStatus[]
-                ).includes(item.status as TBudgetStatus)
+                ).includes(item.statusProvider as TBudgetStatus)
                 ? [
                     {
                       role: "reparticipate",

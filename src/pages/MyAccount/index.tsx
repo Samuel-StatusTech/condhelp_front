@@ -133,106 +133,113 @@ const MyAccount = () => {
    *  Data fetching
    */
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
+  const loadData = useCallback(
+    async (updateLocal?: boolean) => {
+      setLoading(true)
 
-    try {
-      // user info
+      try {
+        // user info
 
-      const id =
-        user?.profile === "PRESTADOR"
-          ? user?.userAccountId
-          : (user?.userId as number)
+        const id =
+          user?.profile === "PRESTADOR"
+            ? user?.userAccountId
+            : (user?.userId as number)
 
-      if (user?.profile === "FRANQUEADO")
-        setForm((frm: any) => ({ ...frm, franqId: user?.userId as number }))
+        if (user?.profile === "FRANQUEADO")
+          setForm((frm: any) => ({ ...frm, franqId: user?.userId as number }))
 
-      const req = await Api.persons.getSingle({
-        id: id,
-      })
+        const req = await Api.persons.getSingle({
+          id: id,
+        })
 
-      if (req.ok) {
-        const hasInfo = req.data.profile && req.data.email
+        if (req.ok) {
+          const hasInfo = req.data.profile && req.data.email
 
-        if (hasInfo) {
-          const initialRoleInfo = initials.forms.person[req.data.profile]
+          if (hasInfo) {
+            const initialRoleInfo = initials.forms.person[req.data.profile]
 
-          const reqInfo = req.data as TUserTypes["PRESTADOR"]
+            const reqInfo = req.data as TUserTypes["PRESTADOR"]
 
-          const gettedInfo = {
-            ...form,
-            ...initialRoleInfo,
-            ...{
-              ...reqInfo,
-              address: !!reqInfo.address
-                ? {
-                    ...reqInfo.address,
-                    country: +reqInfo.address.country,
-                    state: +reqInfo.address.state,
-                  }
-                : undefined,
-            },
+            const gettedInfo = {
+              ...form,
+              ...initialRoleInfo,
+              ...{
+                ...reqInfo,
+                address: !!reqInfo.address
+                  ? {
+                      ...reqInfo.address,
+                      country: +reqInfo.address.country,
+                      state: +reqInfo.address.state,
+                    }
+                  : undefined,
+              },
+            }
+
+            if (updateLocal) {
+              controllers.user.setData(gettedInfo)
+            }
+
+            setForm(gettedInfo)
           }
+        } else {
+          controllers.feedback.setData({
+            message: req.error,
+            state: "error",
+            visible: true,
+          })
 
-          setForm(gettedInfo)
+          navigate(-1)
         }
-      } else {
+
+        let proms: Promise<any>[] = []
+
+        // • Categories
+        proms.push(
+          Api.categories
+            .listAll({ size: 300 })
+            .then((res) => {
+              if (res.ok) {
+                const list = res.data.content
+
+                setCategories(list)
+
+                setOptions((opts) => ({
+                  ...opts,
+                  category: parseOptionList(list, "id", "name"),
+                }))
+              } else throw new Error()
+            })
+            .catch(() => {
+              throw new Error()
+            })
+        )
+
+        await Promise.all(proms).catch((err) => {
+          controllers.feedback.setData({
+            message:
+              "Houve um erro ao carregar informações necessárias. Tente novamente mais tarde.",
+            state: "error",
+            visible: true,
+          })
+          navigate(-1)
+        })
+
+        setLoading(false)
+      } catch (error) {
         controllers.feedback.setData({
-          message: req.error,
+          message: "Não foi possível carregar suas informações.",
           state: "error",
           visible: true,
         })
+
+        setLoading(false)
 
         navigate(-1)
       }
-
-      let proms: Promise<any>[] = []
-
-      // • Categories
-      proms.push(
-        Api.categories
-          .listAll({ size: 300 })
-          .then((res) => {
-            if (res.ok) {
-              const list = res.data.content
-
-              setCategories(list)
-
-              setOptions((opts) => ({
-                ...opts,
-                category: parseOptionList(list, "id", "name"),
-              }))
-            } else throw new Error()
-          })
-          .catch(() => {
-            throw new Error()
-          })
-      )
-
-      await Promise.all(proms).catch((err) => {
-        controllers.feedback.setData({
-          message:
-            "Houve um erro ao carregar informações necessárias. Tente novamente mais tarde.",
-          state: "error",
-          visible: true,
-        })
-        navigate(-1)
-      })
-
-      setLoading(false)
-    } catch (error) {
-      controllers.feedback.setData({
-        message: "Não foi possível carregar suas informações.",
-        state: "error",
-        visible: true,
-      })
-
-      setLoading(false)
-
-      navigate(-1)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controllers.feedback, navigate])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [controllers.feedback, controllers.user, form, navigate, user?.profile, user?.userAccountId, user?.userId]
+  )
 
   useEffect(() => {
     loadData()

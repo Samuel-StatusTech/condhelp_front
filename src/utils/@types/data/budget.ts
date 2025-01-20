@@ -48,6 +48,7 @@ export type TBudget = {
   subcategoryId: number
   attachmentUrl: string
   status: TBudgetStatus
+  statusProvider?: TBudgetStatus
   providers: TProviderOnBudget[]
 
   userId?: number

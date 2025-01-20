@@ -182,6 +182,8 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
 
           return
         }
+
+        person.userAccountId = userAccountRegister.data.userId
       }
 
       const roleUrl = rolesUrlRelations[person.profile]
@@ -195,11 +197,12 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
 
       const parsed =
         person.profile === "PRESTADOR"
-          ? {
-              ...person,
-              status: "AGUARDANDO",
-            }
-          : person
+          ? { ...person, status: "AGUARDANDO" }
+          : JSON.parse(JSON.stringify(person))
+
+      if (parsed.profile === "SINDICO") {
+        delete parsed.id
+      }
 
       await service
         .put(`${roleUrl}/${id}`, parsed)
