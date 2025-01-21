@@ -554,6 +554,7 @@ const FPpeople = () => {
             states,
             onHandleField,
             franchises,
+            isEditing: params && params.id !== undefined,
           }),
         renderExtra,
         isManagingFranchiseCities,

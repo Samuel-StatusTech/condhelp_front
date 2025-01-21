@@ -1,4 +1,5 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { FormField } from "../../../../../utils/@types/components/FormFields"
 import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { TCity } from "../../../../../utils/@types/data/region"
@@ -10,6 +11,7 @@ type Props = {
   form: any
   options: { [key: string]: TOption[] }
   handleSelectCity: (city: TCity) => void
+  isEditing: boolean
 }
 
 export const basicFranchise = ({
@@ -17,6 +19,7 @@ export const basicFranchise = ({
   form,
   options,
   handleSelectCity,
+  isEditing,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -154,14 +157,26 @@ export const basicFranchise = ({
             gridSizes: { big: 6, small: 12 },
           },
         ],
-        {
-          type: "input",
-          field: "email",
-          label: "Email",
-          value: form.email,
-          placeholder: "Digite aqui",
-          gridSizes: { big: 12 },
-        },
+        ...((isEditing
+          ? [
+              {
+                type: "readonly",
+                label: "Email",
+                field: "email",
+                value: form.email,
+                gridSizes: { big: 12 },
+              },
+            ]
+          : [
+              {
+                type: "input",
+                field: "email",
+                label: "Email",
+                value: form.email,
+                placeholder: "Digite aqui",
+                gridSizes: { big: 12 },
+              },
+            ]) as FormField[]),
       ],
     },
   ]

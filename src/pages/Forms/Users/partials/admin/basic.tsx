@@ -1,10 +1,12 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { FormField } from "../../../../../utils/@types/components/FormFields"
 
 type Props = {
   form: any
+  isEditing: boolean
 }
 
-export const basicAdmin = ({ form }: Props): TBlock["groups"] => {
+export const basicAdmin = ({ form, isEditing }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
       type: "fields",
@@ -32,14 +34,26 @@ export const basicAdmin = ({ form }: Props): TBlock["groups"] => {
     {
       type: "fields",
       fields: [
-        {
-          type: "input",
-          field: "email",
-          label: "Email",
-          value: form.email,
-          placeholder: "Digite aqui",
-          gridSizes: { big: 12 },
-        },
+        ...((isEditing
+          ? [
+              {
+                type: "readonly",
+                label: "Email",
+                field: "email",
+                value: form.email,
+                gridSizes: { big: 12 },
+              },
+            ]
+          : [
+              {
+                type: "input",
+                field: "email",
+                label: "Email",
+                value: form.email,
+                placeholder: "Digite aqui",
+                gridSizes: { big: 12 },
+              },
+            ]) as FormField[]),
       ],
     },
     {

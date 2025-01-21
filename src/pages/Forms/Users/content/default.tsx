@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom"
 import Form from "../../../../components/Form"
 import PageHeader from "../../../../components/PageHeader"
 import ProviderLegalization from "../../../../components/ProviderLegalization"
@@ -7,6 +8,7 @@ import { FormField } from "../../../../utils/@types/components/FormFields"
 import { TAccess } from "../../../../utils/@types/data/access"
 import { TOption } from "../../../../utils/@types/data/option"
 import * as C from "../../styled"
+import { profileRelation } from "../../../../utils/@types/data/user"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -23,6 +25,8 @@ type Props = {
 }
 
 export const DefaultContent = (props: Props) => {
+  const params = useParams()
+
   const { user } = getStore()
 
   const {
@@ -58,14 +62,27 @@ export const DefaultContent = (props: Props) => {
                     // eslint-disable-next-line no-sparse-arrays
                     fields: [
                       [
-                        {
-                          type: "select",
-                          label: "Perfil",
-                          field: "profile",
-                          options: options.profile,
-                          value: form.profile,
-                          gridSizes: { big: 10, small: 7 },
-                        },
+                        ...((params && params.id
+                          ? [
+                              {
+                                type: "readonly",
+                                label: "Perfil",
+                                field: "profile",
+                                options: options.profile,
+                                value: profileRelation[form.profile as TAccess],
+                                gridSizes: { big: 10, small: 7 },
+                              },
+                            ]
+                          : [
+                              {
+                                type: "select",
+                                label: "Perfil",
+                                field: "profile",
+                                options: options.profile,
+                                value: form.profile,
+                                gridSizes: { big: 10, small: 7 },
+                              },
+                            ]) as FormField[]),
                         {
                           type: "toggler",
                           label: "Ativo",
@@ -74,20 +91,24 @@ export const DefaultContent = (props: Props) => {
                           hasTopSpace: true,
                         },
                       ],
-                      ...(personType === "SINDICO" &&
+                      ...((["SINDICO", "PRESTADOR"] as TAccess[]).includes(
+                        personType
+                      ) &&
                       (["ADMIN", "FILIAL"] as TAccess[]).includes(
                         user?.profile as TAccess
                       )
-                        ? [
-                            {
-                              type: "select",
-                              label: "Franquia",
-                              field: "franqId",
-                              options: options.franchise,
-                              value: form.franqId,
-                              gridSizes: { big: 12 },
-                            } as FormField,
-                          ]
+                        ? params && params.id !== undefined
+                          ? []
+                          : [
+                              {
+                                type: "select",
+                                label: "Franquia",
+                                field: "franqId",
+                                options: options.franchise,
+                                value: form.franqId,
+                                gridSizes: { big: 12 },
+                              } as FormField,
+                            ]
                         : []),
                     ],
                   },

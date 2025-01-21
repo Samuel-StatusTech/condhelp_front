@@ -13,6 +13,7 @@ type Props = {
   handleSelectCity: (city: TCity) => void
   onHandleField: (field: string, value: any) => void
   franchises: TUser[]
+  isEditing: boolean
 }
 
 export const renderBasic = (props: Props) => {
@@ -24,13 +25,14 @@ export const renderBasic = (props: Props) => {
     handleSelectCity,
     onHandleField,
     franchises,
+    isEditing,
   } = props
 
   let content: TBlock["groups"] = []
 
   switch (form.profile) {
     case "ADMIN":
-      content = formPartials.admin.basic({ form })
+      content = formPartials.admin.basic({ form, isEditing })
       break
 
     case "FILIAL":
@@ -39,6 +41,7 @@ export const renderBasic = (props: Props) => {
         options,
         states,
         handleSelectCity,
+        isEditing,
       })
       break
 
@@ -48,11 +51,13 @@ export const renderBasic = (props: Props) => {
         options,
         userProfile: user?.profile as any,
         handleSelectCity,
+        isEditing,
       })
       break
 
     case "SINDICO":
-      content = formPartials.manager.basic({ form })
+      content = formPartials.manager.basic({ form, isEditing })
+
       break
 
     case "PRESTADOR":
@@ -64,6 +69,7 @@ export const renderBasic = (props: Props) => {
         personType: user?.profile as TAccess,
         franchiseName: user?.name,
         handleSelectCity,
+        isEditing,
       })
       break
 

@@ -1,4 +1,5 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { FormField } from "../../../../../utils/@types/components/FormFields"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { TCity, TState } from "../../../../../utils/@types/data/region"
 import { formatCep } from "../../../../../utils/tb/format/cep"
@@ -11,6 +12,7 @@ type Props = {
   }
   states: TState[]
   handleSelectCity: (city: TCity) => void
+  isEditing: boolean
 }
 
 export const basicBranch = ({
@@ -18,6 +20,7 @@ export const basicBranch = ({
   options,
   states,
   handleSelectCity,
+  isEditing,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -110,14 +113,26 @@ export const basicBranch = ({
     {
       type: "fields",
       fields: [
-        {
-          type: "input",
-          field: "email",
-          label: "Email",
-          value: form.email,
-          placeholder: "Digite aqui",
-          gridSizes: { big: 12 },
-        },
+        ...((isEditing
+          ? [
+              {
+                type: "readonly",
+                label: "Email",
+                field: "email",
+                value: form.email,
+                gridSizes: { big: 12 },
+              },
+            ]
+          : [
+              {
+                type: "input",
+                field: "email",
+                label: "Email",
+                value: form.email,
+                placeholder: "Digite aqui",
+                gridSizes: { big: 12 },
+              },
+            ]) as FormField[]),
       ],
     },
     {
