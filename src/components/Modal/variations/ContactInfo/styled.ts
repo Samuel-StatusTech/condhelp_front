@@ -62,7 +62,8 @@ export const Bottom = styled.div`
   grid-column: span 12;
   padding-top: 48px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 24px;
 `
 
 export const PointsArea = styled.div`

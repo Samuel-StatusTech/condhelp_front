@@ -8,9 +8,18 @@ import { getStore } from "../../../store"
 type Props = {
   list: TMonitorContactResume[]
   subCategoryName: string
+  budgetId: number
+  providerId: number
+  onUpdateContact: () => void
 }
 
-const BudgetContactsList = ({ list, subCategoryName }: Props) => {
+const BudgetContactsList = ({
+  list,
+  subCategoryName,
+  budgetId,
+  providerId,
+  onUpdateContact,
+}: Props) => {
   const { controllers } = getStore()
 
   const handleClick = (item: TMonitorContactResume) => {
@@ -20,9 +29,11 @@ const BudgetContactsList = ({ list, subCategoryName }: Props) => {
       data: {
         ...item,
         subCategoryName,
+        budgetId,
+        providerId,
       },
-      width: "md",
-      onClose: () => {},
+      width: "sm",
+      handleOp: onUpdateContact,
     })
   }
 

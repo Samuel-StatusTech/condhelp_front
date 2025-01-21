@@ -18,6 +18,12 @@ export type TApi_Params_Monitoring = {
       providerName: string
       description: string
     }
+    updateContact: {
+      contact: {
+        id: number
+        description: string
+      }
+    }
     callsHistory: TDefaultFilters
   }
 }

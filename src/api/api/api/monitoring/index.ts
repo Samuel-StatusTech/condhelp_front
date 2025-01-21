@@ -160,6 +160,45 @@ const closeRequest: TApi["monitoring"]["closeRequest"] = async ({ id }) => {
   })
 }
 
+const updateContact: TApi["monitoring"]["updateContact"] = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = baseURL
+
+      await service
+        .put(`${url}/register/${data.contact.id}`, data.contact)
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível atualizar o atendimento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível atualizar o atendimento. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível atualizar o atendimento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const registerRequest: TApi["monitoring"]["registerRequest"] = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -256,6 +295,9 @@ export type TApi_Monitoring = {
   registerRequest: (
     p: TParams["monitoring"]["registerRequest"]
   ) => TResponses["monitoring"]["registerRequest"]
+  updateContact: (
+    p: TParams["monitoring"]["updateContact"]
+  ) => TResponses["monitoring"]["updateContact"]
   callsHistory: (
     p: TParams["monitoring"]["callsHistory"]
   ) => TResponses["monitoring"]["callsHistory"]
@@ -267,5 +309,6 @@ export const apiMonitoring: TApi["monitoring"] = {
   closeRequest: closeRequest,
   getSingle: getSingle,
   registerRequest: registerRequest,
+  updateContact: updateContact,
   callsHistory: callsHistory,
 }

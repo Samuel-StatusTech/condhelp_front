@@ -9,6 +9,9 @@ export type TMonitorItemDetails = {
   openingDate: string
   isUrgent: boolean
   performedContacts: TMonitorContactResume[]
+
+  providerId: number
+
   providers: [
     {
       id: number
@@ -61,7 +64,7 @@ export type TMonitorItemDetails = {
 }
 
 export type TMonitorContactResume = {
-  id?: number
+  idRegister: number
   openingDate: string
   providerName: string
   categoryName: string

@@ -14,6 +14,18 @@ export const Element = styled.div`
   }
 `
 
+export const LoadingContainer = styled.div`
+  position: absolute;
+  z-index: 100;
+  margin: -14px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+`
+
 export const Header = styled.div`
   display: flex;
   flex-direction: column;

@@ -41,11 +41,19 @@ const MonitoringPage = () => {
     category: parseOptionList([], "id", "name"),
     PRESTADOR: [],
   })
-  const [newContact, setNewContact] = useState({
+  const [newContact, setNewContact] = useState<{
+    category: string
+    provider: any
+    description: string
+  }>({
     category: "",
-    provider: 0,
+    provider: null,
     description: "",
   })
+
+  const updateList = async () => {
+    await loadData()
+  }
 
   const handlePick = async (
     selectedBudget: TMonitorItem | { budgetId: number }
@@ -86,7 +94,7 @@ const MonitoringPage = () => {
       const req = await Api.monitoring.registerRequest({
         budgetId: budget.budgetId,
         description: newContact.description,
-        providerId: provider.id,
+        providerId: provider.id ?? 104,
         providerName: provider.name,
       })
 
@@ -100,15 +108,17 @@ const MonitoringPage = () => {
         setProvider(null)
         setNewContact({
           category: "",
-          provider: 0,
+          provider: "none",
           description: "",
         })
+        await updateList()
         handlePick({ budgetId: budget.budgetId })
       }
     }
     setLoading(false)
   }
 
+  // Provider info on contact
   useEffect(() => {
     const pv = budget?.providers.find((p) => p.id === newContact.provider)
 
@@ -151,7 +161,7 @@ const MonitoringPage = () => {
   }, [loadData])
 
   useEffect(() => {
-    setNewContact((nct) => ({ ...nct, provider: 0 }))
+    setNewContact((nct) => ({ ...nct, provider: "none" }))
 
     const providersList: any[] = [] //  category's providers
 
@@ -205,23 +215,32 @@ const MonitoringPage = () => {
         <S.Column>
           <BudgetResumeBlock budget={budget} />
 
-          <NewContactBlock
-            data={budget}
-            provider={provider}
-            newContact={newContact}
-            options={options}
-            handleField={handleField}
-            handleContact={handleContact}
-            contacting={contacting}
-          />
+          {running.some((b) => b.budgetId === budget.budgetId) && (
+            <>
+              <NewContactBlock
+                data={budget}
+                provider={provider}
+                newContact={newContact}
+                options={options}
+                handleField={handleField}
+                handleContact={handleContact}
+                contacting={contacting}
+              />
 
-          <S.Block>
-            <S.BlockTitle>Contatos realizados</S.BlockTitle>
-            <List.BudgetContact
-              list={budget.performedContacts}
-              subCategoryName={budget.subCategoryName}
-            />
-          </S.Block>
+              <S.Block>
+                <S.BlockTitle>Contatos realizados</S.BlockTitle>
+                <List.BudgetContact
+                  list={budget.performedContacts}
+                  subCategoryName={budget.subCategoryName}
+                  budgetId={budget.budgetId}
+                  providerId={budget.providerId}
+                  onUpdateContact={() =>
+                    handlePick({ budgetId: budget.budgetId })
+                  }
+                />
+              </S.Block>
+            </>
+          )}
         </S.Column>
       ) : (
         <S.EmptyMessage>

@@ -15,8 +15,9 @@ export const callsTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    openedAt: (item: TCall) => getDateStr(item.createdAt, "dmy"),
+    openedAt: (item: TCall) => getDateStr(item.opendAt, "dmy"),
     category: (item: TCall) => item.categoryName ?? "",
+    title: (item: TCall) => item.budgetTitle ?? "",
     condo: (item: TCall) => item.condominiumName,
     closedAt: (item: TCall) => getDateStr(item.closedAt, "dmy"),
 

@@ -15,7 +15,7 @@ type Props = {
   provider: TMonitorItemDetails["providers"][number] | null
   newContact: {
     category: string
-    provider: number
+    provider: number | null
     description: string
   }
   options: { [key: string]: TOption[] }
@@ -51,7 +51,7 @@ const NewContactBlock = ({
         <Input.Select
           field="provider"
           // @ts-ignore
-          value={newContact.provider}
+          value={newContact.provider ? newContact.provider : ""}
           options={parseOptionList(data.providers, "id", "name")}
           onChange={handleField}
           gridSizes={{ big: 2, small: 4 }}

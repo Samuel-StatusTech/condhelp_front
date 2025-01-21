@@ -12,6 +12,7 @@ import { faqForm } from "./forms/faq"
 import { goalApprove } from "./modals/goalApprove"
 import { goalPoints } from "./modals/goalPoints"
 import { newBudget } from "./modals/newBudget"
+import { newMonitorContact } from "./modals/newMonitorContact"
 
 // Pagination
 import { initialPagination } from "./table/pagination"
@@ -38,6 +39,7 @@ const initials = {
     goalApprove: goalApprove,
     goalPoints: goalPoints,
     newBudget: newBudget,
+    newMonitorContact: newMonitorContact,
   },
   pagination: initialPagination,
 }
