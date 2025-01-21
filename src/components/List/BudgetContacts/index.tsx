@@ -30,8 +30,10 @@ const BudgetContactsList = ({ list, subCategoryName }: Props) => {
     <S.Wrapper>
       {list?.map((item, sk) => (
         <S.Item $k={sk} key={sk} onClick={() => handleClick(item)}>
-          <S.ItemData>{getDateStr(item.openingDate, "dmy")}</S.ItemData>
-          <S.ItemData>{getDateStr(item.openingDate, "time")}</S.ItemData>
+          <S.ItemData>{getDateStr(item.openingDate, "localDate")}</S.ItemData>
+          <S.ItemData>
+            {getDateStr(item.openingDate, "localTimeStr_HM")}
+          </S.ItemData>
           <S.ItemData>{item.categoryName}</S.ItemData>
           <S.ItemData>{item.providerName}</S.ItemData>
           <Icons.Expand />

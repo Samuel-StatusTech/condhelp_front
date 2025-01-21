@@ -80,12 +80,12 @@ const MonitoringPage = () => {
   }
 
   const handleContact = async () => {
-    if (budget && provider) {
+    if (budget && provider && newContact) {
       setLoading(true)
 
       const req = await Api.monitoring.registerRequest({
         budgetId: budget.budgetId,
-        description: budget.budgetDescription,
+        description: newContact.description,
         providerId: provider.id,
         providerName: provider.name,
       })

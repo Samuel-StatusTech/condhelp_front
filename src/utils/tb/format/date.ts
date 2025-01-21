@@ -23,6 +23,10 @@ export const getDateStr = (
     | "javaTime"
     | "javaDateTime"
     | "iso"
+    | "localDate"
+    | "localTime"
+    | "localTimeStr_HM",
+  removeSeconds?: boolean
 ) => {
   let str = ""
 
@@ -47,6 +51,15 @@ export const getDateStr = (
       break
     case "iso":
       str = getIsoDateStr(new Date(date))
+      break
+    case "localDate":
+      str = getLocalDateStr(new Date(date))
+      break
+    case "localTime":
+      str = getLocalTimeStr(new Date(date), removeSeconds)
+      break
+    case "localTimeStr_HM":
+      str = getLocalTimeStr_HM(date as string)
       break
     default:
       break
@@ -123,6 +136,31 @@ const getJavaDateTimeStr = (date: Date) => {
 
 const getIsoDateStr = (date: Date) => {
   let str = date.toISOString()
+
+  return str
+}
+
+const getLocalDateStr = (date: Date) => {
+  let str = date.toLocaleDateString()
+
+  return str
+}
+
+const getLocalTimeStr = (date: Date, removeSeconds?: boolean) => {
+  let str = date.toLocaleTimeString()
+
+  if (removeSeconds) str = str.slice(0, 5)
+
+  return str
+}
+
+const getLocalTimeStr_HM = (date: string) => {
+  const utcDate = new Date(date)
+
+  const timezoneOffset = utcDate.getTimezoneOffset()
+
+  const localDate = new Date(utcDate.getTime() - timezoneOffset * 60 * 1000)
+  const str = localDate.toLocaleTimeString().slice(0, 5)
 
   return str
 }
