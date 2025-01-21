@@ -24,6 +24,7 @@ import { TFinishedBudgets } from "../../../utils/@types/data/budget/finished"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
 import { useNavigate } from "react-router-dom"
+import { TManagerStatistics } from "../../../utils/@types/data/dashboards/statistics"
 
 const DashboardManager = () => {
   const { user, controllers } = getStore((store) => ({
@@ -63,6 +64,17 @@ const DashboardManager = () => {
 
   const [budgets, setBudgets] = useState<TBudgetResume[]>([])
   const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
+  const [statistics, setStatistics] = useState<TManagerStatistics>({
+    total: 0,
+    completed: 0,
+    inProgress: 0,
+    canceled: 0,
+    recused: 0,
+    completedPercentage: 0,
+    inProgressPercentage: 0,
+    canceledPercentage: 0,
+    recusedPercentage: 0,
+  })
 
   const handlePickBudget = async (id: number) => {
     navigate(`/dashboard/budget/${id}`)
@@ -152,6 +164,18 @@ const DashboardManager = () => {
         )
 
         /*
+         * Statistics
+         */
+
+        const statisticsReq = await Api.dashboards.managerStatistics({
+          managerId: user?.userId,
+        })
+
+        if (statisticsReq.ok) {
+          setStatistics(statisticsReq.data)
+        } else throw new Error()
+
+        /*
          * Finished table content
          */
 
@@ -226,25 +250,25 @@ const DashboardManager = () => {
           <S.ManagerBudgetsResumeArea>
             <S.MBRMessage>
               Para <span>todos os condomínios</span>, você já pediu{" "}
-              <span>{budgets.length}</span> orçamentos:
+              <span>{statistics.total}</span> orçamentos:
             </S.MBRMessage>
             <S.MBRDataArea>
               <DataResumeItem
                 type={"approved"}
-                number={0}
-                total={budgets.length}
+                number={statistics.completed}
+                total={statistics.total}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"awaiting"}
-                number={0}
-                total={budgets.length}
+                number={statistics.inProgress}
+                total={statistics.total}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"rejected"}
-                number={0}
-                total={budgets.length}
+                number={statistics.recused}
+                total={statistics.total}
                 role={"budgets"}
               />
             </S.MBRDataArea>

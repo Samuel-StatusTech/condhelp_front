@@ -4,5 +4,6 @@ import { TDefaultRes } from "../../../types/responses"
 export type TApi_Responses_Dashboards = {
   dashboards: {
     main: Promise<TDefaultRes<TDashboardAdmin>>
+    managerStatistics: Promise<TDefaultRes<any>>
   }
 }

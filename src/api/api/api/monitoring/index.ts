@@ -199,6 +199,47 @@ const registerRequest: TApi["monitoring"]["registerRequest"] = async (data) => {
   })
 }
 
+const callsHistory: TApi["monitoring"]["callsHistory"] = async (filters) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = baseURL
+
+      await service
+        .get(`${url}/register`, {
+          params: filters,
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os chamados. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os chamados. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os chamados. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export type TApi_Monitoring = {
   getList: (
     p: TParams["monitoring"]["getList"]
@@ -215,6 +256,9 @@ export type TApi_Monitoring = {
   registerRequest: (
     p: TParams["monitoring"]["registerRequest"]
   ) => TResponses["monitoring"]["registerRequest"]
+  callsHistory: (
+    p: TParams["monitoring"]["callsHistory"]
+  ) => TResponses["monitoring"]["callsHistory"]
 }
 
 export const apiMonitoring: TApi["monitoring"] = {
@@ -223,4 +267,5 @@ export const apiMonitoring: TApi["monitoring"] = {
   closeRequest: closeRequest,
   getSingle: getSingle,
   registerRequest: registerRequest,
+  callsHistory: callsHistory,
 }

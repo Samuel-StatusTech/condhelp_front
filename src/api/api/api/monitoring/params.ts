@@ -1,3 +1,5 @@
+import { TDefaultFilters } from "../../../types/params"
+
 export type TApi_Params_Monitoring = {
   monitoring: {
     getList: {}
@@ -16,5 +18,6 @@ export type TApi_Params_Monitoring = {
       providerName: string
       description: string
     }
+    callsHistory: TDefaultFilters
   }
 }

@@ -6,6 +6,46 @@ import { TApi_Responses_Dashboards as TResponses } from "./responses"
 
 const baseURL = "/dashboard"
 
+const managerStatistics: TApi["dashboards"]["managerStatistics"] = async ({
+  managerId,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `/budgets/manager/${managerId}/statistics`
+
+      await service
+        .get(`${url}`)
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os dados. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os dados. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error: "Não foi possível listar os dados. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const mainDashboard: TApi["dashboards"]["main"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -46,8 +86,12 @@ const mainDashboard: TApi["dashboards"]["main"] = async (filters) => {
 
 export type TApi_Dashboards = {
   main: (p: TParams["dashboards"]["main"]) => TResponses["dashboards"]["main"]
+  managerStatistics: (
+    p: TParams["dashboards"]["managerStatistics"]
+  ) => TResponses["dashboards"]["managerStatistics"]
 }
 
 export const apiDashboards: TApi["dashboards"] = {
   main: mainDashboard,
+  managerStatistics: managerStatistics,
 }

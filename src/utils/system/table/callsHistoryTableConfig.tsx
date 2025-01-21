@@ -3,7 +3,6 @@ import { TConfig } from "."
 import TableActions from "../../../components/TableActions"
 import { getDateStr } from "../../tb/format/date"
 import { TCall } from "../../@types/data/call"
-import { TCategory } from "../../@types/data/category"
 
 export const callsTableConfig: TConfig = {
   columns: [
@@ -16,11 +15,9 @@ export const callsTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
-    openedAt: (item: TCall) => getDateStr(item.openedAt, "dmy"),
-    category: (item: TCall, { data }) =>
-      (data?.categories as TCategory[]).find((c) => c.id === item.categoryId)
-        ?.name ?? "Não relacionado",
-    condo: (item: TCall) => item.condo.name,
+    openedAt: (item: TCall) => getDateStr(item.createdAt, "dmy"),
+    category: (item: TCall) => item.categoryName ?? "",
+    condo: (item: TCall) => item.condominiumName,
     closedAt: (item: TCall) => getDateStr(item.closedAt, "dmy"),
 
     actions: (item: TCall, { callbacks }) => (

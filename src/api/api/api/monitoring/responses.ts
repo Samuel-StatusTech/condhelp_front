@@ -1,3 +1,4 @@
+import { TCall } from "../../../../utils/@types/data/call"
 import {
   TMonitor,
   TMonitorContact,
@@ -12,5 +13,6 @@ export type TApi_Responses_Monitoring = {
     attendSingle: Promise<TDefaultRes<TMonitor>>
     closeRequest: Promise<TDefaultRes<TMonitor>>
     registerRequest: Promise<TDefaultRes<TMonitorContact>>
+    callsHistory: Promise<TDefaultRes<TCall[]>>
   }
 }

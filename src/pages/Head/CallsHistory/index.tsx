@@ -4,10 +4,8 @@ import * as C from "./styled"
 import { useNavigate } from "react-router-dom"
 
 import { getStore } from "../../../store"
-import { TOption } from "../../../utils/@types/data/option"
 
 import { Api } from "../../../api"
-import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { TCall } from "../../../utils/@types/data/call"
 import Table from "../../../components/Table"
 import { tableConfig } from "../../../utils/system/table"
@@ -17,12 +15,7 @@ const CallsHistory = () => {
 
   const { controllers } = getStore()
 
-  const [calls] = useState<TCall[]>([])
-
-  const [, setOptions] = useState<{ [key: string]: TOption[] }>({
-    country: [],
-    state: [],
-  })
+  const [calls, setCalls] = useState<TCall[]>([])
 
   const handlePickItem = (id: number) => {
     // const call = calls.find((c) => c.id === id)
@@ -30,12 +23,9 @@ const CallsHistory = () => {
 
   const loadData = useCallback(async () => {
     try {
-      await Api.countries.listAll({}).then((res) => {
+      await Api.monitoring.callsHistory({}).then((res) => {
         if (res.ok) {
-          setOptions((opts) => ({
-            ...opts,
-            country: parseOptionList(res.data.content, "id", "name"),
-          }))
+          setCalls(res.data)
         } else {
           controllers.feedback.setData({
             message:
