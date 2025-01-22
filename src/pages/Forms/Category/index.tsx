@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import * as S from "./styled"
 import * as C from "../styled"
 
 import initials from "../../../utils/initials"
@@ -17,6 +18,8 @@ import { Api } from "../../../api"
 import { TCategory, TNewCategory } from "../../../utils/@types/data/category"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
+import Button from "../../../components/Button"
+import { Icons } from "../../../assets/icons/icons"
 
 const FPcategory = () => {
   const navigate = useNavigate()
@@ -279,6 +282,22 @@ const FPcategory = () => {
                       },
                     ],
                   },
+                  {
+                    type: "custom",
+                    element: (
+                      <S.Buttons className="buttonsArea">
+                        <Button
+                          type="quaternary"
+                          action={params.id ? handleDelete : () => {}}
+                          text={"Excluir categoria"}
+                          icon={<Icons.Trash />}
+                          iconLeft={true}
+                          fit={true}
+                          disabled={!params.id}
+                        />
+                      </S.Buttons>
+                    ),
+                  },
                 ],
               },
             ],
@@ -303,11 +322,9 @@ const FPcategory = () => {
                     type: "custom",
                     element: (
                       <FormDefaultButtons
-                        handleDelete={handleDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
                         disabled={errors().has}
-                        deleteModalTitle={"Excluir Categoria"}
                       />
                     ),
                   },
