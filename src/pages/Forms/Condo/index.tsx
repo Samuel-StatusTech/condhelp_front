@@ -53,6 +53,12 @@ const FPcondo = () => {
   }
 
   const getObj = (): TNewCondominium | TCondominium => {
+    const mId = Number(
+      (form as TNewCondominium).managerId ??
+        form.manager.managerId ??
+        form.manager.userId
+    )
+
     const obj: any = {
       name: form.name,
       unities: Number(form.unities),
@@ -64,18 +70,16 @@ const FPcondo = () => {
       city: form.city,
       federateUnit: form.federateUnit,
       electionDate: getDateStr(form.electionDate, "javaDateTime"),
-      managerId: Number(
-        form.manager.userId ?? (form as TNewCondominium).managerId
-      ),
+      managerId: mId,
     }
 
     return params.id && !Number.isNaN(params.id)
       ? { ...obj, id: params.id }
       : {
-        ...obj,
-        branchId: user?.branchId,
-        franchiseId: user?.franchiseId,
-      }
+          ...obj,
+          branchId: user?.branchId,
+          franchiseId: user?.franchiseId,
+        }
   }
 
   const handleUpdate = async () => {
@@ -170,7 +174,7 @@ const FPcondo = () => {
 
           if (req.ok) {
             controllers.feedback.setData({
-              message: "Condomínio excluída com sucesso.",
+              message: "Condomínio excluído com sucesso.",
               state: "success",
               visible: true,
             })
@@ -195,7 +199,7 @@ const FPcondo = () => {
 
   const handleField = async (field: string, value: any) => {
     if (field === "managerId") {
-      const m = managers.find((i) => i.userId === value)
+      const m = managers.find((i) => i.managerId === value)
 
       setForm((f: any) => ({ ...f, manager: m }))
     } else if (field === "managerSince") {
@@ -275,7 +279,11 @@ const FPcondo = () => {
       }
 
       if (user?.profile === "SINDICO") {
-        setForm((frm) => ({ ...frm, managerId: user?.userId, manager: user }))
+        setForm((frm) => ({
+          ...frm,
+          managerId: user?.managerId,
+          manager: user,
+        }))
         loadEditInfo()
       } else {
         const managersReq = await Api.persons.getByRole({ role: "SINDICO" })
@@ -286,7 +294,7 @@ const FPcondo = () => {
             ...opts,
             managers: parseOptionList(
               managersReq.data.content,
-              "userId",
+              "managerId",
               "name"
             ),
           }))
@@ -420,7 +428,7 @@ const FPcondo = () => {
                           placeholder: "Digite aqui",
                           value: formatCep(form.zipCode),
                           gridSizes: { big: 2, small: 6 },
-                          fixedWidth: 112
+                          fixedWidth: 112,
                         },
                       ],
                       [
@@ -452,7 +460,7 @@ const FPcondo = () => {
                           gridSizes: { big: 2, small: 6 },
                           options: options.state,
                           byKey: true,
-                          fixedWidth: 112
+                          fixedWidth: 112,
                         },
                       ],
                       [
@@ -472,7 +480,7 @@ const FPcondo = () => {
                                 label: "Síndico",
                                 field: "managerId",
                                 // @ts-ignore
-                                value: form.manager.userId,
+                                value: form.manager.managerId,
                                 gridSizes: { big: 9, small: 6 },
                                 options: options.managers,
                               },
@@ -484,7 +492,7 @@ const FPcondo = () => {
                           value: new Date(form.electionDate),
                           gridSizes: { big: 3, small: 6 },
                           maxDate: new Date(),
-                          fixedWidth: 138
+                          fixedWidth: 138,
                         },
                       ],
                     ],
@@ -498,7 +506,7 @@ const FPcondo = () => {
                         field: "electionFile",
                         value: form.electionFile,
                         gridSizes: { big: 12 },
-                        allowsPdf: true
+                        allowsPdf: true,
                       },
                     ],
                   },

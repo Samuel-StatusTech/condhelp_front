@@ -167,7 +167,13 @@ const getSingle: TApi["condos"]["getSingle"] = async ({ id }) => {
           if (info) {
             resolve({
               ok: true,
-              data: info,
+              data: {
+                ...info,
+                manager: {
+                  ...info.manager,
+                  managerId: info.manager.id,
+                },
+              },
             })
           } else {
             resolve({
