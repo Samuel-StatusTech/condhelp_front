@@ -47,9 +47,7 @@ const PageHeader = (p: Props) => {
             forForm={p.forForm}
             noBack={p.noBack}
             handleAction={p.action}
-            extra={{
-              personFormType: p.extra?.profile,
-            }}
+            extra={p.extra}
           />
         )
       default:

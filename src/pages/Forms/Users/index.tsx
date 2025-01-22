@@ -326,7 +326,7 @@ const FPpeople = () => {
 
             setOptions((opts) => ({
               ...opts,
-              branch: parseOptionList(branchesList, "id", "name"),
+              branch: parseOptionList(branchesList, "userId", "name"),
               franchise: parseOptionList(franchisesList, "userId", "name"),
               franchises: parseOptionList(franchisesList, "userId", "name"),
             }))
@@ -576,6 +576,9 @@ const FPpeople = () => {
         isManagingFranchiseCities,
         regions,
         setIsManagingFranchiseCities,
+        extra: {
+          profile: "SINDICO",
+        },
       }}
     />
   )

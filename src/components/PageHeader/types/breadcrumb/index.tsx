@@ -16,7 +16,7 @@ type Props = {
   noBack?: boolean
   handleAction?: () => void
   extra?: {
-    personFormType?: TAccess
+    profile?: TAccess
   }
 }
 
@@ -37,10 +37,10 @@ const BreadcrumbPageHeader = ({
   const getPaths = () => {
     let pts: PPath[] = breadcrumbs[from]
 
-    if (extra && extra.personFormType) {
+    if (extra && extra.profile) {
       pts = [
         {
-          title: relations.roles[extra.personFormType],
+          title: relations.roles[extra.profile],
         },
         {
           title: "Detalhes",

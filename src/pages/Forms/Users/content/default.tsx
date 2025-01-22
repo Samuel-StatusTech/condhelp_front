@@ -9,6 +9,7 @@ import { TAccess } from "../../../../utils/@types/data/access"
 import { TOption } from "../../../../utils/@types/data/option"
 import * as C from "../../styled"
 import { profileRelation } from "../../../../utils/@types/data/user"
+import { useState } from "react"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -22,6 +23,8 @@ type Props = {
 
   renderBasic: () => TForm["columns"][number]["blocks"][number]["groups"]
   renderExtra: () => TForm["columns"][number]["blocks"]
+
+  extra?: any
 }
 
 export const DefaultContent = (props: Props) => {
@@ -41,16 +44,18 @@ export const DefaultContent = (props: Props) => {
 
     renderBasic,
     renderExtra,
+
+    extra,
   } = props
+
+  const [extraSelf] = useState(extra)
 
   return (
     <C.Content className="falseSubContentWrapper">
       <PageHeader
         type={"breadcrumb"}
         from={"users"}
-        extra={{
-          profile: params && params.id && form.profile,
-        }}
+        extra={extraSelf}
         forForm={true}
       />
 

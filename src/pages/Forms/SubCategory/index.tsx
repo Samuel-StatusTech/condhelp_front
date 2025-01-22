@@ -193,6 +193,7 @@ const FPsubcategory = () => {
 
       setLoading(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controllers.feedback, params.id, user?.userId])
 
   useEffect(() => {

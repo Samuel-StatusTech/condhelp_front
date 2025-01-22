@@ -23,6 +23,8 @@ export interface BaseProps {
 
     regions: TRegion[]
     setIsManagingFranchiseCities: (value: boolean) => void
+
+    extra?: any
   }
 }
 

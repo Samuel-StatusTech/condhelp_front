@@ -39,16 +39,30 @@ export const basicFranchise = ({
             ]
           : [
               [
-                {
-                  type: "select",
-                  label: "Filial",
-                  placeholder: "Filial",
-                  field: "branchId",
-                  value: form.branchId ?? "",
-                  options: options.branch,
-                  gridSizes: { big: 6, small: 12 },
-                  elevation: 10,
-                },
+                ...(isEditing
+                  ? [
+                      {
+                        type: "readonly",
+                        label: "Filial",
+                        field: "branchId",
+                        value:
+                          options.branch.find((b) => b.key === form.branchId)
+                            ?.value ?? "",
+                        gridSizes: { big: 6, small: 12 },
+                      },
+                    ]
+                  : [
+                      {
+                        type: "select",
+                        label: "Filial",
+                        placeholder: "Filial",
+                        field: "branchId",
+                        value: form.branchId ?? "",
+                        options: options.branch,
+                        gridSizes: { big: 6, small: 12 },
+                        elevation: 10,
+                      },
+                    ]),
                 {
                   type: "input",
                   label: "Nome da franquia",
