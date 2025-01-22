@@ -86,7 +86,7 @@ export const handleField = async (
 
       case "SINDICO":
         if (field === "franqId") {
-          const f = franchises.find((franchise) => franchise.id === value)
+          const f = franchises.find((franchise) => franchise.userId === value)
 
           setForm((p: any) => ({
             ...p,
@@ -99,7 +99,7 @@ export const handleField = async (
       case "PRESTADOR":
         switch (field) {
           case "franqId":
-            const f = franchises.find((franchise) => franchise.id === value)
+            const f = franchises.find((franchise) => franchise.userId === value)
 
             setForm((p: any) => ({
               ...p,

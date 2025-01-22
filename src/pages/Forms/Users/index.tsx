@@ -311,8 +311,8 @@ const FPpeople = () => {
             setOptions((opts) => ({
               ...opts,
               branch: parseOptionList(branchesList, "id", "name"),
-              franchise: parseOptionList(franchisesList, "id", "name"),
-              franchises: parseOptionList(franchisesList, "id", "name"),
+              franchise: parseOptionList(franchisesList, "userId", "name"),
+              franchises: parseOptionList(franchisesList, "userId", "name"),
             }))
           } else throw new Error()
         })

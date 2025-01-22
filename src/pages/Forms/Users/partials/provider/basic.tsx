@@ -29,37 +29,6 @@ export const basicProvider = ({
   isEditing,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
-    ...((isEditing
-      ? []
-      : [
-          {
-            type: "fields",
-            fields: [
-              ...((personType === "FRANQUEADO"
-                ? [
-                    {
-                      type: "readonly",
-                      label: "Franquia",
-                      field: "franqId",
-                      value: `${franchiseName} (Você)`,
-                      gridSizes: { big: 12 },
-                    } as FormField,
-                  ]
-                : [
-                    {
-                      type: "select",
-                      label: "Franquia",
-                      placeholder: "Selecione a franquia",
-                      field: "franqId",
-                      value: form.franqId ?? "",
-                      options: options.franchise,
-                      gridSizes: { big: 12 },
-                      elevation: 10,
-                    },
-                  ]) as FormField[]),
-            ],
-          },
-        ]) as TBlock["groups"]),
     {
       type: "fields",
       title: "Identidade do prestador",

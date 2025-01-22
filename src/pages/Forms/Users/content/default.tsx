@@ -94,21 +94,33 @@ export const DefaultContent = (props: Props) => {
                       ...((["SINDICO", "PRESTADOR"] as TAccess[]).includes(
                         personType
                       ) &&
-                      (["ADMIN", "FILIAL"] as TAccess[]).includes(
+                      (["ADMIN", "FILIAL", "FRANQUEADO"] as TAccess[]).includes(
                         user?.profile as TAccess
                       )
                         ? params && params.id !== undefined
                           ? []
-                          : [
-                              {
-                                type: "select",
-                                label: "Franquia",
-                                field: "franqId",
-                                options: options.franchise,
-                                value: form.franqId,
-                                gridSizes: { big: 12 },
-                              } as FormField,
-                            ]
+                          : ((user?.profile === "FRANQUEADO"
+                              ? [
+                                  {
+                                    type: "readonly",
+                                    label: "Franquia",
+                                    field: "franqId",
+                                    value: `${user?.name} (Você)`,
+                                    gridSizes: { big: 12 },
+                                  } as FormField,
+                                ]
+                              : [
+                                  {
+                                    type: "select",
+                                    label: "Franquia",
+                                    placeholder: "Selecione a franquia",
+                                    field: "franqId",
+                                    value: form.franqId ?? "",
+                                    options: options.franchise,
+                                    gridSizes: { big: 12 },
+                                    elevation: 10,
+                                  },
+                                ]) as FormField[])
                         : []),
                     ],
                   },
