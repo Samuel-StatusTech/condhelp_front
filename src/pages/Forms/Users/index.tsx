@@ -169,8 +169,24 @@ const FPpeople = () => {
           setLoading(false)
 
           navigate("/dashboard/users")
+        } else {
+          if (req.error) {
+            controllers.feedback.setData({
+              visible: true,
+              state: "error",
+              message: req.error,
+            })
+          } else throw new Error()
+        }
+      } else {
+        if (accountRegister.error) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "error",
+            message: accountRegister.error,
+          })
         } else throw new Error()
-      } else throw new Error()
+      }
     } catch (error) {
       // ...
       controllers.feedback.setData({
@@ -179,9 +195,9 @@ const FPpeople = () => {
         message:
           "Não foi possível registrar o usuário. Verifique as informações e tente novamente.",
       })
-
-      setLoading(false)
     }
+
+    setLoading(false)
   }
 
   const handleSave = async () => {
