@@ -194,6 +194,8 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
           ? person.userId
           : person.profile === "PRESTADOR"
           ? person.id
+          : person.profile === "FILIAL"
+          ? person.subsidiaryId
           : person.userAccountId
 
       const parsed =

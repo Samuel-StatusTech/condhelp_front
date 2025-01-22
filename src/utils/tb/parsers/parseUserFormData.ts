@@ -48,6 +48,7 @@ const getAdminObj = (user: TUserTypes["ADMIN"]) => {
 
 const getBranchObj = (user: TUserTypes["FILIAL"]) => {
   const info = {
+    subsidiaryId: user.userAccountId,
     name: user.name,
     address: {
       street: user.address.street,

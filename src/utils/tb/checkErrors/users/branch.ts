@@ -22,6 +22,7 @@ export const branchCheck = (
     if (data.phone1?.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone1")
     if (data.phone2 && data.phone2.replace(/\D/g, "").length < 10)
+      state = getInvalidCheck(state, "phone2")
 
     if (data.address.zipCode.replace(/\D/g, "").length < 8)
       state = getInvalidCheck(state, "address.zipCode")

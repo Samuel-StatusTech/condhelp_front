@@ -103,22 +103,35 @@ const MyAccount = () => {
       })
 
       if (req.ok) {
-        controllers.feedback.setData({
-          visible: true,
-          state: "success",
-          message: "Informações atualizadas com sucesso",
+        const id =
+          user?.profile === "PRESTADOR"
+            ? user?.userAccountId
+            : (user?.userId as number)
+
+        const userDataReq = await Api.persons.getSingle({
+          id: id,
+          profile: user?.profile as TAccess,
         })
 
-        setLoading(false)
+        if (userDataReq.ok) {
+          controllers.user.setData(userDataReq.data)
+          controllers.feedback.setData({
+            visible: true,
+            state: "success",
+            message: "Informações atualizadas com sucesso",
+          })
 
-        navigate(-1)
-      }
+          setLoading(false)
+
+          navigate(-1)
+        } else throw new Error()
+      } else throw new Error()
     } catch (error) {
       controllers.feedback.setData({
         visible: true,
         state: "alert",
         message:
-          "Houve um erro ao atualizar o usuário. Verifique as informações e tente novamente.",
+          "Houve um erro ao atualizar seus dados. Verifique as informações e tente novamente.",
       })
 
       setLoading(false)
@@ -236,9 +249,9 @@ const MyAccount = () => {
 
         navigate(-1)
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [controllers.feedback, controllers.user, form, navigate, user?.profile, user?.userAccountId, user?.userId]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [controllers.feedback, controllers.user, navigate, user]
   )
 
   useEffect(() => {
