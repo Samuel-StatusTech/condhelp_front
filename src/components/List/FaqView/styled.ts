@@ -101,10 +101,8 @@ export const ItemHeaderButtons = styled.div<{ $opened: boolean }>`
     width: 18px;
     height: 18px;
 
-    &:nth-child(2) {
-      transition: transform 0.3s;
-      transform: rotate(${({ $opened }) => ($opened ? 180 : 0)}deg);
-    }
+    transition: transform 0.3s;
+    transform: rotate(${({ $opened }) => ($opened ? 180 : 0)}deg);
   }
 `
 

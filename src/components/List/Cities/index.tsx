@@ -102,7 +102,6 @@ const CitiesList = ({
           id={city.id}
           handleDelete={handleDelete}
           onChange={handleCityName}
-          onEnter={handleAddCity}
           value={city.name}
           gridSizes={{ big: 12 }}
           placeholder="Nome da nova cidade"

@@ -86,7 +86,7 @@ const Item = ({ k, data, actions }: ItemProps) => {
             >
               <Icons.Trash />
             </S.BtnArea>
-            <S.BtnArea onClick={toggleOpened}>
+            <S.BtnArea onClick={toggleOpened} $turnIcon={opened}>
               <Icons.Dropdown />
             </S.BtnArea>
           </S.ItemHeaderButtons>

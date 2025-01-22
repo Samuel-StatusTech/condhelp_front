@@ -223,7 +223,16 @@ const FPfaq = () => {
         if (req.ok) {
           const info = req.data
 
-          if (info) setForm(info)
+          let profiles =
+            info.accessProfiles.length === 4
+              ? ["all", ...info.accessProfiles]
+              : info.accessProfiles
+
+          if (info)
+            setForm({
+              ...info,
+              accessProfiles: profiles as TAccess[],
+            })
           else throw new Error()
         }
       }

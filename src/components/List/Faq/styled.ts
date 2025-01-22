@@ -45,12 +45,17 @@ export const Buttons = styled.div`
   justify-content: center;
 `
 
-export const BtnArea = styled.div`
+export const BtnArea = styled.div<{ $turnIcon?: boolean }>`
   width: fit-content;
   display: flex;
   gap: 10px;
   cursor: pointer;
   padding: 4px;
+
+  svg {
+    transform: rotate(${({ $turnIcon }) => ($turnIcon ? 180 : 0)}deg);
+    transition: transform 0.3s;
+  }
 `
 
 export const ItemId = styled.span`
