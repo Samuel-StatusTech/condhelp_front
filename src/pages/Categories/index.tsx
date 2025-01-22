@@ -47,7 +47,7 @@ const CategoriesPage = () => {
   const [filters, setFilters] = useState({
     creator: "",
   })
-  const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
+  const [, setOptions] = useState<{ [key: string]: TOption[] }>({
     creator: [],
   })
 
@@ -143,14 +143,7 @@ const CategoriesPage = () => {
         onSearchChange={setSearch}
         onFilterChange={handleFilters}
         onSearch={handleSearch}
-        filters={[
-          {
-            label: "Criada por",
-            name: "creator",
-            options: options.creator,
-            value: filters.creator,
-          },
-        ]}
+        filters={[]}
       />
 
       <Divider />

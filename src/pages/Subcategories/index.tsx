@@ -166,12 +166,6 @@ const SubcategoriesPage = () => {
             options: options.serviceCategory,
             value: filters.serviceCategory,
           },
-          {
-            label: "Criada por",
-            name: "creator",
-            options: options.creator,
-            value: filters.creator,
-          },
         ]}
       />
 
