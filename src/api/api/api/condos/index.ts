@@ -141,10 +141,20 @@ const deleteItem: TApi["condos"]["delete"] = async ({ id }) => {
           }
         })
         .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível excluir o condomínio. Tente novamente mais tarde."
+
+          if (
+            err.response?.status === 409 &&
+            err.response &&
+            err.response.data
+          ) {
+            backMessage = (err.response.data as any).error
+          }
+
           resolve({
             ok: false,
-            error:
-              "Não foi possível excluir o condomínio. Tente novamente mais tarde.",
+            error: backMessage,
           })
         })
     } catch (error) {

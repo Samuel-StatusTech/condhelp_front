@@ -182,7 +182,13 @@ const FPcondo = () => {
             setLoading(false)
 
             navigate("/dashboard/condos")
-          } else throw new Error()
+          } else {
+            controllers.feedback.setData({
+              visible: true,
+              state: "error",
+              message: req.error,
+            })
+          }
         }
       } catch (error) {
         controllers.feedback.setData({
@@ -191,9 +197,9 @@ const FPcondo = () => {
           state: "error",
           visible: true,
         })
-
-        setLoading(false)
       }
+
+      setLoading(false)
     }
   }
 
