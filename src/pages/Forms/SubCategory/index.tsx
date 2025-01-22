@@ -158,9 +158,14 @@ const FPsubcategory = () => {
       const catReq = await Api.categories.listAll({})
 
       if (catReq.ok) {
+        const allowedCategories =
+          user?.profile === "ADMIN"
+            ? catReq.data.content
+            : catReq.data.content.filter((c) => c.user.userId === user?.userId)
+
         setOptions((opts) => ({
           ...opts,
-          serviceCategory: parseOptionList(catReq.data.content, "id", "name"),
+          serviceCategory: parseOptionList(allowedCategories, "id", "name"),
         }))
       }
 
@@ -188,7 +193,7 @@ const FPsubcategory = () => {
 
       setLoading(false)
     }
-  }, [controllers.feedback, params.id])
+  }, [controllers.feedback, params.id, user?.userId])
 
   useEffect(() => {
     // ...
