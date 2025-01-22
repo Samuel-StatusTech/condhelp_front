@@ -7,12 +7,17 @@ import { Icons } from "../../../../assets/icons/icons"
 import Button from "../../../Button"
 import { useNavigate } from "react-router-dom"
 import { breadcrumbs } from "../../../../utils/system/breadcrumbs"
+import { TAccess } from "../../../../utils/@types/data/access"
+import { relations } from "../../../../utils/system/relations"
 
 type Props = {
   from: TBreadCrumFrom
   forForm?: boolean
   noBack?: boolean
   handleAction?: () => void
+  extra?: {
+    personFormType?: TAccess
+  }
 }
 
 const BreadcrumbPageHeader = ({
@@ -20,6 +25,7 @@ const BreadcrumbPageHeader = ({
   forForm,
   noBack,
   handleAction,
+  extra,
 }: Props) => {
   const navigate = useNavigate()
 
@@ -30,6 +36,17 @@ const BreadcrumbPageHeader = ({
 
   const getPaths = () => {
     let pts: PPath[] = breadcrumbs[from]
+
+    if (extra && extra.personFormType) {
+      pts = [
+        {
+          title: relations.roles[extra.personFormType],
+        },
+        {
+          title: "Detalhes",
+        },
+      ]
+    }
 
     return pts
   }

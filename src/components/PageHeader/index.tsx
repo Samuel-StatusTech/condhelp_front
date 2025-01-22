@@ -24,6 +24,7 @@ type Props =
       type: "table"
       from: THeaderFrom
       action?: (p?: any) => void
+      extra?: any
     }
   | {
       type: "breadcrumb"
@@ -31,6 +32,7 @@ type Props =
       forForm?: boolean
       noBack?: boolean
       action?: (p?: any) => void
+      extra?: any
     }
 
 const PageHeader = (p: Props) => {
@@ -45,6 +47,9 @@ const PageHeader = (p: Props) => {
             forForm={p.forForm}
             noBack={p.noBack}
             handleAction={p.action}
+            extra={{
+              personFormType: p.extra?.profile,
+            }}
           />
         )
       default:
