@@ -11,6 +11,7 @@ import { Api } from "../../api"
 import { getStore } from "../../store"
 import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const FaqsPage = () => {
   const { controllers } = getStore()
@@ -113,7 +114,15 @@ const FaqsPage = () => {
         config={tableConfig.faqs}
         searchData={searchControl}
         setSearchFilters={setSearchFilters}
-        data={faqs}
+        data={faqs.filter((i) => {
+          const fields = [i.title, ...i.accessProfiles]
+
+          let ok = !!search
+            ? fields.some((val) => matchSearch(val, search))
+            : true
+
+          return ok
+        })}
         actions={{
           edit: handleEdit,
         }}
