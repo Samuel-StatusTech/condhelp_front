@@ -59,12 +59,23 @@ const FPsubcategory = () => {
         setLoading(false)
 
         navigate("/dashboard/subcategories")
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "error",
+          message: req.error,
+        })
       }
     } catch (error) {
-      // ...
-
-      setLoading(false)
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message:
+          "Houve um erro ao excluir a subcategoria. Tente novamente mais tarde.",
+      })
     }
+
+    setLoading(false)
   }
 
   const getObj = () => {

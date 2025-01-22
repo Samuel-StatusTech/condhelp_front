@@ -136,32 +136,40 @@ const deleteItem: TApi["subcategories"]["delete"] = async ({ id }) => {
       await service
         .delete(`${baseURL}/${id}`)
         .then((res) => {
-          const info = res.data
-
           if (res.status === 204) {
             resolve({
               ok: true,
-              data: info,
+              data: {},
             })
           } else {
             resolve({
               ok: false,
               error:
-                "Não foi possível excluir a categoria. Tente novamente mais tarde.",
+                "Não foi possível excluir a subcategoria. Tente novamente mais tarde.",
             })
           }
         })
         .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível excluir a subcategoria. Tente novamente mais tarde."
+
+          if (
+            err.response?.status === 400 &&
+            err.response &&
+            err.response.data
+          ) {
+            backMessage = (err.response.data as any).error
+          }
+
           resolve({
             ok: false,
-            error:
-              "Não foi possível excluir a categoria. Tente novamente mais tarde.",
+            error: backMessage,
           })
         })
     } catch (error) {
       reject({
         error:
-          "Não foi possível excluir a categoria. Tente novamente mais tarde.",
+          "Não foi possível excluir a subcategoria. Tente novamente mais tarde.",
       })
     }
   })

@@ -135,12 +135,10 @@ const deleteCategory: TApi["categories"]["delete"] = async ({ id }) => {
       await service
         .put(`${baseURL}/inactivate/${id}`)
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.status === 204) {
             resolve({
               ok: true,
-              data: info,
+              data: {},
             })
           } else {
             resolve({

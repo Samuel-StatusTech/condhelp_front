@@ -55,9 +55,14 @@ const FPcategory = () => {
         setLoading(false)
 
         navigate("/dashboard/categories")
-      }
+      } else throw new Error()
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message:
+          "Houve um erro ao excluir a categoria. Tente novamente mais tarde.",
+      })
 
       setLoading(false)
     }
