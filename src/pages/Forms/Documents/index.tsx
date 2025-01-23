@@ -164,7 +164,7 @@ const FPdocuments = () => {
 
       navigate(-1)
     }
-  }, [controllers.feedback, form, navigate, user?.userAccountId])
+  }, [controllers.feedback, navigate])
 
   useEffect(() => {
     loadData()
