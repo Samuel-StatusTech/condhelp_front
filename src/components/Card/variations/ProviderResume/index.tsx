@@ -15,6 +15,7 @@ type Props = {
   onPick: (provider: TProviderOnBudget) => void
   budgetId: number
   handleResponseProvider: (providerId: number, status: TBudgetStatus) => void
+  budgetStatus?: TBudgetStatus
 }
 
 /*
@@ -27,6 +28,7 @@ const ProviderResume = ({
   onPick,
   budgetId,
   handleResponseProvider,
+  budgetStatus,
 }: Props) => {
   const isRefusedOrRejected = [
     "RECUSADO_SINDICO",
@@ -133,7 +135,15 @@ const ProviderResume = ({
                     "EXPIRADO",
                     "FINALIZADO",
                   ] as TBudgetStatus[]
-                ).includes(data.status) && (
+                ).includes(data.status) &&
+                budgetStatus &&
+                !(
+                  [
+                    "CANCELADO_SINDICO",
+                    "EXPIRADO",
+                    "FINALIZADO",
+                  ] as TBudgetStatus[]
+                ).includes(budgetStatus) && (
                   <S.ButtonsArea>
                     <Button
                       type="quaternary"

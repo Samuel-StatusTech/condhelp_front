@@ -447,6 +447,7 @@ const DashboardManagerBudget = () => {
                 onPick={handlePickProvider}
                 budgetId={budgetData.id}
                 handleResponseProvider={handleResponseProvider}
+                budgetStatus={budgetData.status}
               />
             ))
           ) : (
