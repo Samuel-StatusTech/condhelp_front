@@ -389,8 +389,9 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                     ...info,
                     ...extraDataReq.data,
                   })
-
+                  
                   extraInfo.address.city = city?.name
+                  extraInfo.address.cityId = city?.id
                 } else if (userProfile === "FRANQUEADO") {
                   extraInfo = parseUserFranchise({
                     ...info,

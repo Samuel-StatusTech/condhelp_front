@@ -15,7 +15,9 @@ export type TUProvider = {
   profile: "PRESTADOR"
   franqId: number
   name: string
-  address: TAddress
+  address: TAddress & {
+    cityId?: number
+  }
 
   responsable: string
   website: string

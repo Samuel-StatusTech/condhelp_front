@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom"
 import {
   TNewUser,
   TNewUserDefault,
-  TUserTypes,
 } from "../../utils/@types/data/user"
 import { getUserObj } from "../../utils/tb/parsers/parseUserFormData"
 import { Api } from "../../api"
@@ -67,7 +66,7 @@ const MyAccount = () => {
           ...form,
           userId: id,
           // @ts-ignore
-          address: { ...(user.address ? user.address : {}) },
+          address: { ...(form.address ?? {}), city: form.cityId },
         },
         (form as TNewUser).profile
       )
@@ -171,7 +170,7 @@ const MyAccount = () => {
           if (hasInfo) {
             const initialRoleInfo = initials.forms.person[req.data.profile]
 
-            const reqInfo = req.data as TUserTypes["PRESTADOR"]
+            const reqInfo = req.data as any
 
             const gettedInfo = {
               ...form,
@@ -181,6 +180,12 @@ const MyAccount = () => {
                 address: !!reqInfo.address
                   ? {
                       ...reqInfo.address,
+                      city: reqInfo.address.city,
+                      cityId:
+                        reqInfo.address.cityId &&
+                        !Number.isNaN(+reqInfo.address.cityId)
+                          ? +reqInfo.address.cityId
+                          : null,
                       country: +reqInfo.address.country,
                       state: +reqInfo.address.state,
                     }

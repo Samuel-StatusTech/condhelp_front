@@ -6,7 +6,9 @@ export type TUBranch = {
   userAccountId: number
   profile: "FILIAL"
   name: string
-  address: TAddress
+  address: TAddress & {
+    cityId?: number
+  }
   addressId: number
   phone1: string
   phone2: string

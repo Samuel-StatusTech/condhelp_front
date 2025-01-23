@@ -55,7 +55,7 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
       number: user.address.number,
       complement: user.address.complement,
       zipCode: user.address.zipCode,
-      city: user.address.city,
+      city: user.address.cityId,
       state: user.address.state,
       country: user.address.country,
     },

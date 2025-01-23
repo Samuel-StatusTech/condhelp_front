@@ -10,6 +10,7 @@ import { TOption } from "../../../../utils/@types/data/option"
 import * as C from "../../styled"
 import { profileRelation } from "../../../../utils/@types/data/user"
 import { useCallback, useEffect, useState } from "react"
+import { checkProviderPendencyStatus } from "../../../../utils/tb/helpers/checkProviderPendencyStatus"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -166,19 +167,39 @@ export const DefaultContent = (props: Props) => {
                               >
                                 <ProviderLegalization
                                   label={"CND Federal"}
-                                  value={"free"}
+                                  value={checkProviderPendencyStatus({
+                                    isent: form.federalCndFree,
+                                    start: form.federalCndStart,
+                                    end: form.federalCndEnd,
+                                    register: form.federalCnd
+                                  })}
                                 />
                                 <ProviderLegalization
                                   label={"CND Estadual"}
-                                  value={"free"}
+                                  value={checkProviderPendencyStatus({
+                                    isent: form.stateCndFree,
+                                    start: form.stateCndStart,
+                                    end: form.stateCndEnd,
+                                    register: form.stateCnd
+                                  })}
                                 />
                                 <ProviderLegalization
                                   label={"CND Municipal"}
-                                  value={"free"}
+                                  value={checkProviderPendencyStatus({
+                                    isent: form.cityCndFree,
+                                    start: form.cityCndStart,
+                                    end: form.cityCndEnd,
+                                    register: form.cityCnd
+                                  })}
                                 />
                                 <ProviderLegalization
                                   label={"FGTS"}
-                                  value={"free"}
+                                  value={checkProviderPendencyStatus({
+                                    isent: form.fgtsCndFree,
+                                    start: form.fgtsCndStart,
+                                    end: form.fgtsCndEnd,
+                                    register: form.fgtsCnd
+                                  })}
                                 />
                               </div>
                             )
