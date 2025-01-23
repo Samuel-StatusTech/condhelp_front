@@ -101,7 +101,7 @@ export const handleField = async (
         } else if (field === "region") {
           if (form.region) {
             setForm((p: any) => ({ ...p, [field]: value, cities: [] }))
-          }
+          } else setForm((p: any) => ({ ...p, [field]: value }))
         } else setForm((p: any) => ({ ...p, [field]: value }))
         break
 
