@@ -32,7 +32,9 @@ export type TApi_Params_Persons = {
     }
     getAllBranches: {}
 
-    getBranchUsers: TDefaultFilters
+    getBranchUsers: TDefaultFilters & {
+      profile?: string
+    }
     getFranchiseUsers: TDefaultFilters
   }
 }

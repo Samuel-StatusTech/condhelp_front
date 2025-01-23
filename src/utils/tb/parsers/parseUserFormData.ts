@@ -73,8 +73,8 @@ const getBranchObj = (user: TUserTypes["FILIAL"]) => {
       responsibleStatus: user.responsible.responsibleStatus,
     },
 
-    phone1: user.phone1,
-    phone2: user.phone2,
+    phone1: user.phone1 ?? "",
+    phone2: user.phone2 ?? "",
   }
 
   return info
@@ -100,8 +100,8 @@ const getFranchiseObj = (user: TUserTypes["FRANQUEADO"]) => {
     number: user.address.number,
     complement: user.address.complement,
     postalCode: user.address.zipCode,
-    phone1: user.phone1,
-    phone2: user.phone2,
+    phone1: user.phone1 ?? "",
+    phone2: user.phone2 ?? "",
     email: user.email,
     typePerson: user.responsible.responsibleType === "CNPJ" ? "PJ" : "CPF",
 
@@ -135,8 +135,8 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
     profile: user.profile,
     status: user.status ? "ATIVO" : "INATIVO",
     surname: user.surname,
-    phone1: user.phone1,
-    phone2: user.phone2,
+    phone1: user.phone1 ?? "",
+    phone2: user.phone2 ?? "",
     documentType: user.documentType,
     documentNumber: user.documentNumber,
     condominiumIds: user.condominiums.map((c) => c.id),
@@ -162,9 +162,9 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
     email: user.email,
     site: user.website,
     logoUrl: "",
-    phone1: user.phone1,
-    phone2: user.phone2,
-    phone3: user.phone3,
+    phone1: user.phone1 ?? "",
+    phone2: user.phone2 ?? "",
+    phone3: user.phone3 ?? "",
     companyName: user.socialRole,
     cnpj: user.document.register,
     cardCnpjUrl: user.cnpjCard,

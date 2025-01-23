@@ -317,7 +317,8 @@ const FPpeople = () => {
       let proms: Promise<any>[] = []
 
       // For Persons select
-      proms.push(
+
+      const adminLogic = () =>
         Api.persons.listAll({ size: 300 }).then((usersReq) => {
           if (usersReq.ok) {
             const list = usersReq.data.content
@@ -337,7 +338,32 @@ const FPpeople = () => {
             }))
           } else throw new Error()
         })
-      )
+
+      const branchLogic = () =>
+        Api.persons
+          .getBranchUsers({ size: 300, profile: "FRANQUEADO" })
+          .then((usersReq) => {
+            if (usersReq.ok) {
+              const list = usersReq.data.content
+
+              const franchisesList = list.filter(
+                (i) => i.profile === "FRANQUEADO"
+              )
+
+              setFranchises(franchisesList)
+
+              setOptions((opts) => ({
+                ...opts,
+                branch: [],
+                franchise: parseOptionList(franchisesList, "userId", "name"),
+                franchises: parseOptionList(franchisesList, "userId", "name"),
+              }))
+            } else throw new Error()
+          })
+
+      if (user?.profile === "ADMIN" || user?.profile === "FILIAL") {
+        proms.push(user?.profile === "ADMIN" ? adminLogic() : branchLogic())
+      }
 
       // For Regions select
       proms.push(

@@ -93,13 +93,21 @@ export const extraProvider = (
                 label: "Início",
                 value: form.federalCndStart,
                 gridSizes: { big: 4, small: 12 },
+                maxDate: new Date(),
               },
               {
                 type: "date",
                 field: "federalCndEnd",
                 label: "Final",
-                value: form.federalCndEnd,
+                value:
+                  form.federalCndStart &&
+                  form.federalCndEnd &&
+                  new Date(form.federalCndStart).getTime() >
+                    new Date(form.federalCndEnd).getTime()
+                    ? form.federalCndStart
+                    : form.federalCndEnd,
                 gridSizes: { big: 4, small: 12 },
+                minDate: form.federalCndStart ?? undefined,
               },
             ],
             [
@@ -140,13 +148,21 @@ export const extraProvider = (
                 label: "Início",
                 value: form.stateCndStart,
                 gridSizes: { big: 4, small: 12 },
+                maxDate: new Date(),
               },
               {
                 type: "date",
                 field: "stateCndEnd",
                 label: "Final",
-                value: form.stateCndEnd,
+                value:
+                  form.stateCndStart &&
+                  form.stateCndEnd &&
+                  new Date(form.stateCndStart).getTime() >
+                    new Date(form.stateCndEnd).getTime()
+                    ? form.stateCndStart
+                    : form.stateCndEnd,
                 gridSizes: { big: 4, small: 12 },
+                minDate: form.stateCndStart ?? undefined,
               },
             ],
             [
@@ -185,8 +201,15 @@ export const extraProvider = (
                 type: "date",
                 field: "cityCndStart",
                 label: "Início",
-                value: form.cityCndStart,
+                value:
+                  form.cityCndStart &&
+                  form.cityCndEnd &&
+                  new Date(form.cityCndStart).getTime() >
+                    new Date(form.cityCndEnd).getTime()
+                    ? form.cityCndStart
+                    : form.cityCndEnd,
                 gridSizes: { big: 4, small: 12 },
+                maxDate: new Date(),
               },
               {
                 type: "date",
@@ -194,6 +217,7 @@ export const extraProvider = (
                 label: "Final",
                 value: form.cityCndEnd,
                 gridSizes: { big: 4, small: 12 },
+                minDate: form.cityCndStart ?? undefined,
               },
             ],
             [
@@ -232,8 +256,15 @@ export const extraProvider = (
                 type: "date",
                 field: "fgtsCndStart",
                 label: "Início",
-                value: form.fgtsCndStart,
+                value:
+                  form.fgtsCndStart &&
+                  form.fgtsCndEnd &&
+                  new Date(form.fgtsCndStart).getTime() >
+                    new Date(form.fgtsCndEnd).getTime()
+                    ? form.fgtsCndStart
+                    : form.fgtsCndEnd,
                 gridSizes: { big: 4, small: 12 },
+                maxDate: new Date(),
               },
               {
                 type: "date",
@@ -241,6 +272,7 @@ export const extraProvider = (
                 label: "Final",
                 value: form.fgtsCndEnd,
                 gridSizes: { big: 4, small: 12 },
+                minDate: form.fgtsCndStart ?? undefined,
               },
             ],
             [

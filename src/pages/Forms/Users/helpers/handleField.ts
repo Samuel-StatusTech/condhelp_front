@@ -88,6 +88,7 @@ export const handleField = async (
                   stateRegistration: "",
                   municipalRegistration: "",
                   cpf: "",
+                  responsibleStatus: "ATIVO"
                 }
               : {
                   ...form.responsible,
