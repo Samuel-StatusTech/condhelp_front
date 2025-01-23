@@ -2,6 +2,8 @@ import { getInvalidCheck } from ".."
 import { TUFranchise } from "../../../@types/data/_user/franchise"
 import { TNewUserDefault } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { cnpjValidator } from "../../helpers/validatorCnpj"
+import { cpfValidator } from "../../helpers/validatorCpf"
 import { validEmail } from "../email"
 
 type Params = (TNewUserDefault & TUFranchise) | null
@@ -42,12 +44,18 @@ export const franchiseCheck = (
 
     if (data.responsible) {
       if (data.responsible.responsibleType === "CPF") {
-        if (data.responsible.cpf.replace(/\D/g, "").length < 11)
+        if (
+          data.responsible.cpf.replace(/\D/g, "").length < 11 ||
+          !cpfValidator(data.responsible.cpf)
+        )
           state = getInvalidCheck(state, "responsible.cpf")
         if (!data.responsible.personName?.trim())
           state = getInvalidCheck(state, "responsible.personName")
       } else if (data.responsible.responsibleType === "CNPJ") {
-        if (data.responsible.cnpj.replace(/\D/g, "").length < 14)
+        if (
+          data.responsible.cnpj.replace(/\D/g, "").length < 14 ||
+          !cnpjValidator(data.responsible.cnpj)
+        )
           state = getInvalidCheck(state, "responsible.cnpj")
         if (!data.responsible.fantasyName?.trim())
           state = getInvalidCheck(state, "responsible.fantasyName")

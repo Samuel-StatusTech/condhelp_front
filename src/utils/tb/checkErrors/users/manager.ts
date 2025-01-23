@@ -1,6 +1,7 @@
 import { getInvalidCheck } from ".."
 import { TNewUserDefault, TUManager } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { cpfValidator } from "../../helpers/validatorCpf"
 import { validEmail } from "../email"
 
 type Params = (TNewUserDefault & TUManager) | null
@@ -27,7 +28,10 @@ export const managerCheck = (
       state = getInvalidCheck(state, "phone2")
     if (!data.documentType?.trim())
       state = getInvalidCheck(state, "documentType")
-    if (data.documentNumber?.replace(/\D/g, "").length < 11)
+    if (
+      data.documentNumber?.replace(/\D/g, "").length < 11 ||
+      !cpfValidator(data.documentNumber)
+    )
       state = getInvalidCheck(state, "documentNumber")
     if (!data.managerSince) state = getInvalidCheck(state, "managerSince")
     if (!data.birthDate) state = getInvalidCheck(state, "birthDate")

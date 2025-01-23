@@ -2,6 +2,7 @@ import { getInvalidCheck } from ".."
 import { TUProvider } from "../../../@types/data/_user/provider"
 import { TNewUserDefault } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { cnpjValidator } from "../../helpers/validatorCnpj"
 import { validEmail } from "../email"
 
 type Params = (TNewUserDefault & TUProvider) | null
@@ -28,7 +29,10 @@ export const providerCheck = (
     if (!data.franqId) state = getInvalidCheck(state, "franchise")
     if (!data.responsable?.trim()) state = getInvalidCheck(state, "responsable")
     if (!data.website?.trim()) state = getInvalidCheck(state, "website")
-    if (data.document.register?.replace(/\D/g, "").length < 14)
+    if (
+      data.document.register?.replace(/\D/g, "").length < 14 ||
+      !cnpjValidator(data.document.register)
+    )
       state = getInvalidCheck(state, "document.register")
     if (!data.document.date) state = getInvalidCheck(state, "document.date")
     if (
