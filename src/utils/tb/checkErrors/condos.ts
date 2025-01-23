@@ -1,6 +1,7 @@
 import { getInvalidCheck } from "."
 import { TCondominium, TNewCondominium } from "../../@types/data/condominium"
 import { TErrorsCheck } from "../../@types/helpers/checkErrors"
+import { cnpjValidator } from "../helpers/validatorCnpj"
 
 type Params = TNewCondominium | TCondominium
 
@@ -19,7 +20,8 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     (!Number.isNaN(data.unities) && Number(data.unities) < 1)
   )
     state = getInvalidCheck(state, "unities")
-  if (!data.cnpj.trim()) state = getInvalidCheck(state, "cnpj")
+  if (!data.cnpj.trim() || !cnpjValidator(data.cnpj))
+    state = getInvalidCheck(state, "cnpj")
   if (!data.address.trim()) state = getInvalidCheck(state, "address")
 
   if (

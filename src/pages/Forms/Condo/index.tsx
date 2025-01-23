@@ -287,7 +287,7 @@ const FPcondo = () => {
       if (user?.profile === "SINDICO") {
         setForm((frm) => ({
           ...frm,
-          managerId: user?.managerId,
+          managerId: user?.userId,
           manager: user,
         }))
         loadEditInfo()
