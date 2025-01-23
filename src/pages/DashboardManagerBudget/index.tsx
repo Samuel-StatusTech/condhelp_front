@@ -133,8 +133,17 @@ const DashboardManagerBudget = () => {
         if (req.ok) {
           let info = req.data as TUserTypes["PRESTADOR"]
 
-          info.address.state = +info.address.state as any
-          info.address.country = +info.address.country as any
+          const stateReq = await Api.states.getSingle({
+            id: +info.address.state,
+          })
+
+          if (stateReq.ok) {
+            info.address.state = stateReq.data.name
+            info.address.country = stateReq.data.country.name
+          } else {
+            info.address.state = ""
+            info.address.country = ""
+          }
 
           setProvider(info as TUserTypes["PRESTADOR"])
         } else throw new Error()
