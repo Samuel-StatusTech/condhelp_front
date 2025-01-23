@@ -7,7 +7,9 @@ export type TUFranchise = {
 
   profile: "FRANQUEADO"
   name: string
-  address: TAddress
+  address: TAddress & {
+    cityId?: number
+  }
 
   phone1: string
   phone2: string
@@ -31,6 +33,7 @@ export type T_Back_Franchise = {
       id: number
       name: string
     }
+    cityId?: number
   }
   phone1: string
   phone2: string

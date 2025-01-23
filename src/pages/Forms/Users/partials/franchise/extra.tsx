@@ -67,25 +67,27 @@ export const extraFranchise = (
                     (c) => c.id === city
                   ) as TCity
 
-                  return (
-                    <div
-                      key={cityKey}
-                      style={{
-                        padding: 6,
-                        borderRadius: 18,
-                        backgroundColor: "white",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 4,
-                        cursor: "pointer",
-                      }}
-                    >
-                      <span style={{ whiteSpace: "nowrap" }}>
-                        {cityData.name}
-                      </span>
-                      {/* <Icons.Close width={16} height={16} /> */}
-                    </div>
-                  ) as JSX.Element
+                  return cityData
+                    ? ((
+                        <div
+                          key={cityKey}
+                          style={{
+                            padding: 6,
+                            borderRadius: 18,
+                            backgroundColor: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <span style={{ whiteSpace: "nowrap" }}>
+                            {cityData.name}
+                          </span>
+                          {/* <Icons.Close width={16} height={16} /> */}
+                        </div>
+                      ) as JSX.Element)
+                    : null
                 })
 
             return (

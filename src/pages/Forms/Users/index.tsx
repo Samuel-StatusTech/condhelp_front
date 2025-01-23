@@ -13,7 +13,6 @@ import {
   TNewUser,
   TNewUserDefault,
   TUser,
-  TUserTypes,
 } from "../../../utils/@types/data/user"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
@@ -279,7 +278,7 @@ const FPpeople = () => {
           if (hasInfo) {
             const initialRoleInfo = initials.forms.person[req.data.profile]
 
-            const reqInfo = req.data as TUserTypes["PRESTADOR"]
+            const reqInfo = req.data as any
 
             const gettedInfo = {
               ...form,
@@ -289,6 +288,12 @@ const FPpeople = () => {
                 address: !!reqInfo.address
                   ? {
                       ...reqInfo.address,
+                      city: reqInfo.address.city,
+                      cityId:
+                        reqInfo.address.cityId &&
+                        !Number.isNaN(+reqInfo.address.cityId)
+                          ? +reqInfo.address.cityId
+                          : null,
                       country: +reqInfo.address.country,
                       state: +reqInfo.address.state,
                     }
@@ -577,7 +582,7 @@ const FPpeople = () => {
         regions,
         setIsManagingFranchiseCities,
         extra: {
-          profile: "SINDICO",
+          profile: form.profile,
         },
       }}
     />

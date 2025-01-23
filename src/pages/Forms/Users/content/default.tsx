@@ -9,7 +9,7 @@ import { TAccess } from "../../../../utils/@types/data/access"
 import { TOption } from "../../../../utils/@types/data/option"
 import * as C from "../../styled"
 import { profileRelation } from "../../../../utils/@types/data/user"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -48,7 +48,15 @@ export const DefaultContent = (props: Props) => {
     extra,
   } = props
 
-  const [extraSelf] = useState(extra)
+  const [extraSelf, setExtraSelf] = useState(extra)
+
+  const updateExtraSelf = useCallback(() => {
+    if (extra.profile !== extraSelf.profile) setExtraSelf(extra)
+  }, [extra, extraSelf.profile])
+
+  useEffect(() => {
+    updateExtraSelf()
+  }, [extra, updateExtraSelf])
 
   return (
     <C.Content className="falseSubContentWrapper">

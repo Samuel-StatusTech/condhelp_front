@@ -398,6 +398,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                   })
 
                   extraInfo.address.city = city?.name
+                  extraInfo.address.cityId = city?.id
                 }
 
                 resolve({

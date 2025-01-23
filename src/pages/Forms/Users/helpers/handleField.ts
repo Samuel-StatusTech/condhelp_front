@@ -77,10 +77,31 @@ export const handleField = async (
 
           const fieldName = fieldKey.charAt(0).toLowerCase() + fieldKey.slice(1)
 
+          const newRespData =
+            field === "responsableResponsibleType"
+              ? {
+                  personName: "",
+                  responsibleType: value,
+                  fantasyName: "",
+                  companyName: "",
+                  cnpj: "",
+                  stateRegistration: "",
+                  municipalRegistration: "",
+                  cpf: "",
+                }
+              : {
+                  ...form.responsible,
+                  [fieldName]: value,
+                }
+
           setForm((p: any) => ({
             ...p,
-            responsible: { ...p.responsible, [fieldName]: value },
+            responsible: newRespData,
           }))
+        } else if (field === "region") {
+          if (form.region) {
+            setForm((p: any) => ({ ...p, [field]: value, cities: [] }))
+          }
         } else setForm((p: any) => ({ ...p, [field]: value }))
         break
 
