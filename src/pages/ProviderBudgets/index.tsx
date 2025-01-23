@@ -8,7 +8,7 @@ import Card from "../../components/Card"
 
 import Divider from "../../components/_minimals/Divider"
 import { Api } from "../../api"
-import ProviderBudgetDetails from "../Dashboard/rolePages/details/providerBudgetDetails"
+import DashboardProviderBudget from "../DashboardProviderBudget"
 
 type Props = {
   status: TProviderBudgetResume["status"]
@@ -110,13 +110,14 @@ const ProviderBudgets = ({ status }: Props) => {
       </S.SubContent>
     </S.Content>
   ) : (
-    <ProviderBudgetDetails
-      budget={budget}
-      handleBack={() => {
-        setBudget(null)
-        window.location.reload()
-      }}
-    />
+    // <ProviderBudgetDetails
+    //   budget={budget}
+    //   handleBack={() => {
+    //     setBudget(null)
+    //     window.location.reload()
+    //   }}
+    // />
+    <DashboardProviderBudget />
   )
 }
 
