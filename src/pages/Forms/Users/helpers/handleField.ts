@@ -140,6 +140,7 @@ export const handleField = async (
           case "documentDate":
             setForm((p: any) => ({
               ...p,
+              openingDate: value,
               document: { ...p.document, date: value },
             }))
             break
