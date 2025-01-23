@@ -169,18 +169,8 @@ const DashboardManagerBudget = () => {
           providerId,
         })
 
-        if (req.ok) {
-          setBudgetData({
-            ...budgetData,
-            providers: budgetData.providers.map((p) => ({
-              ...p,
-              status:
-                p.userId !== providerId ? "RECUSADO_SINDICO" : "CONTRATADO",
-            })),
-          })
-
-          setLoading(false)
-        } else throw new Error()
+        if (req.ok) window.location.reload()
+        else throw new Error()
       } else throw new Error()
     } catch (error) {
       setLoading(false)
