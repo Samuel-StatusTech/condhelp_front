@@ -53,11 +53,7 @@ const FPcondo = () => {
   }
 
   const getObj = (): TNewCondominium | TCondominium => {
-    const mId = Number(
-      (form as TNewCondominium).managerId ??
-        form.manager.managerId ??
-        form.manager.userId
-    )
+    const mId = params.id ? form.manager.managerId : form.manager.userId
 
     const obj: any = {
       name: form.name,
@@ -73,12 +69,29 @@ const FPcondo = () => {
       managerId: mId,
     }
 
+    let branchId = 0
+    let franchiseId = 0
+
+    if (user?.profile === "SINDICO") {
+      branchId = user?.branchId as number
+      franchiseId = user?.franchiseId as number
+    } else if (user?.profile === "FRANQUEADO") {
+      branchId = user?.branchId as number
+      franchiseId = user?.userId as number
+    } else if (user?.profile === "FILIAL") {
+      branchId = user?.userId as number
+      franchiseId = form.manager.franchiseId as number
+    } else if (user?.profile === "ADMIN") {
+      branchId = form.manager.branchId as number
+      franchiseId = form.manager.franchiseId as number
+    }
+
     return params.id && !Number.isNaN(params.id)
       ? { ...obj, id: params.id }
       : {
           ...obj,
-          branchId: user?.branchId,
-          franchiseId: user?.franchiseId,
+          branchId: branchId,
+          franchiseId: franchiseId,
         }
   }
 
@@ -205,7 +218,11 @@ const FPcondo = () => {
 
   const handleField = async (field: string, value: any) => {
     if (field === "managerId") {
-      const m = managers.find((i) => i.managerId === value)
+      const m = params.id
+        ? managers.find((i) => i.managerId === value)
+        : managers.find((i) => i.userId === value)
+
+      console.log(m, value)
 
       setForm((f: any) => ({ ...f, manager: m }))
     } else if (field === "managerSince") {
@@ -287,7 +304,7 @@ const FPcondo = () => {
       if (user?.profile === "SINDICO") {
         setForm((frm) => ({
           ...frm,
-          managerId: user?.userId,
+          managerId: params.id ? user?.managerId : user?.userId,
           manager: user,
         }))
         loadEditInfo()
@@ -295,14 +312,18 @@ const FPcondo = () => {
         const managersReq = await Api.persons.getByRole({ role: "SINDICO" })
 
         if (managersReq.ok) {
-          setManagers(managersReq.data.content as TUserTypes["SINDICO"][])
+          const managersList = managersReq.data.content
+
+          const managersListOptions = params.id
+            ? parseOptionList(managersList, "managerId", "name")
+            : parseOptionList(managersList, "userId", "name")
+
+          console.log(managersListOptions)
+
+          setManagers(managersList as TUserTypes["SINDICO"][])
           setOptions((opts) => ({
             ...opts,
-            managers: parseOptionList(
-              managersReq.data.content,
-              "managerId",
-              "name"
-            ),
+            managers: managersListOptions,
           }))
 
           loadEditInfo()
@@ -320,12 +341,17 @@ const FPcondo = () => {
 
       setLoading(false)
     }
-  }, [controllers, loadEditInfo, user])
+  }, [controllers.feedback, loadEditInfo, params.id, user])
 
   useEffect(() => {
     // ...
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    // ...
+    console.log(form)
+  }, [form])
 
   useEffect(() => {
     controllers.modal.open({
@@ -485,8 +511,9 @@ const FPcondo = () => {
                                 type: "select",
                                 label: "Síndico",
                                 field: "managerId",
-                                // @ts-ignore
-                                value: form.manager.managerId,
+                                value: params.id
+                                  ? form.manager.managerId
+                                  : form.manager.userId,
                                 gridSizes: { big: 9, small: 6 },
                                 options: options.managers,
                               },

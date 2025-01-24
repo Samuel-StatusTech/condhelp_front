@@ -221,13 +221,13 @@ const DashboardProviderBudget = () => {
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
-                <S.DetailName>Telefone síndico:</S.DetailName>
+                <S.DetailName>Telefone:</S.DetailName>
                 <S.DetailValue>
                   {budget?.phone ?? "Carregando..."}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
-                <S.DetailName>Email síndico:</S.DetailName>
+                <S.DetailName>Email:</S.DetailName>
                 <S.DetailValue>
                   {budget?.email ?? "Carregando..."}
                 </S.DetailValue>

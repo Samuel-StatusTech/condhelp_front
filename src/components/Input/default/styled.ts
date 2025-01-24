@@ -52,7 +52,7 @@ export const Input = styled.input<{ $error?: boolean }>`
   padding: 15px;
   border-radius: 10px;
   color: ${({ $error, theme }) =>
-    $error ? theme.colors.red.main : theme.colors.neutral.main};
+    $error ? theme.colors.red.main : theme.colors.neutral.dark};
   background-color: ${({ $error, theme }) =>
     $error ? `rgba(255, 0, 0, 0.1)` : theme.colors.neutral.white};
   border: none;
