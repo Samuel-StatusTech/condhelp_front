@@ -1,65 +1,141 @@
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+
 export const handleField = async (
   field: string,
   value: any,
   form: any,
-  setForm: (newData: any) => void
+  setForm: (newData: any) => void,
+  errors: TErrorsCheck,
+  setErrors: React.Dispatch<React.SetStateAction<TErrorsCheck>>
 ) => {
-  switch (form.profile) {
-    case "FILIAL":
-    case "FRANQUEADO":
-      const responsableKeys = [
-        "responsablePersonName",
-        "responsableResponsibleType",
-        "responsableFantasyName",
-        "responsableCompanyName",
-        "responsableCnpj",
-        "responsableStateRegistration",
-        "responsableMunicipalRegistration",
-        "responsableCpf",
-      ]
+  if (errors.fields.includes(field)) {
+    const newFieldsList = errors.fields.filter(
+      (errorItem) => errorItem !== field
+    )
+    setErrors({
+      fields: newFieldsList,
+      has: newFieldsList.length > 0,
+    })
+  }
 
-      if (responsableKeys.includes(field)) {
-        const fieldKey = field.split("responsable")[1]
+  if (
+    [
+      "country",
+      "state",
+      "city",
+      "street",
+      "number",
+      "complement",
+      "zipCode",
+    ].includes(field)
+  ) {
+    setForm((p: any) => ({
+      ...p,
+      // @ts-ignore
+      address: { ...p.address, [field]: value },
+    }))
+  } else {
+    switch (form.profile) {
+      case "FILIAL":
+      case "FRANQUEADO":
+        const responsableKeys = [
+          "responsablePersonName",
+          "responsableResponsibleType",
+          "responsableFantasyName",
+          "responsableCompanyName",
+          "responsableCnpj",
+          "responsableStateRegistration",
+          "responsableMunicipalRegistration",
+          "responsableCpf",
+        ]
 
-        const fieldName = fieldKey.charAt(0).toLowerCase() + fieldKey.slice(1)
+        if (responsableKeys.includes(field)) {
+          const fieldKey = field.split("responsable")[1]
 
-        setForm((p: any) => ({
-          ...p,
-          responsible: { ...p.responsible, [fieldName]: value },
-        }))
-      } else setForm((p: any) => ({ ...p, [field]: value }))
-      break
+          const fieldName = fieldKey.charAt(0).toLowerCase() + fieldKey.slice(1)
 
-    case "SINDICO":
-      setForm((p: any) => ({ ...p, [field]: value }))
-      break
-
-    case "PRESTADOR":
-      switch (field) {
-        case "categories":
-          const shouldInclude =
-            Array.isArray(form.categories) &&
-            !form.categories.includes(value as number)
-
-          const newList = shouldInclude
-            ? [...form.categories, value]
-            : form.categories.filter((i: number) => i !== value)
+          const newRespData =
+            field === "responsableResponsibleType"
+              ? {
+                  personName: "",
+                  responsibleType: value,
+                  fantasyName: "",
+                  companyName: "",
+                  cnpj: "",
+                  stateRegistration: "",
+                  municipalRegistration: "",
+                  cpf: "",
+                  responsibleStatus: "ATIVO",
+                }
+              : {
+                  ...form.responsible,
+                  [fieldName]: value,
+                }
 
           setForm((p: any) => ({
             ...p,
-            categories: newList,
+            responsible: newRespData,
           }))
-          break
 
-        default:
-          setForm((p: any) => ({ ...p, [field]: value }))
-          break
-      }
+          if (field === "responsableResponsibleType") {
+            const fieldsToClear =
+              value === "CNPJ"
+                ? ["personName", "cpf"]
+                : [
+                    "fantasyName",
+                    "companyName",
+                    "cnpj",
+                    "stateRegistration",
+                    "municipalRegistration",
+                  ]
 
-      break
+            const newFieldsList = errors.fields.filter(
+              (errorItem) => !fieldsToClear.includes(errorItem)
+            )
 
-    default:
-      setForm((p: any) => ({ ...p, [field]: value }))
-      break
+            setErrors({
+              fields: newFieldsList,
+              has: newFieldsList.length > 0,
+            })
+          }
+        } else if (field === "region") {
+          if (form.region) {
+            setForm((p: any) => ({ ...p, [field]: value, cities: [] }))
+          } else setForm((p: any) => ({ ...p, [field]: value }))
+        } else setForm((p: any) => ({ ...p, [field]: value }))
+        break
+
+      case "SINDICO":
+        setForm((p: any) => ({ ...p, [field]: value }))
+        break
+
+      case "PRESTADOR":
+        switch (field) {
+          case "categories":
+            const shouldInclude =
+              Array.isArray(form.categories) &&
+              !form.categories.includes(value as number)
+
+            const newList = shouldInclude
+              ? [...form.categories, value]
+              : form.categories.filter((i: number) => i !== value)
+
+            setForm((p: any) => ({
+              ...p,
+              categories: newList,
+            }))
+            break
+
+          default:
+            setForm((p: any) => ({ ...p, [field]: value }))
+            break
+        }
+
+        break
+
+      default:
+        setForm((p: any) => ({ ...p, [field]: value }))
+        break
+    }
   }
 }

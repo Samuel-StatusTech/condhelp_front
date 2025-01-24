@@ -1,5 +1,7 @@
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 import * as S from "./styled"
+import * as C from "../styled"
 
 export type TReadonlyField = {
   label?: string
@@ -7,6 +9,8 @@ export type TReadonlyField = {
   value: string
   fixedWidth?: number
   disabled?: boolean
+
+  error?: TFieldError
 }
 
 type Props = TReadonlyField & {
@@ -15,7 +19,7 @@ type Props = TReadonlyField & {
 }
 
 const ReadonlyField = (props: Props) => {
-  const { label, value, disabled } = props
+  const { label, value, disabled, error } = props
 
   return (
     <S.Wrapper
@@ -24,8 +28,14 @@ const ReadonlyField = (props: Props) => {
       $disabled={disabled}
     >
       <S.Area>
-        {label && <S.Label>{label}</S.Label>}
-        <S.DataArea>{value}</S.DataArea>
+        {label && <S.Label $error={error?.has}>{label}</S.Label>}
+        <S.DataArea $error={error?.has}>{value}</S.DataArea>
+
+        {error?.message && (
+          <C.ErrorMessage $visible={error && error?.has}>
+            {error?.message}
+          </C.ErrorMessage>
+        )}
       </S.Area>
     </S.Wrapper>
   )

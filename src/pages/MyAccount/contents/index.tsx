@@ -1,6 +1,9 @@
 import { getStore } from "../../../store"
 import { TBlock } from "../../../utils/@types/components/Form"
 import { TAccess } from "../../../utils/@types/data/access"
+import { TOption } from "../../../utils/@types/data/option"
+import { TCity } from "../../../utils/@types/data/region"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 import MyAccountBranch from "./branch"
 import MyAccountFranchise from "./franchise"
@@ -15,6 +18,14 @@ type Props = {
 
     form: any
     formSubmitFields: TBlock["groups"][number]
+
+    errors: TErrorsCheck
+  } & {
+    // Provider
+    handleSelectCity?: (city: TCity) => void
+    options?: {
+      [key: string]: TOption[]
+    }
   }
 }
 

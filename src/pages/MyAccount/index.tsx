@@ -7,16 +7,15 @@ import { handleField } from "./helpers/handleField"
 import { useCallback, useEffect, useState } from "react"
 import initials from "../../utils/initials"
 import { useNavigate } from "react-router-dom"
-import {
-  TNewUser,
-  TNewUserDefault,
-} from "../../utils/@types/data/user"
+import { TNewUser, TNewUserDefault } from "../../utils/@types/data/user"
 import { getUserObj } from "../../utils/tb/parsers/parseUserFormData"
 import { Api } from "../../api"
-import { checkErrors } from "../../utils/tb/checkErrors"
 import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import { TCategory } from "../../utils/@types/data/category"
 import { TOption } from "../../utils/@types/data/option"
+import { TErrorsCheck } from "../../utils/@types/helpers/checkErrors"
+import { checkErrors } from "../../utils/tb/checkErrors"
+import { TState } from "../../utils/@types/data/region"
 
 const MyAccount = () => {
   const { user, controllers } = getStore()
@@ -28,8 +27,9 @@ const MyAccount = () => {
   )
 
   const [, setCategories] = useState<TCategory[]>([])
+  const [states, setStates] = useState<TState[]>([])
 
-  const [, setOptions] = useState<{ [key: string]: TOption[] }>({
+  const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     company: [],
     department: [],
     level: [],
@@ -42,6 +42,10 @@ const MyAccount = () => {
     state: [],
     franchises: [],
     category: [],
+  })
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
   })
 
   const getObj = () => {
@@ -137,8 +141,31 @@ const MyAccount = () => {
     }
   }
 
-  const errors = () => {
+  const updateErrors = () => {
     return checkErrors.users(form)
+  }
+
+  const handleSave = async () => {
+    try {
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) handleUpdate()
+      else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message: "Houve um erro. Verifique os campos e tente novamente.",
+      })
+    }
   }
 
   /*
@@ -232,6 +259,45 @@ const MyAccount = () => {
             })
         )
 
+        // For Countries select
+        proms.push(
+          Api.countries.listAll({ size: 300 }).then((res) => {
+            if (res.ok) {
+              setOptions((opts) => ({
+                ...opts,
+                country: parseOptionList(res.data.content, "id", "name"),
+              }))
+            } else {
+              controllers.feedback.setData({
+                message:
+                  "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+                state: "error",
+                visible: true,
+              })
+              navigate(-1)
+            }
+          })
+        )
+
+        // For States select
+        proms.push(
+          Api.states.listAll({ size: 300 }).then((res) => {
+            if (res.ok) {
+              const results = res.data.content
+
+              setStates(results)
+            } else {
+              controllers.feedback.setData({
+                message:
+                  "Houve um erro ao carregar informações para cadastro. Tente novamente mais tarde.",
+                state: "error",
+                visible: true,
+              })
+              navigate(-1)
+            }
+          })
+        )
+
         await Promise.all(proms).catch((err) => {
           controllers.feedback.setData({
             message:
@@ -263,6 +329,19 @@ const MyAccount = () => {
     loadData()
   }, [loadData])
 
+  useEffect(() => {
+    if (form && form.address && form.address.country) {
+      const availableStates = states.filter(
+        (s) => Number(s.country.id) === Number(form.address.country)
+      )
+
+      setOptions((opt) => ({
+        ...opt,
+        state: parseOptionList(availableStates, "id", "name"),
+      }))
+    }
+  }, [form, states])
+
   /*
    *  Fields render
    */
@@ -273,14 +352,14 @@ const MyAccount = () => {
       <FormDefaultButtons
         handleDelete={undefined}
         handleCancel={handleCancel}
-        handleSave={handleUpdate}
-        disabled={errors().has}
+        handleSave={handleSave}
+        disabled={errors.has}
       />
     ),
   }
 
   const onHandleField = (field: string, value: any) => {
-    handleField(field, value, form, setForm)
+    handleField(field, value, form, setForm, errors, setErrors)
   }
 
   useEffect(() => {
@@ -295,9 +374,11 @@ const MyAccount = () => {
       info={{
         handleField: onHandleField,
         handleCancel,
-        handleSave: handleUpdate,
+        handleSave: handleSave,
         form,
         formSubmitFields,
+        options: options,
+        errors: errors,
       }}
     />
   )
