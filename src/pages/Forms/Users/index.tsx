@@ -88,7 +88,7 @@ const FPpeople = () => {
       photo: null,
       branchId: form.branchId,
       franchiseId: form.franchiseId,
-      document: "",
+      doc: "",
     }
 
     let info = getUserObj(
@@ -147,7 +147,7 @@ const FPpeople = () => {
         const document = getUserDocument(obj)
 
         const req = await Api.persons.update({
-          person: { ...(obj as any), document: document },
+          person: { ...(obj as any), doc: document },
         })
 
         if (req.ok) {
@@ -192,7 +192,7 @@ const FPpeople = () => {
         const obj = getObj(accountRegister.data.id)
 
         const req = await Api.persons.create({
-          newPerson: { ...obj, document: document } as TNewUser,
+          newPerson: { ...obj, doc: document } as TNewUser,
         })
 
         if (req.ok) {

@@ -37,7 +37,7 @@ export const usersCheck = (data: Params): TErrorsCheck => {
         })
         break
       case "PRESTADOR":
-        providerCheck(data, (newState: TErrorsCheck) => {
+        providerCheck(data as any, (newState: TErrorsCheck) => {
           state = newState
         })
         break

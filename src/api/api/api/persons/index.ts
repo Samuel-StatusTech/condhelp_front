@@ -77,7 +77,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           status: newPerson.status,
           branchId: newPerson.branchId,
           franchiseId: newPerson.franchiseId,
-          document: newPerson.document,
+          document: newPerson.doc,
         })
 
         if (!userAccountRegister.data) {
@@ -173,7 +173,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
             status: person.status,
             branchId: person.branchId,
             franchiseId: person.franchiseId,
-            document: person.document,
+            document: person.doc,
           }
         )
 

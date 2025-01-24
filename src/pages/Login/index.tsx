@@ -43,6 +43,7 @@ const Login = () => {
           usuario: form.email,
           senha: form.pass,
           tipo: "SINDICO",
+          document: "",
         })
 
         if (auth.ok) {

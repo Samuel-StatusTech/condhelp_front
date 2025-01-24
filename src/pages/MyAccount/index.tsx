@@ -63,7 +63,7 @@ const MyAccount = () => {
         photo: user.photo,
         branchId: user.branchId,
         franchiseId: user.franchiseId,
-        document: "",
+        doc: "",
       }
 
       let info = getUserObj(
@@ -131,7 +131,7 @@ const MyAccount = () => {
       const document = getUserDocument(obj)
 
       const req = await Api.persons.update({
-        person: { ...(obj as any), document: document },
+        person: { ...(obj as any), doc: document },
       })
 
       if (req.ok) {
