@@ -1,6 +1,7 @@
 import { List } from "../../../../../components/List"
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { TUManager } from "../../../../../utils/@types/data/user"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { systemOptions } from "../../../../../utils/system/options"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
@@ -8,7 +9,8 @@ import { getMajorityDate } from "../../../../../utils/tb/helpers/getMajorityDate
 
 export const extraManager = (
   form: TUManager,
-  formSubmitFields: TBlock["groups"][number]
+  formSubmitFields: TBlock["groups"][number],
+  errors: TErrorsCheck
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -25,6 +27,10 @@ export const extraManager = (
                 value: formatPhone(form.phone1),
                 placeholder: "00 00000-0000",
                 gridSizes: { big: 6, small: 6 },
+                error: {
+                  has: errors.fields.includes("phone1"),
+                  message: "Telefone obrigatório",
+                },
               },
               {
                 type: "input",
@@ -33,6 +39,10 @@ export const extraManager = (
                 value: formatPhone(form.phone2),
                 placeholder: "00 00000-0000",
                 gridSizes: { big: 6, small: 6 },
+                error: {
+                  has: errors.fields.includes("phone2"),
+                  message: "Digite um telefone válido",
+                },
               },
             ],
           ],
@@ -48,6 +58,10 @@ export const extraManager = (
                 value: "cpf",
                 options: [{ key: "cpf", value: "CPF" }],
                 gridSizes: { big: 3, small: 12 },
+                error: {
+                  has: errors.fields.includes("documentType"),
+                  message: "Selecione um documento",
+                },
               },
               {
                 type: "input",
@@ -56,6 +70,10 @@ export const extraManager = (
                 value: formatCpf(form.documentNumber ?? ""),
                 placeholder: "000.000.000-00",
                 gridSizes: { big: 6, small: 12 },
+                error: {
+                  has: errors.fields.includes("documentNumber"),
+                  message: "Digite um documento válido",
+                },
               },
               {
                 type: "date",
@@ -64,6 +82,10 @@ export const extraManager = (
                 value: new Date(form.birthDate),
                 gridSizes: { big: 3, small: 12 },
                 maxDate: getMajorityDate(),
+                error: {
+                  has: errors.fields.includes("birthDate"),
+                  message: "Escolha uma data",
+                },
               },
             ],
           ],
@@ -78,6 +100,10 @@ export const extraManager = (
               value: String(form.managerSince),
               options: systemOptions.managerTime,
               gridSizes: { big: 12 },
+              error: {
+                has: errors.fields.includes("managerSince"),
+                message: "Escolha um período",
+              },
             },
           ],
         },

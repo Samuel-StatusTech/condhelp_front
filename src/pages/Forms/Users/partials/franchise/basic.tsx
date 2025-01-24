@@ -3,6 +3,7 @@ import { FormField } from "../../../../../utils/@types/components/FormFields"
 import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { TCity } from "../../../../../utils/@types/data/region"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
@@ -12,6 +13,8 @@ type Props = {
   options: { [key: string]: TOption[] }
   handleSelectCity: (city: TCity) => void
   isEditing: boolean
+
+  errors: TErrorsCheck
 }
 
 export const basicFranchise = ({
@@ -20,6 +23,7 @@ export const basicFranchise = ({
   options,
   handleSelectCity,
   isEditing,
+  errors,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -35,6 +39,10 @@ export const basicFranchise = ({
                 value: form.name,
                 placeholder: "Nome da franquia",
                 gridSizes: { big: 12 },
+                error: {
+                  has: errors.fields.includes("name"),
+                  message: "Digite um nome",
+                },
               },
             ]
           : [
@@ -61,6 +69,10 @@ export const basicFranchise = ({
                         options: options.branch,
                         gridSizes: { big: 6, small: 12 },
                         elevation: 10,
+                        error: {
+                          has: errors.fields.includes("branchId"),
+                          message: "Selecione uma filial",
+                        },
                       },
                     ]),
                 {
@@ -70,6 +82,10 @@ export const basicFranchise = ({
                   value: form.name,
                   placeholder: "Nome da franquia",
                   gridSizes: { big: 6, small: 12 },
+                  error: {
+                    has: errors.fields.includes("name"),
+                    message: "Digite um nome",
+                  },
                 },
               ],
             ]),
@@ -90,6 +106,10 @@ export const basicFranchise = ({
             options: options.country,
             gridSizes: { big: 3, small: 6 },
             elevation: 10,
+            error: {
+              has: errors.fields.includes("country"),
+              message: "Selecione um país",
+            },
           },
           {
             type: "select",
@@ -99,6 +119,10 @@ export const basicFranchise = ({
             value: form.address?.state ?? ("" as string),
             options: options.state,
             gridSizes: { big: 3, small: 6 },
+            error: {
+              has: errors.fields.includes("state"),
+              message: "Selecione um estado",
+            },
           },
           {
             type: "cityInput",
@@ -109,6 +133,10 @@ export const basicFranchise = ({
             gridSizes: { big: 6, small: 12 },
             stateId: form.address.state,
             onSelectCity: handleSelectCity,
+            error: {
+              has: errors.fields.includes("city"),
+              message: "Selecione uma cidade",
+            },
           },
         ],
         [
@@ -119,6 +147,10 @@ export const basicFranchise = ({
             value: form.address?.street ?? "",
             placeholder: "Digite aqui",
             gridSizes: { big: 8, small: 7 },
+            error: {
+              has: errors.fields.includes("street"),
+              message: "Digite o nome da rua",
+            },
           },
           {
             type: "input",
@@ -127,6 +159,10 @@ export const basicFranchise = ({
             value: form.address?.number ?? "",
             placeholder: "0",
             gridSizes: { big: 4, small: 5 },
+            error: {
+              has: errors.fields.includes("number"),
+              message: "Digite o número da rua",
+            },
           },
         ],
         [
@@ -137,6 +173,10 @@ export const basicFranchise = ({
             value: form.address?.complement ?? "",
             placeholder: "Digite aqui",
             gridSizes: { big: 8, small: 7 },
+            error: {
+              has: false,
+              message: "Digite um complemento",
+            },
           },
           {
             type: "input",
@@ -145,6 +185,10 @@ export const basicFranchise = ({
             value: formatCep(form.address?.zipCode ?? ""),
             placeholder: "00000-000",
             gridSizes: { big: 4, small: 5 },
+            error: {
+              has: errors.fields.includes("zipCode"),
+              message: "Digite o CEP",
+            },
           },
         ],
       ],
@@ -161,6 +205,10 @@ export const basicFranchise = ({
             value: formatPhone(form.phone1),
             placeholder: "00 00000-0000",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("phone1"),
+              message: "Telefone principal obrigatório",
+            },
           },
           {
             type: "input",
@@ -169,6 +217,10 @@ export const basicFranchise = ({
             value: formatPhone(form.phone2),
             placeholder: "00 00000-0000",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("phone2"),
+              message: "Digite um telefone válido",
+            },
           },
         ],
         ...((isEditing
@@ -189,6 +241,10 @@ export const basicFranchise = ({
                 value: form.email,
                 placeholder: "Digite aqui",
                 gridSizes: { big: 12 },
+                error: {
+                  has: errors.fields.includes("email"),
+                  message: "Digite o email",
+                },
               },
             ]) as FormField[]),
       ],

@@ -2,6 +2,7 @@ import { TForm } from "../../../../utils/@types/components/Form"
 import { TAccess } from "../../../../utils/@types/data/access"
 import { TOption } from "../../../../utils/@types/data/option"
 import { TRegion } from "../../../../utils/@types/data/region"
+import { TErrorsCheck } from "../../../../utils/@types/helpers/checkErrors"
 import { DefaultContent } from "./default"
 import { FranchiseCitiesContent } from "./franchiseCities"
 
@@ -24,6 +25,7 @@ export interface BaseProps {
     regions: TRegion[]
     setIsManagingFranchiseCities: (value: boolean) => void
 
+    errors: TErrorsCheck
     extra?: any
   }
 }

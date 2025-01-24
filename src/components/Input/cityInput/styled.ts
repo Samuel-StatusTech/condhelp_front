@@ -39,23 +39,34 @@ export const Area = styled.div`
   flex: 1;
 `
 
-export const Label = styled.label`
+export const Label = styled.label<{ $error?: boolean }>`
   font-size: 14px;
   font-weight: 400;
-  color: ${({ theme }) => theme.colors.neutral.main};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.main};
+  transition: color 0.3s;
   width: fit-content;
 `
 
-export const Input = styled.input`
+export const Input = styled.input<{ $error?: boolean }>`
   flex: 1;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.main};
+  background-color: transparent;
   border: none;
   outline: none;
   min-width: unset;
   font-weight: 600;
   width: 100%;
   transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
+
+  &::placeholder {
+    color: ${({ $error, theme }) =>
+      $error ? theme.colors.red.main : theme.colors.neutral.lightMain};
+    transition: color 0.3s;
+  }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     min-width: unset;
@@ -63,14 +74,15 @@ export const Input = styled.input`
   }
 `
 
-export const Item = styled.div<{ $k: number }>`
+export const Item = styled.div<{ $k: number; $error?: boolean }>`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 4px 20px;
   gap: 48px;
-  background-color: ${({ theme }) => theme.colors.neutral.white};
+  background-color: ${({ $error, theme }) =>
+    $error ? `rgba(255, 0, 0, 0.1)` : theme.colors.neutral.white};
   border-radius: 8px;
 
   transition: opacity 0.3s;

@@ -1,6 +1,7 @@
 import { FormField } from "../../../utils/@types/components/FormFields"
 import * as S from "./styled"
 import * as C from "../styled"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 
 export type TInputDefault = {
   label?: string
@@ -9,6 +10,8 @@ export type TInputDefault = {
   value: string
   limit?: number
   fixedWidth?: number
+
+  error?: TFieldError
 }
 
 type Props = TInputDefault & {
@@ -17,7 +20,16 @@ type Props = TInputDefault & {
 }
 
 const InputDefault = (props: Props) => {
-  const { label, field, value, placeholder, limit, onChange, fixedWidth } = props
+  const {
+    label,
+    field,
+    value,
+    placeholder,
+    limit,
+    onChange,
+    fixedWidth,
+    error,
+  } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = limit ? e.target.value.slice(0, limit) : e.target.value
@@ -27,8 +39,9 @@ const InputDefault = (props: Props) => {
   return (
     <S.Wrapper $gridSizes={props.gridSizes} $fixedWidth={fixedWidth}>
       <S.Area>
-        {label && <S.Label>{label}</S.Label>}
+        {label && <S.Label $error={error?.has}>{label}</S.Label>}
         <S.Input
+          $error={error?.has}
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
@@ -36,9 +49,14 @@ const InputDefault = (props: Props) => {
 
         {limit && (
           <C.Limit
+            $error={error?.has}
             $filled={value.length === limit}
           >{`${value.length}/${limit}`}</C.Limit>
         )}
+
+        <C.ErrorMessage $visible={error && error?.has}>
+          {error?.message}
+        </C.ErrorMessage>
       </S.Area>
     </S.Wrapper>
   )

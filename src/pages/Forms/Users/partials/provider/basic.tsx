@@ -4,6 +4,7 @@ import { TAccess } from "../../../../../utils/@types/data/access"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { TCity } from "../../../../../utils/@types/data/region"
 import { TUser } from "../../../../../utils/@types/data/user"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { formatCep } from "../../../../../utils/tb/format/cep"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 
@@ -18,15 +19,16 @@ type Props = {
   franchiseName?: string
   handleSelectCity: (city: TCity) => void
   isEditing: boolean
+
+  errors: TErrorsCheck
 }
 
 export const basicProvider = ({
   form,
   options,
-  personType,
-  franchiseName,
   handleSelectCity,
   isEditing,
+  errors,
 }: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
@@ -47,6 +49,10 @@ export const basicProvider = ({
             value: form.name,
             placeholder: "Informe o nome fantasia",
             gridSizes: { big: 9, small: 12 },
+            error: {
+              has: errors.fields.includes("name"),
+              message: "Digite um nome",
+            },
           },
         ],
       ],
@@ -66,6 +72,10 @@ export const basicProvider = ({
             options: options.country,
             gridSizes: { big: 3, small: 6 },
             elevation: 10,
+            error: {
+              has: errors.fields.includes("country"),
+              message: "Selecione um país",
+            },
           },
           {
             type: "select",
@@ -75,6 +85,10 @@ export const basicProvider = ({
             value: form.address?.state ?? ("" as string),
             options: options.state,
             gridSizes: { big: 3, small: 6 },
+            error: {
+              has: errors.fields.includes("state"),
+              message: "Selecione um estado",
+            },
           },
           {
             type: "cityInput",
@@ -85,6 +99,10 @@ export const basicProvider = ({
             gridSizes: { big: 6, small: 12 },
             stateId: form.address.state,
             onSelectCity: handleSelectCity,
+            error: {
+              has: errors.fields.includes("city"),
+              message: "Selecione uma cidade",
+            },
           },
         ],
         [
@@ -95,6 +113,10 @@ export const basicProvider = ({
             value: form.address?.street ?? "",
             placeholder: "Digite aqui",
             gridSizes: { big: 8, small: 7 },
+            error: {
+              has: errors.fields.includes("street"),
+              message: "Digite o nome da rua",
+            },
           },
           {
             type: "input",
@@ -103,6 +125,10 @@ export const basicProvider = ({
             value: String(form.address?.number).replace(/\D/g, "") ?? "",
             placeholder: "0",
             gridSizes: { big: 4, small: 5 },
+            error: {
+              has: errors.fields.includes("number"),
+              message: "Digite o número da rua",
+            },
           },
         ],
         [
@@ -113,6 +139,10 @@ export const basicProvider = ({
             value: form.address?.complement ?? "",
             placeholder: "Digite aqui",
             gridSizes: { big: 8, small: 7 },
+            error: {
+              has: false,
+              message: "Digite um complemento",
+            },
           },
           {
             type: "input",
@@ -121,6 +151,10 @@ export const basicProvider = ({
             value: formatCep(form.address?.zipCode ?? ""),
             placeholder: "00000-000",
             gridSizes: { big: 4, small: 5 },
+            error: {
+              has: errors.fields.includes("zipCode"),
+              message: "Digite o CEP",
+            },
           },
         ],
       ],
@@ -138,6 +172,10 @@ export const basicProvider = ({
             value: form.responsable,
             placeholder: "Nome do responsável",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("responsable"),
+              message: "Digite o nome do(a) responsável",
+            },
           },
           {
             type: "input",
@@ -146,6 +184,10 @@ export const basicProvider = ({
             value: form.website,
             placeholder: "Website",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("name"),
+              message: "Digite o website",
+            },
           },
         ],
         [
@@ -156,6 +198,10 @@ export const basicProvider = ({
             value: formatPhone(form.phone1),
             placeholder: "00 00000-0000",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("phone1"),
+              message: "Telefone principal obrigatório",
+            },
           },
           ...((isEditing
             ? [
@@ -175,6 +221,10 @@ export const basicProvider = ({
                   value: form.email,
                   placeholder: "Digite aqui",
                   gridSizes: { big: 6, small: 12 },
+                  error: {
+                    has: errors.fields.includes("email"),
+                    message: "Digite o email",
+                  },
                 },
               ]) as FormField[]),
         ],
@@ -186,6 +236,10 @@ export const basicProvider = ({
             value: formatPhone(form.phone2),
             placeholder: "00 00000-0000",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("phone2"),
+              message: "Digite um telefone válido",
+            },
           },
           {
             type: "input",
@@ -194,6 +248,10 @@ export const basicProvider = ({
             value: formatPhone(form.phone3),
             placeholder: "00 00000-0000",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("phone3"),
+              message: "Digite um telefone válido",
+            },
           },
         ],
       ],

@@ -4,6 +4,7 @@ import Input from "../../../../../components/Input"
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { TOption } from "../../../../../utils/@types/data/option"
 import { TCity, TRegion } from "../../../../../utils/@types/data/region"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import {
@@ -17,7 +18,8 @@ export const extraFranchise = (
   options: { [key: string]: TOption[] },
   handleField: (field: string, value: any) => void,
   formSubmitFields: TBlock["groups"][number],
-  setIsManagingFranchiseCities: (is: boolean) => void
+  setIsManagingFranchiseCities: (is: boolean) => void,
+  errors: TErrorsCheck
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -30,7 +32,7 @@ export const extraFranchise = (
               style={{
                 display: "flex",
                 width: "100%",
-                alignItems: "end",
+                alignItems: "center",
                 gap: 16,
               }}
             >
@@ -41,6 +43,10 @@ export const extraFranchise = (
                 field="region"
                 onChange={handleField}
                 gridSizes={{ big: 9, small: 12 }}
+                error={{
+                  has: errors.fields.includes("region"),
+                  message: "Selecione uma região",
+                }}
               />
               <div style={{ gridColumn: `span 3`, paddingBottom: 2 }}>
                 <Button
@@ -134,6 +140,10 @@ export const extraFranchise = (
                         value: form.responsible.companyName,
                         placeholder: "Informe a razão social",
                         gridSizes: { big: 12 },
+                        error: {
+                          has: errors.fields.includes("responsableCompanyName"),
+                          message: "Digite a razão social",
+                        },
                       },
                       [
                         {
@@ -143,6 +153,12 @@ export const extraFranchise = (
                           value: form.responsible.fantasyName,
                           placeholder: "Informe o nome fantasia",
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes(
+                              "responsableFantasyName"
+                            ),
+                            message: "Digite o nome fantasia",
+                          },
                         },
                         {
                           type: "input",
@@ -151,6 +167,10 @@ export const extraFranchise = (
                           value: formatCNPJ(form.responsible.cnpj),
                           placeholder: "00.000.000/0001-00",
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes("responsableCnpj"),
+                            message: "Digite o CNPJ",
+                          },
                         },
                       ],
                       [
@@ -185,6 +205,12 @@ export const extraFranchise = (
                           value: form.responsible.personName,
                           placeholder: "Informe o nome da pessoa",
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes(
+                              "responsablePersonName"
+                            ),
+                            message: "Digite o nome do(a) responsável",
+                          },
                         },
                         {
                           type: "input",
@@ -193,6 +219,10 @@ export const extraFranchise = (
                           placeholder: "123.456.789-10",
                           value: formatCpf(form.responsible.cpf),
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes("responsableCpf"),
+                            message: "Digite o cpf do(a) responsável",
+                          },
                         },
                       ],
                     ]),

@@ -3,6 +3,7 @@ import { TAccess } from "../../../../utils/@types/data/access"
 import { TOption } from "../../../../utils/@types/data/option"
 import { TCity, TState } from "../../../../utils/@types/data/region"
 import { TUser } from "../../../../utils/@types/data/user"
+import { TErrorsCheck } from "../../../../utils/@types/helpers/checkErrors"
 import { formPartials } from "../partials"
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
   onHandleField: (field: string, value: any) => void
   franchises: TUser[]
   isEditing: boolean
+  errors: TErrorsCheck
 }
 
 export const renderBasic = (props: Props) => {
@@ -26,13 +28,14 @@ export const renderBasic = (props: Props) => {
     onHandleField,
     franchises,
     isEditing,
+    errors,
   } = props
 
   let content: TBlock["groups"] = []
 
   switch (form.profile) {
     case "ADMIN":
-      content = formPartials.admin.basic({ form, isEditing })
+      content = formPartials.admin.basic({ form, isEditing, errors })
       break
 
     case "FILIAL":
@@ -42,6 +45,7 @@ export const renderBasic = (props: Props) => {
         states,
         handleSelectCity,
         isEditing,
+        errors,
       })
       break
 
@@ -52,11 +56,12 @@ export const renderBasic = (props: Props) => {
         userProfile: user?.profile as any,
         handleSelectCity,
         isEditing,
+        errors,
       })
       break
 
     case "SINDICO":
-      content = formPartials.manager.basic({ form, isEditing })
+      content = formPartials.manager.basic({ form, isEditing, errors })
 
       break
 
@@ -70,6 +75,7 @@ export const renderBasic = (props: Props) => {
         franchiseName: user?.name,
         handleSelectCity,
         isEditing,
+        errors,
       })
       break
 

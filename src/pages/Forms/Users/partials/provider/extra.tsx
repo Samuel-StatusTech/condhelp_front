@@ -1,13 +1,16 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { TCategory } from "../../../../../utils/@types/data/category"
 import { TOption } from "../../../../../utils/@types/data/option"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 
 export const extraProvider = (
   form: any,
   formSubmitFields: TBlock["groups"][number],
   options: { [key: string]: TOption[] },
-  categories: TCategory[]
+  categories: TCategory[],
+
+  errors: TErrorsCheck
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -23,6 +26,10 @@ export const extraProvider = (
               value: form.socialRole,
               placeholder: "Informe a razão social",
               gridSizes: { big: 12 },
+              error: {
+                has: errors.fields.includes("socialRole"),
+                message: "Digite a razão social",
+              },
             },
             [
               {
@@ -32,6 +39,10 @@ export const extraProvider = (
                 value: formatCNPJ(form.document.register),
                 placeholder: "00.000.000/0001-00",
                 gridSizes: { big: 6, small: 12 },
+                error: {
+                  has: errors.fields.includes("documentRegister"),
+                  message: "Digite um CNPJ válido",
+                },
               },
               {
                 type: "date",
@@ -40,6 +51,10 @@ export const extraProvider = (
                 value: form.document.date,
                 gridSizes: { big: 6, small: 12 },
                 maxDate: new Date(),
+                error: {
+                  has: errors.fields.includes("documentDate"),
+                  message: "Selecione uma data",
+                },
               },
             ],
             {
@@ -66,6 +81,10 @@ export const extraProvider = (
                 .map((c) => c.name),
               options: options.category,
               gridSizes: { big: 12 },
+              error: {
+                has: errors.fields.includes("categories"),
+                message: "Selecione pelo menos 1 categoria",
+              },
             },
           ],
         },

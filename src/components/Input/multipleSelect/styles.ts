@@ -8,13 +8,18 @@ export const SelectArea = styled.div`
   gap: 8px;
 `
 
-export const DataArea = styled.div<{ $disabled?: boolean }>`
+export const DataArea = styled.div<{ $disabled?: boolean; $error?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: ${({ theme }) => theme.colors.neutral.dark};
-  background-color: ${({ $disabled, theme }) =>
-    !$disabled ? theme.colors.neutral.white : theme.colors.neutral.medium};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.dark};
+  background-color: ${({ $error, $disabled, theme }) =>
+    $error
+      ? `rgba(255, 0, 0, 0.1)`
+      : !$disabled
+      ? theme.colors.neutral.white
+      : theme.colors.neutral.medium};
   cursor: ${({ $disabled }) => ($disabled ? undefined : "pointer")};
   padding: 15px;
   border-radius: 10px;
@@ -38,23 +43,27 @@ export const Left = styled.div`
   gap: 8px;
 `
 
-export const Label = styled.span`
+export const Label = styled.span<{ $error?: boolean }>`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.neutral.main};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.main};
+  transition: color 0.3s;
   white-space: nowrap;
 `
 
-
-export const Placeholder = styled.span`
+export const Placeholder = styled.span<{ $error?: boolean }>`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.neutral.lightMain};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.lightMain};
 `
 
-export const SelectedInfo = styled.span`
+export const SelectedInfo = styled.span<{ $error?: boolean }>`
   font-size: 14px;
   font-weight: 300;
   font-weight: 600;
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.main};
 `
 
 export const OptionsArea = styled.div<{
@@ -94,7 +103,6 @@ export const Option = styled.div`
     background-color: ${({ theme }) => theme.colors.yellow.light};
   }
 `
-
 
 export const Checkbox = styled.div<{ $checked: boolean }>`
   background-color: ${({ $checked, theme }) =>

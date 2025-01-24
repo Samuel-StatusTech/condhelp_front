@@ -8,15 +8,20 @@ export const SelectArea = styled.div`
   gap: 8px;
 `
 
-export const DataArea = styled.div<{ $disabled?: boolean }>`
+export const DataArea = styled.div<{ $disabled?: boolean; $error?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: ${({ theme }) => theme.colors.neutral.dark};
-  background-color: ${({ $disabled, theme }) =>
-    !$disabled ? theme.colors.neutral.white : theme.colors.neutral.medium};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.dark};
+  background-color: ${({ $error, $disabled, theme }) =>
+    $error
+      ? `rgba(255, 0, 0, 0.1)`
+      : !$disabled
+      ? theme.colors.neutral.white
+      : theme.colors.neutral.medium};
   cursor: ${({ $disabled }) => ($disabled ? undefined : "pointer")};
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
   padding: 15px;
   border-radius: 10px;
 
@@ -45,15 +50,20 @@ export const Left = styled.div`
   gap: 8px;
 `
 
-export const Label = styled.span`
+export const Label = styled.span<{ $error?: boolean }>`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.neutral.main};
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.main};
+  transition: color 0.3s;
   white-space: nowrap;
 `
 
-export const SelectedInfo = styled.span`
+export const SelectedInfo = styled.span<{ $error?: boolean }>`
   font-size: 14px;
   font-weight: 300;
+  color: ${({ $error, theme }) =>
+    $error ? theme.colors.red.main : theme.colors.neutral.main};
+  transition: color 0.3s;
 `
 
 export const DatePickerWrapper = styled.div`

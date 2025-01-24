@@ -26,6 +26,7 @@ import { userSubordinates } from "../../../utils/system/options/profiles"
 import { UserFormContent } from "./content"
 import { handleField } from "./helpers/handleField"
 import { renderBasic } from "./helpers/renderBasic"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -53,6 +54,10 @@ const FPpeople = () => {
   const [regions, setRegions] = useState<TRegion[]>([])
   const [franchises, setFranchises] = useState<TUser[]>([])
   const [categories, setCategories] = useState<TCategory[]>([])
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
 
   const [form, setForm] = useState<any>(initials.forms.person[personType])
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
@@ -201,8 +206,20 @@ const FPpeople = () => {
 
   const handleSave = async () => {
     try {
-      if (params.id) handleUpdate()
-      else handleCreate()
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) {
+        if (params.id) handleUpdate()
+        else handleCreate()
+      } else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
     } catch (error) {
       // ...
     }
@@ -513,7 +530,7 @@ const FPpeople = () => {
     })
   }, [controllers.modal, loading])
 
-  const errors = () => {
+  const updateErrors = () => {
     return checkErrors.users(form)
   }
 
@@ -528,7 +545,7 @@ const FPpeople = () => {
         handleDelete={params.id ? handleDelete : undefined}
         handleCancel={handleCancel}
         handleSave={handleSave}
-        disabled={errors().has}
+        disabled={errors.has}
         deleteModalTitle={"Desativar Usuário"}
         deleteBtnText={"Desativar"}
         deleteModalInactivate={true}
@@ -537,7 +554,16 @@ const FPpeople = () => {
   }
 
   const onHandleField = (field: string, value: any) => {
-    handleField(field, value, form, setForm, setPersonType, franchises)
+    handleField(
+      field,
+      value,
+      form,
+      setForm,
+      setPersonType,
+      franchises,
+      errors,
+      setErrors
+    )
   }
 
   const renderExtra = () => {
@@ -545,11 +571,11 @@ const FPpeople = () => {
 
     switch (form.profile) {
       case "ADMIN":
-        content = formPartials.admin.extra(form, formSubmitFields)
+        content = formPartials.admin.extra(form, formSubmitFields, errors)
         break
 
       case "FILIAL":
-        content = formPartials.branch.extra(form, formSubmitFields)
+        content = formPartials.branch.extra(form, formSubmitFields, errors)
         break
 
       case "FRANQUEADO":
@@ -559,12 +585,13 @@ const FPpeople = () => {
           options,
           onHandleField,
           formSubmitFields,
-          setIsManagingFranchiseCities
+          setIsManagingFranchiseCities,
+          errors
         )
         break
 
       case "SINDICO":
-        content = formPartials.manager.extra(form, formSubmitFields)
+        content = formPartials.manager.extra(form, formSubmitFields, errors)
         break
 
       case "PRESTADOR":
@@ -572,7 +599,8 @@ const FPpeople = () => {
           form,
           formSubmitFields,
           options,
-          categories
+          categories,
+          errors
         )
         break
 
@@ -602,6 +630,7 @@ const FPpeople = () => {
             onHandleField,
             franchises,
             isEditing: params && params.id !== undefined,
+            errors: errors,
           }),
         renderExtra,
         isManagingFranchiseCities,
@@ -610,6 +639,7 @@ const FPpeople = () => {
         extra: {
           profile: form.profile,
         },
+        errors: errors,
       }}
     />
   )

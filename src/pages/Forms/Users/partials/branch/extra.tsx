@@ -1,6 +1,7 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { TUBranch } from "../../../../../utils/@types/data/_user/branch"
 import { TNewUser } from "../../../../../utils/@types/data/user"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import initials from "../../../../../utils/initials"
 import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
@@ -13,7 +14,8 @@ const inData = initials.forms.person.FILIAL as TNewUser & TUBranch
 
 export const extraBranch = (
   form: typeof inData,
-  formSubmitFields: TBlock["groups"][number]
+  formSubmitFields: TBlock["groups"][number],
+  errors: TErrorsCheck
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -43,6 +45,10 @@ export const extraBranch = (
                         value: form.responsible.companyName,
                         placeholder: "Informe a razão social",
                         gridSizes: { big: 12 },
+                        error: {
+                          has: errors.fields.includes("responsableCompanyName"),
+                          message: "Digite a razão social",
+                        },
                       },
                       [
                         {
@@ -52,6 +58,12 @@ export const extraBranch = (
                           value: form.responsible.fantasyName,
                           placeholder: "Informe o nome fantasia",
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes(
+                              "responsableFantasyName"
+                            ),
+                            message: "Digite o nome fantasia",
+                          },
                         },
                         {
                           type: "input",
@@ -60,6 +72,10 @@ export const extraBranch = (
                           value: formatCNPJ(form.responsible.cnpj),
                           placeholder: "00.000.000/0001-00",
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes("responsableCnpj"),
+                            message: "Digite o CNPJ",
+                          },
                         },
                       ],
                       [
@@ -94,6 +110,12 @@ export const extraBranch = (
                           value: form.responsible.personName,
                           placeholder: "Informe o nome da pessoa",
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes(
+                              "responsablePersonName"
+                            ),
+                            message: "Digite o nome do(a) responsável",
+                          },
                         },
                         {
                           type: "input",
@@ -102,6 +124,10 @@ export const extraBranch = (
                           placeholder: "123.456.789-10",
                           value: formatCpf(form.responsible.cpf),
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes("responsableCpf"),
+                            message: "Digite o cpf do(a) responsável",
+                          },
                         },
                       ],
                     ]),

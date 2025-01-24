@@ -24,8 +24,8 @@ export const adminCheck = (
       data.document.register?.replace(/\D/g, "").length < 11 ||
       !cpfValidator(data.document.register)
     )
-      state = getInvalidCheck(state, "document.register")
-    if (!data.document.date) state = getInvalidCheck(state, "document.date")
+      state = getInvalidCheck(state, "documentRegister")
+    if (!data.document.date) state = getInvalidCheck(state, "documentDate")
   }
 
   changeState(state)

@@ -3,6 +3,7 @@ import * as C from "../styled"
 import * as S from "./styles"
 import { Icons } from "../../../assets/icons/icons"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 
 export type TMultipleSelect = {
   label: string
@@ -14,6 +15,8 @@ export type TMultipleSelect = {
   elevation?: number
   reverse?: boolean
   selecteds: string[]
+
+  error?: TFieldError
 }
 
 export type TOption = {
@@ -40,6 +43,7 @@ const MultipleSelect = ({
   alignBottom,
   reverse,
   selecteds,
+  error,
 }: Props) => {
   // use ref ...
 
@@ -58,21 +62,31 @@ const MultipleSelect = ({
     <C.Wrapper $gridSizes={gridSizes} $alignBottom={alignBottom}>
       <C.Area $elevation={elevation}>
         <S.SelectArea>
-          {label && <S.Label>{label}</S.Label>}
+          {label && <S.Label $error={error?.has}>{label}</S.Label>}
           <S.DataArea
             onClick={!disabled ? toggleDropdown : undefined}
             className={showing ? "turnedIcon" : ""}
             $disabled={disabled}
+            $error={error?.has}
           >
             <S.Left>
               {selecteds.length > 0 ? (
-                <S.SelectedInfo>{selecteds.join(", ")}</S.SelectedInfo>
+                <S.SelectedInfo $error={error?.has}>
+                  {selecteds.join(", ")}
+                </S.SelectedInfo>
               ) : (
-                <S.Placeholder>{placeholder ?? label}</S.Placeholder>
+                <S.Placeholder $error={error?.has}>
+                  {placeholder ?? label}
+                </S.Placeholder>
               )}
             </S.Left>
             <Icons.Dropdown width={16} height={16} />
           </S.DataArea>
+
+          <C.ErrorMessage $visible={error && error?.has}>
+            {error?.message}
+          </C.ErrorMessage>
+
           <S.OptionsArea
             className={showing ? "visible" : ""}
             $reverse={reverse}

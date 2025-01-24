@@ -26,15 +26,16 @@ export const providerCheck = (
       state = getInvalidCheck(state, "phone2")
     if (data.phone3 && data.phone3.replace(/\D/g, "").length < 10)
       state = getInvalidCheck(state, "phone3")
-    if (!data.franqId) state = getInvalidCheck(state, "franchise")
+    if (!data.franqId) state = getInvalidCheck(state, "franqId")
     if (!data.responsable?.trim()) state = getInvalidCheck(state, "responsable")
     if (!data.website?.trim()) state = getInvalidCheck(state, "website")
+    if (!data.socialRole?.trim()) state = getInvalidCheck(state, "socialRole")
     if (
       data.document.register?.replace(/\D/g, "").length < 14 ||
       !cnpjValidator(data.document.register)
     )
-      state = getInvalidCheck(state, "document.register")
-    if (!data.document.date) state = getInvalidCheck(state, "document.date")
+      state = getInvalidCheck(state, "documentRegister")
+    if (!data.document.date) state = getInvalidCheck(state, "documentDate")
     if (
       !data.categories ||
       !Array.isArray(data.categories) ||
@@ -44,16 +45,15 @@ export const providerCheck = (
 
     if (data.address) {
       if (data.address.zipCode.replace(/\D/g, "").length < 8)
-        state = getInvalidCheck(state, "address.zipCode")
+        state = getInvalidCheck(state, "zipCode")
       if (!String(data.address.city).trim())
-        state = getInvalidCheck(state, "address.city")
-      if (!data.address.country)
-        state = getInvalidCheck(state, "address.country")
-      if (!data.address.state) state = getInvalidCheck(state, "address.state")
+        state = getInvalidCheck(state, "city")
+      if (!data.address.country) state = getInvalidCheck(state, "country")
+      if (!data.address.state) state = getInvalidCheck(state, "state")
       if (!String(data.address.street).trim())
-        state = getInvalidCheck(state, "address.street")
+        state = getInvalidCheck(state, "street")
       if (!String(data.address.number).trim())
-        state = getInvalidCheck(state, "address.number")
+        state = getInvalidCheck(state, "number")
     }
 
     if (!data.federalCndFree) {

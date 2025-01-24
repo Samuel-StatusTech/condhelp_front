@@ -3,6 +3,7 @@ import * as C from "../styled"
 import * as S from "./styles"
 import { Icons } from "../../../assets/icons/icons"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 
 export type TInputSelect = {
   label?: string
@@ -15,6 +16,8 @@ export type TInputSelect = {
   elevation?: number
   reverse?: boolean
   fixedWidth?: number
+
+  error?: TFieldError
 }
 
 export type TOption = {
@@ -44,6 +47,7 @@ const SelectDefault = ({
   avoidValueShow,
   reverse,
   fixedWidth,
+  error,
 }: Props) => {
   // use ref ...
 
@@ -105,23 +109,31 @@ const SelectDefault = ({
     >
       <C.Area $elevation={elevation}>
         <S.SelectArea ref={wrapperRef}>
-          {label && <S.Label>{label}</S.Label>}
+          {label && <S.Label $error={error?.has}>{label}</S.Label>}
           <S.DataArea
             onClick={!disabled ? toggleDropdown : undefined}
             className={showing ? "turnedIcon" : ""}
             $disabled={disabled}
+            $error={error?.has}
           >
             <S.Left>
               {selected && selected.value && !avoidValueShow ? (
-                <S.SelectedInfo>
+                <S.SelectedInfo $error={error?.has}>
                   {byKey ? selected.key : selected?.value}
                 </S.SelectedInfo>
               ) : (
-                <S.Placeholder>{placeholder ?? label}</S.Placeholder>
+                <S.Placeholder $error={error?.has}>
+                  {placeholder ?? label}
+                </S.Placeholder>
               )}
             </S.Left>
             <Icons.Dropdown width={16} height={16} />
           </S.DataArea>
+
+          <C.ErrorMessage $visible={error && error?.has}>
+            {error?.message}
+          </C.ErrorMessage>
+
           <S.OptionsArea
             className={showing ? "visible" : ""}
             $reverse={reverse}

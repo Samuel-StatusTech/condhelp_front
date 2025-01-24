@@ -58,10 +58,20 @@ export const Box = styled.div<{ $state: boolean }>`
   position: relative;
 `
 
-export const Limit = styled.div<{ $filled?: boolean }>`
+export const Limit = styled.div<{ $filled?: boolean; $error?: boolean }>`
   min-width: 100%;
   text-align: right;
   font-size: 14px;
-  color: ${({ $filled, theme }) =>
-    $filled ? theme.colors.red.main : theme.colors.neutral.lightMain};
+  color: ${({ $filled, $error, theme }) =>
+    $filled || $error ? theme.colors.red.main : theme.colors.neutral.lightMain};
+  transition: color 0.3s;
+`
+
+export const ErrorMessage = styled.span<{ $visible?: boolean }>`
+  font-size: 12px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.red.main};
+  width: fit-content;
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: opacity 0.3s;
 `

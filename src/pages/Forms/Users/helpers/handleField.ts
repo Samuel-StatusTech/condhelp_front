@@ -1,5 +1,6 @@
 import { TAccess } from "../../../../utils/@types/data/access"
 import { TUser } from "../../../../utils/@types/data/user"
+import { TErrorsCheck } from "../../../../utils/@types/helpers/checkErrors"
 import initials from "../../../../utils/initials"
 
 export const handleField = async (
@@ -8,13 +9,29 @@ export const handleField = async (
   form: any,
   setForm: (newData: any) => void,
   setPersonType: (personType: TAccess) => void,
-  franchises: TUser[]
+  franchises: TUser[],
+  errors: TErrorsCheck,
+  setErrors: React.Dispatch<React.SetStateAction<TErrorsCheck>>
 ) => {
+  if (errors.fields.includes(field)) {
+    const newFieldsList = errors.fields.filter(
+      (errorItem) => errorItem !== field
+    )
+    setErrors({
+      fields: newFieldsList,
+      has: newFieldsList.length > 0,
+    })
+  }
+
   if (field === "status") {
     setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
   } else if (field === "profile") {
     setForm(initials.forms.person[value as TAccess])
     setPersonType(value)
+    setErrors({
+      fields: [],
+      has: false,
+    })
   } else if (
     [
       "country",
@@ -88,7 +105,7 @@ export const handleField = async (
                   stateRegistration: "",
                   municipalRegistration: "",
                   cpf: "",
-                  responsibleStatus: "ATIVO"
+                  responsibleStatus: "ATIVO",
                 }
               : {
                   ...form.responsible,
@@ -99,6 +116,28 @@ export const handleField = async (
             ...p,
             responsible: newRespData,
           }))
+
+          if (field === "responsableResponsibleType") {
+            const fieldsToClear =
+              value === "CNPJ"
+                ? ["personName", "cpf"]
+                : [
+                    "fantasyName",
+                    "companyName",
+                    "cnpj",
+                    "stateRegistration",
+                    "municipalRegistration",
+                  ]
+
+            const newFieldsList = errors.fields.filter(
+              (errorItem) => !fieldsToClear.includes(errorItem)
+            )
+
+            setErrors({
+              fields: newFieldsList,
+              has: newFieldsList.length > 0,
+            })
+          }
         } else if (field === "region") {
           if (form.region) {
             setForm((p: any) => ({ ...p, [field]: value, cities: [] }))

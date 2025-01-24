@@ -5,6 +5,7 @@ import { Icons } from "../../../assets/icons/icons"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 
 export type TInputDate = {
   label: string
@@ -14,6 +15,8 @@ export type TInputDate = {
   minDate?: Date | string | number
   maxDate?: Date | string | number
   fixedWidth?: number
+
+  error?: TFieldError
 }
 
 type Props = TInputDate & {
@@ -30,7 +33,8 @@ const InputDate = ({
   onChange,
   minDate,
   maxDate,
-  fixedWidth
+  fixedWidth,
+  error,
 }: Props) => {
   const pickerRef = useRef<any>(null)
 
@@ -74,17 +78,24 @@ const InputDate = ({
 
         <C.Area>
           <S.SelectArea>
-            <S.Label>{label}</S.Label>
+            <S.Label $error={error?.has}>{label}</S.Label>
             <S.DataArea
               onClick={!disabled ? toggleCalendar : undefined}
               $disabled={disabled}
+              $error={error?.has}
             >
               <S.Left>
-                <S.SelectedInfo>{renderDate() ?? "DD/MM/AAAA"}</S.SelectedInfo>
+                <S.SelectedInfo $error={error?.has}>
+                  {renderDate() ?? "DD/MM/AAAA"}
+                </S.SelectedInfo>
               </S.Left>
               <Icons.Calendar />
             </S.DataArea>
           </S.SelectArea>
+
+          <C.ErrorMessage $visible={error && error?.has}>
+            {error?.message}
+          </C.ErrorMessage>
         </C.Area>
       </C.Wrapper>
     </>

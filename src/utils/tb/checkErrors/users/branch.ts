@@ -27,34 +27,34 @@ export const branchCheck = (
       state = getInvalidCheck(state, "phone2")
 
     if (data.address.zipCode.replace(/\D/g, "").length < 8)
-      state = getInvalidCheck(state, "address.zipCode")
+      state = getInvalidCheck(state, "zipCode")
     if (!String(data.address.city).trim())
-      state = getInvalidCheck(state, "address.city")
-    if (!data.address.country) state = getInvalidCheck(state, "address.country")
-    if (!data.address.state) state = getInvalidCheck(state, "address.state")
+      state = getInvalidCheck(state, "city")
+    if (!data.address.country) state = getInvalidCheck(state, "country")
+    if (!data.address.state) state = getInvalidCheck(state, "state")
     if (!String(data.address.street).trim())
-      state = getInvalidCheck(state, "address.street")
+      state = getInvalidCheck(state, "street")
     if (!String(data.address.number).trim())
-      state = getInvalidCheck(state, "address.number")
+      state = getInvalidCheck(state, "number")
 
     if (data.responsible.responsibleType === "CPF") {
       if (
         data.responsible.cpf.replace(/\D/g, "").length < 11 ||
         !cpfValidator(data.responsible.cpf)
       )
-        state = getInvalidCheck(state, "responsible.cpf")
+        state = getInvalidCheck(state, "responsableCpf")
       if (!data.responsible.personName?.trim())
-        state = getInvalidCheck(state, "responsible.personName")
+        state = getInvalidCheck(state, "responsablePersonName")
     } else if (data.responsible.responsibleType === "CNPJ") {
       if (
         data.responsible.cnpj.replace(/\D/g, "").length < 14 ||
         !cnpjValidator(data.responsible.cnpj)
       )
-        state = getInvalidCheck(state, "responsible.cnpj")
+        state = getInvalidCheck(state, "responsableCnpj")
       if (!data.responsible.fantasyName?.trim())
-        state = getInvalidCheck(state, "responsible.fantasyName")
+        state = getInvalidCheck(state, "responsableFantasyName")
       if (!data.responsible.companyName?.trim())
-        state = getInvalidCheck(state, "responsible.companyName")
+        state = getInvalidCheck(state, "responsableCompanyName")
     }
   }
 

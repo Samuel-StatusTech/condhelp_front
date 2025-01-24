@@ -11,6 +11,7 @@ import * as C from "../../styled"
 import { profileRelation } from "../../../../utils/@types/data/user"
 import { useCallback, useEffect, useState } from "react"
 import { checkProviderPendencyStatus } from "../../../../utils/tb/helpers/checkProviderPendencyStatus"
+import { TErrorsCheck } from "../../../../utils/@types/helpers/checkErrors"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -25,6 +26,7 @@ type Props = {
   renderBasic: () => TForm["columns"][number]["blocks"][number]["groups"]
   renderExtra: () => TForm["columns"][number]["blocks"]
 
+  errors: TErrorsCheck
   extra?: any
 }
 
@@ -46,6 +48,7 @@ export const DefaultContent = (props: Props) => {
     renderBasic,
     renderExtra,
 
+    errors,
     extra,
   } = props
 
@@ -140,6 +143,10 @@ export const DefaultContent = (props: Props) => {
                                     options: options.franchise,
                                     gridSizes: { big: 12 },
                                     elevation: 10,
+                                    error: {
+                                      has: errors.fields.includes("franqId"),
+                                      message: "Selecione uma franquia",
+                                    },
                                   },
                                 ]) as FormField[])
                         : []),
@@ -171,7 +178,7 @@ export const DefaultContent = (props: Props) => {
                                     isent: form.federalCndFree,
                                     start: form.federalCndStart,
                                     end: form.federalCndEnd,
-                                    register: form.federalCnd
+                                    register: form.federalCnd,
                                   })}
                                 />
                                 <ProviderLegalization
@@ -180,7 +187,7 @@ export const DefaultContent = (props: Props) => {
                                     isent: form.stateCndFree,
                                     start: form.stateCndStart,
                                     end: form.stateCndEnd,
-                                    register: form.stateCnd
+                                    register: form.stateCnd,
                                   })}
                                 />
                                 <ProviderLegalization
@@ -189,7 +196,7 @@ export const DefaultContent = (props: Props) => {
                                     isent: form.cityCndFree,
                                     start: form.cityCndStart,
                                     end: form.cityCndEnd,
-                                    register: form.cityCnd
+                                    register: form.cityCnd,
                                   })}
                                 />
                                 <ProviderLegalization
@@ -198,7 +205,7 @@ export const DefaultContent = (props: Props) => {
                                     isent: form.fgtsCndFree,
                                     start: form.fgtsCndStart,
                                     end: form.fgtsCndEnd,
-                                    register: form.fgtsCnd
+                                    register: form.fgtsCnd,
                                   })}
                                 />
                               </div>

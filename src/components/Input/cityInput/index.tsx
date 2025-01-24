@@ -8,6 +8,7 @@ import { Api } from "../../../api"
 
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { TCity } from "../../../utils/@types/data/region"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 
 export type TCityInput = {
   stateId?: string | number | null
@@ -17,6 +18,8 @@ export type TCityInput = {
   value: string
   onSelectCity?: (id: any) => any
   fixedWidth?: number
+
+  error?: TFieldError
 }
 
 type Props = TCityInput & {
@@ -25,8 +28,16 @@ type Props = TCityInput & {
 }
 
 const CityInput = (props: Props) => {
-  const { field, label, value, placeholder, onChange, stateId, onSelectCity } =
-    props
+  const {
+    field,
+    label,
+    value,
+    placeholder,
+    onChange,
+    stateId,
+    onSelectCity,
+    error,
+  } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -89,14 +100,15 @@ const CityInput = (props: Props) => {
   return (
     <C.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <C.Area>
-        {label && <S.Label>{label}</S.Label>}
-        <S.Item $k={0}>
+        {label && <S.Label $error={error?.has}>{label}</S.Label>}
+        <S.Item $k={0} $error={error?.has}>
           <S.Input
             ref={inputRef}
             value={value}
             placeholder={placeholder}
             onChange={handleChange}
             disabled={!stateId}
+            $error={error?.has}
           />
           <S.BtnArea onClick={() => handleDelete()}>
             <Icons.Trash />
@@ -113,6 +125,10 @@ const CityInput = (props: Props) => {
             </S.OptionsArea>
           )}
         </S.Item>
+
+        <C.ErrorMessage $visible={error && error?.has}>
+          {error?.message}
+        </C.ErrorMessage>
       </C.Area>
     </C.Wrapper>
   )

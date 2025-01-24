@@ -1,12 +1,18 @@
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { FormField } from "../../../../../utils/@types/components/FormFields"
+import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 
 type Props = {
   form: any
   isEditing: boolean
+  errors: TErrorsCheck
 }
 
-export const basicAdmin = ({ form, isEditing }: Props): TBlock["groups"] => {
+export const basicAdmin = ({
+  form,
+  isEditing,
+  errors,
+}: Props): TBlock["groups"] => {
   const content: TBlock["groups"] = [
     {
       type: "fields",
@@ -19,6 +25,10 @@ export const basicAdmin = ({ form, isEditing }: Props): TBlock["groups"] => {
             value: form.name,
             placeholder: "Digite aqui",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("name"),
+              message: "Digite o nome",
+            },
           },
           {
             type: "input",
@@ -27,6 +37,10 @@ export const basicAdmin = ({ form, isEditing }: Props): TBlock["groups"] => {
             value: form.surname,
             placeholder: "Digite aqui",
             gridSizes: { big: 6, small: 12 },
+            error: {
+              has: errors.fields.includes("surname"),
+              message: "Digite o sobrenome",
+            },
           },
         ],
       ],
@@ -52,6 +66,10 @@ export const basicAdmin = ({ form, isEditing }: Props): TBlock["groups"] => {
                 value: form.email,
                 placeholder: "Digite aqui",
                 gridSizes: { big: 12 },
+                error: {
+                  has: errors.fields.includes("email"),
+                  message: "Digite um email válido",
+                },
               },
             ]) as FormField[]),
       ],

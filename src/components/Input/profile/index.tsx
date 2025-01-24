@@ -58,13 +58,21 @@ const InputProfile = (props: Props) => {
           </S.ImageWrapper>
 
           <S.ButtonsArea>
-            <Button
-              type="quaternary"
-              text="Remover foto"
-              iconLeft={true}
-              icon={<Icons.Trash />}
-              action={handleRemove}
-            />
+            {value ? (
+              <Button
+                type="quaternary"
+                text="Remover foto"
+                iconLeft={true}
+                icon={<Icons.Trash />}
+                action={handleRemove}
+              />
+            ) : (
+              <Button
+                type="quaternary"
+                text="Clique para selecionar"
+                action={handleClick}
+              />
+            )}
           </S.ButtonsArea>
         </S.Box>
         <input

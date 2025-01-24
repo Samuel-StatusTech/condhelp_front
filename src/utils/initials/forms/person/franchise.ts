@@ -14,7 +14,7 @@ export const franchiseInitial: TNewUserDefault & TUFranchise = {
     zipCode: "",
     city: "",
     complement: "",
-    country: "br",
+    country: "",
     number: "",
     state: "",
     street: "",

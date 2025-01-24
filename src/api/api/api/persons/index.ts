@@ -596,11 +596,13 @@ const getAllBranches: TApi["persons"]["getAllBranches"] = async () => {
   })
 }
 
-const getBranchUsers: TApi["persons"]["getBranchUsers"] = async () => {
+const getBranchUsers: TApi["persons"]["getBranchUsers"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${rolesUrlRelations.FILIAL}/myusers`)
+        .get(`${rolesUrlRelations.FILIAL}/myusers`, {
+          params: filters
+        })
         .then(async (res) => {
           const info = res.data
 
