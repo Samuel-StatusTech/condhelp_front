@@ -119,13 +119,16 @@ const FPpeople = () => {
         value = form.document.register ?? ""
         break
       case "FILIAL":
-        value = obj.responsible.cnpj ?? obj.responsible.cpf
+        value =
+          obj.responsible.responsibleType === "CPF"
+            ? obj.responsible.cpf
+            : obj.responsible.cnpj
         break
       case "FRANQUEADO":
-        value = obj.cnpj ?? obj.cpf
+        value = obj.typePerson === "PJ" ? obj.cnpj : obj.cpf
         break
       case "SINDICO":
-        value = obj.cnpj ?? obj.cpf
+        value = obj.documentNumber
         break
       case "PRESTADOR":
         value = obj.cnpj
@@ -134,7 +137,6 @@ const FPpeople = () => {
       default:
         break
     }
-
     return value.replace(/\D/g, "")
   }
 
@@ -224,7 +226,6 @@ const FPpeople = () => {
         } else throw new Error()
       }
     } catch (error) {
-      // ...
       controllers.feedback.setData({
         visible: true,
         state: "error",

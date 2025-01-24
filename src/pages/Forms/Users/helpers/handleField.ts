@@ -26,7 +26,10 @@ export const handleField = async (
   if (field === "status") {
     setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
   } else if (field === "profile") {
-    setForm(initials.forms.person[value as TAccess])
+    setForm({
+      ...initials.forms.person[value as TAccess],
+      franqId: form.franqId,
+    })
     setPersonType(value)
     setErrors({
       fields: [],
