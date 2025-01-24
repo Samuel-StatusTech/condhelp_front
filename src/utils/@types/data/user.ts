@@ -14,6 +14,7 @@ export type TUDefault = {
   photo: null | string
   branchId: number | null
   franchiseId: number | null
+  document?: string
 }
 
 export type TNewUserDefault = {
@@ -24,6 +25,7 @@ export type TNewUserDefault = {
   photo: null | string
   branchId: number | null
   franchiseId: number | null
+  document: string
 }
 
 export type TUserTypes = {

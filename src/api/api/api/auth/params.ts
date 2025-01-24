@@ -4,6 +4,7 @@ export type TApi_Params_Auth = {
       usuario: string
       senha: string
       tipo: string
+      document: string
     }
     resetPassword: {
       username: string

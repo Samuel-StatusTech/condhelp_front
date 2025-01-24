@@ -88,6 +88,7 @@ const FPpeople = () => {
       photo: null,
       branchId: form.branchId,
       franchiseId: form.franchiseId,
+      document: "",
     }
 
     let info = getUserObj(
@@ -110,15 +111,43 @@ const FPpeople = () => {
     }
   }
 
+  const getUserDocument = (obj: any) => {
+    let value = ""
+
+    switch (personType) {
+      case "ADMIN":
+        value = form.document.register ?? ""
+        break
+      case "FILIAL":
+        value = obj.responsible.cnpj ?? obj.responsible.cpf
+        break
+      case "FRANQUEADO":
+        value = obj.cnpj ?? obj.cpf
+        break
+      case "SINDICO":
+        value = obj.cnpj ?? obj.cpf
+        break
+      case "PRESTADOR":
+        value = obj.cnpj
+        break
+
+      default:
+        break
+    }
+
+    return value.replace(/\D/g, "")
+  }
+
   const handleUpdate = async () => {
     setLoading(true)
 
     try {
       if (params.id && !Number.isNaN(params.id)) {
         const obj = getObj(Number(params.id))
+        const document = getUserDocument(obj)
 
         const req = await Api.persons.update({
-          person: obj as any,
+          person: { ...(obj as any), document: document },
         })
 
         if (req.ok) {
@@ -149,10 +178,13 @@ const FPpeople = () => {
     setLoading(true)
 
     try {
+      const document = getUserDocument(getObj(0))
+
       const accountRegister = await Api.auth.register({
         tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
         senha: "123456",
         usuario: form.email,
+        document: document,
       })
 
       if (accountRegister.ok) {
@@ -160,7 +192,7 @@ const FPpeople = () => {
         const obj = getObj(accountRegister.data.id)
 
         const req = await Api.persons.create({
-          newPerson: obj as TNewUser,
+          newPerson: { ...obj, document: document } as TNewUser,
         })
 
         if (req.ok) {

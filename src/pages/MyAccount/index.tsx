@@ -63,6 +63,7 @@ const MyAccount = () => {
         photo: user.photo,
         branchId: user.branchId,
         franchiseId: user.franchiseId,
+        document: "",
       }
 
       let info = getUserObj(
@@ -95,14 +96,42 @@ const MyAccount = () => {
     navigate(-1)
   }
 
+  const getUserDocument = (obj: any) => {
+    let value = ""
+
+    switch (user?.profile) {
+      case "ADMIN":
+        value = form.document.register ?? ""
+        break
+      case "FILIAL":
+        value = obj.responsible.cnpj ?? obj.responsible.cpf
+        break
+      case "FRANQUEADO":
+        value = obj.cnpj ?? obj.cpf
+        break
+      case "SINDICO":
+        value = obj.cnpj ?? obj.cpf
+        break
+      case "PRESTADOR":
+        value = obj.cnpj
+        break
+
+      default:
+        break
+    }
+
+    return value.replace(/\D/g, "")
+  }
+
   const handleUpdate = async () => {
     setLoading(true)
 
     try {
       const obj = getObj()
+      const document = getUserDocument(obj)
 
       const req = await Api.persons.update({
-        person: obj as any,
+        person: { ...(obj as any), document: document },
       })
 
       if (req.ok) {

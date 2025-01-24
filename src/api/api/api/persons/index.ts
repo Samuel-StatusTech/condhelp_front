@@ -77,6 +77,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           status: newPerson.status,
           branchId: newPerson.branchId,
           franchiseId: newPerson.franchiseId,
+          document: newPerson.document,
         })
 
         if (!userAccountRegister.data) {
@@ -172,6 +173,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
             status: person.status,
             branchId: person.branchId,
             franchiseId: person.franchiseId,
+            document: person.document,
           }
         )
 
@@ -389,7 +391,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                     ...info,
                     ...extraDataReq.data,
                   })
-                  
+
                   extraInfo.address.city = city?.name
                   extraInfo.address.cityId = city?.id
                 } else if (userProfile === "FRANQUEADO") {
@@ -601,7 +603,7 @@ const getBranchUsers: TApi["persons"]["getBranchUsers"] = async (filters) => {
     try {
       await service
         .get(`${rolesUrlRelations.FILIAL}/myusers`, {
-          params: filters
+          params: filters,
         })
         .then(async (res) => {
           const info = res.data
