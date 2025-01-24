@@ -222,8 +222,6 @@ const FPcondo = () => {
         ? managers.find((i) => i.managerId === value)
         : managers.find((i) => i.userId === value)
 
-      console.log(m, value)
-
       setForm((f: any) => ({ ...f, manager: m }))
     } else if (field === "managerSince") {
       setForm((f: any) => ({
@@ -318,8 +316,6 @@ const FPcondo = () => {
             ? parseOptionList(managersList, "managerId", "name")
             : parseOptionList(managersList, "userId", "name")
 
-          console.log(managersListOptions)
-
           setManagers(managersList as TUserTypes["SINDICO"][])
           setOptions((opts) => ({
             ...opts,
@@ -350,7 +346,6 @@ const FPcondo = () => {
 
   useEffect(() => {
     // ...
-    console.log(form)
   }, [form])
 
   useEffect(() => {

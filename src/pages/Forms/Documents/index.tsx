@@ -21,6 +21,7 @@ import { formPartials } from "./partials"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
+import { checkProviderPendencyStatus } from "../../../utils/tb/helpers/checkProviderPendencyStatus"
 
 const FPdocuments = () => {
   const navigate = useNavigate()
@@ -164,7 +165,7 @@ const FPdocuments = () => {
 
       navigate(-1)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controllers.feedback, navigate])
 
   useEffect(() => {
@@ -203,10 +204,34 @@ const FPdocuments = () => {
 
     content = formPartials.provider.basic({
       pendencies: {
-        cityCnd: "free",
-        federalCnd: "free",
-        stateCnd: "none",
-        fgts: "none",
+        cityCnd:
+          checkProviderPendencyStatus({
+            isent: form.cityCndFree,
+            end: form.cityCndEnd,
+            start: form.cityCndStart,
+            register: form.cityCnd,
+          }) ?? "free",
+        federalCnd:
+          checkProviderPendencyStatus({
+            isent: form.federalCndFree,
+            end: form.federalCndEnd,
+            start: form.federalCndStart,
+            register: form.federalCnd,
+          }) ?? "free",
+        stateCnd:
+          checkProviderPendencyStatus({
+            isent: form.stateCndFree,
+            end: form.stateCndEnd,
+            start: form.stateCndStart,
+            register: form.stateCnd,
+          }) ?? "free",
+        fgts:
+          checkProviderPendencyStatus({
+            isent: form.fgtsCndFree,
+            end: form.fgtsCndEnd,
+            start: form.fgtsCndStart,
+            register: form.fgtsCnd,
+          }) ?? "free",
       },
     })
 

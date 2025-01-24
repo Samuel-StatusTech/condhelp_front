@@ -1,5 +1,6 @@
 import { T_Back_Provider } from "../../../../@types/data/_user/provider"
 import { TUserTypes } from "../../../../@types/data/user"
+import { checkProviderPendencyStatus } from "../../../helpers/checkProviderPendencyStatus"
 
 export const parseUserProvider = (
   backProvider: T_Back_Provider
@@ -81,10 +82,30 @@ export const parseUserProvider = (
       fgtsCndDocument: backProvider.fgtsCndDocAttachment,
 
       pendencies: {
-        federalCnd: "free",
-        stateCnd: "free",
-        cityCnd: "free",
-        fgts: "free",
+        federalCnd: checkProviderPendencyStatus({
+          isent: backProvider.federalCndFree,
+          end: backProvider.federalCndEnd,
+          start: backProvider.federalCndStart,
+          register: backProvider.federalCnd,
+        }),
+        stateCnd: checkProviderPendencyStatus({
+          isent: backProvider.stateCndFree,
+          end: backProvider.stateCndEnd,
+          start: backProvider.stateCndStart,
+          register: backProvider.stateCnd,
+        }),
+        cityCnd: checkProviderPendencyStatus({
+          isent: backProvider.cityCndFree,
+          end: backProvider.cityCndEnd,
+          start: backProvider.cityCndStart,
+          register: backProvider.cityCnd,
+        }),
+        fgts: checkProviderPendencyStatus({
+          isent: backProvider.fgtsCndFree,
+          end: backProvider.fgtsCndEnd,
+          start: backProvider.fgtsCndStart,
+          register: backProvider.fgtsCnd,
+        }),
       },
     }
 
