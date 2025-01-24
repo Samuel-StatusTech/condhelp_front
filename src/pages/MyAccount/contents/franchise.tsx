@@ -219,19 +219,6 @@ const MyAccountFranchise = (props: Props) => {
                       },
                     ],
                   },
-
-                  {
-                    type: "fields",
-                    fields: [
-                      {
-                        type: "profile",
-                        label: "Imagem de perfil",
-                        field: "image",
-                        value: form.image,
-                        gridSizes: { big: 6, small: 12 },
-                      },
-                    ],
-                  },
                 ],
               },
             ],
