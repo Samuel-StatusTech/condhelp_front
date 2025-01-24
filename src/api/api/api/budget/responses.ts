@@ -20,6 +20,7 @@ export type TApi_Responses_Budgets = {
     create: Promise<TDefaultRes<TBudget>>
     getSingle: Promise<TDefaultRes<TBudget>>
     update: Promise<TDefaultRes<TBudget>>
+    finish: Promise<TDefaultRes<{}>>
     delete: Promise<TDefaultRes<{}>>
     interact: Promise<TDefaultRes<{}>>
     cancelBudget: Promise<TDefaultRes<{}>>

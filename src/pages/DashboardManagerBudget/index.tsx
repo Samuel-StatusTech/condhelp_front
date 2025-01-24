@@ -82,25 +82,7 @@ const DashboardManagerBudget = () => {
       setLoading(true)
 
       try {
-        const obj: any = {
-          id: budgetData.id,
-          title: budgetData.title,
-          description: budgetData.description,
-          startDate: getDateStr(budgetData.startDate, "javaDateTime"),
-          finishDate: getDateStr(budgetData.endDate, "javaDateTime"),
-          attachmentUrl: budgetData.attachmentUrl,
-          urgent: budgetData.isUrgent,
-          condominiumId: budgetData.condominiumId,
-          serviceCategoryId: budgetData.categoryId,
-          serviceSubcategoryId: budgetData.subcategoryId,
-          userId: budgetData.userId as number,
-          status: "FINALIZADO" as TBudgetStatus,
-          providerIds: budgetData.providers.map((p) => p.id) as number[],
-          // @ts-ignore
-          franqId: budgetData.franqId,
-        }
-
-        const req = await Api.budgets.update({ budget: obj })
+        const req = await Api.budgets.finish({ id: budgetData.id })
 
         if (req.ok) {
           controllers.feedback.setData({

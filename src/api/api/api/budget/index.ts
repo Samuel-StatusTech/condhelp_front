@@ -244,6 +244,43 @@ const update: TApi["budgets"]["update"] = async ({ budget }) => {
   })
 }
 
+const finish: TApi["budgets"]["finish"] = async ({ id }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`${baseURL}/${id}/finish`)
+        .then((res) => {
+          const info = res.data
+
+          if (res.status === 200) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível finalizar o orçamento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível finalizar o orçamento. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível finalizar o orçamento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const deleteItem: TApi["budgets"]["delete"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -624,6 +661,7 @@ export type TApi_Budgets = {
     p: TParams["budgets"]["getSingle"]
   ) => TResponses["budgets"]["getSingle"]
   update: (p: TParams["budgets"]["update"]) => TResponses["budgets"]["update"]
+  finish: (p: TParams["budgets"]["finish"]) => TResponses["budgets"]["finish"]
   delete: (p: TParams["budgets"]["delete"]) => TResponses["budgets"]["delete"]
   interact: (
     p: TParams["budgets"]["interact"]
@@ -657,6 +695,7 @@ export const apiBudgets: TApi["budgets"] = {
   create: create,
   getSingle: getSingle,
   update: update,
+  finish: finish,
   delete: deleteItem,
   interact: interact,
   statistics: statistics,

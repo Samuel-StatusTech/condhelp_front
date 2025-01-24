@@ -30,6 +30,9 @@ export type TApi_Params_Budgets = {
     update: {
       budget: TBudget
     }
+    finish: {
+      id: number
+    }
     delete: {
       id: number
     }
