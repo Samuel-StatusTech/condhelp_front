@@ -16,6 +16,7 @@ type Props = {
   budgetId: number
   handleResponseProvider: (providerId: number, status: TBudgetStatus) => void
   budgetStatus?: TBudgetStatus
+  forHigherView?: boolean
 }
 
 /*
@@ -29,6 +30,7 @@ const ProviderResume = ({
   budgetId,
   handleResponseProvider,
   budgetStatus,
+  forHigherView,
 }: Props) => {
   const isRefusedOrRejected = [
     "RECUSADO_SINDICO",
@@ -128,7 +130,8 @@ const ProviderResume = ({
             <S.BottomCard>
               {renderStatusIndicator()}
 
-              {data.status !== "CONTRATADO" &&
+              {!forHigherView &&
+                data.status !== "CONTRATADO" &&
                 !(
                   [
                     "CANCELADO_SINDICO",

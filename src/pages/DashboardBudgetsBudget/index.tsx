@@ -12,6 +12,11 @@ import { useCallback, useEffect, useState } from "react"
 import { Api } from "../../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { formatCNPJ } from "../../utils/tb/format/cnpj"
+import Card from "../../components/Card"
+import { TProviderOnBudget } from "../../utils/@types/data/_user/provider"
+import { TUserTypes } from "../../utils/@types/data/user"
+import { TBudgetStatus } from "../../utils/@types/data/status"
+import ProviderDetails from "./provider"
 
 const DashboardBudgetsBudget = () => {
   const { controllers } = getStore()
@@ -20,6 +25,7 @@ const DashboardBudgetsBudget = () => {
   const navigate = useNavigate()
 
   const [budget, setBudgetData] = useState<TBudget | null>(null)
+  const [provider, setProvider] = useState<TUserTypes["PRESTADOR"] | null>(null)
 
   const [loading, setLoading] = useState(false)
 
@@ -65,7 +71,123 @@ const DashboardBudgetsBudget = () => {
     navigate(-1)
   }
 
-  return (
+  /*
+   *  Interactions
+   */
+
+  const handlePickProvider = async (prov: TProviderOnBudget) => {
+    if (prov.userId) {
+      setLoading(true)
+
+      try {
+        const req = await Api.persons.getSingle({ id: prov.userId })
+
+        if (req.ok) {
+          let info = req.data as TUserTypes["PRESTADOR"]
+
+          const stateReq = await Api.states.getSingle({
+            id: +info.address.state,
+          })
+
+          if (stateReq.ok) {
+            info.address.state = stateReq.data.name
+            info.address.country = stateReq.data.country.name
+          } else {
+            info.address.state = ""
+            info.address.country = ""
+          }
+
+          setProvider(info as TUserTypes["PRESTADOR"])
+        } else throw new Error()
+      } catch (error) {
+        controllers.feedback.setData({
+          state: "alert",
+          message: "Não foi possível carregar as informações do prestador.",
+          visible: true,
+        })
+      }
+
+      setLoading(false)
+    }
+  }
+
+  const handleContract = async (providerId: number) => {
+    setLoading(true)
+
+    try {
+      if (budget) {
+        const req = await Api.budgets.contract({
+          budgetId: budget.id,
+          providerId,
+        })
+
+        if (req.ok) window.location.reload()
+        else throw new Error()
+      } else throw new Error()
+    } catch (error) {
+      setLoading(false)
+
+      controllers.feedback.setData({
+        state: "error",
+        message:
+          "Não foi possível realizar o contrato. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
+  }
+
+  const handleResponseProvider = async (
+    providerId: number,
+    status: TBudgetStatus
+  ) => {
+    try {
+      if (budget) {
+        if (status === "CONTRATADO") handleContract(providerId)
+        else {
+          setLoading(true)
+
+          const req = await Api.budgets.interact({
+            budgetId: budget.id,
+            providerId: providerId,
+            status: status,
+          })
+
+          if (req.ok) {
+            setBudgetData({
+              ...budget,
+              providers: budget.providers.map((p) =>
+                p.userId !== providerId
+                  ? p
+                  : {
+                      ...p,
+                      status: status,
+                    }
+              ),
+            })
+
+            setLoading(false)
+
+            controllers.feedback.setData({
+              state: "success",
+              message: "Resposta enviada ao prestador.",
+              visible: true,
+            })
+          } else throw new Error()
+        }
+      } else throw new Error()
+    } catch (error) {
+      setLoading(false)
+
+      controllers.feedback.setData({
+        state: "alert",
+        message:
+          "Não foi possível responder o prestador no momento. Tente novamente mais tarde.",
+        visible: true,
+      })
+    }
+  }
+
+  return !provider ? (
     <C.SubContent>
       <C.BlockArea className="falseSubContentWrapper">
         <BreadcrumbPageHeader from="panelBudget" handleAction={handleBack} />
@@ -167,8 +289,7 @@ const DashboardBudgetsBudget = () => {
               </S.RoundButton>
             </S.PrintArea>
           </S.Block>
-        </S.Column>
-        <S.Column>
+
           <S.Block>
             <S.BlockHeader>
               <S.BlockTitle>{budget?.condominiumName}</S.BlockTitle>
@@ -242,8 +363,40 @@ const DashboardBudgetsBudget = () => {
             </S.DetailsList>
           </S.Block>
         </S.Column>
+        <S.Column>
+          {budget && budget.providers.length > 0 ? (
+            budget.providers.map((p, pk) => (
+              <Card.ProviderResume
+                key={pk}
+                k={pk}
+                data={p}
+                onPick={handlePickProvider}
+                budgetId={budget.id}
+                handleResponseProvider={handleResponseProvider}
+                budgetStatus={budget.status}
+                forHigherView={true}
+              />
+            ))
+          ) : (
+            <S.EmptyMessage>
+              <Icons.Clock />
+              <span style={{ marginTop: 12, fontWeight: 500 }}>
+                Aguardando participantes...
+              </span>
+            </S.EmptyMessage>
+          )}
+        </S.Column>
       </S.SubContent>
     </C.SubContent>
+  ) : (
+    <ProviderDetails
+      data={provider}
+      handleBack={() => setProvider(null)}
+      interactionStatus={
+        budget?.providers.find((p) => p.userId === provider.userAccountId)
+          ?.status as TBudgetStatus
+      }
+    />
   )
 }
 

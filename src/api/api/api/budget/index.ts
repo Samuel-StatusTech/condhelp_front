@@ -469,12 +469,11 @@ const getByStatus: TApi["budgets"]["getByStatus"] = async ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const url = `${baseURL}/provider/${providerId}`
+      const url = `${baseURL}/provider/${providerId}/${status}`
 
       await service
         .get(`${url}`, {
           params: {
-            status: status,
             page: page,
             size: size,
             sort: sort,
