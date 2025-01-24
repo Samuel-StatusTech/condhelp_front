@@ -9,7 +9,6 @@ import { TOption } from "../../../utils/@types/data/option"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { TCity } from "../../../utils/@types/data/region"
 import { formatCNPJ } from "../../../utils/tb/format/cnpj"
-import { useEffect } from "react"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -40,10 +39,6 @@ const MyAccountProvider = (props: Props) => {
     options,
     errors,
   } = props
-
-  useEffect(() => {
-    console.log(form)
-  }, [form])
 
   return (
     <C.Content className="falseSubContentWrapper">
