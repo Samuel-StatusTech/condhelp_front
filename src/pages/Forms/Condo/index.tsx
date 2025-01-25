@@ -474,6 +474,14 @@ const FPcondo = () => {
                           fixedWidth: 112,
                         },
                         {
+                          type: "input",
+                          label: "Bairro",
+                          field: "neighborhood",
+                          placeholder: "Digite aqui",
+                          value: form.neighborhood,
+                          gridSizes: { big: 5, small: 12 },
+                        },
+                        {
                           type: "cityInput",
                           label: "Cidade",
                           field: "city",
