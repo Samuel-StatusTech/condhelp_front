@@ -167,8 +167,6 @@ const FPpeople = () => {
         } else throw new Error()
       } else throw new Error()
     } catch (error) {
-      console.log(error)
-
       controllers.feedback.setData({
         visible: true,
         state: "alert",
@@ -569,8 +567,6 @@ const FPpeople = () => {
 
   const updateErrors = () => {
     const check = checkErrors.users(form)
-    console.log(check)
-
     return check
   }
 

@@ -105,6 +105,10 @@ export const extraProvider = (
                 value: form.federalCnd,
                 placeholder: "000000000000",
                 gridSizes: { big: 4, small: 12 },
+                error: {
+                  has: errors.fields.includes("federalCnd"),
+                  message: "Digite a CND Federal",
+                },
               },
               {
                 type: "date",
@@ -113,6 +117,10 @@ export const extraProvider = (
                 value: form.federalCndStart,
                 gridSizes: { big: 4, small: 12 },
                 maxDate: new Date(),
+                error: {
+                  has: errors.fields.includes("federalCndStart"),
+                  message: "Escolha a data",
+                },
               },
               {
                 type: "date",
@@ -127,6 +135,10 @@ export const extraProvider = (
                     : form.federalCndEnd,
                 gridSizes: { big: 4, small: 12 },
                 minDate: form.federalCndStart ?? undefined,
+                error: {
+                  has: errors.fields.includes("federalCndEnd"),
+                  message: "Escolha a data",
+                },
               },
             ],
             [
@@ -160,6 +172,10 @@ export const extraProvider = (
                 value: form.stateCnd,
                 placeholder: "000000000000",
                 gridSizes: { big: 4, small: 12 },
+                error: {
+                  has: errors.fields.includes("stateCnd"),
+                  message: "Digite a CND Estadual",
+                },
               },
               {
                 type: "date",
@@ -168,6 +184,10 @@ export const extraProvider = (
                 value: form.stateCndStart,
                 gridSizes: { big: 4, small: 12 },
                 maxDate: new Date(),
+                error: {
+                  has: errors.fields.includes("stateCndStart"),
+                  message: "Escolha a data",
+                },
               },
               {
                 type: "date",
@@ -182,6 +202,10 @@ export const extraProvider = (
                     : form.stateCndEnd,
                 gridSizes: { big: 4, small: 12 },
                 minDate: form.stateCndStart ?? undefined,
+                error: {
+                  has: errors.fields.includes("stateCndEnd"),
+                  message: "Escolha a data",
+                },
               },
             ],
             [
@@ -215,11 +239,27 @@ export const extraProvider = (
                 value: form.cityCnd,
                 placeholder: "000000000000",
                 gridSizes: { big: 4, small: 12 },
+                error: {
+                  has: errors.fields.includes("cityCnd"),
+                  message: "Digite a CND Municipal",
+                },
               },
               {
                 type: "date",
                 field: "cityCndStart",
                 label: "Início",
+                value: form.cityCndStart,
+                gridSizes: { big: 4, small: 12 },
+                maxDate: new Date(),
+                error: {
+                  has: errors.fields.includes("cityCndStart"),
+                  message: "Escolha a data",
+                },
+              },
+              {
+                type: "date",
+                field: "cityCndEnd",
+                label: "Final",
                 value:
                   form.cityCndStart &&
                   form.cityCndEnd &&
@@ -228,15 +268,11 @@ export const extraProvider = (
                     ? form.cityCndStart
                     : form.cityCndEnd,
                 gridSizes: { big: 4, small: 12 },
-                maxDate: new Date(),
-              },
-              {
-                type: "date",
-                field: "cityCndEnd",
-                label: "Final",
-                value: form.cityCndEnd,
-                gridSizes: { big: 4, small: 12 },
                 minDate: form.cityCndStart ?? undefined,
+                error: {
+                  has: errors.fields.includes("cityCndEnd"),
+                  message: "Escolha a data",
+                },
               },
             ],
             [
@@ -270,11 +306,27 @@ export const extraProvider = (
                 value: form.fgtsCnd,
                 placeholder: "000000000000",
                 gridSizes: { big: 4, small: 12 },
+                error: {
+                  has: errors.fields.includes("fgtsCnd"),
+                  message: "Digite o FGTS",
+                },
               },
               {
                 type: "date",
                 field: "fgtsCndStart",
                 label: "Início",
+                value: form.fgtsCndStart,
+                gridSizes: { big: 4, small: 12 },
+                maxDate: new Date(),
+                error: {
+                  has: errors.fields.includes("fgtsCndStart"),
+                  message: "Escolha a data",
+                },
+              },
+              {
+                type: "date",
+                field: "fgtsCndEnd",
+                label: "Final",
                 value:
                   form.fgtsCndStart &&
                   form.fgtsCndEnd &&
@@ -283,15 +335,11 @@ export const extraProvider = (
                     ? form.fgtsCndStart
                     : form.fgtsCndEnd,
                 gridSizes: { big: 4, small: 12 },
-                maxDate: new Date(),
-              },
-              {
-                type: "date",
-                field: "fgtsCndEnd",
-                label: "Final",
-                value: form.fgtsCndEnd,
-                gridSizes: { big: 4, small: 12 },
                 minDate: form.fgtsCndStart ?? undefined,
+                error: {
+                  has: errors.fields.includes("fgtsCndEnd"),
+                  message: "Escolha a data",
+                },
               },
             ],
             [

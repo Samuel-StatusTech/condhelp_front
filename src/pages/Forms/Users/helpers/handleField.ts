@@ -203,6 +203,174 @@ export const handleField = async (
             }))
             break
 
+          case "federalCndFree":
+            if (value === true) {
+              const newFieldsList = errors.fields.filter(
+                (errorItem) =>
+                  !["federalCnd", "federalCndStart", "federalCndEnd"].includes(
+                    errorItem
+                  )
+              )
+              setErrors({
+                fields: newFieldsList,
+                has: newFieldsList.length > 0,
+              })
+            }
+
+            const newFederalData =
+              value === true
+                ? {
+                    ...form,
+                    federalCnd: "",
+                    federalCndStart: "",
+                    federalCndEnd: "",
+                    federalCndFree: true,
+                  }
+                : {
+                    ...form,
+                    federalCndFree: false,
+                  }
+
+            setForm(newFederalData)
+            break
+
+          case "federalCnd":
+          case "federalCndStart":
+          case "federalCndEnd":
+            if (form.federalCndFree) {
+              setForm({
+                ...form,
+                [field]: value,
+                federalCndFree: false,
+              })
+            } else setForm((p: any) => ({ ...p, [field]: value }))
+            break
+
+          case "stateCndFree":
+            if (value === true) {
+              const newFieldsList = errors.fields.filter(
+                (errorItem) =>
+                  !["stateCnd", "stateCndStart", "stateCndEnd"].includes(
+                    errorItem
+                  )
+              )
+              setErrors({
+                fields: newFieldsList,
+                has: newFieldsList.length > 0,
+              })
+            }
+
+            const newStateData =
+              value === true
+                ? {
+                    ...form,
+                    stateCnd: "",
+                    stateCndStart: "",
+                    stateCndEnd: "",
+                    stateCndFree: true,
+                  }
+                : {
+                    ...form,
+                    stateCndFree: false,
+                  }
+
+            setForm(newStateData)
+            break
+
+          case "stateCnd":
+          case "stateCndStart":
+          case "stateCndEnd":
+            if (form.stateCndFree) {
+              setForm({
+                ...form,
+                [field]: value,
+                stateCndFree: false,
+              })
+            } else setForm((p: any) => ({ ...p, [field]: value }))
+            break
+
+          case "cityCndFree":
+            if (value === true) {
+              const newFieldsList = errors.fields.filter(
+                (errorItem) =>
+                  !["cityCnd", "cityCndStart", "cityCndEnd"].includes(errorItem)
+              )
+              setErrors({
+                fields: newFieldsList,
+                has: newFieldsList.length > 0,
+              })
+            }
+
+            const newCityData =
+              value === true
+                ? {
+                    ...form,
+                    cityCnd: "",
+                    cityCndStart: "",
+                    cityCndEnd: "",
+                    cityCndFree: true,
+                  }
+                : {
+                    ...form,
+                    cityCndFree: false,
+                  }
+
+            setForm(newCityData)
+            break
+
+          case "cityCnd":
+          case "cityCndStart":
+          case "cityCndEnd":
+            if (form.cityCndFree) {
+              setForm({
+                ...form,
+                [field]: value,
+                cityCndFree: false,
+              })
+            } else setForm((p: any) => ({ ...p, [field]: value }))
+            break
+
+          case "fgtsCndFree":
+            if (value === true) {
+              const newFieldsList = errors.fields.filter(
+                (errorItem) =>
+                  !["fgtsCnd", "fgtsCndStart", "fgtsCndEnd"].includes(errorItem)
+              )
+              setErrors({
+                fields: newFieldsList,
+                has: newFieldsList.length > 0,
+              })
+            }
+
+            const newFgtsData =
+              value === true
+                ? {
+                    ...form,
+                    fgtsCnd: "",
+                    fgtsCndStart: "",
+                    fgtsCndEnd: "",
+                    fgtsCndFree: true,
+                  }
+                : {
+                    ...form,
+                    fgtsCndFree: false,
+                  }
+
+            setForm(newFgtsData)
+            break
+
+          case "fgtsCnd":
+          case "fgtsCndStart":
+          case "fgtsCndEnd":
+            if (form.fgtsCndFree) {
+              setForm({
+                ...form,
+                [field]: value,
+                fgtsCndFree: false,
+              })
+            } else setForm((p: any) => ({ ...p, [field]: value }))
+            break
+
           default:
             setForm((p: any) => ({ ...p, [field]: value }))
             break

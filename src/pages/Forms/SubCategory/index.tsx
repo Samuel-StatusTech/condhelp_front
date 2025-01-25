@@ -158,10 +158,7 @@ const FPsubcategory = () => {
       const catReq = await Api.categories.listAll({})
 
       if (catReq.ok) {
-        const allowedCategories =
-          user?.profile === "ADMIN"
-            ? catReq.data.content
-            : catReq.data.content.filter((c) => c.user.userId === user?.userId)
+        const allowedCategories = catReq.data.content
 
         setOptions((opts) => ({
           ...opts,

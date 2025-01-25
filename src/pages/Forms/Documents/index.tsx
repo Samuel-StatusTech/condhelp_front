@@ -22,6 +22,7 @@ import { checkErrors } from "../../../utils/tb/checkErrors"
 
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 import { checkProviderPendencyStatus } from "../../../utils/tb/helpers/checkProviderPendencyStatus"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const FPdocuments = () => {
   const navigate = useNavigate()
@@ -32,13 +33,197 @@ const FPdocuments = () => {
   const [loading, setLoading] = useState(true)
 
   const [form, setForm] = useState<any>(initials.forms.person.PRESTADOR)
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
 
   const handleCancel = () => {
     navigate(-1)
   }
 
   const handleField = async (field: string, value: any) => {
-    setForm((p: any) => ({ ...p, [field]: value }))
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
+    switch (field) {
+      case "federalCndFree":
+        if (value === true) {
+          const newFieldsList = errors.fields.filter(
+            (errorItem) =>
+              !["federalCnd", "federalCndStart", "federalCndEnd"].includes(
+                errorItem
+              )
+          )
+          setErrors({
+            fields: newFieldsList,
+            has: newFieldsList.length > 0,
+          })
+        }
+
+        const newFederalData =
+          value === true
+            ? {
+                ...form,
+                federalCnd: "",
+                federalCndStart: "",
+                federalCndEnd: "",
+                federalCndFree: true,
+              }
+            : {
+                ...form,
+                federalCndFree: false,
+              }
+
+        setForm(newFederalData)
+        break
+
+      case "federalCnd":
+      case "federalCndStart":
+      case "federalCndEnd":
+        if (form.federalCndFree) {
+          setForm({
+            ...form,
+            [field]: value,
+            federalCndFree: false,
+          })
+        } else setForm((p: any) => ({ ...p, [field]: value }))
+        break
+
+      case "stateCndFree":
+        if (value === true) {
+          const newFieldsList = errors.fields.filter(
+            (errorItem) =>
+              !["stateCnd", "stateCndStart", "stateCndEnd"].includes(errorItem)
+          )
+          setErrors({
+            fields: newFieldsList,
+            has: newFieldsList.length > 0,
+          })
+        }
+
+        const newStateData =
+          value === true
+            ? {
+                ...form,
+                stateCnd: "",
+                stateCndStart: "",
+                stateCndEnd: "",
+                stateCndFree: true,
+              }
+            : {
+                ...form,
+                stateCndFree: false,
+              }
+
+        setForm(newStateData)
+        break
+
+      case "stateCnd":
+      case "stateCndStart":
+      case "stateCndEnd":
+        if (form.stateCndFree) {
+          setForm({
+            ...form,
+            [field]: value,
+            stateCndFree: false,
+          })
+        } else setForm((p: any) => ({ ...p, [field]: value }))
+        break
+
+      case "cityCndFree":
+        if (value === true) {
+          const newFieldsList = errors.fields.filter(
+            (errorItem) =>
+              !["cityCnd", "cityCndStart", "cityCndEnd"].includes(errorItem)
+          )
+          setErrors({
+            fields: newFieldsList,
+            has: newFieldsList.length > 0,
+          })
+        }
+
+        const newCityData =
+          value === true
+            ? {
+                ...form,
+                cityCnd: "",
+                cityCndStart: "",
+                cityCndEnd: "",
+                cityCndFree: true,
+              }
+            : {
+                ...form,
+                cityCndFree: false,
+              }
+
+        setForm(newCityData)
+        break
+
+      case "cityCnd":
+      case "cityCndStart":
+      case "cityCndEnd":
+        if (form.cityCndFree) {
+          setForm({
+            ...form,
+            [field]: value,
+            cityCndFree: false,
+          })
+        } else setForm((p: any) => ({ ...p, [field]: value }))
+        break
+
+      case "fgtsCndFree":
+        if (value === true) {
+          const newFieldsList = errors.fields.filter(
+            (errorItem) =>
+              !["fgtsCnd", "fgtsCndStart", "fgtsCndEnd"].includes(errorItem)
+          )
+          setErrors({
+            fields: newFieldsList,
+            has: newFieldsList.length > 0,
+          })
+        }
+
+        const newFgtsData =
+          value === true
+            ? {
+                ...form,
+                fgtsCnd: "",
+                fgtsCndStart: "",
+                fgtsCndEnd: "",
+                fgtsCndFree: true,
+              }
+            : {
+                ...form,
+                fgtsCndFree: false,
+              }
+
+        setForm(newFgtsData)
+        break
+
+      case "fgtsCnd":
+      case "fgtsCndStart":
+      case "fgtsCndEnd":
+        if (form.fgtsCndFree) {
+          setForm({
+            ...form,
+            [field]: value,
+            fgtsCndFree: false,
+          })
+        } else setForm((p: any) => ({ ...p, [field]: value }))
+        break
+
+      default:
+        setForm((p: any) => ({ ...p, [field]: value }))
+        break
+    }
   }
 
   const getObj = (userId: number) => {
@@ -50,6 +235,7 @@ const FPdocuments = () => {
       photo: null,
       branchId: form.branchId,
       franchiseId: form.franchiseId,
+      doc: "",
     }
 
     let info = getUserObj(
@@ -75,15 +261,22 @@ const FPdocuments = () => {
     }
   }
 
+  const getUserDocument = (obj: any) => {
+    let value = obj.cnpj
+
+    return value.replace(/\D/g, "")
+  }
+
   const handleUpdate = async () => {
     setLoading(true)
 
     try {
       if (user?.userAccountId && !Number.isNaN(user?.userAccountId)) {
         const obj = getObj(Number(user?.userAccountId))
+        const document = getUserDocument(obj)
 
         const req = await Api.persons.update({
-          person: obj as any,
+          person: { ...(obj as any), doc: document },
         })
 
         if (req.ok) {
@@ -111,7 +304,18 @@ const FPdocuments = () => {
   }
 
   const handleSave = async () => {
-    handleUpdate()
+    const errorInfo = updateErrors()
+
+    if (!errorInfo.has) handleUpdate()
+    else {
+      setErrors(errorInfo)
+
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message: "Corrija os campos e tente novamente",
+      })
+    }
   }
 
   const loadData = useCallback(async () => {
@@ -179,8 +383,9 @@ const FPdocuments = () => {
     })
   }, [controllers.modal, loading])
 
-  const errors = () => {
-    return checkErrors.documentation(form)
+  const updateErrors = () => {
+    const check = checkErrors.documentation(form)
+    return check
   }
 
   /*
@@ -193,7 +398,7 @@ const FPdocuments = () => {
       <FormDefaultButtons
         handleCancel={handleCancel}
         handleSave={handleSave}
-        disabled={errors().has}
+        disabled={errors.has}
         deleteModalTitle={"Excluir Documentos"}
       />
     ),
@@ -241,7 +446,7 @@ const FPdocuments = () => {
   const renderExtra = () => {
     let content: TBlock[] = []
 
-    content = formPartials.provider.extra(form, formSubmitFields)
+    content = formPartials.provider.extra(form, formSubmitFields, errors)
 
     return content
   }

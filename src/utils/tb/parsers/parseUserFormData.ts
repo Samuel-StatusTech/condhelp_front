@@ -174,42 +174,74 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
     municipalRegistration: "",
     responsibleName: user.responsable,
 
-    federalCnd: user.federalCnd,
-    federalCndStart: user.federalCndStart
+    // CND Federal
+    federalCnd: user.federalCndFree ? "" : user.federalCnd,
+    federalCndStart: user.federalCndFree
+      ? ""
+      : user.federalCndStart
       ? getDateStr(user.federalCndStart, "javaDateTime")
       : "",
-    federalCndEnd: user.federalCndEnd
-      ? getDateStr(user.federalCndEnd, "javaDateTime")
+    federalCndEnd: user.federalCndFree
+      ? ""
+      : user.federalCndEnd
+      ? getDateStr(
+          getCndEndValue(user.federalCndStart, user.federalCndEnd),
+          "javaDateTime"
+        )
       : "",
     federalCndFree: user.federalCndFree,
     federalCndDocAttachment: user.federalCndDocument,
 
-    stateCnd: user.stateCnd,
-    stateCndStart: user.stateCndStart
+    // CND Estadual
+    stateCnd: user.stateCndFree ? "" : user.stateCnd,
+    stateCndStart: user.stateCndFree
+      ? ""
+      : user.stateCndStart
       ? getDateStr(user.stateCndStart, "javaDateTime")
       : "",
-    stateCndEnd: user.stateCndEnd
-      ? getDateStr(user.stateCndEnd, "javaDateTime")
+    stateCndEnd: user.stateCndFree
+      ? ""
+      : user.stateCndEnd
+      ? getDateStr(
+          getCndEndValue(user.stateCndStart, user.stateCndEnd),
+          "javaDateTime"
+        )
       : "",
     stateCndFree: user.stateCndFree,
     stateCndDocAttachment: user.stateCndDocument,
 
-    cityCnd: user.cityCnd,
-    cityCndStart: user.cityCndStart
+    // CND Municipal
+    cityCnd: user.cityCndFree ? "" : user.cityCnd,
+    cityCndStart: user.cityCndFree
+      ? ""
+      : user.cityCndStart
       ? getDateStr(user.cityCndStart, "javaDateTime")
       : "",
-    cityCndEnd: user.cityCndEnd
-      ? getDateStr(user.cityCndEnd, "javaDateTime")
+    cityCndEnd: user.cityCndFree
+      ? ""
+      : user.cityCndEnd
+      ? getDateStr(
+          getCndEndValue(user.cityCndStart, user.cityCndEnd),
+          "javaDateTime"
+        )
       : "",
     cityCndFree: user.cityCndFree,
     cityCndDocAttachment: user.cityCndDocument,
 
-    fgtsCnd: user.fgtsCnd,
-    fgtsCndStart: user.fgtsCndStart
+    // FGTS
+    fgtsCnd: user.fgtsCndFree ? "" : user.fgtsCnd,
+    fgtsCndStart: user.fgtsCndFree
+      ? ""
+      : user.fgtsCndStart
       ? getDateStr(user.fgtsCndStart, "javaDateTime")
       : "",
-    fgtsCndEnd: user.fgtsCndEnd
-      ? getDateStr(user.fgtsCndEnd, "javaDateTime")
+    fgtsCndEnd: user.fgtsCndFree
+      ? ""
+      : user.fgtsCndEnd
+      ? getDateStr(
+          getCndEndValue(user.fgtsCndStart, user.fgtsCndEnd),
+          "javaDateTime"
+        )
       : "",
     fgtsCndFree: user.fgtsCndFree,
     fgtsCndDocAttachment: user.fgtsCndDocument,
@@ -227,4 +259,17 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
   }
 
   return info
+}
+
+const getCndEndValue = (startDate: any, endDate: any) => {
+  let newValue = ""
+
+  if (!!startDate && !!endDate) {
+    newValue =
+      new Date(startDate).getTime() > new Date(endDate).getTime()
+        ? startDate
+        : endDate
+  }
+
+  return newValue
 }

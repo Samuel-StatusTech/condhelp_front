@@ -220,7 +220,10 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
       }
 
       await service
-        .put(`${roleUrl}/${id}`, parsed)
+        .put(`${roleUrl}/${id}`, {
+          ...parsed,
+          document: parsed.doc,
+        })
         .then((res) => {
           const info = res.data
 
