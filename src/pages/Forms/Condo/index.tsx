@@ -448,7 +448,8 @@ const FPcondo = () => {
                           label: "Nº",
                           field: "addressNumber",
                           placeholder: "Digite aqui",
-                          value: form.addressNumber,
+                          value:
+                            String(form.addressNumber).replace(/\D/g, "") ?? "",
                           gridSizes: { big: 2, small: 6 },
                         },
                         {
@@ -463,12 +464,14 @@ const FPcondo = () => {
                       ],
                       [
                         {
-                          type: "input",
-                          label: "Bairro",
-                          field: "neighborhood",
-                          placeholder: "Digite aqui",
-                          value: form.neighborhood,
-                          gridSizes: { big: 5, small: 12 },
+                          type: "select",
+                          label: "UF",
+                          field: "federateUnit",
+                          value: form.federateUnit,
+                          gridSizes: { big: 2, small: 6 },
+                          options: options.state,
+                          byKey: true,
+                          fixedWidth: 112,
                         },
                         {
                           type: "cityInput",
@@ -481,16 +484,6 @@ const FPcondo = () => {
                             (s) => s.initials === form.federateUnit
                           )?.id,
                           onSelectCity: handleSelectCity,
-                        },
-                        {
-                          type: "select",
-                          label: "UF",
-                          field: "federateUnit",
-                          value: form.federateUnit,
-                          gridSizes: { big: 2, small: 6 },
-                          options: options.state,
-                          byKey: true,
-                          fixedWidth: 112,
                         },
                       ],
                       [

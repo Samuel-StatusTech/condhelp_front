@@ -244,7 +244,7 @@ const FPdocuments = () => {
         userId,
         address: {
           ...(form.address ?? {}),
-          city: (user as TUserTypes["PRESTADOR"])?.address.city,
+          city: (user as TUserTypes["PRESTADOR"])?.address.cityId,
         },
       },
       (form as TNewUser).profile
@@ -275,6 +275,8 @@ const FPdocuments = () => {
         const obj = getObj(Number(user?.userAccountId))
         const document = getUserDocument(obj)
 
+        console.log({ ...(obj as any), doc: document })
+        
         const req = await Api.persons.update({
           person: { ...(obj as any), doc: document },
         })
@@ -334,18 +336,30 @@ const FPdocuments = () => {
         if (hasInfo) {
           const initialRoleInfo = initials.forms.person[req.data.profile]
 
-          const frm = {
+          const reqInfo = req.data as any
+
+          const gettedInfo = {
             ...form,
             ...initialRoleInfo,
-            ...(hasInfo
-              ? req.data
-              : {
-                  ...req.data,
-                  profile: "ADMIN",
-                }),
+            ...{
+              ...reqInfo,
+              address: !!reqInfo.address
+                ? {
+                    ...reqInfo.address,
+                    city: reqInfo.address.city,
+                    cityId:
+                      reqInfo.address.cityId &&
+                      !Number.isNaN(+reqInfo.address.cityId)
+                        ? +reqInfo.address.cityId
+                        : null,
+                    country: +reqInfo.address.country,
+                    state: +reqInfo.address.state,
+                  }
+                : undefined,
+            },
           }
 
-          setForm(frm)
+          setForm(gettedInfo)
         }
       } else {
         controllers.feedback.setData({

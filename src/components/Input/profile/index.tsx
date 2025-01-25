@@ -69,7 +69,7 @@ const InputProfile = (props: Props) => {
             ) : (
               <Button
                 type="quaternary"
-                text="Clique para selecionar"
+                text="Adicionar"
                 action={handleClick}
               />
             )}
