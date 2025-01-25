@@ -114,7 +114,9 @@ const FPpeople = () => {
   const getUserDocument = (obj: any) => {
     let value = ""
 
-    switch (personType) {
+    const type = params.id ? form.profile : personType
+
+    switch (type) {
       case "ADMIN":
         value = form.document.register ?? ""
         break
@@ -165,6 +167,8 @@ const FPpeople = () => {
         } else throw new Error()
       } else throw new Error()
     } catch (error) {
+      console.log(error)
+
       controllers.feedback.setData({
         visible: true,
         state: "alert",
@@ -369,7 +373,7 @@ const FPpeople = () => {
       // For Persons select
 
       const adminLogic = () =>
-        Api.persons.listAll({ size: 300 }).then((usersReq) => {
+        Api.persons.listAll({ size: 300, actives: "true" }).then((usersReq) => {
           if (usersReq.ok) {
             const list = usersReq.data.content
 
@@ -391,7 +395,7 @@ const FPpeople = () => {
 
       const branchLogic = () =>
         Api.persons
-          .getBranchUsers({ size: 300, profile: "FRANQUEADO" })
+          .getBranchUsers({ size: 300, profile: "FRANQUEADO", actives: "true" })
           .then((usersReq) => {
             if (usersReq.ok) {
               const list = usersReq.data.content
@@ -564,7 +568,10 @@ const FPpeople = () => {
   }, [controllers.modal, loading])
 
   const updateErrors = () => {
-    return checkErrors.users(form)
+    const check = checkErrors.users(form)
+    console.log(check)
+
+    return check
   }
 
   /*

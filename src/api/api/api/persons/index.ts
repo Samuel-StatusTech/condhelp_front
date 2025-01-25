@@ -487,14 +487,20 @@ const getSelfData: TApi["persons"]["getSelfData"] = async ({ id }) => {
   })
 }
 
-const getByRole: TApi["persons"]["getByRole"] = async ({ role }) => {
+const getByRole: TApi["persons"]["getByRole"] = async ({ role, actives }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const roleUrl = rolesUrlRelations[role]
 
       if (roleUrl) {
         await service
-          .get(`${roleUrl}`)
+          .get(`${roleUrl}`, {
+            params: actives
+              ? {
+                  actives: actives,
+                }
+              : {},
+          })
           .then(async (res) => {
             const info = res.data
 

@@ -211,6 +211,10 @@ export const basicProvider = ({
                   field: "email",
                   value: form.email,
                   gridSizes: { big: 6, small: 12 },
+                  error: {
+                    has: false,
+                    message: "Digite um email válido",
+                  },
                 },
               ]
             : [
@@ -223,7 +227,7 @@ export const basicProvider = ({
                   gridSizes: { big: 6, small: 12 },
                   error: {
                     has: errors.fields.includes("email"),
-                    message: "Digite o email",
+                    message: "Digite um email válido",
                   },
                 },
               ]) as FormField[]),

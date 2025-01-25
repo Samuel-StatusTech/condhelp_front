@@ -4,7 +4,9 @@ import { TDefaultFilters } from "../../../types/params"
 
 export type TApi_Params_Persons = {
   persons: {
-    listAll: TDefaultFilters
+    listAll: TDefaultFilters & {
+      actives?: string
+    }
     create: {
       newPerson: TNewUser
     }
@@ -29,12 +31,16 @@ export type TApi_Params_Persons = {
     }
     getByRole: {
       role: TAccess
+      actives?: string
     }
     getAllBranches: {}
 
     getBranchUsers: TDefaultFilters & {
       profile?: string
+      actives?: string
     }
-    getFranchiseUsers: TDefaultFilters
+    getFranchiseUsers: TDefaultFilters & {
+      actives?: string
+    }
   }
 }

@@ -307,7 +307,10 @@ const FPcondo = () => {
         }))
         loadEditInfo()
       } else {
-        const managersReq = await Api.persons.getByRole({ role: "SINDICO" })
+        const managersReq = await Api.persons.getByRole({
+          role: "SINDICO",
+          actives: "true",
+        })
 
         if (managersReq.ok) {
           const managersList = managersReq.data.content
