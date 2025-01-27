@@ -13,13 +13,8 @@ export const subcategoriesCheck = (data: Params): TErrorsCheck => {
     fields: [],
   }
 
-  if ((data as TNewSubCategory).serviceCategory) {
-    if (
-      !String((data as TNewSubCategory).serviceCategory).trim() &&
-      !String((data as TNewSubCategory).serviceCategory).trim()
-    )
-      state = getInvalidCheck(state, "serviceCategory")
-  }
+  if (data.serviceCategory === 0)
+    state = getInvalidCheck(state, "serviceCategory")
 
   if (!data.name.trim()) state = getInvalidCheck(state, "name")
 

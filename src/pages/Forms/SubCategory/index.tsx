@@ -79,16 +79,33 @@ const FPsubcategory = () => {
   }
 
   const getObj = () => {
+    let branchId = null
+    let franqId = null
+
+    switch (user?.profile) {
+      case "FILIAL":
+        branchId = user?.userId
+        break
+      case "FRANQUEADO":
+        branchId = user?.branchId
+        franqId = user?.userId
+        break
+      case "SINDICO":
+        branchId = user?.branchId
+        franqId = user?.franqId
+        break
+      default:
+        break
+    }
+
     const obj: TNewSubCategory = {
       name: form.name,
       serviceCategory: !Number.isNaN(form.serviceCategory)
         ? form.serviceCategory
         : // @ts-ignore
           form.serviceCategory.id,
-      // @ts-ignore
-      branchId: ((user?.branchId ?? user?.subsidiaryId) as number) ?? null,
-      // @ts-ignore
-      franqId: ((user?.franqId ?? user?.franchiseId) as number) ?? null,
+      branchId: branchId,
+      franqId: franqId,
     }
 
     return obj
@@ -155,7 +172,7 @@ const FPsubcategory = () => {
     setLoading(true)
 
     try {
-      const catReq = await Api.categories.listAll({})
+      const catReq = await Api.categories.listAll({ size: 300 })
 
       if (catReq.ok) {
         const allowedCategories = catReq.data.content

@@ -167,12 +167,29 @@ const FPcategory = () => {
   }
 
   const getCategoryObj = () => {
+    let branchId = null
+    let franqId = null
+
+    switch (user?.profile) {
+      case "FILIAL":
+        branchId = user?.userId
+        break
+      case "FRANQUEADO":
+        branchId = user?.branchId
+        franqId = user?.userId
+        break
+      case "SINDICO":
+        branchId = user?.branchId
+        franqId = user?.franqId
+        break
+      default:
+        break
+    }
+
     const obj: TNewCategory = {
       active: true,
-      // @ts-ignore
-      branchId: ((user?.branchId ?? user?.subsidiaryId) as number) ?? null,
-      // @ts-ignore
-      franqId: ((user?.franqId ?? user?.franchiseId) as number) ?? null,
+      branchId: branchId,
+      franqId: franqId,
       description: form.description,
       name: form.name,
       serviceSubcategories: [],
