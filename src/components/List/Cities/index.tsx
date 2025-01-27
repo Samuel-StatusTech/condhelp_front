@@ -29,21 +29,25 @@ const CitiesList = ({
   const { controllers } = getStore()
 
   const handleDelete = (id: number) => {
+    const cityData = list.find((city) => city.id === id)
+
     const removal = unlinkCity(id)
 
-    if (removal) {
-      controllers.feedback.setData({
-        message: "Cidade desrelacionada com sucesso.",
-        state: "success",
-        visible: true,
-      })
-    } else {
-      controllers.feedback.setData({
-        message:
-          "Não foi possível desrelacionar a cidade. Tente novamente mais tarde.",
-        state: "error",
-        visible: true,
-      })
+    if (cityData && !cityData.notPicked) {
+      if (removal) {
+        controllers.feedback.setData({
+          message: "Cidade desrelacionada com sucesso.",
+          state: "success",
+          visible: true,
+        })
+      } else {
+        controllers.feedback.setData({
+          message:
+            "Não foi possível desrelacionar a cidade. Tente novamente mais tarde.",
+          state: "error",
+          visible: true,
+        })
+      }
     }
   }
 

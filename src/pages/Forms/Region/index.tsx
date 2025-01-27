@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import * as C from "../styled"
+import * as S from "./styled"
 
 import initials from "../../../utils/initials"
 import Form from "../../../components/Form"
@@ -9,13 +10,15 @@ import PageHeader from "../../../components/PageHeader"
 import { getStore } from "../../../store"
 import { TOption } from "../../../utils/@types/data/option"
 
-import { TCity, TNewRegion } from "../../../utils/@types/data/region"
+import { TCity, TNewRegion, TState } from "../../../utils/@types/data/region"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import { List } from "../../../components/List"
 
 import { Api } from "../../../api"
 import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { checkErrors } from "../../../utils/tb/checkErrors"
+import Button from "../../../components/Button"
+import { Icons } from "../../../assets/icons/icons"
 
 const FPregion = () => {
   const navigate = useNavigate()
@@ -26,6 +29,8 @@ const FPregion = () => {
 
   const [loading, setLoading] = useState(true)
   const [citiesOptions, setCitiesOptions] = useState<TCity[]>([])
+  const [states, setStates] = useState<TState[]>([])
+
   // const [pickedCity, setPickedCity] = useState<TCity | null>(null)
 
   const [changedCountryState, setChangedCountryState] = useState(false)
@@ -241,10 +246,9 @@ const FPregion = () => {
       })
       const statesReq = await Api.states.listAll({}).then((res) => {
         if (res.ok) {
-          setOptions((opts) => ({
-            ...opts,
-            state: parseOptionList(res.data.content, "id", "name"),
-          }))
+          const results = res.data.content
+
+          setStates(results)
         } else {
           controllers.feedback.setData({
             message:
@@ -303,6 +307,19 @@ const FPregion = () => {
   }, [loadData])
 
   useEffect(() => {
+    if (form && form.countryId) {
+      const availableStates = states.filter(
+        (s) => Number(s.country.id) === Number(form.countryId)
+      )
+
+      setOptions((opt) => ({
+        ...opt,
+        state: parseOptionList(availableStates, "id", "name"),
+      }))
+    }
+  }, [form, states])
+
+  useEffect(() => {
     controllers.modal.open({
       role: "loading",
       visible: loading,
@@ -356,6 +373,22 @@ const FPregion = () => {
                       ],
                     ],
                   },
+                  {
+                    type: "custom",
+                    element: (
+                      <S.Buttons className="buttonsArea">
+                        <Button
+                          type="quaternary"
+                          action={params.id ? handleDelete : () => {}}
+                          text={"Excluir região"}
+                          icon={<Icons.Trash />}
+                          iconLeft={true}
+                          fit={true}
+                          disabled={!params.id}
+                        />
+                      </S.Buttons>
+                    ),
+                  },
                 ],
               },
             ],
@@ -389,11 +422,9 @@ const FPregion = () => {
                     type: "custom",
                     element: (
                       <FormDefaultButtons
-                        handleDelete={handleDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
                         disabled={errors().has}
-                        deleteModalTitle={"Excluir Região"}
                       />
                     ),
                   },
