@@ -10,6 +10,7 @@ import Button from "../../Button"
 import Input from "../../Input"
 import { Api } from "../../../api"
 import { getStore } from "../../../store"
+import { useEffect, useState } from "react"
 
 type Props = {
   list: TSubCategory[]
@@ -19,9 +20,12 @@ type Props = {
 const SubcategoriesList = ({ list, setList }: Props) => {
   const { controllers } = getStore()
 
-  const handleDelete = (id: number) => {
-    if (!list.find((i) => i.id === id)?.isNew) {
-      Api.subcategories
+  const [loading, setLoading] = useState(false)
+
+  const onConfirmDelete = async (id: number) => {
+    setLoading(true)
+    try {
+      await Api.subcategories
         .delete({ id })
         .then((res) => {
           if (res.ok) {
@@ -47,13 +51,31 @@ const SubcategoriesList = ({ list, setList }: Props) => {
             visible: true,
           })
         })
-    } else {
-      setList(list.filter((i) => i.id !== id))
+    } catch (error) {
       controllers.feedback.setData({
-        message: "Subcategoria excluída com sucesso.",
-        state: "success",
+        message:
+          "Não foi possível excluir a subcategoria. Tente novamente mais tarde.",
+        state: "error",
         visible: true,
       })
+    }
+
+    setLoading(false)
+  }
+
+  const handleDelete = (id: number) => {
+    if (!list.find((i) => i.id === id)?.isNew) {
+      controllers.modal.open({
+        role: "confirmDelete",
+        visible: true,
+        data: {
+          title: "Excluir subcategoria",
+          deleteTextDescriptor: "excluir esta subcategoria",
+        },
+        handleOp: () => onConfirmDelete(id),
+      })
+    } else {
+      setList(list.filter((i) => i.id !== id))
     }
   }
 
@@ -87,6 +109,13 @@ const SubcategoriesList = ({ list, setList }: Props) => {
 
     focusCity(newId)
   }
+
+  useEffect(() => {
+    controllers.modal.open({
+      role: "loading",
+      visible: loading,
+    })
+  }, [controllers.modal, loading])
 
   return (
     <S.Wrapper>
