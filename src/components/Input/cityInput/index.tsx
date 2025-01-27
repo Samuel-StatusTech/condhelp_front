@@ -20,6 +20,8 @@ export type TCityInput = {
   fixedWidth?: number
 
   error?: TFieldError
+
+  big?: boolean
 }
 
 type Props = TCityInput & {
@@ -37,6 +39,8 @@ const CityInput = (props: Props) => {
     stateId,
     onSelectCity,
     error,
+
+    big,
   } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -101,7 +105,7 @@ const CityInput = (props: Props) => {
     <C.Wrapper $gridSizes={props.gridSizes} $fixedWidth={props.fixedWidth}>
       <C.Area>
         {label && <S.Label $error={error?.has}>{label}</S.Label>}
-        <S.Item $k={0} $error={error?.has}>
+        <S.Item $k={0} $error={error?.has} $big={big}>
           <S.Input
             ref={inputRef}
             value={value}

@@ -274,8 +274,6 @@ const FPdocuments = () => {
       if (user?.userAccountId && !Number.isNaN(user?.userAccountId)) {
         const obj = getObj(Number(user?.userAccountId))
         const document = getUserDocument(obj)
-
-        console.log({ ...(obj as any), doc: document })
         
         const req = await Api.persons.update({
           person: { ...(obj as any), doc: document },

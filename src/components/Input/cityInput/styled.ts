@@ -50,7 +50,6 @@ export const Label = styled.label<{ $error?: boolean }>`
 
 export const Input = styled.input<{ $error?: boolean }>`
   flex: 1;
-  border-radius: 10px;
   color: ${({ $error, theme }) =>
     $error ? theme.colors.red.main : theme.colors.neutral.main};
   background-color: transparent;
@@ -59,7 +58,6 @@ export const Input = styled.input<{ $error?: boolean }>`
   min-width: unset;
   font-weight: 600;
   width: 100%;
-  transition: background-color 0.3s;
   transition: background-color 0.3s, color 0.3s;
 
   &::placeholder {
@@ -74,12 +72,16 @@ export const Input = styled.input<{ $error?: boolean }>`
   }
 `
 
-export const Item = styled.div<{ $k: number; $error?: boolean }>`
+export const Item = styled.div<{
+  $k: number
+  $error?: boolean
+  $big?: boolean
+}>`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 20px;
+  padding: ${({ $big }) => ($big ? 7 : 4)}px 20px;
   gap: 48px;
   background-color: ${({ $error, theme }) =>
     $error ? `rgba(255, 0, 0, 0.1)` : theme.colors.neutral.white};

@@ -74,20 +74,20 @@ const FPcondo = () => {
 
     if (user?.profile === "SINDICO") {
       branchId = user?.branchId as number
-      franchiseId = user?.franchiseId as number
+      franchiseId = user?.franqId as number
     } else if (user?.profile === "FRANQUEADO") {
       branchId = user?.branchId as number
       franchiseId = user?.userId as number
     } else if (user?.profile === "FILIAL") {
       branchId = user?.userId as number
-      franchiseId = form.manager.franchiseId as number
+      franchiseId = form.manager.franqId as number
     } else if (user?.profile === "ADMIN") {
       branchId = form.manager.branchId as number
-      franchiseId = form.manager.franchiseId as number
+      franchiseId = form.manager.franqId as number
     }
 
     return params.id && !Number.isNaN(params.id)
-      ? { ...obj, id: params.id }
+      ? { ...obj, id: params.id, branchId: branchId, franchiseId: franchiseId }
       : {
           ...obj,
           branchId: branchId,
@@ -134,8 +134,6 @@ const FPcondo = () => {
     setLoading(true)
 
     try {
-      // check errors
-
       const obj = getObj()
 
       const req = await Api.condos.create({ newCondo: obj })
@@ -484,6 +482,7 @@ const FPcondo = () => {
                             (s) => s.initials === form.federateUnit
                           )?.id,
                           onSelectCity: handleSelectCity,
+                          big: true,
                         },
                         {
                           type: "input",
