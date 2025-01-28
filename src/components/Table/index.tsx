@@ -88,16 +88,15 @@ const Table = ({
           {loading ? (
             <Skeleton role="table" columns={config.columns.length} rows={10} />
           ) : (
-            data
-              .map((item, k) => (
-                <RowItem
-                  key={k}
-                  item={item}
-                  config={config}
-                  actions={actions}
-                  expandComponent={expandComponent}
-                />
-              ))
+            data.map((item, k) => (
+              <RowItem
+                key={k}
+                item={item}
+                config={config}
+                actions={actions}
+                expandComponent={expandComponent}
+              />
+            ))
           )}
         </S.TableBody>
       </S.Table>
@@ -107,8 +106,11 @@ const Table = ({
           <S.Showinglabel>
             Exibindo{" "}
             <strong>
-              {searchData.pageable.pageNumber * searchData.size +
-                searchData?.numberOfElements}
+              {/* @ts-ignore */}
+              {!searchData.pageable || searchData.pageable === "INSTANCE"
+                ? 0
+                : searchData.pageable.pageNumber * searchData.size +
+                  searchData?.numberOfElements}
             </strong>{" "}
             de {searchData?.totalElements}
           </S.Showinglabel>
