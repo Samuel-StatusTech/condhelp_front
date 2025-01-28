@@ -164,9 +164,9 @@ const FPpeople = () => {
           })
 
           setLoading(false)
-
-          if (onFinish) onFinish(obj.userId)
-          else navigate("/dashboard/users")
+          if (onFinish && typeof onFinish === "function") {
+            onFinish(obj.userId)
+          } else navigate("/dashboard/users")
         } else throw new Error()
       } else throw new Error()
     } catch (error) {
@@ -248,8 +248,8 @@ const FPpeople = () => {
       const errorInfo = updateErrors()
 
       if (!errorInfo.has) {
-        if (params.id) handleUpdate(onFinish)
-        else handleCreate(onFinish)
+        if (params.id) handleUpdate(onFinish ?? undefined)
+        else handleCreate(onFinish ?? undefined)
       } else {
         setErrors(errorInfo)
 

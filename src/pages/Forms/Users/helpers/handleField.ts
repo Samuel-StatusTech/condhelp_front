@@ -13,6 +13,9 @@ export const handleField = async (
   errors: TErrorsCheck,
   setErrors: React.Dispatch<React.SetStateAction<TErrorsCheck>>
 ) => {
+
+  console.log(errors)
+  
   if (errors.fields.includes(field)) {
     const newFieldsList = errors.fields.filter(
       (errorItem) => errorItem !== field
