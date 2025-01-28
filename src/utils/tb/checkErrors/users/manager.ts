@@ -1,6 +1,7 @@
 import { getInvalidCheck } from ".."
 import { TNewUserDefault, TUManager } from "../../../@types/data/user"
 import { TErrorsCheck } from "../../../@types/helpers/checkErrors"
+import { cnpjValidator } from "../../helpers/validatorCnpj"
 import { cpfValidator } from "../../helpers/validatorCpf"
 import { validEmail } from "../email"
 
@@ -28,11 +29,19 @@ export const managerCheck = (
       state = getInvalidCheck(state, "phone2")
     if (!data.documentType?.trim())
       state = getInvalidCheck(state, "documentType")
-    if (
-      data.documentNumber?.replace(/\D/g, "").length < 11 ||
-      !cpfValidator(data.documentNumber)
-    )
-      state = getInvalidCheck(state, "documentNumber")
+    if (data.documentType === "cpf") {
+      if (
+        data.documentNumber?.replace(/\D/g, "").length < 11 ||
+        !cpfValidator(data.documentNumber)
+      )
+        state = getInvalidCheck(state, "documentNumber")
+    } else {
+      if (
+        data.documentNumber?.replace(/\D/g, "").length < 14 ||
+        !cnpjValidator(data.documentNumber)
+      )
+        state = getInvalidCheck(state, "documentNumber")
+    }
     if (!data.managerSince) state = getInvalidCheck(state, "managerSince")
     if (!data.birthDate) state = getInvalidCheck(state, "birthDate")
   }

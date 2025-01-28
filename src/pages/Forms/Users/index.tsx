@@ -211,8 +211,10 @@ const FPpeople = () => {
 
           setLoading(false)
 
-          if (onFinish) onFinish(obj.userId)
-          else navigate("/dashboard/users")
+          setLoading(false)
+          if (onFinish && typeof onFinish === "function") {
+            onFinish(obj.userId)
+          } else navigate("/dashboard/users")
         } else {
           if (req.error) {
             controllers.feedback.setData({
@@ -720,7 +722,8 @@ const FPpeople = () => {
           formSubmitFields,
           errors,
           handleAddCondominium,
-          handleDeleteCondominium
+          handleDeleteCondominium,
+          params.id !== undefined
         )
         break
 

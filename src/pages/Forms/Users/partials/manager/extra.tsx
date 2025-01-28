@@ -1,9 +1,11 @@
 import { List } from "../../../../../components/List"
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { FormField } from "../../../../../utils/@types/components/FormFields"
 import { TCondominium } from "../../../../../utils/@types/data/condominium"
 import { TUManager } from "../../../../../utils/@types/data/user"
 import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { systemOptions } from "../../../../../utils/system/options"
+import { formatCNPJ } from "../../../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../../../utils/tb/format/cpf"
 import { formatPhone } from "../../../../../utils/tb/format/phone"
 import { getMajorityDate } from "../../../../../utils/tb/helpers/getMajorityDate"
@@ -13,7 +15,8 @@ export const extraManager = (
   formSubmitFields: TBlock["groups"][number],
   errors: TErrorsCheck,
   handleAddCondominium: () => void,
-  handleDeleteCondominium: (condominium: TCondominium) => void
+  handleDeleteCondominium: (condominium: TCondominium) => void,
+  isEditing?: boolean
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -54,30 +57,90 @@ export const extraManager = (
           type: "fields",
           fields: [
             [
-              {
-                type: "select",
-                label: "Documento",
-                field: "documentType",
-                value: "cpf",
-                options: [{ key: "cpf", value: "CPF" }],
-                gridSizes: { big: 3, small: 12 },
-                error: {
-                  has: errors.fields.includes("documentType"),
-                  message: "Selecione um documento",
-                },
-              },
-              {
-                type: "input",
-                field: "documentNumber",
-                label: "Nº do documento",
-                value: formatCpf(form.documentNumber ?? ""),
-                placeholder: "000.000.000-00",
-                gridSizes: { big: 6, small: 12 },
-                error: {
-                  has: errors.fields.includes("documentNumber"),
-                  message: "Digite um documento válido",
-                },
-              },
+              ...((isEditing
+                ? [
+                    ...(form.documentType === "cpf"
+                      ? [
+                          {
+                            type: "readonly",
+                            label: "Documento",
+                            field: "documentType",
+                            value: form.documentType.toUpperCase(),
+                            gridSizes: { big: 3, small: 12 },
+                            error: {
+                              has: false,
+                              message: "Escolha um documento",
+                            },
+                          },
+                        ]
+                      : [
+                          {
+                            type: "readonly",
+                            label: "Documento",
+                            field: "documentType",
+                            value: form.documentType.toUpperCase(),
+                            gridSizes: { big: 3, small: 12 },
+                            error: {
+                              has: false,
+                              message: "Escolha um documento",
+                            },
+                          },
+                        ]),
+                  ]
+                : [
+                    {
+                      type: "select",
+                      label: "Documento",
+                      field: "documentType",
+                      value: form.documentType,
+                      options: [
+                        { key: "cpf", value: "CPF" },
+                        { key: "cnpj", value: "CNPJ" },
+                      ],
+                      gridSizes: { big: 3, small: 12 },
+                      error: {
+                        has: errors.fields.includes("documentType"),
+                        message: "Selecione um documento",
+                      },
+                    },
+                  ]) as FormField[]),
+              ...((isEditing
+                ? [
+                    {
+                      type: "readonly",
+                      label: "Nº do documento",
+                      field: "documentNumber",
+                      value:
+                        form.documentType === "cpf"
+                          ? formatCpf(form.documentNumber ?? "")
+                          : formatCNPJ(form.documentNumber ?? ""),
+                      gridSizes: { big: 6, small: 12 },
+                      error: {
+                        has: false,
+                        message: "Digite um documento válido",
+                      },
+                    },
+                  ]
+                : [
+                    {
+                      type: "input",
+                      field: "documentNumber",
+                      label: "Nº do documento",
+                      value:
+                        form.documentType === "cpf"
+                          ? formatCpf(form.documentNumber ?? "")
+                          : formatCNPJ(form.documentNumber ?? ""),
+                      placeholder:
+                        form.documentType === "cpf"
+                          ? "000.000.000-00"
+                          : "00.000.000/0000-00",
+                      gridSizes: { big: 6, small: 12 },
+                      error: {
+                        has: errors.fields.includes("documentNumber"),
+                        message: "Digite um documento válido",
+                      },
+                    },
+                  ]) as FormField[]),
               {
                 type: "date",
                 field: "birthDate",
