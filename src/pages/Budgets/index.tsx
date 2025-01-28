@@ -41,7 +41,7 @@ const Budgets = () => {
     sort: undefined,
   })
 
-  const [specificCondo, setSpecificCondo] = useState("")
+  const [specificFranchise, setSpecificFranchise] = useState("")
   const [finishedBudgetsSearch, setFinishedBudgetsSearch] = useState("")
   const [filters, setFilters] = useState({
     status: "",
@@ -131,15 +131,27 @@ const Budgets = () => {
               )
           )
 
-          const finisheds = req.data.content.filter((b) => {
-            let state = false
+          const finisheds = req.data.content
+            .filter((b) => {
+              let state = false
 
-            state = (
-              ["CANCELADO_SINDICO", "FINALIZADO"] as TBudgetStatus[]
-            ).includes(b.status as TBudgetStatus)
+              state = (
+                [
+                  "CANCELADO_SINDICO",
+                  "FINALIZADO",
+                  "EXPIRADO",
+                ] as TBudgetStatus[]
+              ).includes(b.status as TBudgetStatus)
 
-            return state
-          })
+              return state
+            })
+            .sort((a, b) =>
+              !a.endDate || !b.endDate
+                ? 1
+                : new Date(a.endDate).getTime() < new Date(b.endDate).getTime()
+                ? 1
+                : -1
+            )
 
           setFinishedBudgets(finisheds)
 
@@ -147,16 +159,20 @@ const Budgets = () => {
             // Franchises
             const franchisesReq = await Api.persons.getByRole({
               role: "FRANQUEADO",
+              actives: "true",
             })
 
             if (franchisesReq.ok) {
               setOptions((opts) => ({
                 ...opts,
-                franchises: parseOptionList(
-                  franchisesReq.data.content,
-                  "id",
-                  "name"
-                ),
+                franchises: [
+                  { key: "all", value: "Todas" },
+                  ...parseOptionList(
+                    franchisesReq.data.content,
+                    "userAccountId",
+                    "nome"
+                  ),
+                ],
               }))
             }
           }
@@ -171,8 +187,9 @@ const Budgets = () => {
   )
 
   useEffect(() => {
+    // Filter by franchiseId, only if specificFranchise !== "all"
     loadData(searchFilters)
-  }, [loadData, searchFilters])
+  }, [loadData, searchFilters, specificFranchise])
 
   useEffect(() => {
     controllers.modal.open({
@@ -195,9 +212,9 @@ const Budgets = () => {
             <Input.CondoSelect
               field="franchises"
               options={options.franchises}
-              label="Todos as franquias"
-              value={specificCondo}
-              onChange={setSpecificCondo}
+              label="Todas as franquias"
+              value={specificFranchise}
+              onChange={setSpecificFranchise}
             />
           </S.BlockHeader>
 

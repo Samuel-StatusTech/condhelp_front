@@ -12,6 +12,7 @@ export type TApi_Params_Budgets = {
       managerId?: number
       condominiumId?: number
       branchId?: number
+      franqId?: number
       providerId?: number
       actives?: any
       status?: any

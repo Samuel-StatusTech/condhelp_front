@@ -16,6 +16,7 @@ const listAll: TApi["budgets"]["listAll"] = async (filters) => {
         condominiumId:
           filters.condominiumId !== 0 ? filters.condominiumId : undefined,
         subsidiaryId: filters.branchId,
+        franchiseId: filters.franqId,
         page: filters.page,
         size: filters.size,
         sort: filters.sort,
