@@ -44,6 +44,8 @@ const DashboardManagerBudget = () => {
           setBudgetData(null)
 
           resolve(true)
+
+          if (req.ok) window.location.reload()
         } else throw new Error()
       } catch (error) {
         setLoading(true)
