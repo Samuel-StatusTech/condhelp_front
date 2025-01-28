@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom"
 import { TBudgetStatus } from "../../utils/@types/data/status"
 import { getDateStr } from "../../utils/tb/format/date"
 import { matchSearch } from "../../utils/tb/helpers/matchSearch"
+import { TFinishedBudgets } from "../../utils/@types/data/budget/finished"
 
 const Budgets = () => {
   const { user, controllers } = getStore()
@@ -63,7 +64,9 @@ const Budgets = () => {
   // Engine
 
   const [budgets, setBudgets] = useState<TBudgetResume[]>([])
-  const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
+  const [finishedBudgets, setFinishedBudgets] = useState<
+    (TBudgetResume | TFinishedBudgets)[]
+  >([])
 
   const handlePickBudget = async (id: number) => {
     navigate(`/dashboard/budgets/budget/${id}`)
@@ -105,33 +108,122 @@ const Budgets = () => {
       setLoading(true)
 
       try {
-        // Budgets
-        const req = await Api.budgets.listAll(params)
+        // Franchise user
 
-        if (req.ok) {
-          setSearchControl(req.data)
-          setBudgets(
-            req.data.content
-              .filter((b) => {
-                let state = false
+        if (user?.profile === "FRANQUEADO") {
+          const req = await Api.budgets.listFranchiseBudgets({})
 
-                state = (["DISPONIVEL"] as TBudgetStatus[]).includes(
-                  b.status as TBudgetStatus
+          if (req.ok) {
+            // Active list
+            setBudgets(
+              req.data.content
+                .filter((b) => {
+                  let state = false
+
+                  state = (["DISPONIVEL"] as TBudgetStatus[]).includes(
+                    b.status as TBudgetStatus
+                  )
+
+                  return state
+                })
+                .sort((a, b) =>
+                  !a.endDate || !b.endDate
+                    ? 1
+                    : new Date(a.endDate).getTime() <
+                      new Date(b.endDate).getTime()
+                    ? -1
+                    : 1
                 )
+            )
+          } else {
+            controllers.feedback.setData({
+              visible: true,
+              state: "alert",
+              message: req.error,
+            })
+          }
+        } else if (user?.profile === "FILIAL") {
+          const req = await Api.budgets.listFranchiseBudgets({})
 
-                return state
-              })
-              .sort((a, b) =>
-                !a.endDate || !b.endDate
-                  ? 1
-                  : new Date(a.endDate).getTime() <
-                    new Date(b.endDate).getTime()
-                  ? -1
-                  : 1
-              )
-          )
+          if (req.ok) {
+            // Active list
+            setBudgets(
+              req.data.content
+                .filter((b) => {
+                  let state = false
 
-          const finisheds = req.data.content
+                  state = (["DISPONIVEL"] as TBudgetStatus[]).includes(
+                    b.status as TBudgetStatus
+                  )
+
+                  return state
+                })
+                .sort((a, b) =>
+                  !a.endDate || !b.endDate
+                    ? 1
+                    : new Date(a.endDate).getTime() <
+                      new Date(b.endDate).getTime()
+                    ? -1
+                    : 1
+                )
+            )
+
+            // Franchises
+            const franchisesReq = await Api.persons.getByRole({
+              role: "FRANQUEADO",
+              actives: "true",
+            })
+
+            if (franchisesReq.ok) {
+              setOptions((opts) => ({
+                ...opts,
+                franchises: [
+                  { key: "all", value: "Todas" },
+                  ...parseOptionList(
+                    franchisesReq.data.content,
+                    "userAccountId",
+                    "nome"
+                  ),
+                ],
+              }))
+            }
+          } else {
+            controllers.feedback.setData({
+              visible: true,
+              state: "alert",
+              message: req.error,
+            })
+          }
+        }
+
+        setLoading(false)
+      } catch (error) {}
+
+      setLoading(false)
+    },
+    [controllers.feedback, user?.profile]
+  )
+
+  useEffect(() => {
+    loadData({})
+  }, [loadData, specificFranchise])
+
+  const getFinishedList = useCallback(
+    async (params: TDefaultFilters) => {
+      setLoading(true)
+
+      try {
+        const fn =
+          user?.profile === "FILIAL"
+            ? () => Api.budgets.finished.branch(params)
+            : () => Api.budgets.finished.franchise(params)
+
+        const finishedReq = await fn()
+
+        if (finishedReq.ok) {
+          setSearchControl(finishedReq.data)
+
+          const finisheds = finishedReq.data.content
             .filter((b) => {
               let state = false
 
@@ -154,42 +246,24 @@ const Budgets = () => {
             )
 
           setFinishedBudgets(finisheds)
-
-          if (user?.profile === "FILIAL") {
-            // Franchises
-            const franchisesReq = await Api.persons.getByRole({
-              role: "FRANQUEADO",
-              actives: "true",
-            })
-
-            if (franchisesReq.ok) {
-              setOptions((opts) => ({
-                ...opts,
-                franchises: [
-                  { key: "all", value: "Todas" },
-                  ...parseOptionList(
-                    franchisesReq.data.content,
-                    "userAccountId",
-                    "nome"
-                  ),
-                ],
-              }))
-            }
-          }
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: finishedReq.error,
+          })
         }
+      } catch (error) {}
 
-        setLoading(false)
-      } catch (error) {
-        setLoading(false)
-      }
+      setLoading(false)
     },
-    [user?.profile]
+    [controllers.feedback, user?.profile]
   )
 
   useEffect(() => {
-    // Filter by franchiseId, only if specificFranchise !== "all"
-    loadData(searchFilters)
-  }, [loadData, searchFilters, specificFranchise])
+    getFinishedList(searchFilters)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getFinishedList, searchFilters])
 
   useEffect(() => {
     controllers.modal.open({
@@ -209,13 +283,15 @@ const Budgets = () => {
                 andamento:
               </span>
             </S.BlockTitle>
-            <Input.CondoSelect
-              field="franchises"
-              options={options.franchises}
-              label="Todas as franquias"
-              value={specificFranchise}
-              onChange={setSpecificFranchise}
-            />
+            {user?.profile === "FILIAL" && (
+              <Input.CondoSelect
+                field="franchises"
+                options={options.franchises}
+                label="Todas as franquias"
+                value={specificFranchise}
+                onChange={setSpecificFranchise}
+              />
+            )}
           </S.BlockHeader>
 
           <Divider />
@@ -253,7 +329,6 @@ const Budgets = () => {
 
               const fields = [
                 i.title,
-                i.description,
                 i.condominiumName,
                 getDateStr(i.endDate as string, "dmy"),
               ]

@@ -61,6 +61,106 @@ const listAll: TApi["budgets"]["listAll"] = async (filters) => {
   })
 }
 
+const listBranchBudgets: TApi["budgets"]["listBranchBudgets"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/subsidiary`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = {
+            ...res.data,
+            content: res.data.content,
+          }
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const listFranchiseBudgets: TApi["budgets"]["listFranchiseBudgets"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/franchisee`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = {
+            ...res.data,
+            content: res.data.content,
+          }
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const listManagerBudgets: TApi["budgets"]["listManagerBudgets"] = async (
   filters
 ) => {
@@ -554,6 +654,100 @@ const getByStatus: TApi["budgets"]["getByStatus"] = async ({
   })
 }
 
+const getBranchFinished: TApi["budgets"]["finished"]["branch"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/subsidiary/finished`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const getFranchiseFinished: TApi["budgets"]["finished"]["franchise"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `${baseURL}/franchisee/finished`
+
+      await service
+        .get(`${url}`, {
+          params: {
+            page: filters.page,
+            size: filters.size,
+            sort: filters.sort,
+          },
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os orçamentos. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const getManagerFinished: TApi["budgets"]["finished"]["manager"] = async (
   filters
 ) => {
@@ -656,6 +850,12 @@ export type TApi_Budgets = {
   listAll: (
     p: TParams["budgets"]["listAll"]
   ) => TResponses["budgets"]["listAll"]
+  listBranchBudgets: (
+    p: TParams["budgets"]["listBranchBudgets"]
+  ) => TResponses["budgets"]["listBranchBudgets"]
+  listFranchiseBudgets: (
+    p: TParams["budgets"]["listFranchiseBudgets"]
+  ) => TResponses["budgets"]["listFranchiseBudgets"]
   listManagerBudgets: (
     p: TParams["budgets"]["listManagerBudgets"]
   ) => TResponses["budgets"]["listManagerBudgets"]
@@ -685,6 +885,12 @@ export type TApi_Budgets = {
     p: TParams["budgets"]["contract"]
   ) => TResponses["budgets"]["contract"]
   finished: {
+    branch: (
+      p: TParams["budgets"]["finished"]["franchise"]
+    ) => TResponses["budgets"]["finished"]["franchise"]
+    franchise: (
+      p: TParams["budgets"]["finished"]["franchise"]
+    ) => TResponses["budgets"]["finished"]["franchise"]
     manager: (
       p: TParams["budgets"]["finished"]["manager"]
     ) => TResponses["budgets"]["finished"]["manager"]
@@ -696,8 +902,10 @@ export type TApi_Budgets = {
 
 export const apiBudgets: TApi["budgets"] = {
   listAll: listAll,
-  listProviderBudgets: listProviderBudgets,
+  listBranchBudgets: listBranchBudgets,
+  listFranchiseBudgets: listFranchiseBudgets,
   listManagerBudgets: listManagerBudgets,
+  listProviderBudgets: listProviderBudgets,
   create: create,
   getSingle: getSingle,
   update: update,
@@ -709,6 +917,8 @@ export const apiBudgets: TApi["budgets"] = {
   cancel: cancelBudget,
   contract: contract,
   finished: {
+    branch: getBranchFinished,
+    franchise: getFranchiseFinished,
     manager: getManagerFinished,
     provider: getProviderFinished,
   },

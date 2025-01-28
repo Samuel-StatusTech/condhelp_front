@@ -17,6 +17,8 @@ export type TApi_Params_Budgets = {
       actives?: any
       status?: any
     }
+    listBranchBudgets: TDefaultFilters
+    listFranchiseBudgets: TDefaultFilters
     listManagerBudgets: TDefaultFilters & {
       managerId?: number
       condominiumId?: number
@@ -62,6 +64,7 @@ export type TApi_Params_Budgets = {
       providerId: number
     }
     finished: {
+      franchise: TDefaultFilters
       manager: TDefaultFilters & {
         id: number
       }
