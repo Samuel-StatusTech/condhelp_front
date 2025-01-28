@@ -12,6 +12,7 @@ export const extraManager = (
   form: TUManager,
   formSubmitFields: TBlock["groups"][number],
   errors: TErrorsCheck,
+  handleAddCondominium: () => void,
   handleDeleteCondominium: (condominium: TCondominium) => void
 ): TBlock[] => {
   const content: TBlock[] = [
@@ -115,7 +116,7 @@ export const extraManager = (
             <List.Condos
               title="Condomínios vinculados a este síndico"
               list={form.condominiums ?? []}
-              handleAdd={() => {}}
+              handleAdd={handleAddCondominium}
               handleDelete={handleDeleteCondominium}
             />
           ),

@@ -144,7 +144,7 @@ const FPpeople = () => {
     return value.replace(/\D/g, "")
   }
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (onFinish?: (userId: number) => void) => {
     setLoading(true)
 
     try {
@@ -165,7 +165,8 @@ const FPpeople = () => {
 
           setLoading(false)
 
-          navigate("/dashboard/users")
+          if (onFinish) onFinish(obj.userId)
+          else navigate("/dashboard/users")
         } else throw new Error()
       } else throw new Error()
     } catch (error) {
@@ -180,7 +181,7 @@ const FPpeople = () => {
     }
   }
 
-  const handleCreate = async () => {
+  const handleCreate = async (onFinish?: (userId: number) => void) => {
     setLoading(true)
 
     try {
@@ -210,7 +211,8 @@ const FPpeople = () => {
 
           setLoading(false)
 
-          navigate("/dashboard/users")
+          if (onFinish) onFinish(obj.userId)
+          else navigate("/dashboard/users")
         } else {
           if (req.error) {
             controllers.feedback.setData({
@@ -241,13 +243,13 @@ const FPpeople = () => {
     setLoading(false)
   }
 
-  const handleSave = async () => {
+  const handleSave = async (onFinish?: (managerId: number) => void) => {
     try {
       const errorInfo = updateErrors()
 
       if (!errorInfo.has) {
-        if (params.id) handleUpdate()
-        else handleCreate()
+        if (params.id) handleUpdate(onFinish)
+        else handleCreate(onFinish)
       } else {
         setErrors(errorInfo)
 
@@ -576,10 +578,29 @@ const FPpeople = () => {
    *  Condominiums management
    */
 
+  // Add
+
+  const addCondominiumAction = (manager: number) => {
+    navigate("/dashboard/condos/single", {
+      state: { managerId: manager },
+    })
+  }
+
+  const handleAddCondominium = () => {
+    // Manager is already created
+    if (params.id) addCondominiumAction(+params.id)
+    else {
+      handleSave(addCondominiumAction)
+    }
+  }
+
+  // Remove
+
   const getCondominiumObj = (condominium: TCondominium) => {
     const mId = null
 
     const obj: any = {
+      id: condominium.id,
       name: condominium.name,
       unities: condominium.unities,
       cnpj: condominium.cnpj,
@@ -599,6 +620,8 @@ const FPpeople = () => {
   }
 
   const deleteCondominiumAction = async (condominium: TCondominium) => {
+    setLoading(true)
+
     try {
       const unlinkedObj: TCondominium = getCondominiumObj(condominium)
 
@@ -617,9 +640,9 @@ const FPpeople = () => {
         state: "error",
         message: "Houve um erro ao desvincular o condomínio.",
       })
-
-      setLoading(false)
     }
+
+    setLoading(false)
   }
 
   const handleDeleteCondominium = async (condominium: TCondominium) => {
@@ -696,6 +719,7 @@ const FPpeople = () => {
           form,
           formSubmitFields,
           errors,
+          handleAddCondominium,
           handleDeleteCondominium
         )
         break

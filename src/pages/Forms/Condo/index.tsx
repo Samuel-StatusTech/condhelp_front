@@ -3,7 +3,7 @@ import * as C from "../styled"
 
 import initials from "../../../utils/initials"
 import Form from "../../../components/Form"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import PageHeader from "../../../components/PageHeader"
 
 import { getStore } from "../../../store"
@@ -27,6 +27,8 @@ import { TCity, TState } from "../../../utils/@types/data/region"
 
 const FPcondo = () => {
   const navigate = useNavigate()
+
+  const location = useLocation()
 
   const params = useParams()
 
@@ -147,8 +149,17 @@ const FPcondo = () => {
 
         setLoading(false)
 
-        navigate("/dashboard/condos")
-      } else throw new Error()
+        if (location.state && location.state.managerId) navigate(`/dashboard/users/single/${location.state.managerId}`)
+        else navigate("/dashboard/condos")
+      } else {
+        if (req.error) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "error",
+            message: req.error,
+          })
+        } else throw new Error()
+      }
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -156,9 +167,9 @@ const FPcondo = () => {
         state: "error",
         visible: true,
       })
-
-      setLoading(false)
     }
+
+    setLoading(false)
   }
 
   const handleSave = async () => {
@@ -323,6 +334,22 @@ const FPcondo = () => {
             managers: managersListOptions,
           }))
 
+          if (location.state && location.state.managerId) {
+            const managerId = location.state.managerId
+            const incomingManager = managersList.find(
+              (m) => m.userId === location.state.managerId
+            )
+
+            if (incomingManager) {
+              // @ts-ignore
+              setForm((frm) => ({
+                ...frm,
+                managerId: managerId,
+                manager: incomingManager,
+              }))
+            }
+          }
+
           loadEditInfo()
         } else throw new Error()
       }
@@ -338,7 +365,7 @@ const FPcondo = () => {
 
       setLoading(false)
     }
-  }, [controllers.feedback, loadEditInfo, params.id, user])
+  }, [controllers.feedback, loadEditInfo, location.state, params.id, user])
 
   useEffect(() => {
     // ...
@@ -494,28 +521,38 @@ const FPcondo = () => {
                         },
                       ],
                       [
-                        ...((user && user.profile === "SINDICO"
-                          ? [
+                        ...(location.state && location.state.managerId
+                          ? ([
                               {
                                 type: "readonly",
                                 label: "Síndico",
                                 field: "",
-                                value: `${user.name} (você)`,
+                                value: `${form.manager.name} ${form.manager.surname}`,
                                 gridSizes: { big: 9, small: 6 },
                               },
-                            ]
-                          : [
-                              {
-                                type: "select",
-                                label: "Síndico",
-                                field: "managerId",
-                                value: params.id
-                                  ? form.manager.managerId
-                                  : form.manager.userId,
-                                gridSizes: { big: 9, small: 6 },
-                                options: options.managers,
-                              },
-                            ]) as FormField[]),
+                            ] as FormField[])
+                          : ((user && user.profile === "SINDICO"
+                              ? [
+                                  {
+                                    type: "readonly",
+                                    label: "Síndico",
+                                    field: "",
+                                    value: `${user.name} (você)`,
+                                    gridSizes: { big: 9, small: 6 },
+                                  },
+                                ]
+                              : [
+                                  {
+                                    type: "select",
+                                    label: "Síndico",
+                                    field: "managerId",
+                                    value: params.id
+                                      ? form.manager.managerId
+                                      : form.manager.userId,
+                                    gridSizes: { big: 9, small: 6 },
+                                    options: options.managers,
+                                  },
+                                ]) as FormField[])),
                         {
                           type: "date",
                           label: "Data da eleição",

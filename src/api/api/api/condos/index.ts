@@ -67,10 +67,20 @@ const create: TApi["condos"]["create"] = async ({ newCondo }) => {
           }
         })
         .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível criar o condomínio. Tente novamente mais tarde."
+
+          if (
+            err.response?.status === 400 &&
+            err.response &&
+            err.response.data
+          ) {
+            backMessage = (err.response.data as any).error
+          }
+
           resolve({
             ok: false,
-            error:
-              "Não foi possível criar o condomínio. Tente novamente mais tarde.",
+            error: backMessage,
           })
         })
     } catch (error) {
