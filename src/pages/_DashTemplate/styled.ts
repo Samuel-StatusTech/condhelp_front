@@ -26,7 +26,7 @@ export const Main = styled.div`
   }
 `
 
-export const PageContent = styled.div`
+export const PageContent = styled.div<{ $noHideOverflow?: boolean }>`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -34,7 +34,7 @@ export const PageContent = styled.div`
   background-color: ${({ theme }) => theme.colors.neutral.soft};
   border-radius: 8px;
   max-width: 100%;
-  overflow: hidden;
+  overflow: ${({ $noHideOverflow }) => ($noHideOverflow ? "unset" : "hidden")};
 
   &:has(.falseSubContentWrapper) {
     background-color: transparent;

@@ -65,7 +65,7 @@ const Router = () => {
           <Route path="/faqs" element={<DashTemplate />}>
             <Route path="" element={<FaqsView />} />
           </Route>
-          <Route path="/myaccount" element={<DashTemplate />}>
+          <Route path="/myaccount" element={<DashTemplate noHideOverflow={true} />}>
             <Route path="" element={<MyAccount />} />
           </Route>
           <Route path="/dashboard" element={<DashTemplate />}>

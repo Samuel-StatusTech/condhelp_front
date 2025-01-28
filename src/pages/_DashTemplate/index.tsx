@@ -8,9 +8,10 @@ import { getStore } from "../../store"
 
 type Props = {
   withoutSidebar?: boolean
+  noHideOverflow?: boolean
 }
 
-const DashTemplate = ({ withoutSidebar }: Props) => {
+const DashTemplate = ({ withoutSidebar, noHideOverflow }: Props) => {
   const navigate = useNavigate()
 
   const { user } = getStore()
@@ -64,7 +65,7 @@ const DashTemplate = ({ withoutSidebar }: Props) => {
 
       <S.Main>
         {!withoutSidebar && <SideMenu page={page} />}
-        <S.PageContent>
+        <S.PageContent $noHideOverflow={noHideOverflow}>
           <Outlet />
         </S.PageContent>
       </S.Main>
