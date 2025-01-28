@@ -107,7 +107,7 @@ const ApprovalResume = ({
   role,
   doubledCard,
 }: Props) => {
-  const total = data.approved + data.awaiting + data.rejected
+  const total = data.approved + data.awaiting + (data.rejected ?? 0)
 
   const [isOpened, setIsOpened] = useState(true)
 
@@ -134,12 +134,14 @@ const ApprovalResume = ({
               total={total}
               role={role}
             />
-            <DataResumeItem
-              type="rejected"
-              number={data.rejected}
-              total={total}
-              role={role}
-            />
+            {data.rejected !== undefined && (
+              <DataResumeItem
+                type="rejected"
+                number={data.rejected}
+                total={total}
+                role={role}
+              />
+            )}
           </S.DataResumeArea>
         </C.Header>
       </C.HTop>
@@ -160,10 +162,12 @@ const ApprovalResume = ({
                   type={"awaiting"}
                   size={(data.awaiting / total) * 100}
                 />
-                <GraphData
-                  type={"rejected"}
-                  size={(data.rejected / total) * 100}
-                />
+                {data.rejected !== undefined && (
+                  <GraphData
+                    type={"rejected"}
+                    size={(data.rejected / total) * 100}
+                  />
+                )}
               </S.Graph>
             )}
           </C.Content>

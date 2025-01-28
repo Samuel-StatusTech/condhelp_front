@@ -171,7 +171,6 @@ const DashboardBranch = () => {
           data={{
             approved: data.providerPercentage?.totalProvideActive ?? 0,
             awaiting: data.providerPercentage?.totalProvideInative ?? 0,
-            rejected: data.providerPercentage?.totalProvideCancelled ?? 0,
           }}
           role="providers"
           doubledCard={true}
