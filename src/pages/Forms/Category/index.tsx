@@ -42,7 +42,7 @@ const FPcategory = () => {
     navigate(-1)
   }
 
-  const handleDelete = async () => {
+  const onConfirmDelete = async () => {
     setLoading(true)
 
     try {
@@ -69,6 +69,18 @@ const FPcategory = () => {
 
       setLoading(false)
     }
+  }
+
+  const handleDelete = () => {
+    controllers.modal.open({
+      role: "confirmDelete",
+      visible: true,
+      data: {
+        title: "Excluir categoria",
+        deleteTextDescriptor: "excluir esta categoria",
+      },
+      handleOp: () => onConfirmDelete(),
+    })
   }
 
   const handleSave = async () => {

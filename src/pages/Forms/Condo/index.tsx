@@ -186,44 +186,39 @@ const FPcondo = () => {
     }
   }
 
-  const handleDelete = async () => {
+  const onConfirmDelete = async () => {
     setLoading(true)
 
-    if (params.id) {
-      try {
-        if (Number.isNaN(params.id)) throw new Error()
-        else {
-          const req = await Api.condos.delete({ id: Number(params.id) })
+    try {
+      const req = await Api.condos.delete({ id: Number(params.id) })
 
-          if (req.ok) {
-            controllers.feedback.setData({
-              message: "Condomínio excluído com sucesso.",
-              state: "success",
-              visible: true,
-            })
-
-            setLoading(false)
-
-            navigate("/dashboard/condos")
-          } else {
-            controllers.feedback.setData({
-              visible: true,
-              state: "error",
-              message: req.error,
-            })
-          }
-        }
-      } catch (error) {
+      if (req.ok) {
         controllers.feedback.setData({
-          message:
-            "Não foi possível excluir o condomínio. Tente novamente mais tarde.",
-          state: "error",
+          message: "Condomínio excluído com sucesso.",
+          state: "success",
           visible: true,
         })
-      }
 
-      setLoading(false)
+        setLoading(false)
+
+        navigate("/dashboard/condos")
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "error",
+          message: req.error,
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Não foi possível excluir o condomínio. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
     }
+
+    setLoading(false)
   }
 
   const handleField = async (field: string, value: any) => {
@@ -379,10 +374,6 @@ const FPcondo = () => {
     // ...
     loadData()
   }, [loadData])
-
-  useEffect(() => {
-    // ...
-  }, [form])
 
   useEffect(() => {
     controllers.modal.open({
@@ -590,11 +581,12 @@ const FPcondo = () => {
                     type: "custom",
                     element: (
                       <FormDefaultButtons
-                        handleDelete={handleDelete}
+                        handleDelete={onConfirmDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
                         disabled={errors().has}
                         deleteModalTitle={"Excluir Condomínio"}
+                        deleteTextDescriptor={"excluir este condomínio"}
                       />
                     ),
                   },

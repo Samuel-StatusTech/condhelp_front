@@ -14,6 +14,7 @@ type Props = {
     title: string
     deleteTextDescriptor?: string
     deleteBtnText?: string
+    deleteFullText?: string
   }
   onClose: () => void
   handleOp?: () => void
@@ -48,8 +49,10 @@ const DeleteConfirm = ({ data, onClose, handleOp }: Props) => {
         <S.ContentArea>
           <Icons.AlertThin />
           <S.Message>
-            Tem certeza que deseja {data.deleteTextDescriptor ?? "excluir"}?
-            Esta ação não pode ser desfeita.
+            {data.deleteFullText ??
+              `Tem certeza que deseja ${
+                data.deleteTextDescriptor ?? "excluir"
+              }? Esta ação não pode ser desfeita.`}
           </S.Message>
         </S.ContentArea>
 

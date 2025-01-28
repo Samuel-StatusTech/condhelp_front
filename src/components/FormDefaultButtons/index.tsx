@@ -12,6 +12,8 @@ type Props = {
   disabled?: boolean
   deleteModalTitle?: string
   deleteBtnText?: string
+  deleteFullText?: string
+  deleteTextDescriptor?: string
   deleteModalInactivate?: boolean
 }
 
@@ -22,6 +24,8 @@ const FormDefaultButtons = ({
   disabled,
   deleteModalTitle,
   deleteBtnText,
+  deleteFullText,
+  deleteTextDescriptor,
   deleteModalInactivate,
 }: Props) => {
   const { controllers } = getStore()
@@ -36,8 +40,11 @@ const FormDefaultButtons = ({
       width: "xs",
       data: {
         title: deleteModalTitle,
-        deleteTextDescriptor: deleteModalInactivate ? "desativar" : "excluir",
+        deleteTextDescriptor: deleteModalInactivate
+          ? "desativar"
+          : deleteTextDescriptor ?? "excluir",
         deleteBtnText: deleteBtnText,
+        deleteFullText: deleteFullText,
       },
     })
   }

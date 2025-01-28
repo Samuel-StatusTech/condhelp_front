@@ -78,7 +78,7 @@ const FPregion = () => {
     setForm((f: any) => ({ ...f, [field]: value }))
   }
 
-  const handleDelete = async () => {
+  const onDeleteConfirm = async () => {
     setLoading(true)
 
     try {
@@ -94,12 +94,35 @@ const FPregion = () => {
         setLoading(false)
 
         navigate("/dashboard/regions")
+      } else {
+        controllers.feedback.setData({
+          message: req.error,
+          state: "error",
+          visible: true,
+        })
       }
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        message:
+          "Não foi possível excluir a região. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
 
       setLoading(false)
     }
+  }
+
+  const handleDelete = () => {
+    controllers.modal.open({
+      role: "confirmDelete",
+      visible: true,
+      data: {
+        title: "Excluir categoria",
+        deleteTextDescriptor: "excluir esta categoria",
+      },
+      handleOp: () => onDeleteConfirm(),
+    })
   }
 
   const unlinkCity = (cityId: number): boolean => {

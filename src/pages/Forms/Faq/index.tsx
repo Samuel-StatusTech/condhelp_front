@@ -107,7 +107,7 @@ const FPfaq = () => {
     else handleCreate()
   }
 
-  const handleDelete = async () => {
+  const onConfirmDelete = async () => {
     if (params.id) {
       setLoading(true)
 
@@ -206,11 +206,31 @@ const FPfaq = () => {
     }))
   }
 
-  const handleRemoveQuestion = (id: number) => {
+  const onRemoveQuestionConfirm = (id: number) => {
     setForm((frm) => ({
       ...frm,
       items: frm.items.filter((i) => i.id !== id),
     }))
+
+    controllers.feedback.setData({
+      message: "Pergunta excluída com sucesso",
+      state: "success",
+      visible: true,
+    })
+  }
+
+  const handleRemoveQuestion = (id: number) => {
+    onRemoveQuestionConfirm(id)
+
+    // controllers.modal.open({
+    //   role: "confirmDelete",
+    //   visible: true,
+    //   data: {
+    //     title: "Excluir pergunta",
+    //     deleteTextDescriptor: "excluir esta pergunta",
+    //   },
+    //   handleOp: () => onRemoveQuestionConfirm(id),
+    // })
   }
 
   const loadData = useCallback(async () => {
@@ -329,10 +349,11 @@ const FPfaq = () => {
                     type: "custom",
                     element: (
                       <FormDefaultButtons
-                        handleDelete={handleDelete}
+                        handleDelete={params.id ? onConfirmDelete : undefined}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
                         deleteModalTitle={"Excluir FAQ"}
+                        deleteTextDescriptor={"excluir esta FAQ"}
                       />
                     ),
                   },

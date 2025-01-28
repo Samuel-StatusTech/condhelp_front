@@ -673,6 +673,7 @@ const FPpeople = () => {
         handleSave={handleSave}
         disabled={errors.has}
         deleteModalTitle={"Desativar Usuário"}
+        deleteFullText={"Tem certeza que deseja desativar este usuário?"}
         deleteBtnText={"Desativar"}
         deleteModalInactivate={true}
       />

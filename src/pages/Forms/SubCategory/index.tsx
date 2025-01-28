@@ -53,7 +53,7 @@ const FPsubcategory = () => {
         controllers.feedback.setData({
           visible: true,
           state: "success",
-          message: "Subcategoria excluída",
+          message: "Subcategoria excluída com sucesso",
         })
 
         setLoading(false)
@@ -280,6 +280,7 @@ const FPsubcategory = () => {
                         handleSave={handleSave}
                         disabled={errors().has}
                         deleteModalTitle={"Excluir Subcategoria"}
+                        deleteTextDescriptor={"excluir esta subcategoria"}
                       />
                     ),
                   },
