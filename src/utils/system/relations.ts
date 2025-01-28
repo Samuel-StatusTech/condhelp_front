@@ -38,6 +38,11 @@ export const relations = {
     none: "Sem pendência",
   },
   colors: {
+    budgetStatus: {
+      CANCELADO_SINDICO: "#FFA903",
+      FINALIZADO: "#90CC61",
+      EXPIRADO: "#D8484A",
+    },
     status: {
       active: "#90CC61",
       awaiting: "#FFA903",

@@ -11,17 +11,22 @@ const listAll: TApi["budgets"]["listAll"] = async (filters) => {
     try {
       const url = baseURL
 
+      let params: any = {
+        userId: filters.managerId,
+        condominiumId:
+          filters.condominiumId !== 0 ? filters.condominiumId : undefined,
+        subsidiaryId: filters.branchId,
+        page: filters.page,
+        size: filters.size,
+        sort: filters.sort,
+      }
+
+      if (filters.actives !== undefined) params.actives = filters.actives
+      if (filters.status !== undefined) params.status = filters.status
+
       await service
         .get(`${url}`, {
-          params: {
-            userId: filters.managerId,
-            condominiumId:
-              filters.condominiumId !== 0 ? filters.condominiumId : undefined,
-            subsidiaryId: filters.branchId,
-            page: filters.page,
-            size: filters.size,
-            sort: filters.sort,
-          },
+          params: params,
         })
         .then((res) => {
           const info = res.data

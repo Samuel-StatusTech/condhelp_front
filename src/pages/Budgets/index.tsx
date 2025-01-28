@@ -7,7 +7,7 @@ import { TFilter } from "../../utils/@types/components/SearchBlock"
 import PageRow from "../../components/_minimals/PageRow"
 import { TOption } from "../../components/Input/condosSelect"
 import SearchBlock from "../../components/SearchBlock"
-import { TBudget, TBudgetResume } from "../../utils/@types/data/budget"
+import { TBudgetResume } from "../../utils/@types/data/budget"
 import { tableConfig } from "../../utils/system/table"
 import Card from "../../components/Card"
 import Input from "../../components/Input"
@@ -18,6 +18,9 @@ import { parseOptionList } from "../../utils/tb/parsers/parseOptionList"
 import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
 import { useNavigate } from "react-router-dom"
+import { TBudgetStatus } from "../../utils/@types/data/status"
+import { getDateStr } from "../../utils/tb/format/date"
+import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
 const Budgets = () => {
   const { user, controllers } = getStore()
@@ -34,7 +37,7 @@ const Budgets = () => {
 
   const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
     page: initials.pagination.pageable.pageNumber,
-    size: initials.pagination.size,
+    size: searchControl.size,
     sort: undefined,
   })
 
@@ -60,7 +63,7 @@ const Budgets = () => {
   // Engine
 
   const [budgets, setBudgets] = useState<TBudgetResume[]>([])
-  const [finishedBudgets, setFinishedBudgets] = useState<TBudget[]>([])
+  const [finishedBudgets, setFinishedBudgets] = useState<TBudgetResume[]>([])
 
   const handlePickBudget = async (id: number) => {
     navigate(`/dashboard/budgets/budget/${id}`)
@@ -90,49 +93,82 @@ const Budgets = () => {
     )
   }
 
-  const loadData = useCallback(async (params: TDefaultFilters) => {
-    setLoading(true)
+  const handleRedirect = useCallback(
+    (budgetId: number) => {
+      navigate(`/dashboard/budgets/budget/${budgetId}`)
+    },
+    [navigate]
+  )
 
-    try {
-      // Budgets
-      const req = await Api.budgets.listAll(params)
+  const loadData = useCallback(
+    async (params: TDefaultFilters & { actives?: any; status?: any }) => {
+      setLoading(true)
 
-      if (req.ok) {
-        setSearchControl(req.data)
-        setBudgets(
-          req.data.content.sort((a, b) =>
-            !a.endDate || !b.endDate
-              ? 1
-              : new Date(a.endDate).getTime() < new Date(b.endDate).getTime()
-              ? -1
-              : 1
+      try {
+        // Budgets
+        const req = await Api.budgets.listAll(params)
+
+        if (req.ok) {
+          setSearchControl(req.data)
+          setBudgets(
+            req.data.content
+              .filter((b) => {
+                let state = false
+
+                state = (["DISPONIVEL"] as TBudgetStatus[]).includes(
+                  b.status as TBudgetStatus
+                )
+
+                return state
+              })
+              .sort((a, b) =>
+                !a.endDate || !b.endDate
+                  ? 1
+                  : new Date(a.endDate).getTime() <
+                    new Date(b.endDate).getTime()
+                  ? -1
+                  : 1
+              )
           )
-        )
-        setFinishedBudgets([])
-        // req.data.content.filter((b) => b.status === "approved")
 
-        // Franchises
-        const franchisesReq = await Api.persons.getByRole({
-          role: "FRANQUEADO",
-        })
+          const finisheds = req.data.content.filter((b) => {
+            let state = false
 
-        if (franchisesReq.ok) {
-          setOptions((opts) => ({
-            ...opts,
-            franchises: parseOptionList(
-              franchisesReq.data.content,
-              "id",
-              "name"
-            ),
-          }))
+            state = (
+              ["CANCELADO_SINDICO", "FINALIZADO"] as TBudgetStatus[]
+            ).includes(b.status as TBudgetStatus)
+
+            return state
+          })
+
+          setFinishedBudgets(finisheds)
+
+          if (user?.profile === "FILIAL") {
+            // Franchises
+            const franchisesReq = await Api.persons.getByRole({
+              role: "FRANQUEADO",
+            })
+
+            if (franchisesReq.ok) {
+              setOptions((opts) => ({
+                ...opts,
+                franchises: parseOptionList(
+                  franchisesReq.data.content,
+                  "id",
+                  "name"
+                ),
+              }))
+            }
+          }
         }
-      }
 
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-    }
-  }, [])
+        setLoading(false)
+      } catch (error) {
+        setLoading(false)
+      }
+    },
+    [user?.profile]
+  )
 
   useEffect(() => {
     loadData(searchFilters)
@@ -192,10 +228,35 @@ const Budgets = () => {
           />
 
           <Table
-            config={tableConfig.finishedBudgets}
+            config={tableConfig.finishedBudgetsResume}
             searchData={searchControl}
             setSearchFilters={setSearchFilters}
-            data={finishedBudgets}
+            data={finishedBudgets.filter((i) => {
+              let ok = true
+
+              const fields = [
+                i.title,
+                i.description,
+                i.condominiumName,
+                getDateStr(i.endDate as string, "dmy"),
+              ]
+
+              const searchOk = !!finishedBudgetsSearch
+                ? fields.some((val) => matchSearch(val, finishedBudgetsSearch))
+                : true
+
+              const statusOk =
+                !!filters.status && filters.status !== "all"
+                  ? i.status === filters.status
+                  : true
+
+              ok = searchOk && statusOk
+
+              return ok
+            })}
+            actions={{
+              redirect: handleRedirect,
+            }}
           />
         </S.BlockArea>
       </S.SubContent>

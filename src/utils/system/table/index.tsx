@@ -7,6 +7,7 @@ import { errandTableConfig } from "./errandTableConfig"
 import { faqTableConfig } from "./faqTableConfig"
 import { finishedBudgetsTableConfig } from "./finishedBudgetsTableConfig"
 import { callsTableConfig } from "./callsHistoryTableConfig"
+import { finishedBudgetsResumeTableConfig } from "./finishedBudgetsResumeTableConfig"
 
 type TTableConfigs =
   | "users"
@@ -17,6 +18,7 @@ type TTableConfigs =
   | "errands"
   | "faqs"
   | "finishedBudgets"
+  | "finishedBudgetsResume"
   | "calls"
 
 export const tableConfig: {
@@ -30,6 +32,7 @@ export const tableConfig: {
   errands: errandTableConfig,
   faqs: faqTableConfig,
   finishedBudgets: finishedBudgetsTableConfig,
+  finishedBudgetsResume: finishedBudgetsResumeTableConfig,
   calls: callsTableConfig,
 }
 

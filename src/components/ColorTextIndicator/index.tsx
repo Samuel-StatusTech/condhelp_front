@@ -10,6 +10,10 @@ type Props = {
       data: keyof typeof relations.status
     }
   | {
+      role: "budgetStatus"
+      data: keyof typeof relations.budgetStatus
+    }
+  | {
       role: "profile"
       data: keyof typeof relations.roles
     }
@@ -32,6 +36,8 @@ const ColorTextIndicator = (props: Props) => {
         {text ??
           (role === "status"
             ? relations.status[data]
+            : role === "budgetStatus"
+            ? relations.budgetStatus[data]
             : role === "profile"
             ? relations.roles[data]
             : relations.pendencies[data])}
