@@ -96,7 +96,9 @@ const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
         .put(`${baseURL}/${subcategory.id}`, {
           id: subcategory.id,
           name: subcategory.name,
-          serviceCategoryId: subcategory.serviceCategory.id,
+          serviceCategoryId:
+            // @ts-ignore
+            subcategory.serviceCategoryId ?? subcategory.serviceCategory.id,
         })
         .then((res) => {
           const info = res.data
@@ -110,7 +112,7 @@ const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
             resolve({
               ok: false,
               error:
-                "Não foi possível atualizar a categoria. Tente novamente mais tarde.",
+                "Não foi possível atualizar a categoria 1. Tente novamente mais tarde.",
             })
           }
         })
@@ -118,13 +120,13 @@ const update: TApi["subcategories"]["update"] = async ({ subcategory }) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível atualizar a categoria. Tente novamente mais tarde.",
+              "Não foi possível atualizar a categoria 2. Tente novamente mais tarde.",
           })
         })
     } catch (error) {
       reject({
         error:
-          "Não foi possível atualizar a categoria. Tente novamente mais tarde.",
+          "Não foi possível atualizar a categoria 3. Tente novamente mais tarde.",
       })
     }
   })

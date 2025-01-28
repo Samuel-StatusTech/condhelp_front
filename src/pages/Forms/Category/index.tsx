@@ -147,7 +147,11 @@ const FPcategory = () => {
                 })
             )
           } else {
-            const subCatInfo: TSubCategory = item as TSubCategory
+            const subCatInfo: TSubCategory = {
+              ...(item as TSubCategory),
+              // @ts-ignore
+              serviceCategoryId: catId,
+            }
 
             proms.push(
               Api.subcategories.update({
