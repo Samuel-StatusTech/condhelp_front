@@ -28,7 +28,6 @@ export const providerCheck = (
       state = getInvalidCheck(state, "phone3")
     if (!data.franqId) state = getInvalidCheck(state, "franqId")
     if (!data.responsable?.trim()) state = getInvalidCheck(state, "responsable")
-    if (!data.website?.trim()) state = getInvalidCheck(state, "website")
     if (!data.socialRole?.trim()) state = getInvalidCheck(state, "socialRole")
     if (
       data.document.register?.replace(/\D/g, "").length < 14 ||

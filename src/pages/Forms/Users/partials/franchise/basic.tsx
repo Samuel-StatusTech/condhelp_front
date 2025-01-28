@@ -57,6 +57,10 @@ export const basicFranchise = ({
                           options.branch.find((b) => b.key === form.branchId)
                             ?.value ?? "",
                         gridSizes: { big: 6, small: 12 },
+                        error: {
+                          has: false,
+                          message: "Escolha a filial",
+                        },
                       },
                     ]
                   : [

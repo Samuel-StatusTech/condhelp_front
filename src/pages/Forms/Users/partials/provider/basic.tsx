@@ -185,7 +185,7 @@ export const basicProvider = ({
             placeholder: "Website",
             gridSizes: { big: 6, small: 12 },
             error: {
-              has: errors.fields.includes("name"),
+              has: false,
               message: "Digite o website",
             },
           },
