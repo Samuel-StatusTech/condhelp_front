@@ -221,6 +221,7 @@ const ReopenBudget = ({ data, onClose, handleOp }: Props) => {
                 userId: user?.userId as number,
                 status: bdg.status as TBudgetStatus,
                 providerIds: bdg.providers.map((p) => p.id),
+                startDate: null,
                 // @ts-ignore
                 franqId: user?.franqId,
               }
