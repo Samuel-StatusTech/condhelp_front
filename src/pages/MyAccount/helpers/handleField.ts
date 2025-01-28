@@ -29,11 +29,15 @@ export const handleField = async (
       "zipCode",
     ].includes(field)
   ) {
-    setForm((p: any) => ({
-      ...p,
-      // @ts-ignore
-      address: { ...p.address, [field]: value },
-    }))
+    const newForm = {
+      ...form,
+      address: {
+        ...form.address,
+        [field]: field === "number" ? value.replace(/\D/g, "") : value,
+      },
+    }
+
+    setForm(newForm)
   } else {
     switch (form.profile) {
       case "FILIAL":

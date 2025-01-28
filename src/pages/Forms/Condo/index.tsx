@@ -60,7 +60,7 @@ const FPcondo = () => {
     const obj: any = {
       name: form.name,
       unities: Number(form.unities),
-      cnpj: form.cnpj,
+      cnpj: form.cnpj.replace(/\D/g, ""),
       address: form.address,
       addressNumber: form.addressNumber,
       zipCode: form.zipCode,
@@ -149,7 +149,8 @@ const FPcondo = () => {
 
         setLoading(false)
 
-        if (location.state && location.state.managerId) navigate(`/dashboard/users/single/${location.state.managerId}`)
+        if (location.state && location.state.managerId)
+          navigate(`/dashboard/users/single/${location.state.managerId}`)
         else navigate("/dashboard/condos")
       } else {
         if (req.error) {
@@ -226,7 +227,14 @@ const FPcondo = () => {
   }
 
   const handleField = async (field: string, value: any) => {
-    if (field === "managerId") {
+    if (field === "addressNumber") {
+      const newForm = {
+        ...form,
+        [field]: value.replace(/\D/g, ""),
+      }
+
+      setForm(newForm)
+    } else if (field === "managerId") {
       const m = params.id
         ? managers.find((i) => i.managerId === value)
         : managers.find((i) => i.userId === value)
