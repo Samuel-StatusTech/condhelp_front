@@ -27,6 +27,8 @@ import { UserFormContent } from "./content"
 import { handleField } from "./helpers/handleField"
 import { renderBasic } from "./helpers/renderBasic"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+import { TCondominium } from "../../../utils/@types/data/condominium"
+import { getDateStr } from "../../../utils/tb/format/date"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -571,6 +573,69 @@ const FPpeople = () => {
   }
 
   /*
+   *  Condominiums management
+   */
+
+  const getCondominiumObj = (condominium: TCondominium) => {
+    const mId = null
+
+    const obj: any = {
+      name: condominium.name,
+      unities: condominium.unities,
+      cnpj: condominium.cnpj,
+      address: condominium.address,
+      addressNumber: condominium.addressNumber,
+      zipCode: condominium.zipCode,
+      neighborhood: condominium.neighborhood,
+      city: condominium.city,
+      federateUnit: condominium.federateUnit,
+      electionDate: getDateStr(condominium.electionDate, "javaDateTime"),
+      managerId: mId,
+      branchId: condominium.branchId,
+      franchiseId: condominium.franchiseId,
+    }
+
+    return obj
+  }
+
+  const deleteCondominiumAction = async (condominium: TCondominium) => {
+    try {
+      const unlinkedObj: TCondominium = getCondominiumObj(condominium)
+
+      const req = await Api.condos.update({ condo: unlinkedObj })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Condomínio desvinculado com sucesso.",
+        })
+      } else throw new Error()
+    } catch (error) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message: "Houve um erro ao desvincular o condomínio.",
+      })
+
+      setLoading(false)
+    }
+  }
+
+  const handleDeleteCondominium = async (condominium: TCondominium) => {
+    controllers.modal.open({
+      role: "confirmDelete",
+      visible: true,
+      data: {
+        title: "Desvincular condomínio?",
+        deleteTextDescriptor: "desvincular o condomínio deste síndico",
+        deleteBtnText: "Desvincular",
+      },
+      handleOp: () => deleteCondominiumAction(condominium),
+    })
+  }
+
+  /*
    *  Fields render
    */
 
@@ -627,7 +692,12 @@ const FPpeople = () => {
         break
 
       case "SINDICO":
-        content = formPartials.manager.extra(form, formSubmitFields, errors)
+        content = formPartials.manager.extra(
+          form,
+          formSubmitFields,
+          errors,
+          handleDeleteCondominium
+        )
         break
 
       case "PRESTADOR":

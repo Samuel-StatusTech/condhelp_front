@@ -40,4 +40,7 @@ export type TCondominium = {
   electionDate: string | number | Date
 
   electionFile: null | any
+
+  branchId: number
+  franchiseId: number
 }

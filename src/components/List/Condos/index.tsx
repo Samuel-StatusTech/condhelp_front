@@ -4,13 +4,14 @@ import { Icons } from "../../../assets/icons/icons"
 
 import Button from "../../Button"
 import { TUManager } from "../../../utils/@types/data/user"
+import { TCondominium } from "../../../utils/@types/data/condominium"
 
 type Props = {
   title: string
   list: TUManager["condominiums"]
 
   handleAdd: () => void
-  handleDelete: (id: number) => void
+  handleDelete: (condominium: TCondominium) => void
 }
 
 const CondosList = ({ title, list, handleAdd, handleDelete }: Props) => {
@@ -20,7 +21,7 @@ const CondosList = ({ title, list, handleAdd, handleDelete }: Props) => {
       {list.map((item, sk) => (
         <S.Item $k={sk} key={sk}>
           <S.ItemName>{item.name}</S.ItemName>
-          <S.BtnArea onClick={() => handleDelete(item.id)}>
+          <S.BtnArea onClick={() => handleDelete(item)}>
             <Icons.Trash />
           </S.BtnArea>
         </S.Item>

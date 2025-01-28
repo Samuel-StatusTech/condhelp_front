@@ -1,5 +1,6 @@
 import { List } from "../../../../../components/List"
 import { TBlock } from "../../../../../utils/@types/components/Form"
+import { TCondominium } from "../../../../../utils/@types/data/condominium"
 import { TUManager } from "../../../../../utils/@types/data/user"
 import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { systemOptions } from "../../../../../utils/system/options"
@@ -10,7 +11,8 @@ import { getMajorityDate } from "../../../../../utils/tb/helpers/getMajorityDate
 export const extraManager = (
   form: TUManager,
   formSubmitFields: TBlock["groups"][number],
-  errors: TErrorsCheck
+  errors: TErrorsCheck,
+  handleDeleteCondominium: (condominium: TCondominium) => void
 ): TBlock[] => {
   const content: TBlock[] = [
     {
@@ -114,7 +116,7 @@ export const extraManager = (
               title="Condomínios vinculados a este síndico"
               list={form.condominiums ?? []}
               handleAdd={() => {}}
-              handleDelete={() => {}}
+              handleDelete={handleDeleteCondominium}
             />
           ),
         },
