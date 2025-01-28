@@ -137,7 +137,10 @@ const DashboardManager = () => {
     try {
       setOptions((opts) => ({
         ...opts,
-        condos: parseOptionList(user?.condominiums, "id", "name"),
+        condos: [
+          { key: "all", value: "Todos" },
+          ...parseOptionList(user?.condominiums, "id", "name"),
+        ],
       }))
 
       // Budgets
@@ -145,7 +148,9 @@ const DashboardManager = () => {
         size: 300,
         managerId: user?.userId,
         condominiumId:
-          !Number.isNaN(specificCondo) && +specificCondo !== 0
+          specificCondo !== "all" &&
+          !Number.isNaN(specificCondo) &&
+          +specificCondo !== 0
             ? +specificCondo
             : undefined,
       })
