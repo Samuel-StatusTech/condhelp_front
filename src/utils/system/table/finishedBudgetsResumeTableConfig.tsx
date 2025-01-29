@@ -21,7 +21,7 @@ export const finishedBudgetsResumeTableConfig: TConfig = {
     status: (item: TBudget) => (
       <ColorTextIndicator
         role="budgetStatus"
-        data={item.status}
+        data={item.statusProvider ?? item.status}
         text={
           item.statusProvider !== null
             ? relations.budgetStatus[item.statusProvider as TBudgetStatus]

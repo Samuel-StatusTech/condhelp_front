@@ -39,9 +39,13 @@ export const relations = {
   },
   colors: {
     budgetStatus: {
-      CANCELADO_SINDICO: "#FFA903",
+      RECUSADO_PRESTADOR: "#7D37B4",
+      RECUSADO_SINDICO: "#7D37B4",
+      CANCELADO_PRESTADOR: "#D8484A",
+      CANCELADO_SINDICO: "#D8484A",
+      CONTRATADO: "#90CC61",
       FINALIZADO: "#90CC61",
-      EXPIRADO: "#D8484A",
+      EXPIRADO: "#61676A",
     },
     status: {
       active: "#90CC61",

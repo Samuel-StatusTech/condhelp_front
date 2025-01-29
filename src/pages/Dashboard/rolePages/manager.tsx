@@ -272,6 +272,12 @@ const DashboardManager = () => {
               />
               <DataResumeItem
                 type={"rejected"}
+                number={statistics.canceled}
+                total={statistics.total}
+                role={"budgets"}
+              />
+              <DataResumeItem
+                type={"recused"}
                 number={statistics.recused}
                 total={statistics.total}
                 role={"budgets"}
@@ -303,7 +309,7 @@ const DashboardManager = () => {
         />
 
         <Table
-          config={tableConfig.finishedBudgets}
+          config={tableConfig.finishedBudgetsResume}
           actions={{
             redirect: handleRedirect,
           }}

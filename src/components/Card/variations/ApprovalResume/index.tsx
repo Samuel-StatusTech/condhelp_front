@@ -15,7 +15,7 @@ type Props = {
 }
 
 type PDataResumeItem = {
-  type: "approved" | "awaiting" | "rejected"
+  type: "approved" | "awaiting" | "rejected" | "recused"
   number: number
   total: number
   role: "budgets" | "providers"
@@ -30,11 +30,13 @@ const textRelations = {
     approved: "Finalizado",
     awaiting: "Em andamento",
     rejected: "Cancelado",
+    recused: "Recusado",
   },
   providers: {
     approved: "Ativo",
     awaiting: "Inativo",
     rejected: "Cancelado",
+    recused: "Recusado",
   },
 }
 
@@ -55,9 +57,15 @@ export const DataResumeItem = ({
         str = `${textRelations[role][type]}${number > 1 ? "s" : ""}`
         break
       case "awaiting":
-        str = `${textRelations[role][type]}`
+        str =
+          role === "budgets"
+            ? `${textRelations[role][type]}`
+            : `${textRelations[role][type]}${number > 1 ? "s" : ""}`
         break
       case "rejected":
+        str = `${textRelations[role][type]}${number > 1 ? "s" : ""}`
+        break
+      case "recused":
         str = `${textRelations[role][type]}${number > 1 ? "s" : ""}`
         break
       default:

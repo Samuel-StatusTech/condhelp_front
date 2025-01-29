@@ -59,9 +59,11 @@ const DashboardProvider = () => {
     completed: 0,
     inProgress: 0,
     canceled: 0,
+    recused: 0,
     completedPercentage: 0,
     inProgressPercentage: 0,
     canceledPercentage: 0,
+    recusedPercentage: 0,
   })
   const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
 
@@ -103,7 +105,6 @@ const DashboardProvider = () => {
         k={2}
         data={budget}
         onPickBudget={() => {
-          // loadBudgetInfo(budget)
           navigate(`/dashboard/budget/${budget.id}`, {
             state: budget,
           })
@@ -238,6 +239,12 @@ const DashboardProvider = () => {
                 total={budgetsResume.total}
                 role={"budgets"}
               />
+              <DataResumeItem
+                type={"recused"}
+                number={budgetsResume.recused}
+                total={budgetsResume.total}
+                role={"budgets"}
+              />
             </S.MBRDataArea>
           </S.ManagerBudgetsResumeArea>
         </S.BlockArea>
@@ -265,7 +272,7 @@ const DashboardProvider = () => {
         />
 
         <Table
-          config={tableConfig.finishedBudgets}
+          config={tableConfig.finishedBudgetsResume}
           actions={{
             reparticipate: handleReparticipate,
           }}
