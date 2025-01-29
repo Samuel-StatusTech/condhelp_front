@@ -234,8 +234,6 @@ const FPpeople = () => {
           })
 
           setLoading(false)
-
-          setLoading(false)
           if (onFinish && typeof onFinish === "function") {
             const info = {
               id: obj.userId,
