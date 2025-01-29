@@ -51,13 +51,17 @@ const BudgetResumeBlock = ({ budget }: Props) => {
         <S.DataInfo $small={true}>
           <S.DITitle>Data Início</S.DITitle>
           <S.DIValue>
-            {budget.openingDate ? getDateStr(budget.openingDate, "dmy") : "-"}
+            {budget.openingDate
+              ? getDateStr(budget.openingDate, "localTimeStr_DMY")
+              : "-"}
           </S.DIValue>
         </S.DataInfo>
         <S.DataInfo $small={true}>
           <S.DITitle>Hora</S.DITitle>
           <S.DIValue>
-            {budget.openingDate ? getDateStr(budget.openingDate, "time") : "-"}
+            {budget.openingDate
+              ? getDateStr(budget.openingDate, "localTimeStr_HM")
+              : "-"}
           </S.DIValue>
         </S.DataInfo>
         <S.DataInfo $small={true}>

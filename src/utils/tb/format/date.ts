@@ -25,6 +25,7 @@ export const getDateStr = (
     | "iso"
     | "localDate"
     | "localTime"
+    | "localTimeStr_DMY"
     | "localTimeStr_HM",
   removeSeconds?: boolean
 ) => {
@@ -57,6 +58,9 @@ export const getDateStr = (
       break
     case "localTime":
       str = getLocalTimeStr(new Date(date), removeSeconds)
+      break
+    case "localTimeStr_DMY":
+      str = getLocalTimeStr_DMY(date as string)
       break
     case "localTimeStr_HM":
       str = getLocalTimeStr_HM(date as string)
@@ -150,6 +154,17 @@ const getLocalTimeStr = (date: Date, removeSeconds?: boolean) => {
   let str = date.toLocaleTimeString()
 
   if (removeSeconds) str = str.slice(0, 5)
+
+  return str
+}
+
+const getLocalTimeStr_DMY = (date: string) => {
+  const utcDate = new Date(date)
+
+  const timezoneOffset = utcDate.getTimezoneOffset()
+
+  const localDate = new Date(utcDate.getTime() - timezoneOffset * 60 * 1000)
+  const str = localDate.toLocaleDateString()
 
   return str
 }

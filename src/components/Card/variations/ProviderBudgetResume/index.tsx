@@ -140,7 +140,7 @@ const ManagerBudgetResume = ({
       <S.MainWrapper>
         <S.ContentWrapper>
           <S.Content
-            $fillBottom={hideInteraction || data.status === "CONTRATADO"}
+            $fillBottom={!hideInteraction && data.status === "CONTRATADO"}
           >
             <S.Info>
               <S.InfoItem>
@@ -230,46 +230,49 @@ const ManagerBudgetResume = ({
               )}
             </S.ResumeArea>
 
-            <Divider />
+            {!hideInteraction && (
+              <>
+                <Divider />
 
-            {hideInteraction ||
-              (!["CONTRATADO"].includes(data.status) && (
-                <S.BottomCard>
-                  <Button
-                    type="quaternary"
-                    text={
-                      (
+                {!["CONTRATADO"].includes(data.status) && (
+                  <S.BottomCard>
+                    <Button
+                      type="quaternary"
+                      text={
+                        (
+                          [
+                            "DISPONIVEL",
+                            "AGUARDANDO_SINDICO",
+                          ] as TProviderBudgetResume["status"][]
+                        ).includes(data.status)
+                          ? "Recusar"
+                          : "Cancelar Participação"
+                      }
+                      action={handleReject}
+                      fit={true}
+                      red={true}
+                    />
+
+                    <Button
+                      type="green"
+                      text={"PARTICIPAR"}
+                      action={handleGetIn}
+                      fit={true}
+                      disabled={(
                         [
-                          "DISPONIVEL",
                           "AGUARDANDO_SINDICO",
+                          "APROVADO_SINDICO",
+                          "RECUSADO_SINDICO",
+                          "CANCELADO_SINDICO",
+                          "FINALIZADO",
+                          "EXPIRADO",
                         ] as TProviderBudgetResume["status"][]
-                      ).includes(data.status)
-                        ? "Recusar"
-                        : "Cancelar Participação"
-                    }
-                    action={handleReject}
-                    fit={true}
-                    red={true}
-                  />
-
-                  <Button
-                    type="green"
-                    text={"PARTICIPAR"}
-                    action={handleGetIn}
-                    fit={true}
-                    disabled={(
-                      [
-                        "AGUARDANDO_SINDICO",
-                        "APROVADO_SINDICO",
-                        "RECUSADO_SINDICO",
-                        "CANCELADO_SINDICO",
-                        "FINALIZADO",
-                        "EXPIRADO",
-                      ] as TProviderBudgetResume["status"][]
-                    ).includes(data.status)}
-                  />
-                </S.BottomCard>
-              ))}
+                      ).includes(data.status)}
+                    />
+                  </S.BottomCard>
+                )}
+              </>
+            )}
           </S.Content>
         </S.ContentWrapper>
       </S.MainWrapper>
