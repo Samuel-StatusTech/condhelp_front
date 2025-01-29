@@ -144,7 +144,15 @@ const FPpeople = () => {
     return value.replace(/\D/g, "")
   }
 
-  const handleUpdate = async (onFinish?: (userId: number) => void) => {
+  const handleUpdate = async (
+    onFinish?: (manager: {
+      id: number
+      name: string
+      surname: string
+      branchId: number
+      franchiseId: number
+    }) => void
+  ) => {
     setLoading(true)
 
     try {
@@ -165,7 +173,15 @@ const FPpeople = () => {
 
           setLoading(false)
           if (onFinish && typeof onFinish === "function") {
-            onFinish(obj.userId)
+            const info = {
+              id: obj.userId,
+              name: (obj as any).name,
+              surname: (obj as any).surname,
+              branchId: (obj as any).branchId,
+              franchiseId: (obj as any).franchiseId,
+            }
+
+            onFinish(info)
           } else navigate("/dashboard/users")
         } else throw new Error()
       } else throw new Error()
@@ -181,7 +197,15 @@ const FPpeople = () => {
     }
   }
 
-  const handleCreate = async (onFinish?: (userId: number) => void) => {
+  const handleCreate = async (
+    onFinish?: (manager: {
+      id: number
+      name: string
+      surname: string
+      branchId: number
+      franchiseId: number
+    }) => void
+  ) => {
     setLoading(true)
 
     try {
@@ -213,7 +237,15 @@ const FPpeople = () => {
 
           setLoading(false)
           if (onFinish && typeof onFinish === "function") {
-            onFinish(obj.userId)
+            const info = {
+              id: obj.userId,
+              name: (obj as any).name,
+              surname: (obj as any).surname,
+              branchId: (obj as any).branchId,
+              franchiseId: (obj as any).franchiseId,
+            }
+
+            onFinish(info)
           } else navigate("/dashboard/users")
         } else {
           if (req.error) {
@@ -245,7 +277,15 @@ const FPpeople = () => {
     setLoading(false)
   }
 
-  const handleSave = async (onFinish?: (managerId: number) => void) => {
+  const handleSave = async (
+    onFinish?: (manager: {
+      id: number
+      name: string
+      surname: string
+      branchId: number
+      franchiseId: number
+    }) => void
+  ) => {
     try {
       const errorInfo = updateErrors()
 
@@ -582,15 +622,28 @@ const FPpeople = () => {
 
   // Add
 
-  const addCondominiumAction = (manager: number) => {
+  const addCondominiumAction = (manager: {
+    id: number
+    name: string
+    surname: string
+    branchId: number
+    franchiseId: number
+  }) => {
     navigate("/dashboard/condos/single", {
-      state: { managerId: manager },
+      state: { manager: manager },
     })
   }
 
   const handleAddCondominium = () => {
     // Manager is already created
-    if (params.id) addCondominiumAction(+params.id)
+    if (params.id)
+      addCondominiumAction({
+        id: +params.id,
+        name: form.name,
+        surname: form.surname,
+        branchId: form.branchId,
+        franchiseId: form.franchiseId,
+      })
     else {
       handleSave(addCondominiumAction)
     }
@@ -605,7 +658,7 @@ const FPpeople = () => {
       id: condominium.id,
       name: condominium.name,
       unities: condominium.unities,
-      cnpj: condominium.cnpj,
+      cnpj: condominium.cnpj.replace(/\D/g, ""),
       address: condominium.address,
       addressNumber: condominium.addressNumber,
       zipCode: condominium.zipCode,
@@ -635,6 +688,13 @@ const FPpeople = () => {
           state: "success",
           message: "Condomínio desvinculado com sucesso.",
         })
+
+        setForm((frm: any) => ({
+          ...frm,
+          condominiums: frm.condominiums.filter(
+            (c: TCondominium) => c.id !== condominium.id
+          ),
+        }))
       } else throw new Error()
     } catch (error) {
       controllers.feedback.setData({

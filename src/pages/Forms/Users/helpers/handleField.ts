@@ -50,7 +50,9 @@ export const handleField = async (
       ...form,
       address: {
         ...form.address,
-        [field]: field === "number" ? value.replace(/\D/g, "") : value,
+        [field]: ["number", "zipCode"].includes(field)
+          ? value.replace(/\D/g, "")
+          : value,
       },
     }
 

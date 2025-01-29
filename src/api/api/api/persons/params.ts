@@ -32,6 +32,7 @@ export type TApi_Params_Persons = {
     getByRole: {
       role: TAccess
       actives?: string
+      size?: number
     }
     getAllBranches: {}
 

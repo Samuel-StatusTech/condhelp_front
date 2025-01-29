@@ -55,7 +55,33 @@ const FPcondo = () => {
   }
 
   const getObj = (): TNewCondominium | TCondominium => {
-    const mId = params.id ? form.manager.managerId : form.manager.userId
+    let mId = 0
+
+    let branchId = 0
+    let franchiseId = 0
+
+    if (location.state && location.state.manager) {
+      mId = location.state.manager.id
+      branchId = location.state.manager.branchId
+      franchiseId = location.state.manager.franchiseId
+    } else {
+      if (params.id) mId = form.manager.managerId
+      else mId = form.manager.userId
+
+      if (user?.profile === "SINDICO") {
+        branchId = user?.branchId as number
+        franchiseId = user?.franqId as number
+      } else if (user?.profile === "FRANQUEADO") {
+        branchId = user?.branchId as number
+        franchiseId = user?.userId as number
+      } else if (user?.profile === "FILIAL") {
+        branchId = user?.userId as number
+        franchiseId = form.manager.franqId as number
+      } else if (user?.profile === "ADMIN") {
+        branchId = form.manager.branchId as number
+        franchiseId = form.manager.franqId as number
+      }
+    }
 
     const obj: any = {
       name: form.name,
@@ -69,32 +95,13 @@ const FPcondo = () => {
       federateUnit: form.federateUnit,
       electionDate: getDateStr(form.electionDate, "javaDateTime"),
       managerId: mId,
-    }
-
-    let branchId = 0
-    let franchiseId = 0
-
-    if (user?.profile === "SINDICO") {
-      branchId = user?.branchId as number
-      franchiseId = user?.franqId as number
-    } else if (user?.profile === "FRANQUEADO") {
-      branchId = user?.branchId as number
-      franchiseId = user?.userId as number
-    } else if (user?.profile === "FILIAL") {
-      branchId = user?.userId as number
-      franchiseId = form.manager.franqId as number
-    } else if (user?.profile === "ADMIN") {
-      branchId = form.manager.branchId as number
-      franchiseId = form.manager.franqId as number
+      branchId: branchId,
+      franchiseId: franchiseId,
     }
 
     return params.id && !Number.isNaN(params.id)
-      ? { ...obj, id: params.id, branchId: branchId, franchiseId: franchiseId }
-      : {
-          ...obj,
-          branchId: branchId,
-          franchiseId: franchiseId,
-        }
+      ? { ...obj, id: params.id }
+      : obj
   }
 
   const handleUpdate = async () => {
@@ -149,8 +156,8 @@ const FPcondo = () => {
 
         setLoading(false)
 
-        if (location.state && location.state.managerId)
-          navigate(`/dashboard/users/single/${location.state.managerId}`)
+        if (location.state && location.state.manager)
+          navigate(`/dashboard/users/single/${location.state.manager.id}`)
         else navigate("/dashboard/condos")
       } else {
         if (req.error) {
@@ -222,7 +229,7 @@ const FPcondo = () => {
   }
 
   const handleField = async (field: string, value: any) => {
-    if (field === "addressNumber") {
+    if (["addressNumber", "zipCode"].includes(field)) {
       const newForm = {
         ...form,
         [field]: value.replace(/\D/g, ""),
@@ -241,7 +248,10 @@ const FPcondo = () => {
         manager: { ...f.manager, managerSince: value },
       }))
     } else if (field === "unities")
-      setForm((f: any) => ({ ...f, unities: String(value).replace(/\D/g, "") }))
+      setForm((f: any) => ({
+        ...f,
+        unities: String(+String(value).replace(/\D/g, "")),
+      }))
     else if (Object.keys(form.address).includes(field))
       setForm((f: any) => ({ ...f, address: { ...f.address, [field]: value } }))
     else setForm((f: any) => ({ ...f, [field]: value }))
@@ -319,42 +329,44 @@ const FPcondo = () => {
         }))
         loadEditInfo()
       } else {
-        const managersReq = await Api.persons.getByRole({
-          role: "SINDICO",
-          actives: "true",
-        })
+        if (location.state && location.state.manager) {
+          const { manager } = location.state
 
-        if (managersReq.ok) {
-          const managersList = managersReq.data.content
-
-          const managersListOptions = params.id
-            ? parseOptionList(managersList, "managerId", "name")
-            : parseOptionList(managersList, "userId", "name")
-
-          setManagers(managersList as TUserTypes["SINDICO"][])
-          setOptions((opts) => ({
-            ...opts,
-            managers: managersListOptions,
+          // @ts-ignore
+          setForm((frm) => ({
+            ...frm,
+            managerId: manager.id,
+            manager: {
+              managerId: manager.id,
+              name: manager.name,
+              surname: manager.surname,
+              branchId: manager.branchId,
+              franchiseId: manager.franchiseId,
+            },
           }))
+        } else {
+          const managersReq = await Api.persons.getByRole({
+            role: "SINDICO",
+            actives: "true",
+            size: 100,
+          })
 
-          if (location.state && location.state.managerId) {
-            const managerId = location.state.managerId
-            const incomingManager = managersList.find(
-              (m) => m.userId === location.state.managerId
-            )
+          if (managersReq.ok) {
+            const managersList = managersReq.data.content
 
-            if (incomingManager) {
-              // @ts-ignore
-              setForm((frm) => ({
-                ...frm,
-                managerId: managerId,
-                manager: incomingManager,
-              }))
-            }
-          }
+            const managersListOptions = params.id
+              ? parseOptionList(managersList, "managerId", "name")
+              : parseOptionList(managersList, "userId", "name")
 
-          loadEditInfo()
-        } else throw new Error()
+            setManagers(managersList as TUserTypes["SINDICO"][])
+            setOptions((opts) => ({
+              ...opts,
+              managers: managersListOptions,
+            }))
+          } else throw new Error()
+        }
+
+        loadEditInfo()
       }
 
       setLoading(false)
@@ -520,7 +532,7 @@ const FPcondo = () => {
                         },
                       ],
                       [
-                        ...(location.state && location.state.managerId
+                        ...(location.state && location.state.manager
                           ? ([
                               {
                                 type: "readonly",

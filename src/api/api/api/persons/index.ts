@@ -490,7 +490,11 @@ const getSelfData: TApi["persons"]["getSelfData"] = async ({ id }) => {
   })
 }
 
-const getByRole: TApi["persons"]["getByRole"] = async ({ role, actives }) => {
+const getByRole: TApi["persons"]["getByRole"] = async ({
+  role,
+  actives,
+  size,
+}) => {
   return new Promise(async (resolve, reject) => {
     try {
       const roleUrl = rolesUrlRelations[role]
@@ -501,8 +505,11 @@ const getByRole: TApi["persons"]["getByRole"] = async ({ role, actives }) => {
             params: actives
               ? {
                   actives: actives,
+                  size: size,
                 }
-              : {},
+              : {
+                  size: size,
+                },
           })
           .then(async (res) => {
             const info = res.data

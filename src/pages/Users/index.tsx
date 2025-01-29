@@ -36,7 +36,7 @@ const UsersPage = () => {
   const [searchFilters, setSearchFilters] = useState<TDefaultFilters>({
     page: initials.pagination.pageable.pageNumber,
     size: initials.pagination.size,
-    sort: undefined,
+    sort: "name,asc",
   })
 
   const [search, setSearch] = useState("")
