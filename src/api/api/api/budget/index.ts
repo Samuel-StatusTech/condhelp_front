@@ -66,7 +66,7 @@ const listBranchBudgets: TApi["budgets"]["listBranchBudgets"] = async (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const url = `${baseURL}/subsidiary`
+      const url = `${baseURL}/branch`
 
       await service
         .get(`${url}`, {
@@ -74,6 +74,7 @@ const listBranchBudgets: TApi["budgets"]["listBranchBudgets"] = async (
             page: filters.page,
             size: filters.size,
             sort: filters.sort,
+            franqId: filters.franchise,
           },
         })
         .then((res) => {
@@ -659,7 +660,7 @@ const getBranchFinished: TApi["budgets"]["finished"]["branch"] = async (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const url = `${baseURL}/subsidiary/finished`
+      const url = `${baseURL}/branch/finished`
 
       await service
         .get(`${url}`, {

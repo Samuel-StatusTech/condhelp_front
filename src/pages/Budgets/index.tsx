@@ -33,6 +33,7 @@ const Budgets = () => {
    */
 
   const [loading, setLoading] = useState(true)
+  const [firstSearch, setFirstSearch] = useState(false)
 
   const [searchControl, setSearchControl] = useState(initials.pagination)
 
@@ -104,7 +105,13 @@ const Budgets = () => {
   )
 
   const loadData = useCallback(
-    async (params: TDefaultFilters & { actives?: any; status?: any }) => {
+    async (
+      params: TDefaultFilters & {
+        actives?: any
+        status?: any
+        franchise?: number
+      }
+    ) => {
       setLoading(true)
 
       try {
@@ -143,7 +150,9 @@ const Budgets = () => {
             })
           }
         } else if (user?.profile === "FILIAL") {
-          const req = await Api.budgets.listFranchiseBudgets({})
+          const req = await Api.budgets.listBranchBudgets({
+            franchise: params.franchise,
+          })
 
           if (req.ok) {
             // Active list
@@ -199,13 +208,21 @@ const Budgets = () => {
         setLoading(false)
       } catch (error) {}
 
+      setFirstSearch(true)
       setLoading(false)
     },
     [controllers.feedback, user?.profile]
   )
 
   useEffect(() => {
-    loadData({})
+    if (specificFranchise) {
+      loadData({
+        franchise:
+          specificFranchise !== "all" && String(specificFranchise) !== "0"
+            ? +specificFranchise
+            : undefined,
+      })
+    } else loadData({})
   }, [loadData, specificFranchise])
 
   const getFinishedList = useCallback(
@@ -261,9 +278,9 @@ const Budgets = () => {
   )
 
   useEffect(() => {
-    getFinishedList(searchFilters)
+    if (firstSearch) getFinishedList(searchFilters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getFinishedList, searchFilters])
+  }, [getFinishedList, searchFilters, firstSearch])
 
   useEffect(() => {
     controllers.modal.open({
