@@ -16,6 +16,7 @@ export type THeaderFrom =
   | "franchiseCities"
   | "documents"
   | "myaccount"
+  | "monitoring"
 
 export type TBreadCrumFrom = THeaderFrom
 

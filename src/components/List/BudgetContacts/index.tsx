@@ -1,7 +1,6 @@
 import * as S from "./styled"
 import { getDateStr } from "../../../utils/tb/format/date"
 
-import { Icons } from "../../../assets/icons/icons"
 import { TMonitorContactResume } from "../../../utils/@types/data/monitoring"
 import { getStore } from "../../../store"
 
@@ -47,7 +46,8 @@ const BudgetContactsList = ({
           </S.ItemData>
           <S.ItemData>{item.categoryName}</S.ItemData>
           <S.ItemData>{item.providerName}</S.ItemData>
-          <Icons.Expand />
+          
+          <S.SeeMore>Ver mais</S.SeeMore>
         </S.Item>
       ))}
     </S.Wrapper>

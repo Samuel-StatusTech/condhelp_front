@@ -7,7 +7,7 @@ import { getStore } from "../../store"
 
 type TActionButton = {
   userId?: number
-  role: "edit" | "delete" | "reparticipate" | "redirect"
+  role: "edit" | "delete" | "reparticipate" | "redirect" | "seeMore"
   type: "icon" | "outlined" | "textonly"
   action: (id: string | number) => void | any
 }
@@ -49,6 +49,14 @@ const TableActions = ({ id, content }: Props) => {
               icon={<Icons.Expand />}
               action={() => c.action(id)}
               fit={true}
+            />
+          ) : c.role === "seeMore" ? (
+            <Button
+              key={ck}
+              type="quaternary"
+              action={() => c.action(id)}
+              fit={true}
+              text="Ver mais"
             />
           ) : (
             <Button

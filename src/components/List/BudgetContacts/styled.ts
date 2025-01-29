@@ -64,6 +64,11 @@ export const Buttons = styled.div`
   justify-content: space-between;
 `
 
+export const SeeMore = styled.div`
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.green.medium};
+`
+
 export const BtnArea = styled.div`
   width: fit-content;
   display: flex;

@@ -6,7 +6,7 @@ import { TCall } from "../../@types/data/call"
 
 export const callsTableConfig: TConfig = {
   columns: [
-    { title: "Nº", field: "id" },
+    { title: "Nº", field: "budgetId" },
     { title: "Abertura", field: "openedAt" },
     { title: "Categoria", field: "category" },
     { title: "Título", field: "title" },
@@ -23,12 +23,12 @@ export const callsTableConfig: TConfig = {
 
     actions: (item: TCall, { callbacks }) => (
       <TableActions
-        id={item.id}
+        id={item as any}
         content={[
           {
-            role: "edit",
-            type: "icon",
-            action: callbacks?.edit as (id: string | number) => void | any,
+            role: "seeMore",
+            type: "textonly",
+            action: callbacks?.seeMore as (id: string | number) => void | any,
           },
         ]}
       />

@@ -6,4 +6,8 @@ export type TCall = {
   budgetTitle: string
   closedAt: string
   opendAt: string
+  subCategoryName: string
+  budgetId: number
+  categoryId: number
+  subcategoryId: number
 }
