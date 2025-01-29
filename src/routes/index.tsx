@@ -65,7 +65,10 @@ const Router = () => {
           <Route path="/faqs" element={<DashTemplate />}>
             <Route path="" element={<FaqsView />} />
           </Route>
-          <Route path="/myaccount" element={<DashTemplate noHideOverflow={true} />}>
+          <Route
+            path="/myaccount"
+            element={<DashTemplate noHideOverflow={true} />}
+          >
             <Route path="" element={<MyAccount />} />
           </Route>
           <Route path="/dashboard" element={<DashTemplate />}>
@@ -103,15 +106,15 @@ const Router = () => {
             </Route>
             <Route
               path="providerBudgets/available"
-              element={<ProviderBudgets status="DISPONIVEL" />}
+              element={<ProviderBudgets status="inprogress" />}
             />
             <Route
               path="providerBudgets/awaiting"
-              element={<ProviderBudgets status="AGUARDANDO_SINDICO" />}
+              element={<ProviderBudgets status="awaiting" />}
             />
             <Route
               path="providerBudgets/finished"
-              element={<ProviderBudgets status="FINALIZADO" />}
+              element={<ProviderBudgets status="finished" />}
             />
             <Route path="budgets">
               <Route path="" element={<Budgets />} />

@@ -44,7 +44,7 @@ export const Content = styled.div<{ $fillBottom?: boolean }>`
       display: block;
       content: "";
       position: relative;
-      flex: 1;
+      height: 36px;
     }
   `
       : ""}

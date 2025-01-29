@@ -1,8 +1,4 @@
-import {
-  TBudget,
-  TNewBudget,
-  TProviderBudgetResume,
-} from "../../../../utils/@types/data/budget"
+import { TBudget, TNewBudget } from "../../../../utils/@types/data/budget"
 import { TBudgetStatus } from "../../../../utils/@types/data/status"
 import { TDefaultFilters } from "../../../types/params"
 
@@ -45,8 +41,7 @@ export type TApi_Params_Budgets = {
       id: number
     }
     getByStatus: TDefaultFilters & {
-      providerId: number
-      status: TProviderBudgetResume["status"]
+      status: "inprogress" | "finished" | "awaiting"
     }
     interact: {
       budgetId: number

@@ -605,7 +605,6 @@ const statistics: TApi["budgets"]["statistics"] = async ({ providerId }) => {
 }
 
 const getByStatus: TApi["budgets"]["getByStatus"] = async ({
-  providerId,
   status,
   page,
   size,
@@ -613,7 +612,7 @@ const getByStatus: TApi["budgets"]["getByStatus"] = async ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const url = `${baseURL}/provider/${providerId}/${status}`
+      const url = `${baseURL}/provider/${status}`
 
       await service
         .get(`${url}`, {

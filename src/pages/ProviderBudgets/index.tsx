@@ -11,11 +11,11 @@ import { Api } from "../../api"
 import DashboardProviderBudget from "../DashboardProviderBudget"
 
 type Props = {
-  status: TProviderBudgetResume["status"]
+  status: "inprogress" | "finished" | "awaiting"
 }
 
 const ProviderBudgets = ({ status }: Props) => {
-  const { user, controllers } = getStore()
+  const { controllers } = getStore()
 
   /*
    *  Search control
@@ -37,6 +37,7 @@ const ProviderBudgets = ({ status }: Props) => {
         forGrid={true}
         k={2}
         onPickBudget={() => setBudget(budget)}
+        hideInteraction={status === "finished"}
       />
     ))
 
@@ -54,7 +55,6 @@ const ProviderBudgets = ({ status }: Props) => {
       // Budgets
       const req = await Api.budgets.getByStatus({
         size: 300,
-        providerId: user?.userAccountId as number,
         status: status,
       })
 
@@ -74,7 +74,7 @@ const ProviderBudgets = ({ status }: Props) => {
     } catch (error) {
       setLoading(false)
     }
-  }, [status, user?.userAccountId])
+  }, [status])
 
   useEffect(() => {
     loadData()
