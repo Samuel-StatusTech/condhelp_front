@@ -80,10 +80,7 @@ const Form = ({ handleField, columns }: Props) => {
                   50 + (column.blocks.length + 2 - blockKey) - columnKey
                 }
               >
-                <S.BlockTitle>
-                  {block.title}
-                  {`${column.blocks.length}, ${blockKey}`}
-                </S.BlockTitle>
+                <S.BlockTitle>{block.title}</S.BlockTitle>
 
                 {block.groups.map((group, gKey) => (
                   <div
