@@ -118,8 +118,8 @@ const FPregion = () => {
       role: "confirmDelete",
       visible: true,
       data: {
-        title: "Excluir categoria",
-        deleteTextDescriptor: "excluir esta categoria",
+        title: "Excluir região",
+        deleteTextDescriptor: "excluir esta região",
       },
       handleOp: () => onDeleteConfirm(),
     })
