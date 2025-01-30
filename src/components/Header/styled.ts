@@ -18,6 +18,20 @@ export const Element = styled.header`
       theme.animations.durations.slow +
       theme.animations.delays.main(12)}
   }
+
+  svg.smallLogo {
+    display: none;
+  }
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    svg.bigLogo {
+      display: none;
+    }
+
+    svg.smallLogo {
+      display: block;
+    }
+  }
 `
 
 export const Nav = styled.nav`

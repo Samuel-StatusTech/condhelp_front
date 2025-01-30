@@ -10,7 +10,8 @@ const Header = () => {
 
   return (
     <S.Element>
-      <Icons.LogoFull width={190} />
+      <Icons.LogoFull className="bigLogo" width={190} />
+      <Icons.Logo className="smallLogo" width={36} height={36} />
 
       <S.Nav>
         {system.menu.nav.map((mi, k) =>

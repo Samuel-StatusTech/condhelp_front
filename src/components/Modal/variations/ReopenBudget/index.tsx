@@ -365,6 +365,7 @@ const ReopenBudget = ({ data, onClose, handleOp }: Props) => {
             value={form.description}
             gridSizes={{ big: 12 }}
             placeholder="Descrição"
+            label="Descrição"
             limit={1000}
           />
         </S.Row>

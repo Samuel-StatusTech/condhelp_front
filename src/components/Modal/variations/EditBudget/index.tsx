@@ -413,6 +413,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             value={form.description}
             gridSizes={{ big: 12 }}
             placeholder="Descrição"
+            label="Descrição"
             limit={1000}
           />
         </S.Row>
@@ -427,7 +428,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
                 getDateStr(new Date(budgetData?.startDate as any), "dmy") ??
                 "Data de Início"
               }
-              gridSizes={{ big: 6 }}
+              gridSizes={{ big: 6, small: 12 }}
               disabled={true}
             />
           ) : (
