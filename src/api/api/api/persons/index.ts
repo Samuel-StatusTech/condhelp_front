@@ -178,11 +178,9 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
         )
 
         if (!userAccountRegister.data) {
-          resolve({
-            ok: false,
-            error:
-              "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
-          })
+          let errMessage =
+            "Não foi possível atualizar o usuário. Tente novamente mais tarde."
+          resolve({ ok: false, error: errMessage })
 
           return
         }
@@ -241,17 +239,26 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error:
-              "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
-          })
+          let errMessage =
+            "Não foi possível atualizar o usuário. Tente novamente mais tarde."
+
+          if ((err.response as any)?.data.error) {
+            errMessage = (err.response?.data as any).error
+          }
+
+          resolve({ ok: false, error: errMessage })
         })
     } catch (error) {
+      let errMessage =
+        "Não foi possível atualizar o usuário. Tente novamente mais tarde."
+
+      if (error instanceof AxiosError && error.response?.data.error) {
+        errMessage = error.response?.data.error
+      }
+
       resolve({
         ok: false,
-        error:
-          "Não foi possível atualizar o usuário. Tente novamente mais tarde.",
+        error: errMessage,
       })
     }
   })
@@ -402,6 +409,18 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                     ...info,
                     ...extraDataReq.data,
                   })
+
+                  extraInfo.address.city = city?.name
+                  extraInfo.address.cityId = city?.id
+                } else if (userProfile === "ADMIN") {
+                  extraInfo = {
+                    ...info,
+                    document: {
+                      type: info.document.length > 11 ? "cnpj" : "cpf",
+                      register: info.document,
+                      date: info.birthDate,
+                    },
+                  }
 
                   extraInfo.address.city = city?.name
                   extraInfo.address.cityId = city?.id

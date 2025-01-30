@@ -183,7 +183,13 @@ const FPpeople = () => {
 
             onFinish(info)
           } else navigate("/dashboard/users")
-        } else throw new Error()
+        } else {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: req.error,
+          })
+        }
       } else throw new Error()
     } catch (error) {
       controllers.feedback.setData({
@@ -192,9 +198,9 @@ const FPpeople = () => {
         message:
           "Houve um erro ao atualizar o usuário. Verifique as informações e tente novamente.",
       })
-
-      setLoading(false)
     }
+
+    setLoading(false)
   }
 
   const handleCreate = async (

@@ -32,7 +32,7 @@ export const extraAdmin = (
                 type: "input",
                 field: "documentRegister",
                 label: "Nº do documento",
-                value: formatCpf(form.document.register),
+                value: formatCpf(form.document.register ?? ""),
                 placeholder: "000.000.000-00",
                 gridSizes: { big: 6, small: 12 },
                 error: {
