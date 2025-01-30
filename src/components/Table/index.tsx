@@ -69,37 +69,43 @@ const Table = ({
 
   return (
     <S.Wrapper>
-      <S.Table>
-        <S.TableHead>
-          <S.RowItem>
-            {config.columns.map((col, k) => (
-              <S.TCol
-                key={k}
-                $size={col.size}
-                $align={col.align}
-                $width={col.width}
-              >
-                {col.title}
-              </S.TCol>
-            ))}
-          </S.RowItem>
-        </S.TableHead>
-        <S.TableBody $noHover={noHover}>
-          {loading ? (
-            <Skeleton role="table" columns={config.columns.length} rows={10} />
-          ) : (
-            data.map((item, k) => (
-              <RowItem
-                key={k}
-                item={item}
-                config={config}
-                actions={actions}
-                expandComponent={expandComponent}
+      <S.TableWrapper>
+        <S.Table>
+          <S.TableHead>
+            <S.RowItem>
+              {config.columns.map((col, k) => (
+                <S.TCol
+                  key={k}
+                  $size={col.size}
+                  $align={col.align}
+                  $width={col.width}
+                >
+                  {col.title}
+                </S.TCol>
+              ))}
+            </S.RowItem>
+          </S.TableHead>
+          <S.TableBody $noHover={noHover}>
+            {loading ? (
+              <Skeleton
+                role="table"
+                columns={config.columns.length}
+                rows={10}
               />
-            ))
-          )}
-        </S.TableBody>
-      </S.Table>
+            ) : (
+              data.map((item, k) => (
+                <RowItem
+                  key={k}
+                  item={item}
+                  config={config}
+                  actions={actions}
+                  expandComponent={expandComponent}
+                />
+              ))
+            )}
+          </S.TableBody>
+        </S.Table>
+      </S.TableWrapper>
 
       {searchData && (
         <S.PaginationWrapper>
