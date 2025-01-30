@@ -82,6 +82,17 @@ export const Row = styled.div`
 
   gap: 10px;
   align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+
+    align-items: unset;
+
+    min-width: unset;
+    max-width: unset;
+    width: unset;
+  }
 `
 
 export const HeaderLeft = styled.div`

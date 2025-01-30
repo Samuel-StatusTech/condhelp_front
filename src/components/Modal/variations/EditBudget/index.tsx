@@ -435,11 +435,11 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
               field={"startDate"}
               onChange={handleField}
               value={form.startDate}
-              gridSizes={{ big: 6 }}
+              gridSizes={{ big: 6, small: 12 }}
               label="Data de Início"
               minDate={new Date()}
-              />
-            )}
+            />
+          )}
         </S.Row>
 
         <S.Row>
@@ -447,7 +447,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             field={"finishDate"}
             onChange={handleField}
             value={form.finishDate}
-            gridSizes={{ big: 6 }}
+            gridSizes={{ big: 6, small: 12 }}
             label="Data fim"
             minDate={new Date()}
           />
@@ -468,9 +468,9 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
         <S.Bottom>
           <Button
             type="main"
-            text="Atualizar"
+            text={submitting ? "Atualizando..." : "Atualizar"}
             action={!submitting ? handleSubmit : () => {}}
-            disabled={errors().has}
+            disabled={errors().has || submitting}
           />
         </S.Bottom>
       </S.Content>

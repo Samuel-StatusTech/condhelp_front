@@ -35,6 +35,8 @@ const SideMenu = (props: Props) => {
       role: "newBudget",
       visible: true,
     })
+
+    setSideOpened(false)
   }, [controllers.modal])
 
   return (

@@ -374,7 +374,7 @@ const ReopenBudget = ({ data, onClose, handleOp }: Props) => {
             field={"startDate"}
             onChange={handleField}
             value={form.startDate}
-            gridSizes={{ big: 6 }}
+            gridSizes={{ big: 6, small: 12 }}
             label="Data de Início"
             minDate={new Date()}
           />
@@ -385,7 +385,7 @@ const ReopenBudget = ({ data, onClose, handleOp }: Props) => {
             field={"finishDate"}
             onChange={handleField}
             value={form.finishDate}
-            gridSizes={{ big: 6 }}
+            gridSizes={{ big: 6, small: 12 }}
             label="Data fim"
             minDate={new Date(form.startDate)}
           />
@@ -406,7 +406,7 @@ const ReopenBudget = ({ data, onClose, handleOp }: Props) => {
         <S.Bottom>
           <Button
             type="main"
-            text="Reabrir"
+            text={submitting ? "Reabrindo" : "Reabrir"}
             action={!submitting ? handleSubmit : () => {}}
             disabled={errors().has || submitting}
           />

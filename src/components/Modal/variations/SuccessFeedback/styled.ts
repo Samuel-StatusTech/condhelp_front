@@ -61,7 +61,7 @@ export const Bottom = styled.div`
   gap: 8px;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    alignitems: center;
+    align-items: center;
     flex-direction: column;
   }
 `
