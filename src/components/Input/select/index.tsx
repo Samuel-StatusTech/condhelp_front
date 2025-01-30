@@ -17,6 +17,8 @@ export type TInputSelect = {
   reverse?: boolean
   fixedWidth?: number
 
+  zIndex?: number
+
   error?: TFieldError
 }
 
@@ -47,6 +49,7 @@ const SelectDefault = ({
   avoidValueShow,
   reverse,
   fixedWidth,
+  zIndex,
   error,
 }: Props) => {
   // use ref ...
@@ -106,6 +109,7 @@ const SelectDefault = ({
       $gridSizes={gridSizes}
       $alignBottom={alignBottom}
       $fixedWidth={fixedWidth}
+      $zIndex={zIndex}
     >
       <C.Area $elevation={elevation}>
         <S.SelectArea ref={wrapperRef}>

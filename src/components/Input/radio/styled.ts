@@ -5,9 +5,6 @@ export const Wrapper = styled.div<{
   $gridSizes?: FormField["gridSizes"]
   $fixedWidth?: number
 }>`
-  /* grid-column: span
-    ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.big : "unset")};
-    flex: ${({ $gridSizes }) => (!$gridSizes ? 1 : "unset")}; */
   flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   display: flex;
   min-width: unset;
@@ -23,9 +20,9 @@ export const Wrapper = styled.div<{
       : ""}
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    /* grid-column: span
-      ${({ $gridSizes }) => ($gridSizes ? $gridSizes?.small : "unset")}; */
-    flex: ${({ $gridSizes }) => $gridSizes?.small ?? 1};
+    grid-column: span
+      ${({ $gridSizes }) => $gridSizes?.small ?? $gridSizes?.big ?? "unset"};
+    flex: unset;
 
     min-width: unset;
     max-width: unset;

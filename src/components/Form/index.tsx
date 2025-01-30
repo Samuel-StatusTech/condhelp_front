@@ -34,7 +34,14 @@ const getElement = (
     case "readonly":
       return <Input.ReadonlyField {...field} onChange={handleField} key={key} />
     case "select":
-      return <Input.Select {...field} onChange={handleField} key={key} />
+      return (
+        <Input.Select
+          {...field}
+          zIndex={50 - (key + 1)}
+          onChange={handleField}
+          key={key}
+        />
+      )
     case "multipleSelect":
       return (
         <Input.MultipleSelect {...field} onChange={handleField} key={key} />
@@ -69,8 +76,14 @@ const Form = ({ handleField, columns }: Props) => {
                 key={blockKey}
                 $white={block.isWhite}
                 $zIndex={50 + (column.blocks.length + 2 - blockKey)}
+                $mobileZIndex={
+                  50 + (column.blocks.length + 2 - blockKey) - columnKey
+                }
               >
-                <S.BlockTitle>{block.title}</S.BlockTitle>
+                <S.BlockTitle>
+                  {block.title}
+                  {`${column.blocks.length}, ${blockKey}`}
+                </S.BlockTitle>
 
                 {block.groups.map((group, gKey) => (
                   <div

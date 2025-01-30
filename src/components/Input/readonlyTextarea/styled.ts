@@ -23,7 +23,9 @@ export const Wrapper = styled.div<{
       : ""}
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    flex: ${({ $gridSizes }) => $gridSizes?.small ?? 1};
+    grid-column: span
+      ${({ $gridSizes }) => $gridSizes?.small ?? $gridSizes?.big ?? "unset"};
+    flex: unset;
 
     min-width: unset;
     max-width: unset;

@@ -504,7 +504,7 @@ const FPcondo = () => {
                           label: "UF",
                           field: "federateUnit",
                           value: form.federateUnit,
-                          gridSizes: { big: 2, small: 6 },
+                          gridSizes: { big: 2, small: 12 },
                           options: options.state,
                           byKey: true,
                           fixedWidth: 112,
@@ -515,7 +515,7 @@ const FPcondo = () => {
                           field: "city",
                           placeholder: "Digite aqui",
                           value: form.city,
-                          gridSizes: { big: 5, small: 6 },
+                          gridSizes: { big: 5, small: 12 },
                           stateId: states.find(
                             (s) => s.initials === form.federateUnit
                           )?.id,

@@ -23,7 +23,11 @@ export const BlockCols = styled.div`
   height: fit-content;
 `
 
-export const Block = styled.div<{ $white?: boolean; $zIndex: number }>`
+export const Block = styled.div<{
+  $white?: boolean
+  $zIndex: number
+  $mobileZIndex: number
+}>`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -35,6 +39,10 @@ export const Block = styled.div<{ $white?: boolean; $zIndex: number }>`
   border-radius: 8px;
   height: fit-content;
   z-index: ${({ $zIndex }) => $zIndex};
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    z-index: ${({ $mobileZIndex }) => $mobileZIndex};
+  }
 `
 
 export const BlockTitle = styled.span`
@@ -67,9 +75,6 @@ export const FormArea = styled.div`
 `
 
 export const FormLine = styled.div<{ $k: number }>`
-  /* display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr)); */
-
   display: flex;
 
   gap: 10px;
@@ -82,4 +87,15 @@ export const FormLine = styled.div<{ $k: number }>`
     theme.animations.types.fadeTop +
     theme.animations.durations.slow +
     theme.animations.delays.main($k)}
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+
+    align-items: unset;
+
+    min-width: unset;
+    max-width: unset;
+    width: unset;
+  }
 `

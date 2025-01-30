@@ -5,12 +5,13 @@ export const Wrapper = styled.div<{
   $gridSizes?: FormField["gridSizes"]
   $alignBottom?: boolean
   $fixedWidth?: number
+  $zIndex?: number
 }>`
-  /* grid-column: span ${({ $gridSizes }) => $gridSizes?.big ?? "unset"}; */
   flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   display: flex;
   align-self: ${({ $alignBottom }) => ($alignBottom ? "flex-end" : "unset")};
   position: relative;
+  z-index: ${({ $zIndex }) => $zIndex ?? "unset"};
 
   ${({ $fixedWidth }) =>
     $fixedWidth
@@ -22,8 +23,9 @@ export const Wrapper = styled.div<{
       : ""}
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    /* grid-column: span ${({ $gridSizes }) => $gridSizes?.small ?? "unset"}; */
-    flex: ${({ $gridSizes }) => $gridSizes?.small ?? 1};
+    grid-column: span
+      ${({ $gridSizes }) => $gridSizes?.small ?? $gridSizes?.big ?? "unset"};
+    flex: unset;
 
     min-width: unset;
     max-width: unset;
