@@ -118,7 +118,7 @@ export const DefaultContent = (props: Props) => {
                       ...((["SINDICO", "PRESTADOR"] as TAccess[]).includes(
                         personType
                       ) &&
-                      (["ADMIN", "FILIAL", "FRANQUEADO"] as TAccess[]).includes(
+                      (["ADMIN", "REDE", "FRANQUEADO"] as TAccess[]).includes(
                         user?.profile as TAccess
                       )
                         ? params && params.id !== undefined
@@ -127,7 +127,7 @@ export const DefaultContent = (props: Props) => {
                               ? [
                                   {
                                     type: "readonly",
-                                    label: "Franquia",
+                                    label: "Loja",
                                     field: "franqId",
                                     value: `${user?.name} (Você)`,
                                     gridSizes: { big: 12 },
@@ -136,8 +136,8 @@ export const DefaultContent = (props: Props) => {
                               : [
                                   {
                                     type: "select",
-                                    label: "Franquia",
-                                    placeholder: "Selecione a franquia",
+                                    label: "Loja",
+                                    placeholder: "Selecione a loja",
                                     field: "franqId",
                                     value: form.franqId ?? "",
                                     options: options.franchise,
@@ -145,7 +145,7 @@ export const DefaultContent = (props: Props) => {
                                     elevation: 10,
                                     error: {
                                       has: errors.fields.includes("franqId"),
-                                      message: "Selecione uma franquia",
+                                      message: "Selecione uma loja",
                                     },
                                   },
                                 ]) as FormField[])

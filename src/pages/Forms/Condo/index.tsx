@@ -74,7 +74,7 @@ const FPcondo = () => {
       } else if (user?.profile === "FRANQUEADO") {
         branchId = user?.branchId as number
         franchiseId = user?.userId as number
-      } else if (user?.profile === "FILIAL") {
+      } else if (user?.profile === "REDE") {
         branchId = user?.userId as number
         franchiseId = form.manager.franqId as number
       } else if (user?.profile === "ADMIN") {

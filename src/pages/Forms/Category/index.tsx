@@ -187,7 +187,7 @@ const FPcategory = () => {
     let franqId = null
 
     switch (user?.profile) {
-      case "FILIAL":
+      case "REDE":
         branchId = user?.userId
         break
       case "FRANQUEADO":

@@ -122,7 +122,7 @@ const FPpeople = () => {
       case "ADMIN":
         value = form.document.register ?? ""
         break
-      case "FILIAL":
+      case "REDE":
         value =
           obj.responsible.responsibleType === "CPF"
             ? obj.responsible.cpf
@@ -425,7 +425,7 @@ const FPpeople = () => {
           if (usersReq.ok) {
             const list = usersReq.data.content
 
-            const branchesList = list.filter((i) => i.profile === "FILIAL")
+            const branchesList = list.filter((i) => i.profile === "REDE")
             const franchisesList = list.filter(
               (i) => i.profile === "FRANQUEADO"
             )
@@ -463,7 +463,7 @@ const FPpeople = () => {
             } else throw new Error()
           })
 
-      if (user?.profile === "ADMIN" || user?.profile === "FILIAL") {
+      if (user?.profile === "ADMIN" || user?.profile === "REDE") {
         proms.push(user?.profile === "ADMIN" ? adminLogic() : branchLogic())
       }
 
@@ -574,7 +574,7 @@ const FPpeople = () => {
   }, [controllers.feedback, navigate, params.id])
 
   useEffect(() => {
-    if (user?.profile === "FILIAL") {
+    if (user?.profile === "REDE") {
       setForm((frm: any) => ({ ...frm, branchId: user?.userId }))
     } else if (user?.profile === "FRANQUEADO") {
       setForm((frm: any) => ({
@@ -765,7 +765,7 @@ const FPpeople = () => {
         content = formPartials.admin.extra(form, formSubmitFields, errors)
         break
 
-      case "FILIAL":
+      case "REDE":
         content = formPartials.branch.extra(form, formSubmitFields, errors)
         break
 

@@ -66,7 +66,7 @@ const MyAccountBranch = (props: Props) => {
                         {
                           type: "input",
                           field: "name",
-                          label: "Nome da Filial",
+                          label: "Nome da Rede",
                           value: form.name,
                           placeholder: "Digite aqui",
                           gridSizes: { big: 3, small: 12 },

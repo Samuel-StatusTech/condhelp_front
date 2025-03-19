@@ -38,7 +38,7 @@ export const renderBasic = (props: Props) => {
       content = formPartials.admin.basic({ form, isEditing, errors })
       break
 
-    case "FILIAL":
+    case "REDE":
       content = formPartials.branch.basic({
         form,
         options,

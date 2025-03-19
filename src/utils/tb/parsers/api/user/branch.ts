@@ -7,11 +7,11 @@ import {
 
 export const parseUserBranch = (
   backUser: TUDefault & T_Back_Branch
-): TUserTypes["FILIAL"] => {
+): TUserTypes["REDE"] => {
   try {
     // @ts-ignore
-    let user: TUserTypes["FILIAL"] = {
-      profile: "FILIAL",
+    let user: TUserTypes["REDE"] = {
+      profile: "REDE",
 
       id: backUser.id,
       photo: null,

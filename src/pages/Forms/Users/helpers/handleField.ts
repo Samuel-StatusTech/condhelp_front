@@ -85,7 +85,7 @@ export const handleField = async (
         }
         break
 
-      case "FILIAL":
+      case "REDE":
       case "FRANQUEADO":
         const responsableKeys = [
           "responsablePersonName",

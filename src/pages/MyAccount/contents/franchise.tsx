@@ -66,7 +66,7 @@ const MyAccountFranchise = (props: Props) => {
                         {
                           type: "input",
                           field: "name",
-                          label: "Nome da Franquia",
+                          label: "Nome da Loja",
                           value: form.name,
                           placeholder: "Digite aqui",
                           gridSizes: { big: 3, small: 12 },

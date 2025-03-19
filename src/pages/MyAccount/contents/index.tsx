@@ -32,7 +32,7 @@ type Props = {
 const contentRelation: {
   [key in string]: (props: any) => JSX.Element
 } = {
-  FILIAL: MyAccountBranch,
+  REDE: MyAccountBranch,
   FRANQUEADO: MyAccountFranchise,
   SINDICO: MyAccountManager,
   PRESTADOR: MyAccountProvider,

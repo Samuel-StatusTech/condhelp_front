@@ -52,7 +52,7 @@ export const extraFranchise = (
                 <Button
                   type="main"
                   action={() => setIsManagingFranchiseCities(true)}
-                  text="Editar franquia"
+                  text="Editar loja"
                   icon={<Icons.Edit />}
                   iconLeft={true}
                   disabled={!form.region || form.region === 0}

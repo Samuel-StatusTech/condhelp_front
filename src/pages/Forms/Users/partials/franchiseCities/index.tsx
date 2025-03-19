@@ -101,12 +101,12 @@ const FranchiseCities = ({ cities, region, handleBack, handleList }: Props) => {
         <S.Column>
           <S.Block>
             <S.BlockHeader>
-              <S.BlockTitle>Cidades desta filial</S.BlockTitle>
+              <S.BlockTitle>Cidades desta rede</S.BlockTitle>
             </S.BlockHeader>
 
             <Divider />
 
-            <S.ListName>Cidades que a filial irá atender:</S.ListName>
+            <S.ListName>Cidades que a rede irá atender:</S.ListName>
 
             <S.CitiesList>
               {selecteds.map((city, cityKey) => (

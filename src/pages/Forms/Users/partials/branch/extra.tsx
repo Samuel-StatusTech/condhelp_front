@@ -10,7 +10,7 @@ import {
   formatStateInscription,
 } from "../../../../../utils/tb/format/inscription"
 
-const inData = initials.forms.person.FILIAL as TNewUser & TUBranch
+const inData = initials.forms.person.REDE as TNewUser & TUBranch
 
 export const extraBranch = (
   form: typeof inData,

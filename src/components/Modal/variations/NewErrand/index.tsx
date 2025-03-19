@@ -86,8 +86,8 @@ const NewErrand = ({ data, onClose, handleOp }: Props) => {
 
         <S.TargetArea>
           <S.Target>Perfis de destino:</S.Target>
-          <S.Target>Filial,</S.Target>
-          <S.Target>Franquia</S.Target>
+          <S.Target>Rede,</S.Target>
+          <S.Target>Loja</S.Target>
         </S.TargetArea>
 
         <Divider />

@@ -78,7 +78,7 @@ const UsersPage = () => {
 
       try {
         const listFn =
-          user?.profile === "FILIAL"
+          user?.profile === "REDE"
             ? Api.persons.getBranchUsers(searchParams)
             : user?.profile === "FRANQUEADO"
             ? Api.persons.getFranchiseUsers(searchParams)

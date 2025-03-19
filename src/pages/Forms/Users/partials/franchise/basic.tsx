@@ -30,14 +30,14 @@ export const basicFranchise = ({
       type: "fields",
       // @ts-ignore
       fields: [
-        ...(userProfile === "FILIAL"
+        ...(userProfile === "REDE"
           ? [
               {
                 type: "input",
-                label: "Nome da franquia",
+                label: "Nome da loja",
                 field: "name",
                 value: form.name,
-                placeholder: "Nome da franquia",
+                placeholder: "Nome da loja",
                 gridSizes: { big: 12 },
                 error: {
                   has: errors.fields.includes("name"),
@@ -51,7 +51,7 @@ export const basicFranchise = ({
                   ? [
                       {
                         type: "readonly",
-                        label: "Filial",
+                        label: "Rede",
                         field: "branchId",
                         value:
                           options.branch.find((b) => b.key === form.branchId)
@@ -59,15 +59,15 @@ export const basicFranchise = ({
                         gridSizes: { big: 6, small: 12 },
                         error: {
                           has: false,
-                          message: "Escolha a filial",
+                          message: "Escolha a rede",
                         },
                       },
                     ]
                   : [
                       {
                         type: "select",
-                        label: "Filial",
-                        placeholder: "Filial",
+                        label: "Rede",
+                        placeholder: "Rede",
                         field: "branchId",
                         value: form.branchId ?? "",
                         options: options.branch,
@@ -75,16 +75,16 @@ export const basicFranchise = ({
                         elevation: 10,
                         error: {
                           has: errors.fields.includes("branchId"),
-                          message: "Selecione uma filial",
+                          message: "Selecione uma rede",
                         },
                       },
                     ]),
                 {
                   type: "input",
-                  label: "Nome da franquia",
+                  label: "Nome da loja",
                   field: "name",
                   value: form.name,
-                  placeholder: "Nome da franquia",
+                  placeholder: "Nome da loja",
                   gridSizes: { big: 6, small: 12 },
                   error: {
                     has: errors.fields.includes("name"),

@@ -21,7 +21,7 @@ export const usersCheck = (data: Params): TErrorsCheck => {
           state = newState
         })
         break
-      case "FILIAL":
+      case "REDE":
         branchCheck(data as any, (newState: TErrorsCheck) => {
           state = newState
         })

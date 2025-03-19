@@ -103,7 +103,7 @@ const MyAccount = () => {
       case "ADMIN":
         value = form.document.register ?? ""
         break
-      case "FILIAL":
+      case "REDE":
         value =
           obj.responsible.responsibleType === "CPF"
             ? obj.responsible.cpf

@@ -4,7 +4,7 @@ import { TResponsableTypes } from "../user"
 export type TUBranch = {
   subsidiaryId: number
   userAccountId: number
-  profile: "FILIAL"
+  profile: "REDE"
   name: string
   address: TAddress & {
     cityId?: number

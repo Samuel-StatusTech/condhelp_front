@@ -149,7 +149,7 @@ const Budgets = () => {
               message: req.error,
             })
           }
-        } else if (user?.profile === "FILIAL") {
+        } else if (user?.profile === "REDE") {
           const req = await Api.budgets.listBranchBudgets({
             franchise: params.franchise,
           })
@@ -231,7 +231,7 @@ const Budgets = () => {
 
       try {
         const fn =
-          user?.profile === "FILIAL"
+          user?.profile === "REDE"
             ? () => Api.budgets.finished.branch(params)
             : () => Api.budgets.finished.franchise(params)
 
@@ -300,11 +300,11 @@ const Budgets = () => {
                 andamento:
               </span>
             </S.BlockTitle>
-            {user?.profile === "FILIAL" && (
+            {user?.profile === "REDE" && (
               <Input.CondoSelect
                 field="franchises"
                 options={options.franchises}
-                label="Todas as franquias"
+                label="Todas as lojas"
                 value={specificFranchise}
                 onChange={setSpecificFranchise}
               />

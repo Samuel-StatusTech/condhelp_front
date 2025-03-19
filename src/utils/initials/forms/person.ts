@@ -10,7 +10,7 @@ export const personForm: {
   [key in TAccess]?: TNewUser
 } = {
   ADMIN: ADMINInitial,
-  FILIAL: branchInitial,
+  REDE: branchInitial,
   FRANQUEADO: franchiseInitial,
   SINDICO: managerInitial,
   PRESTADOR: providerInitial,

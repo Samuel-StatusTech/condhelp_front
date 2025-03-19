@@ -76,9 +76,9 @@ const DashboardBranch = () => {
       data.totalFranchises +
       data.totalBranches
 
-    dashboardShortcuts.FILIAL.forEach((s, sk) => {
+    dashboardShortcuts.REDE.forEach((s, sk) => {
       const keyValue: { [key: string]: keyof typeof data } = {
-        FILIAL: "totalBranches",
+        REDE: "totalBranches",
         FRANQUEADO: "totalFranchises",
         region: "totalRegions",
         PRESTADOR: "totalProviders",
@@ -146,7 +146,7 @@ const DashboardBranch = () => {
   return (
     <S.SubContent>
       <S.BlockTitle $k={2}>
-        <span>Painel Administrativo da Filial</span>
+        <span>Painel Administrativo da Rede</span>
       </S.BlockTitle>
 
       {renderCardsContent()}

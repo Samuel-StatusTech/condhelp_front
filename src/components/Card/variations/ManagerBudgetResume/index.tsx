@@ -120,7 +120,7 @@ const ManagerBudgetResume = ({
               {forBranch && (
                 <S.InfoItem>
                   <Icons.Franchise />
-                  <span>Nome da franquia</span>
+                  <span>Nome da loja</span>
                 </S.InfoItem>
               )}
               <S.InfoItem>

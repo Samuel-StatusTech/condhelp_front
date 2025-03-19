@@ -18,7 +18,7 @@ export const rolesUrlRelations: { [key in TAccess]: string } = {
   USUARIO: "",
   MATRIZ: "",
   PRESTADOR: "/providers",
-  FILIAL: "/subsidiaries",
+  REDE: "/subsidiaries",
   MONITOR: "",
   FRANQUEADO: "franchisees",
   CONDOMINIO: "",
@@ -110,7 +110,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           newPerson.profile === "PRESTADOR" ? "AGUARDANDO" : newPerson.status,
       }
 
-      if (newPerson.profile === "FILIAL") {
+      if (newPerson.profile === "REDE") {
         additionalData.subsidiaryId = newPerson.userId
         additionalData.userAccountId = newPerson.userId
       }
@@ -204,7 +204,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
           ? person.userId
           : person.profile === "PRESTADOR"
           ? person.id
-          : person.profile === "FILIAL"
+          : person.profile === "REDE"
           ? person.subsidiaryId
           : person.userAccountId
 
@@ -356,7 +356,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
 
             if (!["ADMIN"].includes(userProfile)) {
               const url =
-                userProfile === "FILIAL"
+                userProfile === "REDE"
                   ? `${rolesUrlRelations[userProfile]}/useraccount`
                   : userProfile === "PRESTADOR"
                   ? `${rolesUrlRelations[userProfile]}/useraccount`
@@ -376,7 +376,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                 if (
                   extraInfo.address &&
                   extraInfo.address.city &&
-                  (["FILIAL", "FRANQUEADO", "PRESTADOR"] as TAccess[]).includes(
+                  (["REDE", "FRANQUEADO", "PRESTADOR"] as TAccess[]).includes(
                     userProfile
                   )
                 ) {
@@ -396,7 +396,7 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
 
                   extraInfo.address.city = city?.name
                   extraInfo.address.cityId = city?.id
-                } else if (userProfile === "FILIAL") {
+                } else if (userProfile === "REDE") {
                   extraInfo = parseUserBranch({
                     ...info,
                     ...extraDataReq.data,
@@ -600,7 +600,7 @@ const getAllBranches: TApi["persons"]["getAllBranches"] = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${rolesUrlRelations.FILIAL}`)
+        .get(`${rolesUrlRelations.REDE}`)
         .then(async (res) => {
           const info = res.data
 
@@ -637,7 +637,7 @@ const getBranchUsers: TApi["persons"]["getBranchUsers"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${rolesUrlRelations.FILIAL}/myusers`, {
+        .get(`${rolesUrlRelations.REDE}/myusers`, {
           params: filters,
         })
         .then(async (res) => {
