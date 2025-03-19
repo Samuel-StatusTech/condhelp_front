@@ -214,7 +214,7 @@ const FPcondo = () => {
       controllers.feedback.setData({
         visible: true,
         state: "alert",
-        message: "Corrija os campos e tente novamente",
+        message: "Houve um erro ao processar as informações. Tente novamente mais tarde.",
       })
     }
   }

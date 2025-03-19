@@ -20,6 +20,7 @@ import { checkErrors } from "../../../utils/tb/checkErrors"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import Button from "../../../components/Button"
 import { Icons } from "../../../assets/icons/icons"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const FPcategory = () => {
   const navigate = useNavigate()
@@ -34,9 +35,10 @@ const FPcategory = () => {
     initials.forms.category
   )
 
-  const errors = () => {
-    return checkErrors.categories(form)
-  }
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
 
   const handleCancel = () => {
     navigate(-1)
@@ -85,10 +87,27 @@ const FPcategory = () => {
 
   const handleSave = async () => {
     try {
-      if (params.id) handleUpdate()
-      else handleCreate()
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) {
+        if (params.id) handleUpdate()
+        else handleCreate()
+      } else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message:
+          "Houve um erro ao processar as informações. Tente novamente mais tarde.",
+      })
     }
   }
 
@@ -242,6 +261,16 @@ const FPcategory = () => {
   }
 
   const handleField = async (field: string, value: any) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     setForm((f: any) => ({ ...f, [field]: value }))
   }
 
@@ -287,6 +316,11 @@ const FPcategory = () => {
     })
   }, [controllers.modal, loading])
 
+  const updateErrors = () => {
+    const check = checkErrors.categories(form)
+    return check
+  }
+
   return (
     <C.Content>
       <PageHeader type={"breadcrumb"} from={"categories"} forForm={true} />
@@ -312,6 +346,10 @@ const FPcategory = () => {
                         field: "name",
                         value: form.name,
                         gridSizes: { big: 12 },
+                        error: {
+                          has: errors.fields.includes("name"),
+                          message: "Digite o nome",
+                        },
                       },
                     ],
                   },
@@ -357,7 +395,7 @@ const FPcategory = () => {
                       <FormDefaultButtons
                         handleCancel={handleCancel}
                         handleSave={handleSave}
-                        disabled={errors().has}
+                        disabled={errors.has}
                       />
                     ),
                   },
