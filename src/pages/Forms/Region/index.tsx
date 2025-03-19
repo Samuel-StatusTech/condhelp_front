@@ -69,6 +69,16 @@ const FPregion = () => {
   }
 
   const handleField = async (field: string, value: any) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     if (!changedCountryState) {
       if (
         (field === "country" && !!form.countryId) ||
@@ -425,7 +435,7 @@ const FPregion = () => {
                           options: options.state,
                           gridSizes: { big: 6, small: 12 },
                           error: {
-                            has: errors.fields.includes("name"),
+                            has: errors.fields.includes("stateId"),
                             message: "Escolha o estado",
                           },
                         },
