@@ -11,6 +11,8 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     fields: [],
   }
 
+  console.log("Data", data)
+
   if (!data.name.trim()) state = getInvalidCheck(state, "name")
   if (!String(Number(data.unities)).trim())
     state = getInvalidCheck(state, "units")
@@ -29,7 +31,7 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     Number.isNaN(data.addressNumber) ||
     (!Number.isNaN(data.addressNumber) && Number(data.addressNumber) < 1)
   )
-    state = getInvalidCheck(state, "unities")
+    state = getInvalidCheck(state, "addressNumber")
   if (!data.zipCode.trim() || data.zipCode.trim().replace(/\D/g, "").length < 8)
     state = getInvalidCheck(state, "zipCode")
   if (!data.neighborhood.trim()) state = getInvalidCheck(state, "neighborhood")
@@ -40,7 +42,7 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     Number.isNaN(data.manager.userId) ||
     (!Number.isNaN(data.manager.userId) && Number(data.manager.userId) < 1)
   )
-    state = getInvalidCheck(state, "manager")
+    state = getInvalidCheck(state, "managerId")
   if (!data.electionDate) state = getInvalidCheck(state, "electionDate")
 
   // photo

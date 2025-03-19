@@ -24,6 +24,7 @@ import { TUserTypes } from "../../../utils/@types/data/user"
 import { getDateStr } from "../../../utils/tb/format/date"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { TCity, TState } from "../../../utils/@types/data/region"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -48,6 +49,11 @@ const FPcondo = () => {
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     managers: [],
     state: systemOptions.states,
+  })
+
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
   })
 
   const handleCancel = () => {
@@ -181,14 +187,34 @@ const FPcondo = () => {
   }
 
   const handleSave = async () => {
-    if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
-      if (params.id) handleUpdate()
-      else handleCreate()
-    } else {
+    try {
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) {
+        if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
+          if (params.id) handleUpdate()
+          else handleCreate()
+        } else {
+          controllers.feedback.setData({
+            state: "alert",
+            message: "Selecione uma cidade válida",
+            visible: true,
+          })
+        }
+      } else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
+    } catch (error) {
       controllers.feedback.setData({
-        state: "alert",
-        message: "Selecione uma cidade válida",
         visible: true,
+        state: "alert",
+        message: "Corrija os campos e tente novamente",
       })
     }
   }
@@ -229,6 +255,16 @@ const FPcondo = () => {
   }
 
   const handleField = async (field: string, value: any) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     if (["addressNumber", "zipCode"].includes(field)) {
       const newForm = {
         ...form,
@@ -247,10 +283,10 @@ const FPcondo = () => {
         ...f,
         manager: { ...f.manager, managerSince: value },
       }))
-    } else if (field === "unities")
+    } else if (field === "unities" || field === "addressNumber")
       setForm((f: any) => ({
         ...f,
-        unities: String(+String(value).replace(/\D/g, "")),
+        [field]: String(+String(value).replace(/\D/g, "")),
       }))
     else if (Object.keys(form.address).includes(field))
       setForm((f: any) => ({ ...f, address: { ...f.address, [field]: value } }))
@@ -394,8 +430,9 @@ const FPcondo = () => {
     })
   }, [controllers.modal, loading])
 
-  const errors = () => {
-    return checkErrors.condos(form)
+  const updateErrors = () => {
+    const check = checkErrors.condos(form)
+    return check
   }
 
   return (
@@ -422,6 +459,10 @@ const FPcondo = () => {
                           field: "name",
                           placeholder: "Digite aqui",
                           value: form.name,
+                          error: {
+                            has: errors.fields.includes("name"),
+                            message: "Digite o nome do condomínio",
+                          },
                           gridSizes: {
                             big: 10,
                             small: 9,
@@ -432,6 +473,10 @@ const FPcondo = () => {
                           label: "Unidades",
                           field: "unities",
                           value: String(form.unities),
+                          error: {
+                            has: errors.fields.includes("unities"),
+                            message: "Digite um valor válido",
+                          },
                           gridSizes: {
                             big: 2,
                             small: 3,
@@ -444,6 +489,10 @@ const FPcondo = () => {
                         field: "cnpj",
                         placeholder: "Digite aqui",
                         value: formatCNPJ(form.cnpj),
+                        error: {
+                          has: errors.fields.includes("cnpj"),
+                          message: "Digite um cnpj válido",
+                        },
                         gridSizes: {
                           big: 12,
                         },
@@ -478,15 +527,27 @@ const FPcondo = () => {
                           placeholder: "Digite aqui",
                           value: form.address,
                           gridSizes: { big: 8, small: 12 },
+                          error: {
+                            has: errors.fields.includes("address"),
+                            message: "Digite o endereço",
+                          },
                         },
                         {
                           type: "input",
                           label: "Nº",
                           field: "addressNumber",
                           placeholder: "Digite aqui",
-                          value:
-                            String(form.addressNumber).replace(/\D/g, "") ?? "",
+                          value: String(
+                            +(
+                              String(form.addressNumber).replace(/\D/g, "") ??
+                              ""
+                            )
+                          ),
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("addressNumber"),
+                            message: "Nº inválido",
+                          },
                         },
                         {
                           type: "input",
@@ -496,6 +557,10 @@ const FPcondo = () => {
                           value: formatCep(form.zipCode),
                           gridSizes: { big: 2, small: 6 },
                           fixedWidth: 112,
+                          error: {
+                            has: errors.fields.includes("zipCode"),
+                            message: "CEP inválido",
+                          },
                         },
                       ],
                       [
@@ -508,6 +573,10 @@ const FPcondo = () => {
                           options: options.state,
                           byKey: true,
                           fixedWidth: 112,
+                          error: {
+                            has: errors.fields.includes("federateUnit"),
+                            message: "Escolha uma UF",
+                          },
                         },
                         {
                           type: "cityInput",
@@ -521,6 +590,10 @@ const FPcondo = () => {
                           )?.id,
                           onSelectCity: handleSelectCity,
                           big: true,
+                          error: {
+                            has: errors.fields.includes("city"),
+                            message: "Escolha uma cidade válida",
+                          },
                         },
                         {
                           type: "input",
@@ -529,6 +602,10 @@ const FPcondo = () => {
                           placeholder: "Digite aqui",
                           value: form.neighborhood,
                           gridSizes: { big: 5, small: 12 },
+                          error: {
+                            has: errors.fields.includes("neighborhood"),
+                            message: "Digite o nome do bairro",
+                          },
                         },
                       ],
                       [
@@ -562,6 +639,10 @@ const FPcondo = () => {
                                       : form.manager.userId,
                                     gridSizes: { big: 9, small: 6 },
                                     options: options.managers,
+                                    error: {
+                                      has: errors.fields.includes("managerId"),
+                                      message: "Escolha um síndico",
+                                    },
                                   },
                                 ]) as FormField[])),
                         {
@@ -572,6 +653,10 @@ const FPcondo = () => {
                           gridSizes: { big: 3, small: 6 },
                           maxDate: new Date(),
                           fixedWidth: 138,
+                          error: {
+                            has: errors.fields.includes("electionDate"),
+                            message: "Data inválida",
+                          },
                         },
                       ],
                     ],
@@ -596,7 +681,7 @@ const FPcondo = () => {
                         handleDelete={onConfirmDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
-                        disabled={errors().has}
+                        disabled={errors.has}
                         deleteModalTitle={"Excluir Condomínio"}
                         deleteTextDescriptor={"excluir este condomínio"}
                       />

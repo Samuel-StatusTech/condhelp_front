@@ -6,7 +6,7 @@ export const condoForm: TNewCondominium = {
   cnpj: "",
   image: null,
   address: "",
-  addressNumber: "",
+  addressNumber: "0",
   zipCode: "",
   neighborhood: "",
   city: "",
