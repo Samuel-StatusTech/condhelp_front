@@ -19,6 +19,7 @@ import { parseOptionList } from "../../../utils/tb/parsers/parseOptionList"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import Button from "../../../components/Button"
 import { Icons } from "../../../assets/icons/icons"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const FPregion = () => {
   const navigate = useNavigate()
@@ -40,9 +41,10 @@ const FPregion = () => {
     state: [],
   })
 
-  const errors = () => {
-    return checkErrors.regions(form)
-  }
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
 
   const handleCancel = () => {
     navigate(-1)
@@ -238,12 +240,34 @@ const FPregion = () => {
     }
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.regions(form)
+    return check
+  }
+
   const handleSave = async () => {
     try {
-      if (params.id) handleUpdate()
-      else handleCreate()
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) {
+        if (params.id) handleUpdate()
+        else handleCreate()
+      } else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message:
+          "Houve um erro ao processar as informações. Tente novamente mais tarde.",
+      })
     }
   }
 
@@ -373,6 +397,10 @@ const FPregion = () => {
                         field: "name",
                         value: form.name as string,
                         gridSizes: { big: 12 },
+                        error: {
+                          has: errors.fields.includes("name"),
+                          message: "Digite o nome",
+                        },
                       },
                       [
                         {
@@ -383,6 +411,10 @@ const FPregion = () => {
                           value: form.countryId as string,
                           options: options.country,
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes("countryId"),
+                            message: "Escolha o país",
+                          },
                         },
                         {
                           type: "select",
@@ -392,6 +424,10 @@ const FPregion = () => {
                           value: form.stateId as string,
                           options: options.state,
                           gridSizes: { big: 6, small: 12 },
+                          error: {
+                            has: errors.fields.includes("name"),
+                            message: "Escolha o estado",
+                          },
                         },
                       ],
                     ],
@@ -447,7 +483,7 @@ const FPregion = () => {
                       <FormDefaultButtons
                         handleCancel={handleCancel}
                         handleSave={handleSave}
-                        disabled={errors().has}
+                        disabled={errors.has}
                       />
                     ),
                   },
