@@ -17,6 +17,7 @@ import {
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
 import { Api } from "../../../api"
 import { checkErrors } from "../../../utils/tb/checkErrors"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const FPsubcategory = () => {
   const navigate = useNavigate()
@@ -35,9 +36,10 @@ const FPsubcategory = () => {
     serviceCategory: [],
   })
 
-  const errors = () => {
-    return checkErrors.subcategories(form)
-  }
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
 
   const handleCancel = () => {
     navigate(-1)
@@ -155,16 +157,48 @@ const FPsubcategory = () => {
     }
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.subcategories(form)
+    return check
+  }
+
   const handleSave = async () => {
     try {
-      if (params.id) handleUpdate()
-      else handleCreate()
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) {
+        if (params.id) handleUpdate()
+        else handleCreate()
+      } else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
     } catch (error) {
-      // ...
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message:
+          "Houve um erro ao processar as informações. Tente novamente mais tarde.",
+      })
     }
   }
 
   const handleField = async (field: string, value: any) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     setForm((f: any) => ({ ...f, [field]: value }))
   }
 
@@ -247,6 +281,10 @@ const FPsubcategory = () => {
                           .serviceCategory as unknown as string,
                         options: options.serviceCategory,
                         gridSizes: { big: 12 },
+                        error: {
+                          has: errors.fields.includes("serviceCategory"),
+                          message: "Escolha a categoria pai",
+                        },
                       },
                     ],
                   },
@@ -268,6 +306,10 @@ const FPsubcategory = () => {
                         field: "name",
                         value: form.name,
                         gridSizes: { big: 12 },
+                        error: {
+                          has: errors.fields.includes("name"),
+                          message: "Digite o nome da subcategoria",
+                        },
                       },
                     ],
                   },
@@ -278,7 +320,7 @@ const FPsubcategory = () => {
                         handleDelete={handleDelete}
                         handleCancel={handleCancel}
                         handleSave={handleSave}
-                        disabled={errors().has}
+                        disabled={errors.has}
                         deleteModalTitle={"Excluir Subcategoria"}
                         deleteTextDescriptor={"excluir esta subcategoria"}
                       />
