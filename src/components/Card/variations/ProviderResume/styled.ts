@@ -173,6 +173,11 @@ export const BottomCard = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    padding-top: 12px;
+    flex-direction: column;
+  }
 `
 
 export const StatusArea = styled.div<{ $status: TBudgetStatus }>`
@@ -183,7 +188,7 @@ export const StatusArea = styled.div<{ $status: TBudgetStatus }>`
   color: ${({ $status, theme }) =>
     $status === "AGUARDANDO_SINDICO"
       ? theme.colors.yellow.dark
-      : ($status === "APROVADO_SINDICO" || $status === "CONTRATADO")
+      : $status === "APROVADO_SINDICO" || $status === "CONTRATADO"
       ? theme.colors.green.medium
       : theme.colors.red.main};
 `
