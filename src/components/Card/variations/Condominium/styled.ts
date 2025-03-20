@@ -28,7 +28,7 @@ export const Element = styled.div<{
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    grid-column: span 2;
+    grid-column: span 12;
   }
 `
 
