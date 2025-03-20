@@ -14,6 +14,8 @@ import { List } from "../../../components/List"
 import { systemOptions } from "../../../utils/system/options"
 import { Api } from "../../../api"
 import { TAccess } from "../../../utils/@types/data/access"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+import { checkErrors } from "../../../utils/tb/checkErrors"
 
 const FPfaq = () => {
   const navigate = useNavigate()
@@ -25,6 +27,11 @@ const FPfaq = () => {
   const [loading, setLoading] = useState(true)
 
   const [form, setForm] = useState<TNewFaq | TFaq>(initials.forms.faq)
+
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
 
   const handleCancel = () => {
     navigate(-1)
@@ -102,9 +109,28 @@ const FPfaq = () => {
     }
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.faq(form)
+    return check
+  }
+
   const handleSave = async () => {
-    if (params.id) handleUpdate()
-    else handleCreate()
+    try {
+      const errorInfo = updateErrors()
+
+      if (!errorInfo.has) {
+        if (params.id) handleUpdate()
+        else handleCreate()
+      } else {
+        setErrors(errorInfo)
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: "Corrija os campos e tente novamente",
+        })
+      }
+    } catch (error) {}
   }
 
   const onConfirmDelete = async () => {
@@ -142,6 +168,16 @@ const FPfaq = () => {
   }
 
   const handleField = async (field: string, value: any) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     if (field === "accessProfiles") {
       let newList: (TAccess | "all")[] = []
 
@@ -173,6 +209,16 @@ const FPfaq = () => {
   }
 
   const handleAddQuestion = () => {
+    if (errors.fields.includes("items")) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== "items"
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     const newFaq: TFaq["items"][number] = {
       // @ts-ignore
       id: `new-${form.items.length}`,
@@ -274,6 +320,10 @@ const FPfaq = () => {
   }, [loadData])
 
   useEffect(() => {
+    console.log(errors)
+  }, [errors])
+
+  useEffect(() => {
     controllers.modal.open({
       role: "loading",
       visible: loading,
@@ -305,6 +355,10 @@ const FPfaq = () => {
                         value: form.title as string,
                         gridSizes: { big: 12 },
                         limit: 50,
+                        error: {
+                          has: errors.fields.includes("title"),
+                          message: "Digite o título",
+                        },
                       },
                     ],
                   },
@@ -321,6 +375,10 @@ const FPfaq = () => {
                             (i) => i.key !== "ADMIN"
                           ),
                           gridSizes: { big: 12 },
+                          error: {
+                            has: errors.fields.includes("accessProfiles"),
+                            message: "Defina ao menos 1 perfil",
+                          },
                         },
                       ],
                     ],
@@ -342,6 +400,10 @@ const FPfaq = () => {
                         handleQuestion={handleQuestion}
                         handleRemoveQuestion={handleRemoveQuestion}
                         list={form.items}
+                        error={{
+                          has: errors.fields.includes("items"),
+                          message: "Insira ao menos 1 item",
+                        }}
                       />
                     ),
                   },
@@ -354,6 +416,7 @@ const FPfaq = () => {
                         handleSave={handleSave}
                         deleteModalTitle={"Excluir FAQ"}
                         deleteTextDescriptor={"excluir esta FAQ"}
+                        disabled={errors.has}
                       />
                     ),
                   },

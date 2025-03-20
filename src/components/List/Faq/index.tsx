@@ -13,6 +13,11 @@ type Props = {
   handleAddQuestion: () => void
   handleQuestion: (id: any, field: string, value: string) => void
   handleRemoveQuestion: (id: any) => void
+
+  error?: {
+    has: boolean
+    message: string
+  }
 }
 
 const FaqList = ({
@@ -20,6 +25,7 @@ const FaqList = ({
   handleAddQuestion,
   handleQuestion,
   handleRemoveQuestion,
+  error,
 }: Props) => {
   return (
     <S.Wrapper>
@@ -45,6 +51,12 @@ const FaqList = ({
           fit={true}
         />
       </S.Buttons>
+
+      {error && (
+        <S.ErrorWrapper $visible={error.has} className="errorWrapper">
+          <S.ErrorMessage>{error.message}</S.ErrorMessage>
+        </S.ErrorWrapper>
+      )}
     </S.Wrapper>
   )
 }

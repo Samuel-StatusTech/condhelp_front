@@ -89,3 +89,18 @@ export const Checkbox = styled.div<{ $checked: boolean }>`
     height: 16px;
   }
 `
+
+export const ErrorWrapper = styled.div<{ $visible?: boolean }>`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 36px;
+  border-radius: 8px;
+  background-color: rgba(216, 72, 74, 0.2);
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)} !important;
+  transition: color 0.3s;
+`
+
+export const ErrorMessage = styled.span`
+  color: ${({ theme }) => theme.colors.red.main};
+`

@@ -47,16 +47,25 @@ const InputDefault = (props: Props) => {
           onChange={handleChange}
         />
 
-        {limit && (
-          <C.Limit
-            $error={error?.has}
-            $filled={value.length === limit}
-          >{`${value.length}/${limit}`}</C.Limit>
-        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <C.ErrorMessage $visible={error && error?.has}>
+            {error?.message}
+          </C.ErrorMessage>
 
-        <C.ErrorMessage $visible={error && error?.has}>
-          {error?.message}
-        </C.ErrorMessage>
+          {limit && (
+            <C.Limit
+              $error={error?.has}
+              $filled={value.length === limit}
+            >{`${value.length}/${limit}`}</C.Limit>
+          )}
+        </div>
       </S.Area>
     </S.Wrapper>
   )

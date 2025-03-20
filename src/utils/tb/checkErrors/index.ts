@@ -7,6 +7,7 @@ import { condosCheck } from "./condos"
 import { usersCheck } from "./users"
 import { budgetCheck, budgetEditCheck } from "./budget"
 import { documentationCheck } from "./documentation"
+import { faqCheck } from "./faq"
 
 export const checkErrors = {
   login: loginCheck,
@@ -18,6 +19,7 @@ export const checkErrors = {
   budget: budgetCheck,
   budgetEdit: budgetEditCheck,
   documentation: documentationCheck,
+  faq: faqCheck,
 }
 
 export const getInvalidCheck = (actualState: TErrorsCheck, field: string) => {

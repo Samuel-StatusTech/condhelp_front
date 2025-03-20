@@ -10,6 +10,10 @@ export type TInputMultiple = {
   value: string[]
   options: TOption[]
   fixedWidth?: number
+  error?: {
+    has: boolean
+    message: string
+  }
 }
 
 type Props = TInputMultiple & {
@@ -18,7 +22,7 @@ type Props = TInputMultiple & {
 }
 
 const InputMultiple = (props: Props) => {
-  const { field, label, value, options, onChange } = props
+  const { field, label, value, options, onChange, error } = props
 
   const toggle = (d: TOption) => {
     onChange(field, d.key)
@@ -42,6 +46,12 @@ const InputMultiple = (props: Props) => {
             </S.Option>
           ))}
         </S.Main>
+
+        {error && (
+          <S.ErrorWrapper $visible={error.has} className="errorWrapper">
+            <S.ErrorMessage>{error.message}</S.ErrorMessage>
+          </S.ErrorWrapper>
+        )}
       </S.Area>
     </S.Wrapper>
   )

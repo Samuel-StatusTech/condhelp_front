@@ -20,7 +20,7 @@ export type TBlock = {
   groups: TGroup[]
 }
 
-type TGroup =
+export type TGroup =
   | {
       type: "custom"
       element: JSX.Element

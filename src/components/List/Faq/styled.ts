@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   gap: 10px;
 
-  &:has(div:not(.buttonsArea):hover) {
+  &:has(div:not(.buttonsArea):not(.errorWrapper):hover) {
     & > div:not(.buttonsArea) {
       /* background-color: ${({ theme }) => theme.colors.neutral.soft}; */
       opacity: 0.4;
@@ -143,4 +143,19 @@ export const ItemAnswer = styled.textarea`
   border: none;
   outline: none;
   background: none;
+`
+
+export const ErrorWrapper = styled.div<{ $visible?: boolean }>`
+  width: fit-content;
+  padding: 12px 36px;
+  border-radius: 8px;
+  background-color: rgba(216, 72, 74, 0.2);
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)} !important;
+  transition: color 0.3s;
+  margin: auto;
+  align-self: center;
+`
+
+export const ErrorMessage = styled.span`
+  color: ${({ theme }) => theme.colors.red.main};
 `

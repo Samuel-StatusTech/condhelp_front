@@ -61,7 +61,6 @@ export const Box = styled.div<{ $state: boolean }>`
 `
 
 export const Limit = styled.div<{ $filled?: boolean; $error?: boolean }>`
-  min-width: 100%;
   text-align: right;
   font-size: 14px;
   color: ${({ $filled, $error, theme }) =>
