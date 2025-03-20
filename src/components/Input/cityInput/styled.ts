@@ -122,6 +122,8 @@ export const OptionsArea = styled.div<{ $visible?: boolean }>`
   z-index: 2;
   padding: 6px;
   box-shadow: ${({ theme }) => theme.shadows.default};
+  max-height: 280px;
+  overflow-y: auto;
 
   &.visible {
     display: flex;
