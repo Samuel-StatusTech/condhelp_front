@@ -12,6 +12,7 @@ export const Element = styled.header`
   max-width: 1920px;
 
   & > svg {
+    margin-right: 24px;
     opacity: 0;
     ${({ theme }) =>
       theme.animations.types.fade +
@@ -19,8 +20,14 @@ export const Element = styled.header`
       theme.animations.delays.main(12)}
   }
 
+  svg.bigLogo {
+    min-width: 190px;
+  }
+
   svg.smallLogo {
+    min-width: 36px;
     display: none;
+    height: 36px;
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {

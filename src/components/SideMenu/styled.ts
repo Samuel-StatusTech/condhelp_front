@@ -55,15 +55,21 @@ export const ButtonWrapper = styled.div`
   display: flex;
 `
 
-export const BurguerWrapper = styled.div<{ $opened: boolean }>`
+export const BurguerWrapper = styled.div<{
+  $opened: boolean
+  $type?: "primary" | "secondary"
+}>`
   position: absolute;
-  top: 12px;
+  top: ${({ $type }) => (!$type || $type === "primary" ? 12 : 64)}px;
   right: -12px;
   transform: translateX(
     ${({ $opened }) => ($opened ? "calc(50% - 12px)" : "calc(100% + 7px)")}
   );
   transition: transform 0.3s;
-  background-color: ${({ theme }) => theme.colors.neutral.soft};
+  background-color: ${({ theme, $type }) =>
+    !$type || $type === "primary"
+      ? theme.colors.neutral.soft
+      : theme.colors.yellow.main};
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
   border-radius: 200px;
   padding: 8px;

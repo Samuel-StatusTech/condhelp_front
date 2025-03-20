@@ -4,7 +4,7 @@ import { system } from "../../utils/system"
 import SideMenuItem from "../SideMenuItem"
 
 import { Icons } from "../../assets/icons/icons"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { getStore } from "../../store"
 import { relations } from "../../utils/system/relations"
 import Button from "../Button"
@@ -14,7 +14,7 @@ type Props = {
 }
 
 const SideMenu = (props: Props) => {
-  // use ref ...
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
 
   const { page } = props
 
@@ -39,12 +39,41 @@ const SideMenu = (props: Props) => {
     setSideOpened(false)
   }, [controllers.modal])
 
+  useEffect(() => {
+    const collapseOwnDropdown = () => {
+      setSideOpened(false)
+    }
+
+    const handleClickOutside = (e: any) => {
+      if (e.target !== document.children[0]) {
+        if (!wrapperRef.current?.contains(e.target) && sideOpened)
+          collapseOwnDropdown()
+      }
+    }
+
+    if (sideOpened) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside)
+      }
+    }
+  }, [wrapperRef, sideOpened])
+
   return (
-    <S.Wrapper $opened={sideOpened}>
+    <S.Wrapper $opened={sideOpened} ref={wrapperRef}>
       <S.MenuArea>
         <S.BurguerWrapper $opened={sideOpened} onClick={toggleSideMenu}>
           <Icons.Burguer />
         </S.BurguerWrapper>
+        {user?.profile === "SINDICO" && (
+          <S.BurguerWrapper
+            $type={"secondary"}
+            $opened={sideOpened}
+            onClick={toggleNewBudgetModal}
+          >
+            <Icons.PlusCircle />
+          </S.BurguerWrapper>
+        )}
 
         <S.LoggedUserArea>
           <S.UserProfile>
