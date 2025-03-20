@@ -51,6 +51,14 @@ export const BlockTitle = styled.div<{ $k?: number }>`
     theme.animations.delays.main($k)}
 `
 
+export const BudgetsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+`
+
 export const BudgetsArea = styled.div`
   display: flex;
   align-items: stretch;
@@ -58,6 +66,12 @@ export const BudgetsArea = styled.div`
   overflow-x: auto;
   width: 100%;
   max-width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    &.desktopBudgetsArea {
+      display: none;
+    }
+  }
 `
 
 export const ManagerBudgetsResumeArea = styled.div`

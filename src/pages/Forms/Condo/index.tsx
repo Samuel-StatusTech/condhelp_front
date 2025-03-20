@@ -214,7 +214,8 @@ const FPcondo = () => {
       controllers.feedback.setData({
         visible: true,
         state: "alert",
-        message: "Houve um erro ao processar as informações. Tente novamente mais tarde.",
+        message:
+          "Houve um erro ao processar as informações. Tente novamente mais tarde.",
       })
     }
   }
@@ -627,6 +628,10 @@ const FPcondo = () => {
                                     field: "",
                                     value: `${user.name} (você)`,
                                     gridSizes: { big: 9, small: 6 },
+                                    error: {
+                                      has: false,
+                                      message: "Precisa de um síndico.",
+                                    },
                                   },
                                 ]
                               : [

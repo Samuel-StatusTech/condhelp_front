@@ -26,6 +26,14 @@ import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
 import { useNavigate } from "react-router-dom"
 import { TManagerStatistics } from "../../../utils/@types/data/dashboards/statistics"
 
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Pagination, Scrollbar, A11y } from "swiper/modules"
+
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
+import "swiper/css/scrollbar"
+
 const DashboardManager = () => {
   const { user, controllers } = getStore((store) => ({
     controllers: store.controllers,
@@ -64,6 +72,7 @@ const DashboardManager = () => {
 
   const [budgets, setBudgets] = useState<TBudgetResume[]>([])
   const [finishedBudgets, setFinishedBudgets] = useState<TFinishedBudgets[]>([])
+
   const [statistics, setStatistics] = useState<TManagerStatistics>({
     total: 0,
     completed: 0,
@@ -98,7 +107,39 @@ const DashboardManager = () => {
 
     return (
       <PageRow>
-        <S.BudgetsArea>{content}</S.BudgetsArea>
+        {/* Desktop */}
+        <S.BudgetsArea className="desktopBudgetsArea">{content}</S.BudgetsArea>
+
+        {/* Mobile */}
+        <div className="mobileBudgetsArea">
+          <Swiper
+            slidesPerView={1}
+            spaceBetween={48}
+            style={{
+              maxWidth: "100%",
+            }}
+            modules={[Pagination, Scrollbar, A11y]}
+            // navigation
+            pagination={{ clickable: true }}
+            allowTouchMove={true}
+          >
+            {budgets.map((b, bKey) => (
+              <SwiperSlide key={bKey}>
+                {/* <span>Slide {bKey}</span> */}
+                <Card.ManagerBudgetResume
+                  data={b}
+                  k={2}
+                  resume={{
+                    approved: b.accepted,
+                    awaiting: b.awaiting,
+                    rejected: b.rejected,
+                  }}
+                  handlePick={handlePickBudget}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </PageRow>
     )
   }

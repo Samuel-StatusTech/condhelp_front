@@ -18,6 +18,10 @@ export const Element = styled.div<{ $k?: number }>`
     theme.animations.types.fade +
     theme.animations.durations.main +
     theme.animations.delays.main($k)}
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    max-width: calc(100vw - 104px);
+  }
 `
 
 export const MainWrapper = styled.div`

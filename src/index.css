@@ -26,6 +26,22 @@ input[type="password"]::-moz-textfield-decoration-container {
   animation-iteration-count: infinite;
 }
 
+/* Swiper Pagination */
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #4e7c3c !important;
+}
+
+@media (min-width: 540px) {
+  .mobileBudgetsArea {
+    display: none;
+  }
+}
+@media (max-width: 540px) {
+  .desktopBudgetsArea {
+    display: none;
+  }
+}
+
 /* Animations */
 
 @keyframes pulse {
