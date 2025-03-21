@@ -198,6 +198,7 @@ const Login = () => {
           placeholder={"Senha"}
           value={form.pass}
           onChange={(v: any) => handleForm("pass", v)}
+          onEnter={handleSubmit}
         />
         <Button
           type={"main"}

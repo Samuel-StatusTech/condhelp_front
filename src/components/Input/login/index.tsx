@@ -8,10 +8,11 @@ type Props = {
   placeholder?: string
   value: string | boolean
   onChange: (v: string | boolean) => void
+  onEnter?: (params?: any) => void
 }
 
 const Input = (props: Props) => {
-  const { type, placeholder, value, onChange } = props
+  const { type, placeholder, value, onChange, onEnter } = props
 
   const [secure, setSecure] = useState(true)
 
@@ -40,6 +41,12 @@ const Input = (props: Props) => {
         placeholder={placeholder}
         value={String(value)}
         onChange={handleChange}
+        onKeyUp={(e) => {
+          if (e.key === "Enter" && onEnter) {
+            onEnter()
+            if (type === "pass") e.currentTarget.blur()
+          }
+        }}
       />
       {renderIcon()}
     </S.Wrapper>
