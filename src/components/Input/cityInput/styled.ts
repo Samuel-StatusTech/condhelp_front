@@ -80,7 +80,7 @@ export const Item = styled.div<{
   align-items: center;
   justify-content: space-between;
   padding: ${({ $big }) => ($big ? 7 : 4)}px 20px;
-  gap: 48px;
+  /* gap: 48px; */
   background-color: ${({ $error, theme }) =>
     $error ? `rgba(255, 0, 0, 0.1)` : theme.colors.neutral.white};
   border-radius: 8px;

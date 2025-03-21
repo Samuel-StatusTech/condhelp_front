@@ -84,6 +84,7 @@ export const DefaultContent = (props: Props) => {
                   {
                     type: "fields",
                     // eslint-disable-next-line no-sparse-arrays
+                    centeredLines: [1],
                     fields: [
                       [
                         ...((params && params.id

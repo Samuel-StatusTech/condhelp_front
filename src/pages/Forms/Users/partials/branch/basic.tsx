@@ -82,6 +82,7 @@ export const basicBranch = ({
             label: "Cidade",
             field: "city",
             placeholder: "Digite aqui",
+            big: true,
             value: form.address.city,
             gridSizes: { big: 6, small: 12 },
             stateId: form.address.state,

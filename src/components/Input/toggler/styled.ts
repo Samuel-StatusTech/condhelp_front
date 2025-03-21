@@ -8,7 +8,7 @@ export const Wrapper = styled.div<{
 }>`
   flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   display: flex;
-  margin-top: ${({ $hasTopSpace }) => ($hasTopSpace ? "24px" : "unset")};
+  margin-top: ${({ $hasTopSpace }) => ($hasTopSpace ? "18px" : "unset")};
 
   ${({ $fixedWidth }) =>
     $fixedWidth

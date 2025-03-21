@@ -100,7 +100,16 @@ const Form = ({ handleField, columns }: Props) => {
                           ? group.element
                           : group.fields.map((line, k) =>
                               Array.isArray(line) ? (
-                                <S.FormLine key={k} $k={k}>
+                                <S.FormLine
+                                  key={k}
+                                  $k={k}
+                                  $align={
+                                    group.centeredLines &&
+                                    group.centeredLines.includes(k + 1)
+                                      ? "center"
+                                      : undefined
+                                  }
+                                >
                                   {line.map((f, fKey) => renderInput(f, fKey))}
                                 </S.FormLine>
                               ) : (

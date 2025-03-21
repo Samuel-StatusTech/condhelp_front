@@ -25,7 +25,10 @@ type IRadio = { type: "radio" } & TInputRadio
 type IReadonly = { type: "readonly" } & TReadonlyField
 type ICityInput = { type: "cityInput" } & TCityInput
 type ISelect = { type: "select"; multiple?: boolean } & TSelect
-type IMultipleSelect = { type: "multipleSelect"; multiple?: boolean } & TMultipleSelect
+type IMultipleSelect = {
+  type: "multipleSelect"
+  multiple?: boolean
+} & TMultipleSelect
 type ITextArea = { type: "textarea" } & TInputTextArea
 type IToggler = { type: "toggler" } & TInputToggler
 
@@ -48,6 +51,7 @@ export type FormField = (
 ) & {
   gridSizes?: {
     big: number
+    medium?: number
     small?: number
   }
   alignBottom?: boolean

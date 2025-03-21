@@ -96,6 +96,7 @@ export const extraProvider = (
         // CND Federal
         {
           type: "fields",
+          centeredLines: [2],
           fields: [
             [
               {
@@ -163,6 +164,7 @@ export const extraProvider = (
         // CND Estadual
         {
           type: "fields",
+          centeredLines: [2],
           fields: [
             [
               {
@@ -230,6 +232,7 @@ export const extraProvider = (
         // CND Municipal
         {
           type: "fields",
+          centeredLines: [2],
           fields: [
             [
               {
@@ -297,6 +300,7 @@ export const extraProvider = (
         // FGTS
         {
           type: "fields",
+          centeredLines: [2],
           fields: [
             [
               {

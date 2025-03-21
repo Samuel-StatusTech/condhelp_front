@@ -118,6 +118,7 @@ const MyAccountProvider = (props: Props) => {
                           field: "city",
                           placeholder: "Digite aqui",
                           value: form.address.city,
+                          big: true,
                           gridSizes: { big: 6, small: 12 },
                           stateId: form.address.state,
                           onSelectCity: handleSelectCity,

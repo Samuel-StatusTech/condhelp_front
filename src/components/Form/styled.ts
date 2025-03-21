@@ -74,11 +74,11 @@ export const FormArea = styled.div`
   }
 `
 
-export const FormLine = styled.div<{ $k: number }>`
+export const FormLine = styled.div<{ $k: number; $align?: string }>`
   display: flex;
 
   gap: 10px;
-  align-items: center;
+  align-items: ${({$align}) => $align ?? "flex-start"};
   max-width: 100%;
   z-index: ${({ $k }) => 10 - ($k + 1)};
 

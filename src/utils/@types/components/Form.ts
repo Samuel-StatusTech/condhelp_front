@@ -25,10 +25,12 @@ export type TGroup =
       type: "custom"
       element: JSX.Element
       title?: string
+      centeredLines?: number[]
     }
   | {
       type: "fields"
       title?: string
       fields: TContent[]
       hasFieldControl?: boolean
+      centeredLines?: number[]
     }

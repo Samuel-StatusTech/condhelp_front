@@ -118,6 +118,7 @@ const MyAccountBranch = (props: Props) => {
                           placeholder: "Digite aqui",
                           value: form.address.city,
                           gridSizes: { big: 6, small: 12 },
+                          big: true,
                           stateId: form.address.state,
                           onSelectCity: handleSelectCity,
                           error: {
