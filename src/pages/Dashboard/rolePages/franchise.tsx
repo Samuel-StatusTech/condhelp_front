@@ -72,7 +72,7 @@ const DashboardFranchise = () => {
 
     dashboardShortcuts.FRANQUEADO.forEach((s, sk) => {
       const keyValue: { [key: string]: keyof typeof data } = {
-        REDE: "totalBranches",
+        FILIAL: "totalBranches",
         FRANQUEADO: "totalFranchises",
         region: "totalRegions",
         PRESTADOR: "totalProviders",

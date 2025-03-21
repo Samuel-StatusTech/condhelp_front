@@ -23,7 +23,7 @@ const FPerrand = () => {
 
   const [form, setForm] = useState<TNewErrand | TErrand>(initials.forms.errand)
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
-    REDE: [],
+    FILIAL: [],
     FRANQUEADO: [],
   })
 
@@ -61,7 +61,7 @@ const FPerrand = () => {
       setTimeout(() => {
         setOptions((opts) => ({
           ...opts,
-          REDE: parseOptionList(
+          FILIAL: parseOptionList(
             [
               { id: "1", name: "K1" },
               { id: "2", name: "K2" },
@@ -139,9 +139,9 @@ const FPerrand = () => {
                           type: "select",
                           label: "Perfis de destino",
                           placeholder: "Redes",
-                          field: "REDE",
-                          value: form.target.REDE as string,
-                          options: options.REDE,
+                          field: "FILIAL",
+                          value: form.target.FILIAL as string,
+                          options: options.FILIAL,
                           gridSizes: { big: 6, small: 12 },
                         },
                         {

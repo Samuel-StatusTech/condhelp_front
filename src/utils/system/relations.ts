@@ -1,7 +1,7 @@
 export const relations = {
   roles: {
     ADMIN: "Admin",
-    REDE: "Rede",
+    FILIAL: "Rede",
     FRANQUEADO: "Loja",
     SINDICO: "Síndico",
     PRESTADOR: "Prestador",
@@ -57,7 +57,7 @@ export const relations = {
     },
     profile: {
       ADMIN: "#90CC61",
-      REDE: "#45D0EE",
+      FILIAL: "#45D0EE",
       FRANQUEADO: "#45D0EE",
       SINDICO: "#7D37B4",
       PRESTADOR: "",

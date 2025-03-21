@@ -25,7 +25,7 @@ export const branchInitial: TNewUser & TUBranch = {
   name: "",
   phone1: "",
   phone2: "",
-  profile: "REDE",
+  profile: "FILIAL",
   responsible: {
     id: 0,
     cnpj: "",

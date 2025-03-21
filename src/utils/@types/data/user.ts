@@ -30,7 +30,7 @@ export type TNewUserDefault = {
 
 export type TUserTypes = {
   ADMIN: TUDefault & TUAdmin
-  REDE: TUDefault & TUBranch
+  FILIAL: TUDefault & TUBranch
   FRANQUEADO: TUDefault & TUFranchise
   SINDICO: TUDefault & TUManager
   PRESTADOR: TUDefault & TUProvider
@@ -105,7 +105,7 @@ export type TUserProfile = TAccess
 
 export const profileRelation: { [key in TUserProfile]: string } = {
   ADMIN: "Admin",
-  REDE: "Rede",
+  FILIAL: "Rede",
   FRANQUEADO: "Lojista",
   SINDICO: "Síndico",
   PRESTADOR: "Prestador",

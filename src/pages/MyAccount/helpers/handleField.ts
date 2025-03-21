@@ -40,7 +40,7 @@ export const handleField = async (
     setForm(newForm)
   } else {
     switch (form.profile) {
-      case "REDE":
+      case "FILIAL":
       case "FRANQUEADO":
         const responsableKeys = [
           "responsablePersonName",

@@ -4,7 +4,7 @@ export type TAccess =
   | "SINDICO"
   | "MATRIZ"
   | "PRESTADOR"
-  | "REDE"
+  | "FILIAL"
   | "MONITOR"
   | "FRANQUEADO"
   | "CONDOMINIO"

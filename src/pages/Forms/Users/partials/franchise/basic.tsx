@@ -30,7 +30,7 @@ export const basicFranchise = ({
       type: "fields",
       // @ts-ignore
       fields: [
-        ...(userProfile === "REDE"
+        ...(userProfile === "FILIAL"
           ? [
               {
                 type: "input",

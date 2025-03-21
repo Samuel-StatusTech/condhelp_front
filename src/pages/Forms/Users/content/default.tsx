@@ -118,7 +118,7 @@ export const DefaultContent = (props: Props) => {
                       ...((["SINDICO", "PRESTADOR"] as TAccess[]).includes(
                         personType
                       ) &&
-                      (["ADMIN", "REDE", "FRANQUEADO"] as TAccess[]).includes(
+                      (["ADMIN", "FILIAL", "FRANQUEADO"] as TAccess[]).includes(
                         user?.profile as TAccess
                       )
                         ? params && params.id !== undefined

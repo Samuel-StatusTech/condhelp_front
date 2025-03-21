@@ -183,7 +183,7 @@ const FPfaq = () => {
 
       if (value === "all") {
         if (form.accessProfiles.length < 4)
-          newList = ["all", "REDE", "FRANQUEADO", "SINDICO", "PRESTADOR"]
+          newList = ["all", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"]
         else if (form.accessProfiles.includes("all" as any)) newList = []
       } else {
         if (form.accessProfiles.includes(value)) {

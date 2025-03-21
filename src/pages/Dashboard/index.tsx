@@ -11,7 +11,7 @@ const Dashboard = () => {
     switch (user?.profile) {
       case "ADMIN":
         return <DashboardPages.Admin />
-      case "REDE":
+      case "FILIAL":
         return <DashboardPages.Branch />
       case "FRANQUEADO":
         return <DashboardPages.Franchise />

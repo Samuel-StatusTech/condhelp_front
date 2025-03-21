@@ -10,7 +10,7 @@ export type PDashboardShortcut = {
 }
 
 export const iconsRelations = {
-  REDE: <Icons.Branch />,
+  FILIAL: <Icons.Branch />,
   FRANQUEADO: <Icons.Franchise />,
   region: <Icons.Location />,
   PRESTADOR: <Icons.Provider />,
@@ -89,7 +89,7 @@ const shortsAdmin: PDashboardShortcut[] = [
   {
     title: "Cadastrar Rede",
     registers: 0,
-    icon: "REDE",
+    icon: "FILIAL",
     link: "/dashboard/users/single",
   },
   {
@@ -103,7 +103,7 @@ const shortsAdmin: PDashboardShortcut[] = [
 
 export const dashboardShortcuts: { [key in TAccess]: PDashboardShortcut[] } = {
   ADMIN: shortsAdmin,
-  REDE: shortsBranch,
+  FILIAL: shortsBranch,
   FRANQUEADO: shortsFranchise,
   PRESTADOR: [],
   SINDICO: [],

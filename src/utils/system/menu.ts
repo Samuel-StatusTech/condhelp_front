@@ -51,28 +51,28 @@ export const menu: {
       text: "Usuários",
       link: "/users",
       tag: "users",
-      access: ["ADMIN", "REDE", "FRANQUEADO"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO"],
     },
     {
       icon: "condos",
       text: "Condomínios",
       link: "/condos",
       tag: "condos",
-      access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO"],
     },
     {
       icon: "folder",
       text: "Categorias",
       link: "/categories",
       tag: "categories",
-      access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO"],
     },
     {
       icon: "subcategories",
       text: "Subcategorias",
       link: "/subcategories",
       tag: "subcategories",
-      access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO"],
     },
     {
       icon: "location",
@@ -86,14 +86,14 @@ export const menu: {
       text: "Orçamentos",
       link: "/budgets",
       tag: "budgets",
-      access: ["REDE", "FRANQUEADO"],
+      access: ["FILIAL", "FRANQUEADO"],
     },
     // {
     //   icon: "chat",
     //   text: "Recados",
     //   link: "/errands",
     //   tag: "errands",
-    //   access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO", "PRESTADOR"],
+    //   access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
     // },
     {
       icon: "faq",
@@ -107,14 +107,14 @@ export const menu: {
     //   text: "Relatórios",
     //   link: "/reports",
     //   tag: "reports",
-    //   access: ["ADMIN", "REDE", "FRANQUEADO"],
+    //   access: ["ADMIN", "FILIAL", "FRANQUEADO"],
     // },
   ],
   nav: [
     {
       text: "Dashboard",
       link: "/dashboard",
-      access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO", "PRESTADOR"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
     },
     {
       text: "Monitoramento",
@@ -134,12 +134,12 @@ export const menu: {
     {
       text: "FAQ",
       link: "/faqs",
-      access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO", "PRESTADOR"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
     },
     // {
     //   text: "Política de privacidade",
     //   link: "/policy",
-    //   access: ["ADMIN", "REDE", "FRANQUEADO", "SINDICO", "PRESTADOR"],
+    //   access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO", "PRESTADOR"],
     // },
   ],
 }
