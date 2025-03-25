@@ -29,7 +29,7 @@ const listAll: TApi["subcategories"]["listAll"] = async (filters) => {
             resolve({
               ok: false,
               error:
-                "Não foi possível listar as subcategorias. Tente novamente mais tarde. 1",
+                "Não foi possível listar as subcategorias. Tente novamente mais tarde.",
             })
           }
         })
@@ -37,13 +37,13 @@ const listAll: TApi["subcategories"]["listAll"] = async (filters) => {
           resolve({
             ok: false,
             error:
-              "Não foi possível listar as subcategorias. Tente novamente mais tarde. 2",
+              "Não foi possível listar as subcategorias. Tente novamente mais tarde.",
           })
         })
     } catch (error) {
       reject({
         error:
-          "Não foi possível listar as subcategorias. Tente novamente mais tarde. 3",
+          "Não foi possível listar as subcategorias. Tente novamente mais tarde.",
       })
     }
   })

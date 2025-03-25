@@ -60,7 +60,7 @@ const FPcondo = () => {
     navigate(-1)
   }
 
-  const getObj = (): TNewCondominium | TCondominium => {
+  const getObj = (imgUrl: string | null): TNewCondominium | TCondominium => {
     let mId = 0
 
     let branchId = 0
@@ -103,6 +103,7 @@ const FPcondo = () => {
       managerId: mId,
       branchId: branchId,
       franchiseId: franchiseId,
+      image: imgUrl,
     }
 
     return params.id && !Number.isNaN(params.id)
@@ -110,13 +111,13 @@ const FPcondo = () => {
       : obj
   }
 
-  const handleUpdate = async () => {
+  const handleUpdate = async ({ imgUrl }: { imgUrl: string | null }) => {
     setLoading(true)
 
     try {
       // check errors
 
-      const obj = getObj()
+      const obj = getObj(imgUrl)
 
       const req = await Api.condos.update({
         condo: obj as TCondominium,
@@ -145,11 +146,11 @@ const FPcondo = () => {
     }
   }
 
-  const handleCreate = async () => {
+  const handleCreate = async ({ imgUrl }: { imgUrl: string | null }) => {
     setLoading(true)
 
     try {
-      const obj = getObj()
+      const obj = getObj(imgUrl)
 
       const req = await Api.condos.create({ newCondo: obj })
 
@@ -186,14 +187,51 @@ const FPcondo = () => {
     setLoading(false)
   }
 
+  const blobUrlToFile = async (blobUrl: string, fileName: string) => {
+    const response = await fetch(blobUrl)
+    const blob = await response.blob()
+    return new File([blob], fileName, { type: blob.type })
+  }
+
+  const sendFile = async () => {
+    try {
+      const fd = new FormData()
+
+      const fileName = String(new Date().getTime())
+      const fileData = await blobUrlToFile(form.image as string, fileName)
+
+      fd.append("file", fileData, "image/jpg")
+      fd.append("fileName", fileName)
+
+      const req = await Api.files.sendFile(fd)
+
+      if (req.ok) return req.data
+      else return null
+    } catch (error) {
+      controllers.feedback.setData({
+        state: "alert",
+        message: "Não foi possível enviar a imagem",
+        visible: true,
+      })
+
+      return null
+    }
+  }
+
   const handleSave = async () => {
     try {
       const errorInfo = updateErrors()
 
       if (!errorInfo.has) {
         if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
-          if (params.id) handleUpdate()
-          else handleCreate()
+          let img = null
+          if (form.image && typeof form.image === "string") {
+            const imgUrl = await sendFile()
+            if (imgUrl) img = imgUrl
+          }
+
+          if (params.id) await handleUpdate({ imgUrl: img })
+          else await handleCreate({ imgUrl: img })
         } else {
           controllers.feedback.setData({
             state: "alert",

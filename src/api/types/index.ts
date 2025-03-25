@@ -11,6 +11,7 @@ import { TApi_Condos } from "../api/api/condos"
 import { TApi_Faqs } from "../api/api/faqs"
 import { TApi_Dashboards } from "../api/api/dashboards"
 import { TApi_Monitoring } from "../api/api/monitoring"
+import { TApi_Files } from "../api/api/files"
 
 export type TApi = {
   auth: TApi_Auth
@@ -26,4 +27,5 @@ export type TApi = {
   countries: TApi_Countries
   persons: TApi_Persons
   faqs: TApi_Faqs
+  files: TApi_Files
 }

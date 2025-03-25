@@ -5,6 +5,7 @@ import { Icons } from "../../../assets/icons/icons"
 import { useRef } from "react"
 import Button from "../../Button"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { getStore } from "../../../store"
 
 export type TInputImage = {
   height?: number
@@ -19,6 +20,8 @@ type Props = TInputImage & {
 }
 
 const InputImage = (props: Props) => {
+  const { controllers } = getStore()
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { height, label, field, value, onChange } = props
@@ -27,14 +30,40 @@ const InputImage = (props: Props) => {
     inputRef.current?.click()
   }
 
+  const clearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = ""
+      inputRef.current.parentNode?.replaceChild(
+        inputRef.current.cloneNode(true),
+        inputRef.current
+      )
+    }
+  }
+
   const handleRemove = () => {
     onChange(field, null)
+    clearInput()
+  }
+
+  const handleImageCrop = (imgUrl: string) => {
+    onChange(field, imgUrl)
+    clearInput()
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.item(0)
 
-    onChange(field, file)
+    if (file) {
+      controllers.modal.open({
+        role: "imageEditor",
+        visible: true,
+        width: "md",
+        data: {
+          file: file,
+        },
+        handleOp: (v) => (v ? handleImageCrop(v) : clearInput()),
+      })
+    }
   }
 
   const getImageUrl = () => {

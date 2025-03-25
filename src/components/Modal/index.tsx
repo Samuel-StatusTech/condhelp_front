@@ -14,6 +14,7 @@ import ContactInfo from "./variations/ContactInfo"
 import LoadingModal from "../LoadingModal"
 import EditBudget from "./variations/EditBudget"
 import ReopenBudget from "./variations/ReopenBudget"
+import ImageEditor from "./variations/ImageEditor"
 
 export type ModalProps = {
   width?: DialogProps["maxWidth"]
@@ -34,6 +35,7 @@ export type TModals =
   | "successFeedback"
   | "confirmDelete"
   | "contactInfo"
+  | "imageEditor"
 
 const Modal = () => {
   const { modal, controllers } = getStore()
@@ -88,6 +90,11 @@ const Modal = () => {
           />
         )
         break
+      case "imageEditor":
+        el = (
+          <ImageEditor data={data} onClose={handleClose} handleOp={handleOp} />
+        )
+        break
       default:
         el = children
         break
@@ -104,9 +111,11 @@ const Modal = () => {
         open={visible}
         maxWidth={width}
         sx={{
+          width: "100%",
           "& .MuiPaper-root": {
             backgroundColor: "#F4F5F7",
             borderRadius: "16px",
+            width: "100%"
           },
         }}
       >

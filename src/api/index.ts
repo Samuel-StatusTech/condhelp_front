@@ -17,6 +17,7 @@ import { apiCondos } from "./api/api/condos"
 import { apiFaqs } from "./api/api/faqs"
 import { apiDashboards } from "./api/api/dashboards"
 import { apiMonitoring } from "./api/api/monitoring"
+import { apiFiles } from "./api/api/files"
 
 const backUrl = process.env.REACT_APP_API_BASE_URL
 
@@ -78,4 +79,5 @@ export const Api: TApi = {
   countries: apiCountries,
   persons: apiPersons,
   faqs: apiFaqs,
+  files: apiFiles,
 }
