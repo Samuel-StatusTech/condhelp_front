@@ -190,17 +190,20 @@ const FPcondo = () => {
   const blobUrlToFile = async (blobUrl: string, fileName: string) => {
     const response = await fetch(blobUrl)
     const blob = await response.blob()
-    return new File([blob], fileName, { type: blob.type })
+    const file = new File([blob], `${fileName}.${blob.type.split("/")[1]}`, {
+      type: blob.type,
+    })
+    return file
   }
 
   const sendFile = async () => {
     try {
       const fd = new FormData()
 
-      const fileName = String(new Date().getTime())
-      const fileData = await blobUrlToFile(form.image as string, fileName)
+      const fileName = `${new Date().getTime()}`
+      const file = await blobUrlToFile(form.image as string, fileName)
 
-      fd.append("file", fileData, "image/jpg")
+      fd.append("file", file)
       fd.append("fileName", fileName)
 
       const req = await Api.files.sendFile(fd)
