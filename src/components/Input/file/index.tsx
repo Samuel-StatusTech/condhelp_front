@@ -61,8 +61,6 @@ const InputFile = (props: Props) => {
     if (file) {
       const isFileAcceptable = checkFileType(file, allowsPdf ? "pdf" : "image")
 
-      console.log(isFileAcceptable, file)
-
       if (isFileAcceptable) {
         const limitSize = 10485760 // 10mb
 

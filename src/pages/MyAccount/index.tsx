@@ -16,6 +16,7 @@ import { TOption } from "../../utils/@types/data/option"
 import { TErrorsCheck } from "../../utils/@types/helpers/checkErrors"
 import { checkErrors } from "../../utils/tb/checkErrors"
 import { TState } from "../../utils/@types/data/region"
+import { sendFile } from "../../utils/tb/helpers/file/sendFile"
 
 const MyAccount = () => {
   const { user, controllers } = getStore()
@@ -48,7 +49,7 @@ const MyAccount = () => {
     has: false,
   })
 
-  const getObj = () => {
+  const getObj = (image: string | null) => {
     if (user) {
       const id =
         user?.profile === "PRESTADOR"
@@ -60,7 +61,7 @@ const MyAccount = () => {
         status: user.status,
         userId: id,
         email: user.email,
-        photo: user.photo,
+        photo: image,
         branchId: user.branchId,
         franchiseId: user.franchiseId,
         doc: "",
@@ -129,7 +130,9 @@ const MyAccount = () => {
     setLoading(true)
 
     try {
-      const obj = getObj()
+      const img = form.profile !== "FRANQUEADO" ? await getUserImage() : null
+
+      const obj = getObj(img)
       const document = getUserDocument(obj)
 
       const req = await Api.persons.update({
@@ -169,6 +172,29 @@ const MyAccount = () => {
       })
 
       setLoading(false)
+    }
+  }
+
+  const getUserImage = async (): Promise<string | null> => {
+    try {
+      return form.photo
+        ? typeof form.photo === "string" && form.photo.startsWith("https://")
+          ? form.photo
+          : await sendFile({
+              fileData: form.photo,
+              showError: () => {
+                controllers.feedback.setData({
+                  visible: true,
+                  state: "alert",
+                  message:
+                    "Houve um erro ao enviar a imagem. Verifique as informações e tente novamente.",
+                })
+              },
+              type: "image",
+            })
+        : null
+    } catch (error) {
+      return null
     }
   }
 

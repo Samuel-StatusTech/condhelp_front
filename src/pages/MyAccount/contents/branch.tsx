@@ -229,8 +229,8 @@ const MyAccountBranch = (props: Props) => {
                       {
                         type: "profile",
                         label: "Imagem de perfil",
-                        field: "image",
-                        value: form.image,
+                        field: "photo",
+                        value: form.photo,
                         gridSizes: { big: 12 },
                       },
                     ],

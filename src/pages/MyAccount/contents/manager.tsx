@@ -94,8 +94,8 @@ const MyAccountManager = (props: Props) => {
                       {
                         type: "profile",
                         label: "Imagem de perfil",
-                        field: "image",
-                        value: form.image,
+                        field: "photo",
+                        value: form.photo,
                         gridSizes: { big: 6, small: 12 },
                       },
                     ],

@@ -23,6 +23,7 @@ import { checkErrors } from "../../../utils/tb/checkErrors"
 import { getUserObj } from "../../../utils/tb/parsers/parseUserFormData"
 import { checkProviderPendencyStatus } from "../../../utils/tb/helpers/checkProviderPendencyStatus"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+import { sendFile } from "../../../utils/tb/helpers/file/sendFile"
 
 const FPdocuments = () => {
   const navigate = useNavigate()
@@ -226,40 +227,58 @@ const FPdocuments = () => {
     }
   }
 
-  const getObj = (userId: number) => {
-    const baseInfo: TNewUserDefault = {
-      id: userId,
-      status: form.status,
-      userId: userId,
-      email: form.email,
-      photo: null,
-      branchId: form.branchId,
-      franchiseId: form.franchiseId,
-      doc: "",
-    }
+  const getObj = useCallback(
+    (
+      userId: number,
+      cndsUrls: {
+        federalCndDocument: string | null
+        stateCndDocument: string | null
+        cityCndDocument: string | null
+        fgtsCndDocument: string | null
+      }
+    ) => {
+      const baseInfo: TNewUserDefault = {
+        id: userId,
+        status: form.status,
+        userId: userId,
+        email: form.email,
+        photo: form.photo,
+        branchId: form.branchId,
+        franchiseId: form.franchiseId,
+        doc: "",
+      }
 
-    let info = getUserObj(
-      {
-        ...form,
-        userId,
-        address: {
-          ...(form.address ?? {}),
-          city: (user as TUserTypes["PRESTADOR"])?.address.cityId,
+      let info = getUserObj(
+        {
+          ...{
+            ...form,
+            ...cndsUrls,
+          },
+          userId,
+          address: {
+            ...(form.address ?? {}),
+            city: (user as TUserTypes["PRESTADOR"])?.address.cityId,
+          },
         },
-      },
-      (form as TNewUser).profile
-    )
+        (form as TNewUser).profile
+      )
 
-    if (params.id && !Number.isNaN(params.id) && form.profile !== "PRESTADOR") {
-      info = { ...info, id: Number(params.id) }
-    }
+      if (
+        params.id &&
+        !Number.isNaN(params.id) &&
+        form.profile !== "PRESTADOR"
+      ) {
+        info = { ...info, id: Number(params.id) }
+      }
 
-    return {
-      profile: form.profile,
-      ...baseInfo,
-      ...info,
-    }
-  }
+      return {
+        profile: form.profile,
+        ...baseInfo,
+        ...info,
+      }
+    },
+    [form, params.id, user]
+  )
 
   const getUserDocument = (obj: any) => {
     let value = obj.cnpj
@@ -267,14 +286,19 @@ const FPdocuments = () => {
     return value.replace(/\D/g, "")
   }
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (cndsUrls: {
+    federalCndDocument: string | null
+    stateCndDocument: string | null
+    cityCndDocument: string | null
+    fgtsCndDocument: string | null
+  }) => {
     setLoading(true)
 
     try {
       if (user?.userAccountId && !Number.isNaN(user?.userAccountId)) {
-        const obj = getObj(Number(user?.userAccountId))
+        const obj = getObj(Number(user?.userAccountId), cndsUrls)
         const document = getUserDocument(obj)
-        
+
         const req = await Api.persons.update({
           person: { ...(obj as any), doc: document },
         })
@@ -303,11 +327,89 @@ const FPdocuments = () => {
     }
   }
 
+  const processProviderCnds = async () => {
+    try {
+      const cndsFiles = [
+        ...[
+          !form.federalCndFree
+            ? { key: "federal", document: form.federalCndDocument }
+            : null,
+        ],
+        ...[
+          !form.stateCndFree
+            ? { key: "state", document: form.stateCndDocument }
+            : null,
+        ],
+        ...[
+          !form.cityCndFree
+            ? { key: "city", document: form.cityCndDocument }
+            : null,
+        ],
+        ...[
+          !form.fgtsCndFree
+            ? { key: "fgts", document: form.fgtsCndDocument }
+            : null,
+        ],
+      ].filter((i) => i !== null)
+
+      let urls: { [key: string]: string | null } = {}
+
+      let cndError = false
+
+      for (const i in cndsFiles) {
+        const cnd = cndsFiles[i]
+
+        if (!cndError && cnd) {
+          if (
+            typeof cnd.document === "string" &&
+            cnd.document.startsWith("https://")
+          ) {
+            urls[cnd.key as keyof typeof urls] = cnd.document
+          } else {
+            const cndUrl = await sendFile({
+              fileData: cnd.document,
+              type: "pdf",
+              showError: () => {
+                controllers.feedback.setData({
+                  state: "alert",
+                  message: `Não foi possível enviar a cnd ${cnd.key}`,
+                  visible: true,
+                })
+              },
+            })
+
+            if (cndUrl) urls[cnd.key as keyof typeof urls] = cndUrl
+            else cndError = true
+          }
+        }
+      }
+
+      const newFormInfo = {
+        federalCndDocument: urls.federal ?? null,
+        stateCndDocument: urls.state ?? null,
+        cityCndDocument: urls.city ?? null,
+        fgtsCndDocument: urls.fgts ?? null,
+      }
+
+      return newFormInfo
+    } catch (error) {
+      return false
+    }
+  }
+
   const handleSave = async () => {
     const errorInfo = updateErrors()
 
-    if (!errorInfo.has) handleUpdate()
-    else {
+    if (!errorInfo.has) {
+      const cndProcesses = await processProviderCnds()
+
+      if (!cndProcesses) {
+        setLoading(false)
+        return
+      }
+
+      handleUpdate(cndProcesses)
+    } else {
       setErrors(errorInfo)
 
       controllers.feedback.setData({

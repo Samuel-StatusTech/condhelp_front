@@ -60,8 +60,8 @@ const MyAccountProvider = (props: Props) => {
                       [
                         {
                           type: "logo",
-                          field: "image",
-                          value: form.image,
+                          field: "photo",
+                          value: form.photo,
                           gridSizes: { big: 3, small: 12 },
                         },
                         {
@@ -182,19 +182,6 @@ const MyAccountProvider = (props: Props) => {
                           },
                         },
                       ],
-                    ],
-                  },
-
-                  {
-                    type: "fields",
-                    fields: [
-                      {
-                        type: "profile",
-                        label: "Imagem de perfil",
-                        field: "image",
-                        value: form.image,
-                        gridSizes: { big: 6, small: 12 },
-                      },
                     ],
                   },
                 ],

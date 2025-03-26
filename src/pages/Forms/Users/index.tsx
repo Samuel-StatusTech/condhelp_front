@@ -82,7 +82,16 @@ const FPpeople = () => {
     navigate(-1)
   }
 
-  const getObj = (userId: number, image: string | null) => {
+  const getObj = (
+    userId: number,
+    image: string | null,
+    cndsUrls?: {
+      federalCndDocument: string | null
+      stateCndDocument: string | null
+      cityCndDocument: string | null
+      fgtsCndDocument: string | null
+    }
+  ) => {
     const baseInfo: TNewUserDefault = {
       id: userId,
       status: form.status,
@@ -96,7 +105,7 @@ const FPpeople = () => {
 
     let info = getUserObj(
       {
-        ...form,
+        ...(cndsUrls ? { ...form, ...cndsUrls } : form),
         userId,
         address: { ...(form.address ?? {}), city: pickedCity?.id },
         // image for admin...
@@ -153,7 +162,13 @@ const FPpeople = () => {
       surname: string
       branchId: number
       franchiseId: number
-    }) => void
+    }) => void,
+    cndsUrls?: {
+      federalCndDocument: string | null
+      stateCndDocument: string | null
+      cityCndDocument: string | null
+      fgtsCndDocument: string | null
+    }
   ) => {
     setLoading(true)
 
@@ -161,7 +176,7 @@ const FPpeople = () => {
       const img = form.profile !== "FRANQUEADO" ? await getUserImage() : null
 
       if (params.id && !Number.isNaN(params.id)) {
-        const obj = getObj(Number(params.id), img)
+        const obj = getObj(Number(params.id), img, cndsUrls)
         const document = getUserDocument(obj)
 
         const req = await Api.persons.update({
@@ -214,14 +229,20 @@ const FPpeople = () => {
       surname: string
       branchId: number
       franchiseId: number
-    }) => void
+    }) => void,
+    cndsUrls?: {
+      federalCndDocument: string | null
+      stateCndDocument: string | null
+      cityCndDocument: string | null
+      fgtsCndDocument: string | null
+    }
   ) => {
     setLoading(true)
 
     try {
       const img = form.profile !== "FRANQUEADO" ? await getUserImage() : null
 
-      const document = getUserDocument(getObj(0, img))
+      const document = getUserDocument(getObj(0, img, cndsUrls))
 
       const accountRegister = await Api.auth.register({
         tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
@@ -342,20 +363,27 @@ const FPpeople = () => {
         const cnd = cndsFiles[i]
 
         if (!cndError && cnd) {
-          const cndUrl = await sendFile({
-            fileData: cnd.document,
-            type: "pdf",
-            showError: () => {
-              controllers.feedback.setData({
-                state: "alert",
-                message: `Não foi possível enviar a cnd ${cnd.key}`,
-                visible: true,
-              })
-            },
-          })
+          if (
+            typeof cnd.document === "string" &&
+            cnd.document.startsWith("https://")
+          ) {
+            urls[cnd.key as keyof typeof urls] = cnd.document
+          } else {
+            const cndUrl = await sendFile({
+              fileData: cnd.document,
+              type: "pdf",
+              showError: () => {
+                controllers.feedback.setData({
+                  state: "alert",
+                  message: `Não foi possível enviar a cnd ${cnd.key}`,
+                  visible: true,
+                })
+              },
+            })
 
-          if (cndUrl) urls[cnd.key as keyof typeof urls] = cndUrl
-          else cndError = true
+            if (cndUrl) urls[cnd.key as keyof typeof urls] = cndUrl
+            else cndError = true
+          }
         }
       }
 
@@ -367,9 +395,7 @@ const FPpeople = () => {
         fgtsCndDocument: urls.fgts ?? null,
       }
 
-      setForm(newFormInfo)
-
-      return Object.values(urls).every((url) => url !== null)
+      return newFormInfo
     } catch (error) {
       return false
     }
@@ -396,11 +422,14 @@ const FPpeople = () => {
           if (!cndProcesses) {
             setLoading(false)
             return
+          } else {
+            if (params.id) handleUpdate(onFinish ?? undefined, cndProcesses)
+            else handleCreate(onFinish ?? undefined, cndProcesses)
           }
+        } else {
+          if (params.id) handleUpdate(onFinish ?? undefined)
+          else handleCreate(onFinish ?? undefined)
         }
-
-        if (params.id) handleUpdate(onFinish ?? undefined)
-        else handleCreate(onFinish ?? undefined)
       } else {
         setErrors(errorInfo)
 
