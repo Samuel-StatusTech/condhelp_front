@@ -49,7 +49,12 @@ const MyAccount = () => {
     has: false,
   })
 
-  const getObj = (image: string | null) => {
+  const getObj = (
+    image: string | null,
+    providerDocumentsUrls?: {
+      cnpjCard: string | null
+    }
+  ) => {
     if (user) {
       const id =
         user?.profile === "PRESTADOR"
@@ -69,7 +74,9 @@ const MyAccount = () => {
 
       let info = getUserObj(
         {
-          ...form,
+          ...(providerDocumentsUrls
+            ? { ...form, ...providerDocumentsUrls }
+            : form),
           userId: id,
           // @ts-ignore
           address: { ...(form.address ?? {}), city: form.cityId },
@@ -126,13 +133,15 @@ const MyAccount = () => {
     return value.replace(/\D/g, "")
   }
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (providerDocumentsUrls?: {
+    cnpjCard: string | null
+  }) => {
     setLoading(true)
 
     try {
       const img = form.profile !== "FRANQUEADO" ? await getUserImage() : null
 
-      const obj = getObj(img)
+      const obj = getObj(img, providerDocumentsUrls)
       const document = getUserDocument(obj)
 
       const req = await Api.persons.update({
@@ -202,12 +211,62 @@ const MyAccount = () => {
     return checkErrors.users(form)
   }
 
+  const processProviderDocuments = async () => {
+    try {
+      let urls: { [key: string]: string | null } = {}
+
+      // CNPJ card
+
+      if (form.cnpjCard) {
+        if (
+          typeof form.cnpjCard === "string" &&
+          form.cnpjCard.startsWith("https://")
+        ) {
+          urls["cnpjCard"] = form.cnpjCard
+        } else {
+          const cardUrl = await sendFile({
+            fileData: form.cnpjCard,
+            type: "pdf",
+            showError: () => {
+              controllers.feedback.setData({
+                state: "alert",
+                message: `Não foi possível enviar o cartão CNPJ`,
+                visible: true,
+              })
+
+              throw new Error()
+            },
+          })
+
+          if (cardUrl) urls["cnpjCard"] = cardUrl
+        }
+      }
+
+      const newFormInfo = {
+        ...form,
+        cnpjCard: urls.cnpjCard ?? null,
+      }
+
+      return newFormInfo
+    } catch (error) {
+      return false
+    }
+  }
+
   const handleSave = async () => {
     try {
       const errorInfo = updateErrors()
 
-      if (!errorInfo.has) handleUpdate()
-      else {
+      if (!errorInfo.has) {
+        if (form.profile === "PRESTADOR") {
+          const providerDocumentsUrls = await processProviderDocuments()
+
+          if (!providerDocumentsUrls) {
+            setLoading(false)
+            return
+          } else handleUpdate(providerDocumentsUrls)
+        } else handleUpdate()
+      } else {
         setErrors(errorInfo)
 
         controllers.feedback.setData({

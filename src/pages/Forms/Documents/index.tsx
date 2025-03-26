@@ -381,6 +381,8 @@ const FPdocuments = () => {
             if (cndUrl) urls[cnd.key as keyof typeof urls] = cndUrl
             else cndError = true
           }
+        } else {
+          throw new Error()
         }
       }
 

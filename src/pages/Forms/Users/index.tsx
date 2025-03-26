@@ -90,6 +90,7 @@ const FPpeople = () => {
       stateCndDocument: string | null
       cityCndDocument: string | null
       fgtsCndDocument: string | null
+      cnpjCard: string | null
     }
   ) => {
     const baseInfo: TNewUserDefault = {
@@ -168,6 +169,7 @@ const FPpeople = () => {
       stateCndDocument: string | null
       cityCndDocument: string | null
       fgtsCndDocument: string | null
+      cnpjCard: string | null
     }
   ) => {
     setLoading(true)
@@ -235,6 +237,7 @@ const FPpeople = () => {
       stateCndDocument: string | null
       cityCndDocument: string | null
       fgtsCndDocument: string | null
+      cnpjCard: string | null
     }
   ) => {
     setLoading(true)
@@ -331,8 +334,9 @@ const FPpeople = () => {
     }
   }
 
-  const processProviderCnds = async () => {
+  const processProviderDocuments = async () => {
     try {
+      // CNDs
       const cndsFiles = [
         ...[
           !form.federalCndFree
@@ -362,7 +366,7 @@ const FPpeople = () => {
       for (const i in cndsFiles) {
         const cnd = cndsFiles[i]
 
-        if (!cndError && cnd) {
+        if (!cndError && cnd && cnd.document) {
           if (
             typeof cnd.document === "string" &&
             cnd.document.startsWith("https://")
@@ -378,6 +382,8 @@ const FPpeople = () => {
                   message: `Não foi possível enviar a cnd ${cnd.key}`,
                   visible: true,
                 })
+
+                throw new Error()
               },
             })
 
@@ -387,12 +393,40 @@ const FPpeople = () => {
         }
       }
 
+      // CNPJ card
+
+      if (form.cnpjCard) {
+        if (
+          typeof form.cnpjCard === "string" &&
+          form.cnpjCard.startsWith("https://")
+        ) {
+          urls["cnpjCard"] = form.cnpjCard
+        } else {
+          const cardUrl = await sendFile({
+            fileData: form.cnpjCard,
+            type: "pdf",
+            showError: () => {
+              controllers.feedback.setData({
+                state: "alert",
+                message: `Não foi possível enviar o cartão CNPJ`,
+                visible: true,
+              })
+
+              throw new Error()
+            },
+          })
+
+          if (cardUrl) urls["cnpjCard"] = cardUrl
+        }
+      }
+
       const newFormInfo = {
         ...form,
         federalCndDocument: urls.federal ?? null,
         stateCndDocument: urls.state ?? null,
         cityCndDocument: urls.city ?? null,
         fgtsCndDocument: urls.fgts ?? null,
+        cnpjCard: urls.cnpjCard ?? null,
       }
 
       return newFormInfo
@@ -417,7 +451,7 @@ const FPpeople = () => {
 
       if (!errorInfo.has) {
         if (form.profile === "PRESTADOR") {
-          const cndProcesses = await processProviderCnds()
+          const cndProcesses = await processProviderDocuments()
 
           if (!cndProcesses) {
             setLoading(false)
