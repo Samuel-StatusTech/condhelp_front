@@ -40,25 +40,25 @@ export type TUProvider = {
   federalCndStart: string
   federalCndEnd: string
   federalCndFree: boolean
-  federalCndDocument: null | File
+  federalCndDocument: string | null
 
   stateCnd: string
   stateCndStart: string
   stateCndEnd: string
   stateCndFree: boolean
-  stateCndDocument: null | File
+  stateCndDocument: string | null
 
   cityCnd: string
   cityCndStart: string
   cityCndEnd: string
   cityCndFree: boolean
-  cityCndDocument: null | File
+  cityCndDocument: string | null
 
   fgtsCnd: string
   fgtsCndStart: string
   fgtsCndEnd: string
   fgtsCndFree: boolean
-  fgtsCndDocument: null | File
+  fgtsCndDocument: string | null
 
   pendencies: {
     federalCnd: TPendency

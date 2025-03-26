@@ -29,6 +29,7 @@ import { renderBasic } from "./helpers/renderBasic"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { TCondominium } from "../../../utils/@types/data/condominium"
 import { getDateStr } from "../../../utils/tb/format/date"
+import { sendFile } from "../../../utils/tb/helpers/file/sendFile"
 
 const FPpeople = () => {
   const navigate = useNavigate()
@@ -93,20 +94,15 @@ const FPpeople = () => {
       doc: "",
     }
 
-    console.log("Admin form", form)
-    console.log("Admin base", baseInfo)
-
     let info = getUserObj(
       {
         ...form,
         userId,
         address: { ...(form.address ?? {}), city: pickedCity?.id },
-        // image...
+        // image for admin...
       },
       (form as TNewUser).profile
     )
-
-    console.log("Admin obj", info)
 
     if (params.id && !Number.isNaN(params.id) && form.profile !== "PRESTADOR") {
       info = { ...info, id: Number(params.id) }
@@ -291,37 +287,91 @@ const FPpeople = () => {
     setLoading(false)
   }
 
-  const sendFile = async (file: File): Promise<string | null> => {
-    setLoading(true)
-
+  const getUserImage = async (): Promise<string | null> => {
     try {
-      const fd = new FormData()
-
-      const fileName = `${new Date().getTime()}`
-
-      fd.append("file", file)
-      fd.append("fileName", fileName)
-
-      const req = await Api.files.sendFile(fd)
-
-      if (req.ok) return req.data as unknown as string
-      else return null
+      return form.photo
+        ? typeof form.photo === "string" && form.photo.startsWith("https://")
+          ? form.photo
+          : await sendFile({
+              fileData: form.photo,
+              showError: () => {
+                controllers.feedback.setData({
+                  visible: true,
+                  state: "alert",
+                  message:
+                    "Houve um erro ao enviar a imagem. Verifique as informações e tente novamente.",
+                })
+              },
+              type: "image",
+            })
+        : null
     } catch (error) {
-      controllers.feedback.setData({
-        state: "alert",
-        message: "Não foi possível enviar a imagem",
-        visible: true,
-      })
-
       return null
     }
   }
 
-  const getUserImage = async (): Promise<string | null> => {
+  const processProviderCnds = async () => {
     try {
-      return form.photo ? await sendFile(form.photo) : null
+      const cndsFiles = [
+        ...[
+          !form.federalCndFree
+            ? { key: "federal", document: form.federalCndDocument }
+            : null,
+        ],
+        ...[
+          !form.stateCndFree
+            ? { key: "state", document: form.stateCndDocument }
+            : null,
+        ],
+        ...[
+          !form.cityCndFree
+            ? { key: "city", document: form.cityCndDocument }
+            : null,
+        ],
+        ...[
+          !form.fgtsCndFree
+            ? { key: "fgts", document: form.fgtsCndDocument }
+            : null,
+        ],
+      ].filter((i) => i !== null)
+      let urls: { [key: string]: string | null } = {}
+
+      let cndError = false
+
+      for (const i in cndsFiles) {
+        const cnd = cndsFiles[i]
+
+        if (!cndError && cnd) {
+          const cndUrl = await sendFile({
+            fileData: cnd.document,
+            type: "pdf",
+            showError: () => {
+              controllers.feedback.setData({
+                state: "alert",
+                message: `Não foi possível enviar a cnd ${cnd.key}`,
+                visible: true,
+              })
+            },
+          })
+
+          if (cndUrl) urls[cnd.key as keyof typeof urls] = cndUrl
+          else cndError = true
+        }
+      }
+
+      const newFormInfo = {
+        ...form,
+        federalCndDocument: urls.federal ?? null,
+        stateCndDocument: urls.state ?? null,
+        cityCndDocument: urls.city ?? null,
+        fgtsCndDocument: urls.fgts ?? null,
+      }
+
+      setForm(newFormInfo)
+
+      return Object.values(urls).every((url) => url !== null)
     } catch (error) {
-      return null
+      return false
     }
   }
 
@@ -340,6 +390,15 @@ const FPpeople = () => {
       const errorInfo = updateErrors()
 
       if (!errorInfo.has) {
+        if (form.profile === "PRESTADOR") {
+          const cndProcesses = await processProviderCnds()
+
+          if (!cndProcesses) {
+            setLoading(false)
+            return
+          }
+        }
+
         if (params.id) handleUpdate(onFinish ?? undefined)
         else handleCreate(onFinish ?? undefined)
       } else {

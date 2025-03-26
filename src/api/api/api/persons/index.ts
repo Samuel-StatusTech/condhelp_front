@@ -161,7 +161,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
 const update: TApi["persons"]["update"] = async ({ person }) => {
   return new Promise(async (resolve) => {
     try {
-      if (!["SINDICO"].includes(person.profile)) {
+      // if (!["SINDICO"].includes(person.profile)) {
         const userAccountRegister = await service.put(
           `${baseURL}/${person.userId}`,
           {
@@ -195,7 +195,7 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
         }
 
         person.userAccountId = userAccountRegister.data.userId
-      }
+      // }
 
       const roleUrl = rolesUrlRelations[person.profile]
 
