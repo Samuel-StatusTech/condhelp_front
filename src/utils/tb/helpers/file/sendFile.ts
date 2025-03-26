@@ -15,7 +15,7 @@ type TSendFileProps = {
   showError: () => void
 }
 
-const checkFileType = (file: File, fileType: "image" | "pdf") => {
+export const checkFileType = (file: File, fileType: "image" | "pdf") => {
   let status = false
 
   if (fileType === "image") status = file.type.startsWith("image/")

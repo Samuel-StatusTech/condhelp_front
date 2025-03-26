@@ -7,6 +7,8 @@ import Button from "../../Button"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 import { theme } from "../../../theme"
+import { getStore } from "../../../store"
+import { checkFileType } from "../../../utils/tb/helpers/file/sendFile"
 
 export type TInputFile = {
   height?: number
@@ -23,7 +25,11 @@ type Props = TInputFile & {
   gridSizes?: FormField["gridSizes"]
 }
 
+const imagesMimeTypes = ["image/png", "image/jpeg", "image/jpg"]
+
 const InputFile = (props: Props) => {
+  const { controllers } = getStore()
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -37,6 +43,10 @@ const InputFile = (props: Props) => {
     error,
   } = props
 
+  const acceptableMimeTypes = allowsPdf
+    ? "application/pdf"
+    : imagesMimeTypes.join(",")
+
   const handleClick = () => {
     inputRef.current?.click()
   }
@@ -48,7 +58,40 @@ const InputFile = (props: Props) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.item(0)
 
-    onChange(field, file)
+    if (file) {
+      const isFileAcceptable = checkFileType(file, allowsPdf ? "pdf" : "image")
+
+      console.log(isFileAcceptable, file)
+
+      if (isFileAcceptable) {
+        const limitSize = 10485760 // 10mb
+
+        if (file.size > limitSize) {
+          controllers.feedback.setData({
+            visible: true,
+            state: "alert",
+            message: "Tamanho máximo permitido: 10mb",
+          })
+        } else onChange(field, file)
+      } else {
+        e.target.value = ""
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: `Tipo de arquivo não permitido. Apenas ${
+            allowsPdf ? "pdf" : "imagem"
+          }.`,
+        })
+      }
+    } else {
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message:
+          "Houve um erro ao carregar o arquivo. Verifique-o em seu dispositivo e tente novamente.",
+      })
+    }
   }
 
   return (
@@ -119,9 +162,7 @@ const InputFile = (props: Props) => {
 
         <input
           type="file"
-          accept={`image/png,image/jpeg,image/jpg${
-            allowsPdf ? ",application/pdf" : ""
-          }`}
+          accept={acceptableMimeTypes}
           onChange={handleInputChange}
           ref={inputRef}
           hidden={true}
