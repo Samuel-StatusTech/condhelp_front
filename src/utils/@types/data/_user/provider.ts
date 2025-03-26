@@ -75,7 +75,7 @@ export type T_Back_Provider = {
   branchId: number
   userId: number
   userAccountId: number
-  photo: null
+  photo: string | null
   profile: string
   birthDate: null
   name: string

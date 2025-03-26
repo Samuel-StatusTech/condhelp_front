@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const Element = styled.aside<{
+export const Element = styled.div<{
   $img: string | null
   $size?: string | number
 }>`
@@ -8,7 +8,7 @@ export const Element = styled.aside<{
     $size ? (typeof $size === "string" ? $size : `${$size}px`) : "64px"};
   aspect-ratio: 1;
 
-  background-image: ${({ $img }) => ($img ? `url(${$img})` : "")};
+  background-image: ${({ $img }) => ($img ? `url("${$img}")` : "")};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -10,8 +10,8 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     has: false,
     fields: [],
   }
-
-  console.log("Data", data)
+  console.log("Condo data", data)
+  console.log("Has not condo election file", !data.electionFile)
 
   if (!data.name.trim()) state = getInvalidCheck(state, "name")
   if (!String(Number(data.unities)).trim())
@@ -45,8 +45,11 @@ export const condosCheck = (data: Params): TErrorsCheck => {
     state = getInvalidCheck(state, "managerId")
   if (!data.electionDate) state = getInvalidCheck(state, "electionDate")
 
-  // photo
   // file
+  if (!data.electionFile) state = getInvalidCheck(state, "electionFile")
+
+  console.log("Condo data", data)
+  console.log("Has not condo election file", !data.electionFile)
 
   return state
 }

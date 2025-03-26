@@ -38,8 +38,8 @@ export const basicProvider = ({
         [
           {
             type: "logo",
-            field: "image",
-            value: form.image,
+            field: "photo",
+            value: form.photo,
             gridSizes: { big: 3, small: 12 },
           },
           {

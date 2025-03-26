@@ -4,7 +4,7 @@ export type TNewCondominium = {
   name: string
   unities: number
   cnpj: string
-  image: null | string
+  photo: null | string
 
   address: string
   addressNumber: string
@@ -18,7 +18,7 @@ export type TNewCondominium = {
 
   electionDate: string | number | Date
 
-  electionFile: null | any
+  electionFile: null | string
 }
 
 export type TCondominium = {
@@ -26,7 +26,7 @@ export type TCondominium = {
   name: string
   unities: number
   cnpj: string
-  image: null | string
+  photo: null | string
 
   address: string
   addressNumber: string
@@ -39,7 +39,7 @@ export type TCondominium = {
 
   electionDate: string | number | Date
 
-  electionFile: null | any
+  electionFile: null | string
 
   branchId: number
   franchiseId: number

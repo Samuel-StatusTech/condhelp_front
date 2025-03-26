@@ -312,7 +312,7 @@ export const ItemData = styled.td<{
   justify-items: ${({ $align }) => $align ?? "left"};
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
 
-  &:nth-child(1) div {
+  &:nth-child(1) > div {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }

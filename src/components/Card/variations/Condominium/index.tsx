@@ -30,8 +30,8 @@ const CondominiumCard = ({ k, data, onPick }: Props) => {
       <C.MainWrapper $expanded={true}>
         <C.ContentWrapper>
           <S.Content>
-            <S.ImageWrapper $height={120} $hasContent={!!data.image}>
-              <S.Image src={data as any} alt={""} />
+            <S.ImageWrapper $height={120} $hasContent={!!data.photo}>
+              <S.Image src={data.photo as string} alt={""} />
             </S.ImageWrapper>
 
             <Divider />

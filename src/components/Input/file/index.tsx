@@ -5,6 +5,8 @@ import { Icons } from "../../../assets/icons/icons"
 import { useRef } from "react"
 import Button from "../../Button"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
+import { theme } from "../../../theme"
 
 export type TInputFile = {
   height?: number
@@ -13,6 +15,7 @@ export type TInputFile = {
   value: string | File | null
   singleComponent?: boolean
   allowsPdf?: boolean
+  error?: TFieldError
 }
 
 type Props = TInputFile & {
@@ -23,7 +26,16 @@ type Props = TInputFile & {
 const InputFile = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { allowsPdf, singleComponent, height, label, field, value, onChange } = props
+  const {
+    allowsPdf,
+    singleComponent,
+    height,
+    label,
+    field,
+    value,
+    onChange,
+    error,
+  } = props
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -37,12 +49,6 @@ const InputFile = (props: Props) => {
     const file = e.target.files?.item(0)
 
     onChange(field, file)
-  }
-
-  const getUrl = (val: File) => {
-    const blob = new Blob([val], { type: val.type })
-    const url = URL.createObjectURL(blob)
-    return url
   }
 
   return (
@@ -70,15 +76,32 @@ const InputFile = (props: Props) => {
             </div>
           ) : (
             <>
-              {value && value instanceof File ? (
-                <a href={getUrl(value)} download={value}>
-                  <Icons.Clip />
-                  <span>{value.name}</span>
-                </a>
+              {value ? (
+                typeof value === "string" ? (
+                  <a href={value} download={value}>
+                    <Icons.Clip />
+                    <span>Baixar</span>
+                  </a>
+                ) : (
+                  value instanceof File && (
+                    <div>
+                      <Icons.Clip />
+                      <span>{value.name}</span>
+                    </div>
+                  )
+                )
               ) : (
                 <div>
                   <Icons.Clip />
-                  <span>Nenhum arquivo selecionado</span>
+                  <span
+                    style={{
+                      color: error?.has
+                        ? theme.colors.red.main
+                        : "currentcolor",
+                    }}
+                  >
+                    Nenhum arquivo selecionado
+                  </span>
                 </div>
               )}
 

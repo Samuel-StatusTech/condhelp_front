@@ -14,7 +14,7 @@ export const parseUserBranch = (
       profile: "FILIAL",
 
       id: backUser.id,
-      photo: null,
+      photo: backUser.photo,
       status: backUser.status as any,
       userAccountId: backUser.userAccountId,
       userId: backUser.userId,

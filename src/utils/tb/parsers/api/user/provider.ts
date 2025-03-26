@@ -11,7 +11,7 @@ export const parseUserProvider = (
       id: backProvider.id,
       franchiseId: backProvider.franqId,
       branchId: backProvider.branchId,
-      photo: null,
+      photo: backProvider.photo,
       status: backProvider.status as any,
       userAccountId: backProvider.userAccountId,
       userId: backProvider.id,

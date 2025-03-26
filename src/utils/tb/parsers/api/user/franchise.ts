@@ -10,7 +10,7 @@ export const parseUserFranchise = (
       profile: "FRANQUEADO",
 
       id: backUser.id,
-      photo: null,
+      photo: backUser.photo,
       status: backUser.status as any,
       userAccountId: backUser.userAccountId,
       userId: backUser.userId,

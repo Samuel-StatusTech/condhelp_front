@@ -4,7 +4,7 @@ export const condoForm: TNewCondominium = {
   name: "",
   unities: 0,
   cnpj: "",
-  image: null,
+  photo: null,
   address: "",
   addressNumber: "0",
   zipCode: "",
@@ -41,5 +41,5 @@ export const condoForm: TNewCondominium = {
 
     condominiums: [],
   },
-  electionFile: undefined,
+  electionFile: null,
 }

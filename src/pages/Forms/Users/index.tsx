@@ -81,26 +81,32 @@ const FPpeople = () => {
     navigate(-1)
   }
 
-  const getObj = (userId: number) => {
+  const getObj = (userId: number, image: string | null) => {
     const baseInfo: TNewUserDefault = {
       id: userId,
       status: form.status,
       userId: userId,
       email: form.email,
-      photo: null,
+      photo: image,
       branchId: form.branchId,
       franchiseId: form.franchiseId,
       doc: "",
     }
+
+    console.log("Admin form", form)
+    console.log("Admin base", baseInfo)
 
     let info = getUserObj(
       {
         ...form,
         userId,
         address: { ...(form.address ?? {}), city: pickedCity?.id },
+        // image...
       },
       (form as TNewUser).profile
     )
+
+    console.log("Admin obj", info)
 
     if (params.id && !Number.isNaN(params.id) && form.profile !== "PRESTADOR") {
       info = { ...info, id: Number(params.id) }
@@ -156,8 +162,10 @@ const FPpeople = () => {
     setLoading(true)
 
     try {
+      const img = form.profile !== "FRANQUEADO" ? await getUserImage() : null
+
       if (params.id && !Number.isNaN(params.id)) {
-        const obj = getObj(Number(params.id))
+        const obj = getObj(Number(params.id), img)
         const document = getUserDocument(obj)
 
         const req = await Api.persons.update({
@@ -215,7 +223,9 @@ const FPpeople = () => {
     setLoading(true)
 
     try {
-      const document = getUserDocument(getObj(0))
+      const img = form.profile !== "FRANQUEADO" ? await getUserImage() : null
+
+      const document = getUserDocument(getObj(0, img))
 
       const accountRegister = await Api.auth.register({
         tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
@@ -226,7 +236,7 @@ const FPpeople = () => {
 
       if (accountRegister.ok) {
         // @ts-ignore
-        const obj = getObj(accountRegister.data.id)
+        const obj = getObj(accountRegister.data.id, img)
 
         const req = await Api.persons.create({
           newPerson: { ...obj, doc: document } as TNewUser,
@@ -281,6 +291,40 @@ const FPpeople = () => {
     setLoading(false)
   }
 
+  const sendFile = async (file: File): Promise<string | null> => {
+    setLoading(true)
+
+    try {
+      const fd = new FormData()
+
+      const fileName = `${new Date().getTime()}`
+
+      fd.append("file", file)
+      fd.append("fileName", fileName)
+
+      const req = await Api.files.sendFile(fd)
+
+      if (req.ok) return req.data as unknown as string
+      else return null
+    } catch (error) {
+      controllers.feedback.setData({
+        state: "alert",
+        message: "Não foi possível enviar a imagem",
+        visible: true,
+      })
+
+      return null
+    }
+  }
+
+  const getUserImage = async (): Promise<string | null> => {
+    try {
+      return form.photo ? await sendFile(form.photo) : null
+    } catch (error) {
+      return null
+    }
+  }
+
   const handleSave = async (
     onFinish?: (manager: {
       id: number
@@ -290,6 +334,8 @@ const FPpeople = () => {
       franchiseId: number
     }) => void
   ) => {
+    setLoading(true)
+
     try {
       const errorInfo = updateErrors()
 
@@ -304,9 +350,12 @@ const FPpeople = () => {
           state: "alert",
           message: "Corrija os campos e tente novamente",
         })
+
+        setLoading(false)
       }
     } catch (error) {
       // ...
+      setLoading(false)
     }
   }
 

@@ -25,6 +25,7 @@ import { getDateStr } from "../../../utils/tb/format/date"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { TCity, TState } from "../../../utils/@types/data/region"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+import { sendFile } from "../../../utils/tb/helpers/file/sendFile"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -60,7 +61,10 @@ const FPcondo = () => {
     navigate(-1)
   }
 
-  const getObj = (imgUrl: string | null): TNewCondominium | TCondominium => {
+  const getObj = (
+    imgUrl: string | null,
+    electionFileUrl: string
+  ): TNewCondominium | TCondominium => {
     let mId = 0
 
     let branchId = 0
@@ -100,10 +104,11 @@ const FPcondo = () => {
       city: form.city,
       federateUnit: form.federateUnit,
       electionDate: getDateStr(form.electionDate, "javaDateTime"),
+      electionFile: electionFileUrl,
       managerId: mId,
       branchId: branchId,
       franchiseId: franchiseId,
-      image: imgUrl,
+      photo: imgUrl,
     }
 
     return params.id && !Number.isNaN(params.id)
@@ -111,13 +116,19 @@ const FPcondo = () => {
       : obj
   }
 
-  const handleUpdate = async ({ imgUrl }: { imgUrl: string | null }) => {
+  const handleUpdate = async ({
+    imgUrl,
+    electionFileUrl,
+  }: {
+    imgUrl: string | null
+    electionFileUrl: string
+  }) => {
     setLoading(true)
 
     try {
       // check errors
 
-      const obj = getObj(imgUrl)
+      const obj = getObj(imgUrl, electionFileUrl)
 
       const req = await Api.condos.update({
         condo: obj as TCondominium,
@@ -146,11 +157,17 @@ const FPcondo = () => {
     }
   }
 
-  const handleCreate = async ({ imgUrl }: { imgUrl: string | null }) => {
+  const handleCreate = async ({
+    imgUrl,
+    electionFileUrl,
+  }: {
+    imgUrl: string | null
+    electionFileUrl: string
+  }) => {
     setLoading(true)
 
     try {
-      const obj = getObj(imgUrl)
+      const obj = getObj(imgUrl, electionFileUrl)
 
       const req = await Api.condos.create({ newCondo: obj })
 
@@ -187,40 +204,6 @@ const FPcondo = () => {
     setLoading(false)
   }
 
-  const blobUrlToFile = async (blobUrl: string, fileName: string) => {
-    const response = await fetch(blobUrl)
-    const blob = await response.blob()
-    const file = new File([blob], `${fileName}.${blob.type.split("/")[1]}`, {
-      type: blob.type,
-    })
-    return file
-  }
-
-  const sendFile = async () => {
-    try {
-      const fd = new FormData()
-
-      const fileName = `${new Date().getTime()}`
-      const file = await blobUrlToFile(form.image as string, fileName)
-
-      fd.append("file", file)
-      fd.append("fileName", fileName)
-
-      const req = await Api.files.sendFile(fd)
-
-      if (req.ok) return req.data
-      else return null
-    } catch (error) {
-      controllers.feedback.setData({
-        state: "alert",
-        message: "Não foi possível enviar a imagem",
-        visible: true,
-      })
-
-      return null
-    }
-  }
-
   const handleSave = async () => {
     try {
       const errorInfo = updateErrors()
@@ -228,13 +211,44 @@ const FPcondo = () => {
       if (!errorInfo.has) {
         if (pickedCity && pickedCity.name && pickedCity.name === form.city) {
           let img = null
-          if (form.image && typeof form.image === "string") {
-            const imgUrl = await sendFile()
+          let electionFile = null
+
+          if (form.photo) {
+            const imgUrl = await sendFile({
+              type: "image",
+              fileData: form.photo,
+              showError: () => {
+                controllers.feedback.setData({
+                  state: "alert",
+                  message: "Não foi possível enviar a imagem.",
+                  visible: true,
+                })
+              },
+            })
             if (imgUrl) img = imgUrl
           }
 
-          if (params.id) await handleUpdate({ imgUrl: img })
-          else await handleCreate({ imgUrl: img })
+          if (form.electionFile) {
+            const electionFileUrl = await sendFile({
+              type: "pdf",
+              fileData: form.electionFile,
+              showError: () => {
+                controllers.feedback.setData({
+                  state: "alert",
+                  message: "Não foi possível enviar a ata de eleição.",
+                  visible: true,
+                })
+              },
+            })
+            if (electionFileUrl) electionFile = electionFileUrl
+          }
+
+          if (electionFile) {
+            if (params.id)
+              await handleUpdate({ imgUrl: img, electionFileUrl: electionFile })
+            else
+              await handleCreate({ imgUrl: img, electionFileUrl: electionFile })
+          }
         } else {
           controllers.feedback.setData({
             state: "alert",
@@ -542,8 +556,8 @@ const FPcondo = () => {
                       {
                         type: "image",
                         label: "Foto do condomínio",
-                        field: "image",
-                        value: form.image,
+                        field: "photo",
+                        value: form.photo,
                         gridSizes: { big: 12 },
                         height: 140,
                       },
@@ -717,6 +731,10 @@ const FPcondo = () => {
                         value: form.electionFile,
                         gridSizes: { big: 12 },
                         allowsPdf: true,
+                        error: {
+                          has: errors.fields.includes("electionFile"),
+                          message: "Insira um arquivo",
+                        },
                       },
                     ],
                   },

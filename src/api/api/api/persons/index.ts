@@ -435,9 +435,25 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                 })
               } else throw new Error()
             } else {
+              
+              const reg = info.document ?? ""
+
+              const docInfo = {
+                type: reg.length > 11 ? "CPF" : "CNPJ",
+                register: reg,
+                date: info.birthDate,
+              }
+
+              const responseInfo = {
+                ...info,
+                document: docInfo
+              }
+              
+              console.log("Response info", responseInfo)
+
               resolve({
                 ok: true,
-                data: info,
+                data: responseInfo,
               })
             }
           } else {
