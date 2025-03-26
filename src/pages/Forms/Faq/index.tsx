@@ -320,10 +320,6 @@ const FPfaq = () => {
   }, [loadData])
 
   useEffect(() => {
-    console.log(errors)
-  }, [errors])
-
-  useEffect(() => {
     controllers.modal.open({
       role: "loading",
       visible: loading,

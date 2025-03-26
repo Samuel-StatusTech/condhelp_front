@@ -162,39 +162,39 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
   return new Promise(async (resolve) => {
     try {
       // if (!["SINDICO"].includes(person.profile)) {
-        const userAccountRegister = await service.put(
-          `${baseURL}/${person.userId}`,
-          {
-            userId: person.userId,
-            photo: person.photo,
-            name: person.name,
-            email: person.email,
-            profile: person.profile,
-            status: person.status,
-            branchId: person.branchId,
-            franchiseId: person.franchiseId,
-            document: person.doc,
-          }
-        )
-
-        if (!userAccountRegister.data) {
-          let errMessage =
-            "Não foi possível atualizar o usuário. Tente novamente mais tarde."
-          resolve({ ok: false, error: errMessage })
-
-          return
+      const userAccountRegister = await service.put(
+        `${baseURL}/${person.userId}`,
+        {
+          userId: person.userId,
+          photo: person.photo,
+          name: person.name,
+          email: person.email,
+          profile: person.profile,
+          status: person.status,
+          branchId: person.branchId,
+          franchiseId: person.franchiseId,
+          document: person.doc,
         }
+      )
 
-        if (["ADMIN"].includes(person.profile)) {
-          resolve({
-            ok: true,
-            data: userAccountRegister.data,
-          })
+      if (!userAccountRegister.data) {
+        let errMessage =
+          "Não foi possível atualizar o usuário. Tente novamente mais tarde."
+        resolve({ ok: false, error: errMessage })
 
-          return
-        }
+        return
+      }
 
-        person.userAccountId = userAccountRegister.data.userId
+      if (["ADMIN"].includes(person.profile)) {
+        resolve({
+          ok: true,
+          data: userAccountRegister.data,
+        })
+
+        return
+      }
+
+      person.userAccountId = userAccountRegister.data.userId
       // }
 
       const roleUrl = rolesUrlRelations[person.profile]
@@ -435,7 +435,6 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
                 })
               } else throw new Error()
             } else {
-              
               const reg = info.document ?? ""
 
               const docInfo = {
@@ -446,10 +445,8 @@ const getSingle: TApi["persons"]["getSingle"] = async ({
 
               const responseInfo = {
                 ...info,
-                document: docInfo
+                document: docInfo,
               }
-              
-              console.log("Response info", responseInfo)
 
               resolve({
                 ok: true,

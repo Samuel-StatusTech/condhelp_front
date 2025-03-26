@@ -5,6 +5,8 @@ import { Icons } from "../../../assets/icons/icons"
 import { useRef } from "react"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import Button from "../../Button"
+import { checkFileType } from "../../../utils/tb/helpers/file/sendFile"
+import { getStore } from "../../../store"
 
 export type TInputProfile = {
   height?: number
@@ -19,6 +21,8 @@ type Props = TInputProfile & {
 }
 
 const InputProfile = (props: Props) => {
+  const { controllers } = getStore()
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { gridSizes, label, field, value, onChange } = props
@@ -27,14 +31,65 @@ const InputProfile = (props: Props) => {
     inputRef.current?.click()
   }
 
+  const clearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = ""
+    }
+  }
+
   const handleRemove = () => {
     onChange(field, null)
+    clearInput()
+  }
+
+  const handleImageCrop = (imgUrl: string) => {
+    onChange(field, imgUrl)
+    clearInput()
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.item(0)
 
-    onChange(field, file)
+    if (file) {
+      const isFileAcceptable = checkFileType(file, "image")
+
+      if (isFileAcceptable) {
+        // const limitSize = 10485760 // 10mb
+
+        // if (file.size > limitSize) {
+        //   controllers.feedback.setData({
+        //     visible: true,
+        //     state: "alert",
+        //     message: "Tamanho máximo permitido: 10mb",
+        //   })
+        // } else {
+        controllers.modal.open({
+          role: "imageEditor",
+          visible: true,
+          width: "md",
+          data: {
+            file: file,
+          },
+          handleOp: (v) => (v ? handleImageCrop(v) : clearInput()),
+        })
+        // }
+      } else {
+        e.target.value = ""
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: `Tipo de arquivo não permitido. Apenas imagem.`,
+        })
+      }
+    } else {
+      controllers.feedback.setData({
+        visible: true,
+        state: "alert",
+        message:
+          "Houve um erro ao carregar o arquivo. Verifique-o em seu dispositivo e tente novamente.",
+      })
+    }
   }
 
   const getImageUrl = () => {

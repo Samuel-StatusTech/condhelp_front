@@ -6,6 +6,7 @@ import { useRef } from "react"
 import Button from "../../Button"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { getStore } from "../../../store"
+import { checkFileType } from "../../../utils/tb/helpers/file/sendFile"
 
 export type TInputImage = {
   height?: number
@@ -33,10 +34,6 @@ const InputImage = (props: Props) => {
   const clearInput = () => {
     if (inputRef.current) {
       inputRef.current.value = ""
-      inputRef.current.parentNode?.replaceChild(
-        inputRef.current.cloneNode(true),
-        inputRef.current
-      )
     }
   }
 
@@ -54,14 +51,43 @@ const InputImage = (props: Props) => {
     const file = e.target.files?.item(0)
 
     if (file) {
-      controllers.modal.open({
-        role: "imageEditor",
+      const isFileAcceptable = checkFileType(file, "image")
+
+      if (isFileAcceptable) {
+        // const limitSize = 10485760 // 10mb
+
+        // if (file.size > limitSize) {
+        //   controllers.feedback.setData({
+        //     visible: true,
+        //     state: "alert",
+        //     message: "Tamanho máximo permitido: 10mb",
+        //   })
+        // } else {
+        controllers.modal.open({
+          role: "imageEditor",
+          visible: true,
+          width: "md",
+          data: {
+            file: file,
+          },
+          handleOp: (v) => (v ? handleImageCrop(v) : clearInput()),
+        })
+        // }
+      } else {
+        e.target.value = ""
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "alert",
+          message: `Tipo de arquivo não permitido. Apenas imagem.`,
+        })
+      }
+    } else {
+      controllers.feedback.setData({
         visible: true,
-        width: "md",
-        data: {
-          file: file,
-        },
-        handleOp: (v) => (v ? handleImageCrop(v) : clearInput()),
+        state: "alert",
+        message:
+          "Houve um erro ao carregar o arquivo. Verifique-o em seu dispositivo e tente novamente.",
       })
     }
   }
