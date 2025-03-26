@@ -1,6 +1,6 @@
 import { Api } from "../../../../api"
 
-const blobUrlToFile = async (blobUrl: string, fileName: string) => {
+export const blobUrlToFile = async (blobUrl: string, fileName: string) => {
   const response = await fetch(blobUrl)
   const blob = await response.blob()
   const file = new File([blob], `${fileName}.${blob.type.split("/")[1]}`, {

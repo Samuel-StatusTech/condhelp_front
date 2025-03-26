@@ -54,32 +54,25 @@ const ImageEditor = ({ data, onClose, handleOp }: Props) => {
       </C.Header>
 
       <S.Content>
-        <div
-          style={{
-            height: "70vh",
-            gridColumn: "span 12",
-          }}
-        >
-          {incomingUrl && (
-            <CropEditor
-              imageSrc={incomingUrl}
-              onCancel={() => {}}
-              onSave={setCroppedUrl}
-            />
-          )}
-        </div>
-
-        <S.Bottom>
-          <Button
-            type="main"
-            text={"Atualizar"}
-            action={handleSubmit}
-            fit={true}
-            // text={submitting ? "Atualizando..." : "Atualizar"}
-            // action={!submitting ? handleSubmit : () => {}}
-            // disabled={errors().has || submitting}
+        <S.ContentBox>
+          <CropEditor
+            imageSrc={incomingUrl as string}
+            onCancel={() => {}}
+            onSave={setCroppedUrl}
           />
-        </S.Bottom>
+
+          <S.Bottom>
+            <Button
+              type="main"
+              text={"Atualizar"}
+              action={handleSubmit}
+              fit={true}
+              // text={submitting ? "Atualizando..." : "Atualizar"}
+              // action={!submitting ? handleSubmit : () => {}}
+              // disabled={errors().has || submitting}
+            />
+          </S.Bottom>
+        </S.ContentBox>
       </S.Content>
     </S.Element>
   )

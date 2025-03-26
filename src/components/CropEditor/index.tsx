@@ -3,6 +3,8 @@ import Cropper from "react-easy-crop"
 import getCroppedImg from "../../utils/tb/images/canvas/condominium"
 
 import "./styles.css"
+import * as S from "./styled"
+import CustomSlider from "../CustomSlider"
 
 type Props = {
   imageSrc: string
@@ -14,6 +16,8 @@ const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [rotation, setRotation] = useState(0)
   const [zoom, setZoom] = useState(1)
+
+  const [activeController, setActiveController] = useState("zoom")
 
   const onCropComplete = useCallback(
     async (_: any, croppedAreaPixels: any) => {
@@ -30,64 +34,53 @@ const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
     <div
       style={{
         display: "flex",
-        alignItems: "center",
         flexDirection: "column",
-        width: "100%",
-        padding: "16px",
-        backgroundColor: "white",
-        gap: "64px",
-        borderRadius: "16px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        gap: "24px",
       }}
     >
       {/* Área do editor */}
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "400px",
-          backgroundColor: "#f0f0f0",
-          borderRadius: "12px",
-          overflow: "hidden",
-        }}
-      >
-        <Cropper
-          image={imageSrc}
-          crop={crop}
-          zoom={zoom}
-          rotation={rotation}
-          aspect={16 / 9} // Mantenha o aspecto quadrado
-          onCropChange={setCrop}
-          onCropComplete={onCropComplete}
-          onZoomChange={setZoom}
-          onRotationChange={setRotation}
-        />
-      </div>
+      <S.EditorAreaWrapper>
+        <S.EditorArea>
+          {imageSrc && (
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              zoom={1}
+              rotation={0}
+              aspect={16 / 9} // Mantenha o aspecto quadrado
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+              onRotationChange={setRotation}
+            />
+          )}
+        </S.EditorArea>
+      </S.EditorAreaWrapper>
 
-      {/* Controles */}
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "64px",
-          marginTop: "16px",
-        }}
-      >
-        {/* Controle de Zoom */}
-        <div>
-          <label style={{ fontWeight: "600", marginBottom: "4px" }}>Zoom</label>
-          <input
-            type="range"
-            min="1"
-            max="3"
-            step="0.1"
+      <S.ControllersArea>
+        <S.ControllerUXArea>
+          <CustomSlider
             value={zoom}
-            onChange={(e) => setZoom(Number(e.target.value))}
-            style={{ width: "100%" }}
+            onChange={setZoom}
+            range={[1, 3]}
+            classifier="x"
           />
-        </div>
-      </div>
+        </S.ControllerUXArea>
+        <S.ControllersOptionsArea>
+          <S.ControllerOption
+            $active={activeController === "zoom"}
+            onClick={() => setActiveController("zoom")}
+          >
+            Zoom
+          </S.ControllerOption>
+          <S.ControllerOption
+            $active={activeController === "rotate"}
+            onClick={() => setActiveController("rotate")}
+          >
+            Girar
+          </S.ControllerOption>
+        </S.ControllersOptionsArea>
+      </S.ControllersArea>
     </div>
   )
 }
