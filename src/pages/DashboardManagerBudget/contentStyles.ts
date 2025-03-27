@@ -93,6 +93,16 @@ export const DetailItem = styled.div`
   align-items: center;
 `
 
+export const AttachmentLink = styled.a`
+  text-decoration: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.blue.cyan};
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
 export const DetailName = styled.span`
   width: 110px;
   font-size: 14px;

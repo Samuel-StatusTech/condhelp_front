@@ -17,6 +17,7 @@ export type TInputFile = {
   value: string | File | null
   singleComponent?: boolean
   allowsPdf?: boolean
+  allowsPdfAndImages?: boolean
   error?: TFieldError
 }
 
@@ -25,7 +26,7 @@ type Props = TInputFile & {
   gridSizes?: FormField["gridSizes"]
 }
 
-const imagesMimeTypes = ["image/png", "image/jpeg", "image/jpg"]
+export const imagesMimeTypes = ["image/png", "image/jpeg", "image/jpg"]
 
 const InputFile = (props: Props) => {
   const { controllers } = getStore()
@@ -34,6 +35,7 @@ const InputFile = (props: Props) => {
 
   const {
     allowsPdf,
+    allowsPdfAndImages,
     singleComponent,
     height,
     label,
@@ -43,9 +45,13 @@ const InputFile = (props: Props) => {
     error,
   } = props
 
-  const acceptableMimeTypes = allowsPdf
+  const acceptableMimeTypes = allowsPdfAndImages
+    ? `application/pdf,${imagesMimeTypes.join(",")}`
+    : allowsPdf
     ? "application/pdf"
     : imagesMimeTypes.join(",")
+
+  console.log(acceptableMimeTypes)
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -59,7 +65,10 @@ const InputFile = (props: Props) => {
     const file = e.target.files?.item(0)
 
     if (file) {
-      const isFileAcceptable = checkFileType(file, allowsPdf ? "pdf" : "image")
+      const isFileAcceptable = checkFileType(
+        file,
+        allowsPdfAndImages ? "both" : allowsPdf ? "pdf" : "image"
+      )
 
       if (isFileAcceptable) {
         const limitSize = 10485760 // 10mb

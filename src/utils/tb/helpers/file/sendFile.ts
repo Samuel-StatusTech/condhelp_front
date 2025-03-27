@@ -1,4 +1,5 @@
 import { Api } from "../../../../api"
+import { imagesMimeTypes } from "../../../../components/Input/file"
 
 export const blobUrlToFile = async (blobUrl: string, fileName: string) => {
   const response = await fetch(blobUrl)
@@ -10,16 +11,20 @@ export const blobUrlToFile = async (blobUrl: string, fileName: string) => {
 }
 
 type TSendFileProps = {
-  type: "image" | "pdf"
+  type: "image" | "pdf" | "both"
   fileData: string | File
   showError: () => void
 }
 
-export const checkFileType = (file: File, fileType: "image" | "pdf") => {
+export const checkFileType = (
+  file: File,
+  fileType: "image" | "pdf" | "both"
+) => {
   let status = false
 
   if (fileType === "image") status = file.type.startsWith("image/")
-  else status = file.type === "application/pdf"
+  else if (fileType === "pdf") status = file.type === "application/pdf"
+  else status = ["application/pdf", ...imagesMimeTypes].includes(file.type)
 
   return status
 }

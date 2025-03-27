@@ -217,3 +217,15 @@ export const StatusArea = styled.div<{ $status: TBudgetStatus }>`
       ? theme.colors.green.medium
       : theme.colors.red.main};
 `
+
+export const AttachmentLink = styled.a`
+  & > a {
+    text-decoration: none;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.blue.cyan};
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`

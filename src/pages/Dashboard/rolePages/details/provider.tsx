@@ -129,10 +129,19 @@ const ProviderDetails = ({ data, handleBack }: Props) => {
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
-                <S.DetailName>Cartão CNPJ:</S.DetailName>
-                <S.DetailValue>
-                  {!!data.cnpjCard ? "Baixar anexo" : "-"}
-                </S.DetailValue>
+                <S.DetailItem>
+                  <S.DetailName>Cartão CNPJ:</S.DetailName>
+                  {!!data?.cnpjCard ? (
+                    <S.AttachmentLink
+                      href={data.cnpjCard}
+                      download={data?.cnpjCard}
+                    >
+                      Baixar anexo
+                    </S.AttachmentLink>
+                  ) : (
+                    <S.DetailValue>-</S.DetailValue>
+                  )}
+                </S.DetailItem>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Abertura:</S.DetailName>

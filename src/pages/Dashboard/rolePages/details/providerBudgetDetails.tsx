@@ -107,6 +107,16 @@ const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Anexo:</S.DetailName>
+                {!!budget?.attachmentUrl ? (
+                  <S.AttachmentLink
+                    href={budget.attachmentUrl}
+                    download={budget.attachmentUrl}
+                  >
+                    Baixar anexo
+                  </S.AttachmentLink>
+                ) : (
+                  <S.DetailValue>-</S.DetailValue>
+                )}
                 <S.DetailValue>
                   {!!budget.attachmentUrl ? "Baixar anexo" : "-"}
                 </S.DetailValue>

@@ -217,9 +217,16 @@ const BudgetDetails = ({
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Anexo:</S.DetailName>
-                <S.DetailValue>
-                  {!!budgetData?.attachmentUrl ? "Baixar anexo" : "-"}
-                </S.DetailValue>
+                {!!budgetData?.attachmentUrl ? (
+                  <S.AttachmentLink
+                    href={budgetData.attachmentUrl}
+                    download={budgetData.attachmentUrl}
+                  >
+                    Baixar anexo
+                  </S.AttachmentLink>
+                ) : (
+                  <S.DetailValue>-</S.DetailValue>
+                )}
               </S.DetailItem>
             </S.DetailsList>
 

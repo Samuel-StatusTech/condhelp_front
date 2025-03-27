@@ -93,6 +93,18 @@ export const DetailName = styled.span`
   color: ${({ theme }) => theme.colors.neutral.lightMain};
 `
 
+export const AttachmentLink = styled.a`
+  & > a {
+    text-decoration: none;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.blue.cyan};
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`
+
 export const DetailValue = styled.span`
   flex: 1;
   font-size: 14px;

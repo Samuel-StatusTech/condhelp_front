@@ -25,6 +25,8 @@ import { useNavigate } from "react-router-dom"
 import Lottie from "lottie-react"
 
 import lottieData from "../../../../assets/animations/loading.json"
+import { TErrorsCheck } from "../../../../utils/@types/helpers/checkErrors"
+import { sendFile } from "../../../../utils/tb/helpers/file/sendFile"
 
 type Props = {
   data?: any
@@ -44,6 +46,11 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
   const [categories, setCategories] = useState<TCategory[]>([])
   const [, setCondos] = useState<TCondominium[]>([])
 
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    fields: [],
+    has: false,
+  })
+
   const [options, setOptions] = useState<any>({
     subsidiary: [],
     condo: [],
@@ -51,20 +58,38 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     subcategory: [],
   })
 
-  const getObj = () => {
+  const getObj = (img: string | null) => {
     const obj: TNewBudget = {
       ...form,
       userId: user?.userId as number,
       branchId: user?.branchId as number,
       startDate: getDateStr(form.startDate, "javaDateTime"),
       finishDate: getDateStr(form.finishDate, "javaDateTime"),
+      attachedUrl: img,
     }
 
     return obj
   }
 
-  const budgetCreate = () => {
-    const obj = getObj()
+  const budgetCreate = async () => {
+    let img = null
+
+    if (form.attachedUrl) {
+      const imgUrl = await sendFile({
+        type: "both",
+        fileData: form.attachedUrl,
+        showError: () => {
+          controllers.feedback.setData({
+            state: "alert",
+            message: "Não foi possível enviar a imagem.",
+            visible: true,
+          })
+        },
+      })
+      if (imgUrl) img = imgUrl
+    }
+
+    const obj = getObj(img)
 
     return new Promise<TDefaultRes<TBudget>>(async (resolve) => {
       const req = await Api.budgets.create({ newBudget: obj })
@@ -88,25 +113,32 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     // TODO: check errors
     setSubmitting(true)
 
-    const creation = await budgetCreate()
+    const errorsCheck = updateErrors()
 
-    if (creation.ok) {
-      if (handleOp) handleOp(form)
+    if (!errorsCheck.has) {
+      const creation = await budgetCreate()
 
-      onClose()
+      if (creation.ok) {
+        if (handleOp) handleOp(form)
 
-      setSubmitting(false)
+        onClose()
 
-      showSuccessFeedback({ newBudgetId: creation.data.id })
+        setSubmitting(false)
+
+        showSuccessFeedback({ newBudgetId: creation.data.id })
+      } else {
+        controllers.feedback.setData({
+          state: "error",
+          message: creation.error,
+          visible: true,
+        })
+
+        setSubmitting(false)
+      }
     } else {
-      controllers.feedback.setData({
-        state: "error",
-        message: creation.error,
-        visible: true,
-      })
-
-      setSubmitting(false)
+      setErrors(errorsCheck)
     }
+    setSubmitting(false)
   }
 
   const handleClose = () => {
@@ -237,7 +269,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
     loadData()
   }, [loadData])
 
-  const errors = () => {
+  const updateErrors = () => {
     return checkErrors.budget(form)
   }
 
@@ -261,7 +293,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
       </C.Header>
 
       <S.Content>
-        <S.Row>
+        <S.Row $alignTop={true} className={"firstRow"}>
           {/* For Branches and Managers */}
           <Input.Select
             field={"condominiumId"}
@@ -271,6 +303,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             gridSizes={{ big: 8 }}
             placeholder="Condomínio"
             elevation={2}
+            error={{
+              has: errors.fields.includes("condominiumId"),
+              message: "Escolha um condomínio",
+            }}
           />
 
           <Input.Toggler
@@ -290,6 +326,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             gridSizes={{ big: 12 }}
             placeholder="Categoria"
             elevation={3}
+            error={{
+              has: errors.fields.includes("serviceCategoryId"),
+              message: "Escolha uma categoria",
+            }}
           />
         </S.Row>
 
@@ -302,6 +342,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             gridSizes={{ big: 12 }}
             placeholder="Subcategoria"
             elevation={4}
+            error={{
+              has: errors.fields.includes("serviceSubcategoryId"),
+              message: "Escolha uma subcategoria",
+            }}
           />
         </S.Row>
 
@@ -312,6 +356,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             value={form.title}
             gridSizes={{ big: 12 }}
             placeholder="Título do orçamento"
+            error={{
+              has: errors.fields.includes("title"),
+              message: "Escreva o título",
+            }}
           />
         </S.Row>
 
@@ -324,6 +372,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             placeholder="Descrição"
             label="Descrição"
             limit={1000}
+            error={{
+              has: errors.fields.includes("description"),
+              message: "Escreva a descrição",
+            }}
           />
         </S.Row>
 
@@ -335,6 +387,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             gridSizes={{ big: 6, small: 12 }}
             label="Data de Início"
             minDate={new Date()}
+            error={{
+              has: errors.fields.includes("startDate"),
+              message: "Defina a data",
+            }}
           />
         </S.Row>
 
@@ -346,6 +402,10 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             gridSizes={{ big: 6, small: 12 }}
             label="Data fim"
             minDate={new Date(form.startDate)}
+            error={{
+              has: errors.fields.includes("finishDate"),
+              message: "Defina a data",
+            }}
           />
         </S.Row>
 
@@ -357,7 +417,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             gridSizes={{ big: 12 }}
             label="Anexar um arquivo"
             singleComponent={true}
-            allowsPdf={true}
+            allowsPdfAndImages={true}
           />
         </S.Row>
 
@@ -366,7 +426,7 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
             type="main"
             text={submitting ? "Enviando..." : "Solicitar"}
             action={!submitting ? handleSubmit : () => {}}
-            disabled={errors().has || submitting}
+            disabled={errors.has || submitting}
           />
         </S.Bottom>
       </S.Content>

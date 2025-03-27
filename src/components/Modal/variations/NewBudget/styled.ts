@@ -75,13 +75,19 @@ export const LoadingContainer = styled.div`
   backdrop-filter: blur(8px);
 `
 
-export const Row = styled.div`
+export const Row = styled.div<{ $alignTop?: boolean }>`
   grid-column: span 12;
 
   display: flex;
 
   gap: 10px;
-  align-items: center;
+  align-items: ${({ $alignTop }) => ($alignTop ? "flex-start" : "center")};
+
+  &.firstRow {
+    & > div:nth-child(2) {
+      margin-top: 12px;
+    }
+  }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     display: grid;

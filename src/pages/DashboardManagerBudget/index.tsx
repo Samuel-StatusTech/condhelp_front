@@ -355,13 +355,18 @@ const DashboardManagerBudget = () => {
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Anexo:</S.DetailName>
-                <S.DetailValue>
-                  {budgetData
-                    ? !!budgetData?.attachmentUrl
-                      ? "Baixar anexo"
-                      : "-"
-                    : "Carregando..."}
-                </S.DetailValue>
+                {!!budgetData?.attachmentUrl ? (
+                  <S.AttachmentLink
+                    href={budgetData.attachmentUrl}
+                    download={budgetData.attachmentUrl}
+                  >
+                    Baixar anexo
+                  </S.AttachmentLink>
+                ) : (
+                  <S.DetailValue>
+                    {budgetData ? "-" : "Carregando..."}
+                  </S.DetailValue>
+                )}
               </S.DetailItem>
             </S.DetailsList>
 

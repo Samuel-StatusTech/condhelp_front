@@ -7,7 +7,7 @@ export type TNewBudget = {
   description: string
   startDate: string
   finishDate: string
-  attachedUrl: string
+  attachedUrl: string | null
   urgent: boolean
   condominiumId: number
   serviceCategoryId: number

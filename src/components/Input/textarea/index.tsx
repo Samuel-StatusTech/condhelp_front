@@ -1,4 +1,5 @@
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TFieldError } from "../../../utils/@types/helpers/checkErrors"
 import * as C from "../styled"
 import * as S from "./styled"
 
@@ -9,6 +10,8 @@ export type TInputTextArea = {
   placeholder?: string
   limit?: number
   disabled?: boolean
+
+  error?: TFieldError
 }
 
 type Props = TInputTextArea & {
@@ -26,6 +29,7 @@ const InputTextArea = (props: Props) => {
     placeholder,
     onChange,
     disabled,
+    error,
   } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,8 +43,9 @@ const InputTextArea = (props: Props) => {
   return (
     <C.Wrapper $gridSizes={gridSizes}>
       <S.Area>
-        {label && <S.Label>{label}</S.Label>}
+        {label && <S.Label $error={error?.has}>{label}</S.Label>}
         <S.Textarea
+          $error={error?.has}
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
@@ -48,11 +53,24 @@ const InputTextArea = (props: Props) => {
           $disabled={disabled}
         />
 
-        {limit && (
-          <C.Limit
-            $filled={value.length === limit}
-          >{`${value.length}/${limit}`}</C.Limit>
-        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <C.ErrorMessage $visible={error && error?.has}>
+            {error?.message}
+          </C.ErrorMessage>
+
+          {limit && (
+            <C.Limit
+              $filled={value.length === limit}
+            >{`${value.length}/${limit}`}</C.Limit>
+          )}
+        </div>
       </S.Area>
     </C.Wrapper>
   )

@@ -137,3 +137,13 @@ export const ShortcutsGrid = styled.div`
     grid-template-columns: repeat(1, 1fr);
   }
 `
+
+export const AttachmentLink = styled.a`
+  text-decoration: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.blue.cyan};
+
+  &:hover {
+    text-decoration: underline;
+  }
+`

@@ -10,7 +10,7 @@ export const budgetCheck = (data: Params): TErrorsCheck => {
     fields: [],
   }
 
-  if (!data.condominiumId) state = getInvalidCheck(state, "condominium")
+  if (!data.condominiumId) state = getInvalidCheck(state, "condominiumId")
   if (!data.serviceCategoryId)
     state = getInvalidCheck(state, "serviceCategoryId")
   if (!data.serviceSubcategoryId)
@@ -38,7 +38,8 @@ export const budgetEditCheck = (data: Params): TErrorsCheck => {
 
   if (!(data.title ?? (data as any).titulo).trim())
     state = getInvalidCheck(state, "title")
-  if (!data.description.trim()) state = getInvalidCheck(state, "description")
+  if (!data.description || data.description.trim().length === 0)
+    state = getInvalidCheck(state, "description")
   if (!data.finishDate) state = getInvalidCheck(state, "finishDate")
 
   // photo
