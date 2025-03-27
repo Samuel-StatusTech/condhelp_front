@@ -17,11 +17,12 @@ export const SmallDot = styled.div`
   background-color: ${({ theme }) => theme.colors.neutral.lightMain};
 `
 
-export const SliderWrapper = styled.div`
+export const SliderWrapper = styled.div<{ $isPositive?: boolean }>`
   width: 100%;
   max-width: 100%;
   overflow: hidden;
   height: 20px;
+  /* padding-left: ${({ $isPositive }) => ($isPositive ? "50%" : 0)}; */
 
   &::before {
     content: "";
@@ -45,6 +46,14 @@ export const SliderWrapper = styled.div`
     transform: translate(0px, -50%);
     z-index: 3;
     background: linear-gradient(90deg, transparent, rgba(244, 245, 247, 1));
+  }
+
+  & > div:nth-child(2) {
+    margin-left: ${({ $isPositive }) => ($isPositive ? "50%" : 0)};
+
+    & > div {
+      min-width: fit-content;
+    }
   }
 `
 
@@ -72,12 +81,10 @@ export const SliderMarker = styled.div`
     font-weight: 300;
 
     &:nth-child(1) {
-      /* font-weight: 700; */
       font-size: 12px;
       transform: translate(-0.5px, -1.5rem);
     }
     &:nth-child(2) {
-      /* font-weight: 300; */
       font-size: 14px;
     }
   }
@@ -89,7 +96,7 @@ export const SliderTrack = styled.div`
   align-items: center;
   justify-content: space-between;
   cursor: grab;
-  gap: 8px;
+  gap: 10px;
   padding: 6px 0;
   margin: 0 -${bigDotSize / 2}px;
 `

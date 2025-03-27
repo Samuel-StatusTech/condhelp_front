@@ -45,9 +45,6 @@ export const ControllerOption = styled.div<{ $active?: boolean }>`
   border-radius: 24px;
   transition: background-color 0.3s;
   background-color: ${({ $active, theme }) =>
-    // $active ? "rgba(78, 124, 60, 0.9)" : "transparent"};
     $active ? "rgba(220, 220, 220, 0.7)" : "transparent"};
   color: ${({ theme }) => theme.colors.neutral.main};
-  /* color: ${({ $active, theme }) =>
-    $active ? theme.colors.neutral.soft : theme.colors.neutral.main}; */
 `

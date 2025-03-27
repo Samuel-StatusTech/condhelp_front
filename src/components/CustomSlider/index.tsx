@@ -8,6 +8,8 @@ type Props = {
   onChange: (v: number) => void
   range: number[]
   classifier?: string
+  roundValue?: boolean
+  nonZero?: boolean
 }
 
 export default function CustomSlider({
@@ -15,11 +17,16 @@ export default function CustomSlider({
   onChange,
   range,
   classifier,
+  roundValue,
+  nonZero,
 }: Props) {
   const sliderWrapperRef = useRef<HTMLDivElement | null>(null)
   const dragAreaRef = useRef<HTMLDivElement | null>(null)
 
+  const isPositive = range[0] > -1
+
   const [currentPoint, setCurrentPoint] = useState(value)
+  const [xValue, setXValue] = useState(0)
 
   const renderBackTrack = () => {
     let content: JSX.Element | JSX.Element[] = []
@@ -37,6 +44,40 @@ export default function CustomSlider({
     }
 
     return content
+  }
+
+  const applyZeroRule = (n: number) => {
+    let res = 0
+
+    if (nonZero) {
+      res = n > 0 ? n : 1
+    } else res = n
+
+    return res
+  }
+
+  const getScaledValue = (newValue: number) => {
+    let v = 0
+
+    const sliderSize = sliderWrapperRef?.current?.clientWidth as number
+
+    const divisor = isPositive
+      ? (sliderSize as number) -
+        (sliderWrapperRef?.current?.parentElement?.clientWidth as number) *
+          0.125
+      : sliderSize / 2
+
+    if (newValue > 0) {
+      const x = (range[1] / divisor) * newValue
+      v = applyZeroRule(roundValue ? Math.round(x) : x)
+    } else if (newValue < 0) {
+      const x = (range[0] / divisor) * newValue
+      v = -applyZeroRule(roundValue ? Math.round(x) : x)
+    } else {
+      v = applyZeroRule(range[0])
+    }
+
+    return v
   }
 
   return (
@@ -61,19 +102,28 @@ export default function CustomSlider({
         }}
       >
         {/* Markers */}
-        <S.SliderWrapper ref={sliderWrapperRef}>
+        <S.SliderWrapper ref={sliderWrapperRef} $isPositive={isPositive}>
           <S.SliderMarker>
             <span>|</span>
             <span>
-              {value}
+              {Math.round(value)}
               {classifier ?? ""}
             </span>
           </S.SliderMarker>
           <motion.div
             drag="x"
             dragConstraints={{
-              left: -(sliderWrapperRef?.current?.clientWidth as number) / 2,
-              right: (sliderWrapperRef?.current?.clientWidth as number) / 2,
+              left: isPositive
+                ? -(
+                    (sliderWrapperRef?.current?.clientWidth as number) -
+                    (sliderWrapperRef?.current?.parentElement
+                      ?.clientWidth as number) *
+                      0.125
+                  )
+                : -(sliderWrapperRef?.current?.clientWidth as number) / 2,
+              right: isPositive
+                ? 0
+                : (sliderWrapperRef?.current?.clientWidth as number) / 2,
             }}
             dragElastic={0}
             dragMomentum={false}
@@ -81,9 +131,7 @@ export default function CustomSlider({
               setCurrentPoint(0)
             }}
             onDrag={(_, info) => {
-              const walked = Math.abs((currentPoint - info.offset.x) % 30)
-
-              if (currentPoint !== info.offset.x && walked !== 0) {
+              if (currentPoint !== info.offset.x) {
                 const shouldPlus = currentPoint > info.offset.x
 
                 const diff = Math.abs(
@@ -92,21 +140,39 @@ export default function CustomSlider({
                     : currentPoint - info.offset.x
                 )
 
-                const newValue = shouldPlus ? value + diff : value - diff
+                const newValue = shouldPlus ? xValue + diff : xValue - diff
 
-                const min =
-                  -(sliderWrapperRef?.current?.clientWidth as number) / 2
-                const max =
-                  (sliderWrapperRef?.current?.clientWidth as number) / 2
+                const min = isPositive
+                  ? 0
+                  : -(sliderWrapperRef?.current?.clientWidth as number) / 2
+                const max = isPositive
+                  ? (sliderWrapperRef?.current?.clientWidth as number) -
+                    (sliderWrapperRef?.current?.parentElement
+                      ?.clientWidth as number) *
+                      0.125
+                  : (sliderWrapperRef?.current?.clientWidth as number) / 2
 
                 const isBetweenRange = min <= newValue && newValue <= max
 
                 if (isBetweenRange) {
                   setCurrentPoint(info.offset.x)
-                  onChange(newValue)
+
+                  const scaledValue = getScaledValue(newValue)
+
+                  setXValue(newValue)
+                  onChange(scaledValue)
                 } else {
-                  if (newValue < min) onChange(Math.floor(min))
-                  else if (newValue > min) onChange(Math.floor(max))
+                  if (newValue < min) {
+                    const scaledValue = getScaledValue(Math.floor(min))
+
+                    setXValue(Math.floor(min))
+                    onChange(scaledValue)
+                  } else if (newValue > min) {
+                    const scaledValue = getScaledValue(Math.floor(max))
+
+                    setXValue(Math.floor(max))
+                    onChange(scaledValue)
+                  }
                 }
               }
             }}

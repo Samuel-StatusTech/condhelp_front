@@ -12,12 +12,15 @@ type Props = {
   onCancel: () => void
 }
 
+type TEditorControllers = "zoom" | "rotate"
+
 const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [rotation, setRotation] = useState(0)
   const [zoom, setZoom] = useState(1)
 
-  const [activeController, setActiveController] = useState("zoom")
+  const [activeController, setActiveController] =
+    useState<TEditorControllers>("zoom")
 
   const onCropComplete = useCallback(
     async (_: any, croppedAreaPixels: any) => {
@@ -45,9 +48,9 @@ const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
             <Cropper
               image={imageSrc}
               crop={crop}
-              zoom={1}
-              rotation={0}
-              aspect={16 / 9} // Mantenha o aspecto quadrado
+              zoom={zoom}
+              rotation={rotation}
+              aspect={16 / 9}
               onCropChange={setCrop}
               onCropComplete={onCropComplete}
               onZoomChange={setZoom}
@@ -60,10 +63,12 @@ const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
       <S.ControllersArea>
         <S.ControllerUXArea>
           <CustomSlider
-            value={zoom}
-            onChange={setZoom}
-            range={[1, 3]}
-            classifier="x"
+            value={activeController === "zoom" ? zoom : rotation}
+            onChange={activeController === "zoom" ? setZoom : setRotation}
+            range={activeController === "zoom" ? [1, 100] : [-90, 90]}
+            classifier={activeController === "zoom" ? "x" : "º"}
+            roundValue={activeController === "zoom"}
+            nonZero={true}
           />
         </S.ControllerUXArea>
         <S.ControllersOptionsArea>
