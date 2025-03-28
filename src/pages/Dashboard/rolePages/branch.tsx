@@ -11,12 +11,12 @@ import { TDashboardBranch } from "../../../utils/@types/data/dashboards/branch"
 import initials from "../../../utils/initials"
 import { getStore } from "../../../store"
 
-const DashboardBranch = () => {
+const DashboardBranch = ({ canLoadData }: { canLoadData: boolean }) => {
   const { controllers } = getStore()
 
   const [data, setData] = useState<TDashboardBranch>(initials.dashboards.admin)
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   // Cards
 
@@ -133,8 +133,8 @@ const DashboardBranch = () => {
   }, [])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    if (canLoadData) loadData()
+  }, [loadData, canLoadData])
 
   useEffect(() => {
     controllers.modal.open({

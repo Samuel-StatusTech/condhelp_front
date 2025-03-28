@@ -106,7 +106,11 @@ const Login = () => {
 
               if (userDataReq.ok) {
                 controllers.user.setData(userDataReq.data)
-                navigate("/dashboard")
+                navigate("/dashboard", {
+                  state: {
+                    resetPass: auth.data.renewPassword,
+                  },
+                })
               } else {
                 controllers.feedback.setData({
                   state: "error",

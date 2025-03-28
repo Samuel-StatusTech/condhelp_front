@@ -15,8 +15,10 @@ import LoadingModal from "../LoadingModal"
 import EditBudget from "./variations/EditBudget"
 import ReopenBudget from "./variations/ReopenBudget"
 import ImageEditor from "./variations/ImageEditor"
+import ResetPassword from "./variations/ResetPassword"
 
 export type ModalProps = {
+  bluredBack?: boolean
   width?: DialogProps["maxWidth"]
   visible: boolean
   onClose?: () => void
@@ -36,11 +38,21 @@ export type TModals =
   | "confirmDelete"
   | "contactInfo"
   | "imageEditor"
+  | "resetPassword"
 
 const Modal = () => {
   const { modal, controllers } = getStore()
 
-  const { width, role, visible, data, onClose, handleOp, children } = modal
+  const {
+    bluredBack,
+    width,
+    role,
+    visible,
+    data,
+    onClose,
+    handleOp,
+    children,
+  } = modal
 
   const handleClose = () => {
     onClose && onClose()
@@ -95,6 +107,15 @@ const Modal = () => {
           <ImageEditor data={data} onClose={handleClose} handleOp={handleOp} />
         )
         break
+      case "resetPassword":
+        el = (
+          <ResetPassword
+            data={data}
+            onClose={handleClose}
+            handleOp={handleOp as (newPass: string) => Promise<void>}
+          />
+        )
+        break
       default:
         el = children
         break
@@ -112,10 +133,11 @@ const Modal = () => {
         maxWidth={width}
         sx={{
           width: "100%",
+          backdropFilter: bluredBack ? "blur(5px)" : undefined,
           "& .MuiPaper-root": {
             backgroundColor: "#F4F5F7",
             borderRadius: "16px",
-            width: "100%"
+            width: "100%",
           },
         }}
       >

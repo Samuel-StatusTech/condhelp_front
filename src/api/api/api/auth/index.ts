@@ -75,12 +75,12 @@ const authResetPassword: TApi["auth"]["resetPassword"] = async (data) => {
       await service
         .post(`/auth/reset-password`, data)
         .then((res) => {
-          const info = res.data
+          const isOk = res.status === 200
 
-          if (info) {
+          if (isOk) {
             resolve({
               ok: true,
-              data: info,
+              data: undefined,
             })
           } else {
             resolve({

@@ -11,12 +11,12 @@ import { getStore } from "../../../store"
 import { TDashboardAdmin } from "../../../utils/@types/data/dashboards/admin"
 import initials from "../../../utils/initials"
 
-const DashboardAdmin = () => {
+const DashboardAdmin = ({ canLoadData }: { canLoadData: boolean }) => {
   const { controllers } = getStore()
 
   const [data, setData] = useState<TDashboardAdmin>(initials.dashboards.admin)
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   // Cards
 
@@ -124,8 +124,8 @@ const DashboardAdmin = () => {
   }, [])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    if (canLoadData) loadData()
+  }, [loadData, canLoadData])
 
   useEffect(() => {
     controllers.modal.open({

@@ -22,7 +22,7 @@ import { getDateStr } from "../../../utils/tb/format/date"
 import { matchSearch } from "../../../utils/tb/helpers/matchSearch"
 import { useNavigate } from "react-router-dom"
 
-const DashboardProvider = () => {
+const DashboardProvider = ({ canLoadData }: { canLoadData: boolean }) => {
   const { user, controllers } = getStore()
 
   const navigate = useNavigate()
@@ -31,7 +31,7 @@ const DashboardProvider = () => {
    *  Search control
    */
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [budget, setBudget] = useState<TProviderBudgetResume | null>(null)
 
   const [finishedBudgetsSearch, setFinishedBudgetsSearch] = useState("")
@@ -185,8 +185,8 @@ const DashboardProvider = () => {
   }, [])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    if (canLoadData) loadData()
+  }, [loadData, canLoadData])
 
   useEffect(() => {
     controllers.modal.open({

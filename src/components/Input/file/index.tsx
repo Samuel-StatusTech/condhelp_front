@@ -51,8 +51,6 @@ const InputFile = (props: Props) => {
     ? "application/pdf"
     : imagesMimeTypes.join(",")
 
-  console.log(acceptableMimeTypes)
-
   const handleClick = () => {
     inputRef.current?.click()
   }

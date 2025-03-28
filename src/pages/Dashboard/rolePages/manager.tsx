@@ -34,7 +34,7 @@ import "swiper/css/navigation"
 import "swiper/css/pagination"
 import "swiper/css/scrollbar"
 
-const DashboardManager = () => {
+const DashboardManager = ({ canLoadData }: { canLoadData: boolean }) => {
   const { user, controllers } = getStore((store) => ({
     controllers: store.controllers,
     user: store.user as TUserTypes["SINDICO"],
@@ -42,7 +42,7 @@ const DashboardManager = () => {
 
   const navigate = useNavigate()
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   /*
    *  Search control
@@ -257,8 +257,8 @@ const DashboardManager = () => {
   }, [specificCondo])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    if (canLoadData) loadData()
+  }, [loadData, canLoadData])
 
   useEffect(() => {
     controllers.modal.open({

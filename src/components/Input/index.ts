@@ -6,6 +6,7 @@ import Image from "./image"
 import Logo from "./logo"
 import ListInput from "./ListInput"
 import Multiple from "./multiple"
+import Password from "./password"
 import Points from "./points"
 import Profile from "./profile"
 import Radio from "./radio"
@@ -26,6 +27,7 @@ const Input = {
   Logo,
   ListInput,
   Multiple,
+  Password,
   Points,
   Profile,
   Radio,
