@@ -14,29 +14,31 @@ const Dashboard = () => {
   const [canLoadData, setCanLoadData] = useState(false)
 
   const handlePasswordReset = useCallback(
-    async (newPassword: string) => {
-      try {
-        const req = await Api.auth.resetPassword({
-          newPassword,
-          username: user?.email as string,
-        })
+    async (newPassword?: string) => {
+      if (newPassword) {
+        try {
+          const req = await Api.auth.resetPassword({
+            newPassword,
+            username: user?.email as string,
+          })
 
-        if (req.ok) {
+          if (req.ok) {
+            controllers.modal.close()
+            controllers.feedback.setData({
+              message: "Senha atualizada com sucesso.",
+              state: "success",
+              visible: true,
+            })
+          } else throw new Error()
+        } catch (error) {
           controllers.modal.close()
           controllers.feedback.setData({
-            message: "Senha atualizada com sucesso.",
-            state: "success",
+            message:
+              "Não foi possível atualizar sua senha. Tente novamente mais tarde.",
+            state: "alert",
             visible: true,
           })
-        } else throw new Error()
-      } catch (error) {
-        controllers.modal.close()
-        controllers.feedback.setData({
-          message:
-            "Não foi possível atualizar sua senha. Tente novamente mais tarde.",
-          state: "alert",
-          visible: true,
-        })
+        }
       }
 
       setCanLoadData(true)

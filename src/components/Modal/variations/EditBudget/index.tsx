@@ -25,6 +25,7 @@ import Lottie from "lottie-react"
 
 import lottieData from "../../../../assets/animations/loading.json"
 import { TBudgetStatus } from "../../../../utils/@types/data/status"
+import { sendFile } from "../../../../utils/tb/helpers/file/sendFile"
 
 type Props = {
   data?: any
@@ -50,14 +51,14 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
     subcategory: [],
   })
 
-  const getObj = () => {
+  const getObj = (img: string | null) => {
     const obj: any = {
       id: data.id,
       title: form.title,
       description: form.description,
       startDate: getDateStr(form.startDate, "javaDateTime"),
       finishDate: getDateStr(form.finishDate, "javaDateTime"),
-      attachmentUrl: form.attachedUrl,
+      attachedUrl: img,
       urgent: form.urgent,
       condominiumId: budgetData?.condominiumId,
       serviceCategoryId: budgetData?.categoryId,
@@ -72,8 +73,25 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
     return obj
   }
 
-  const budgetEdit = () => {
-    const obj = getObj()
+  const budgetEdit = async () => {
+    let img = null
+
+    if (form.attachedUrl) {
+      const imgUrl = await sendFile({
+        type: "both",
+        fileData: form.attachedUrl,
+        showError: () => {
+          controllers.feedback.setData({
+            state: "alert",
+            message: "Não foi possível enviar a imagem.",
+            visible: true,
+          })
+        },
+      })
+      if (imgUrl) img = imgUrl
+    }
+
+    const obj = getObj(img)
 
     return new Promise<TDefaultRes<TBudget>>(async (resolve) => {
       const req = await Api.budgets.update({ budget: obj })
@@ -461,8 +479,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
             value={form.attachedUrl}
             gridSizes={{ big: 12 }}
             label="Anexar um arquivo"
-            singleComponent={true}
-            allowsPdf={true}
+            allowsPdfAndImages={true}
           />
         </S.Row>
 
