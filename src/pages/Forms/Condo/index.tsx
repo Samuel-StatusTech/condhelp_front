@@ -205,6 +205,8 @@ const FPcondo = () => {
   }
 
   const handleSave = async () => {
+    setLoading(true)
+
     try {
       const errorInfo = updateErrors()
 
@@ -214,40 +216,69 @@ const FPcondo = () => {
           let electionFile = null
 
           if (form.photo) {
-            const imgUrl = await sendFile({
-              type: "image",
-              fileData: form.photo,
-              showError: () => {
-                controllers.feedback.setData({
-                  state: "alert",
-                  message: "Não foi possível enviar a imagem.",
-                  visible: true,
-                })
-              },
-            })
+            const imgUrl =
+              typeof form.photo === "string" &&
+              form.photo.startsWith("https://")
+                ? form.photo
+                : await sendFile({
+                    type: "image",
+                    fileData: form.photo,
+                    showError: () => {
+                      controllers.feedback.setData({
+                        state: "alert",
+                        message: "Não foi possível enviar a imagem.",
+                        visible: true,
+                      })
+                    },
+                  })
             if (imgUrl) img = imgUrl
           }
 
           if (form.electionFile) {
-            const electionFileUrl = await sendFile({
-              type: "pdf",
-              fileData: form.electionFile,
-              showError: () => {
-                controllers.feedback.setData({
-                  state: "alert",
-                  message: "Não foi possível enviar a ata de eleição.",
-                  visible: true,
-                })
-              },
-            })
-            if (electionFileUrl) electionFile = electionFileUrl
-          }
+            if (
+              typeof form.electionFile === "string" &&
+              form.electionFile.startsWith("https://")
+            ) {
+              electionFile = form.electionFile
+            } else {
+              const electionFileUrl = await sendFile({
+                type: "pdf",
+                fileData: form.electionFile,
+                showError: () => {
+                  controllers.feedback.setData({
+                    state: "alert",
+                    message: "Não foi possível enviar a ata de eleição.",
+                    visible: true,
+                  })
+                },
+              })
+              if (electionFileUrl) electionFile = electionFileUrl
+            }
 
-          if (electionFile) {
-            if (params.id)
-              await handleUpdate({ imgUrl: img, electionFileUrl: electionFile })
-            else
-              await handleCreate({ imgUrl: img, electionFileUrl: electionFile })
+            if (electionFile) {
+              if (params.id)
+                await handleUpdate({
+                  imgUrl: img,
+                  electionFileUrl: electionFile,
+                })
+              else
+                await handleCreate({
+                  imgUrl: img,
+                  electionFileUrl: electionFile,
+                })
+            } else {
+              controllers.feedback.setData({
+                state: "alert",
+                message: "Selecione uma arquivo para a ata de eleição",
+                visible: true,
+              })
+            }
+          } else {
+            controllers.feedback.setData({
+              state: "alert",
+              message: "Selecione uma arquivo para a ata de eleição",
+              visible: true,
+            })
           }
         } else {
           controllers.feedback.setData({
@@ -273,6 +304,8 @@ const FPcondo = () => {
           "Houve um erro ao processar as informações. Tente novamente mais tarde.",
       })
     }
+
+    setLoading(false)
   }
 
   const onConfirmDelete = async () => {
