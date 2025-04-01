@@ -249,7 +249,7 @@ const FPpeople = () => {
 
       const accountRegister = await Api.auth.register({
         tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
-        senha: null,
+        senha: "123456",
         usuario: form.email,
         document: document,
       })

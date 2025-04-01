@@ -110,9 +110,7 @@ const InputProfile = (props: Props) => {
             <S.ImageContent
               onClick={handleClick}
               $image={value ? getImageUrl() : undefined}
-            >
-              {!value && <Icons.User />}
-            </S.ImageContent>
+            ></S.ImageContent>
           </S.ImageWrapper>
 
           <S.ButtonsArea>

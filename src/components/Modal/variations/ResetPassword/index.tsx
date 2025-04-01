@@ -4,6 +4,8 @@ import * as S from "./styled"
 
 import { TErrorsCheck } from "../../../../utils/@types/helpers/checkErrors"
 
+import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
+
 import Input from "../../../Input"
 
 import Button from "../../../Button"
@@ -11,11 +13,11 @@ import { checkErrors } from "../../../../utils/tb/checkErrors"
 
 type Props = {
   data?: any
-  onClose: () => void
+  onClose?: () => void
   handleOp?: (newPass: string) => Promise<void>
 }
 
-const ResetPassword = ({ handleOp }: Props) => {
+const ResetPassword = ({ onClose, handleOp }: Props) => {
   const [form, setForm] = useState({
     newPass1: "",
     newPass2: "",
@@ -44,6 +46,10 @@ const ResetPassword = ({ handleOp }: Props) => {
     setSubmitting(false)
   }
 
+  const handleClose = () => {
+    if (onClose) onClose()
+  }
+
   const handleField = (field: string, value: boolean | string) => {
     if (errors.fields.includes(field)) {
       const newFieldsList = errors.fields.filter(
@@ -68,6 +74,11 @@ const ResetPassword = ({ handleOp }: Props) => {
         <C.HeaderDefault>
           <C.HeaderMain>
             <C.ModalTitle>Nova senha</C.ModalTitle>
+            {onClose && (
+              <C.CloseBtn onClick={handleClose}>
+                <CloseIcon />
+              </C.CloseBtn>
+            )}
           </C.HeaderMain>
         </C.HeaderDefault>
       </C.Header>

@@ -486,40 +486,57 @@ const MyAccount = () => {
     })
   }, [controllers.modal, loading])
 
-  const handleChangePassword = async () => {
-    setLoading(true)
+  const handlePasswordReset = useCallback(
+    async (newPassword?: string) => {
+      setLoading(true)
 
-    try {
-      const req = await Api.auth.requestPasswordLink({
-        email: user?.email as string,
-      })
+      if (newPassword) {
+        try {
+          const req = await Api.auth.resetPassword({
+            newPassword,
+            username: user?.email as string,
+          })
 
-      if (req.ok) {
-        controllers.feedback.setData({
-          message:
-            "Um link foi enviado ao seu email. Acesse para trocar a senha.",
-          state: "success",
-          visible: true,
-        })
+          if (req.ok) {
+            controllers.modal.close()
+            controllers.feedback.setData({
+              message: "Senha atualizada com sucesso.",
+              state: "success",
+              visible: true,
+            })
+          } else throw new Error()
+        } catch (error) {
+          controllers.modal.close()
+          controllers.feedback.setData({
+            message:
+              "Não foi possível atualizar sua senha. Tente novamente mais tarde.",
+            state: "alert",
+            visible: true,
+          })
+        }
       } else {
         controllers.feedback.setData({
-          message:
-            "Houve um erro ao solicitar o link. Tente novamente mais tarde.",
+          message: "Defina uma senha para redefinir",
           state: "alert",
           visible: true,
         })
       }
-    } catch (error) {
-      controllers.feedback.setData({
-        message:
-          "Houve um erro ao solicitar o link. Tente novamente mais tarde.",
-        state: "alert",
-        visible: true,
-      })
-    }
 
-    setLoading(false)
-  }
+      setLoading(false)
+    },
+    [controllers.feedback, controllers.modal, user?.email]
+  )
+
+  const handleChangePassword = useCallback(async () => {
+    controllers.modal.open({
+      role: "resetPassword",
+      visible: true,
+      width: "sm",
+      bluredBack: true,
+      handleOp: handlePasswordReset,
+      onClose: () => controllers.modal.close(),
+    })
+  }, [controllers.modal, handlePasswordReset])
 
   return (
     <MyAccountContent
