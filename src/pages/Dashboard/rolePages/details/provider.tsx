@@ -94,7 +94,7 @@ const ProviderDetails = ({ data, handleBack }: Props) => {
 
             <S.ProviderBrand>
               <S.LogoArea>
-                <span>Sem logo</span>
+                <span style={{ textAlign: "center" }}>Sem<br/>imagem</span>
               </S.LogoArea>
               <S.ContactInfos>
                 <S.Contact>
