@@ -11,12 +11,65 @@ import { TApi_Responses_Auth as TResponses } from "./responses"
 /*
  * Auth
  */
+
 export type TApi_Auth = {
+  requestPasswordLink: (
+    p: TParams["auth"]["requestPasswordLink"]
+  ) => TResponses["auth"]["requestPasswordLink"]
   register: (p: TParams["auth"]["register"]) => TResponses["auth"]["register"]
   resetPassword: (
     p: TParams["auth"]["resetPassword"]
   ) => TResponses["auth"]["resetPassword"]
   login: (p: TParams["auth"]["login"]) => TResponses["auth"]["login"]
+}
+
+const requestPasswordLink: TApi["auth"]["requestPasswordLink"] = async (
+  data
+) => {
+  return new Promise(async (resolve) => {
+    try {
+      await service
+        .post(`/auth/requestPasswordLink`, data)
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível requisitar o link. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível requisitar o link. Tente novamente mais tarde."
+
+          if (
+            err.response?.status === 400 &&
+            err.response &&
+            err.response.data
+          ) {
+            backMessage = (err.response.data as any).error
+          }
+
+          resolve({
+            ok: false,
+            error: backMessage,
+          })
+        })
+    } catch (error) {
+      resolve({
+        ok: false,
+        error: "Não foi possível fazer o cadastro. Tente novamente mais tarde.",
+      })
+    }
+  })
 }
 
 const authRegister: TApi["auth"]["register"] = async (data) => {
@@ -147,6 +200,7 @@ const authLogin: TApi["auth"]["login"] = async (data) => {
 }
 
 export const apiAuth = {
+  requestPasswordLink: requestPasswordLink,
   register: authRegister,
   resetPassword: authResetPassword,
   login: authLogin,

@@ -14,6 +14,7 @@ import {
 } from "../../../utils/tb/format/inscription"
 import { formatCNPJ } from "../../../utils/tb/format/cnpj"
 import { formatCpf } from "../../../utils/tb/format/cpf"
+import Button from "../../../components/Button"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -23,6 +24,7 @@ type Props = {
   formSubmitFields: TBlock["groups"][number]
 
   handleSelectCity: (city: TCity) => void
+  handleChangePassword: () => Promise<void>
 
   options: {
     [key: string]: TOption[]
@@ -35,6 +37,7 @@ const MyAccountFranchise = (props: Props) => {
     handleField,
     handleCancel,
     handleSave,
+    handleChangePassword,
 
     form,
     formSubmitFields,
@@ -144,7 +147,9 @@ const MyAccountFranchise = (props: Props) => {
                           type: "input",
                           field: "number",
                           label: "Número",
-                          value: String(form.address?.number).replace(/\D/g, "") ?? "",
+                          value:
+                            String(form.address?.number).replace(/\D/g, "") ??
+                            "",
                           placeholder: "0",
                           gridSizes: { big: 4, small: 5 },
                           error: {
@@ -219,6 +224,26 @@ const MyAccountFranchise = (props: Props) => {
                         gridSizes: { big: 12 },
                       },
                     ],
+                  },
+                  {
+                    type: "custom",
+                    title: "Senha",
+                    smallTitle: true,
+                    element: (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          type="main"
+                          text="Alterar senha"
+                          action={handleChangePassword}
+                          fit={true}
+                        />
+                      </div>
+                    ),
                   },
                 ],
               },

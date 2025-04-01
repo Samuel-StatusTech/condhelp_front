@@ -15,6 +15,7 @@ type Props = {
     handleField: (field: string, value: any) => void
     handleCancel: (params?: any) => void
     handleSave: (form: any) => Promise<void>
+    handleChangePassword: () => Promise<void>
 
     form: any
     formSubmitFields: TBlock["groups"][number]

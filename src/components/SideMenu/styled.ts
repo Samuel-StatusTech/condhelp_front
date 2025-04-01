@@ -116,18 +116,29 @@ export const LoggedUserArea = styled.div`
     theme.animations.delays.main(5)}
 `
 
-export const UserProfile = styled.div`
+export const UserProfile = styled.div<{ $image?: string | null }>`
   border: 2px solid ${({ theme }) => theme.colors.neutral.white};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   width: 75px;
   height: 75px;
   overflow: hidden;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border-radius: 75px;
 
-  img,
+  background-image: ${({ $image }) => ($image ? `url(${$image})` : "unset")};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  img {
+    width: 100%;
+    max-width: 120%;
+    height: 100%;
+  }
+
   svg {
     min-width: 100%;
     min-height: 100%;

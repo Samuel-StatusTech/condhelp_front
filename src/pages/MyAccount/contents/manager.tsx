@@ -8,11 +8,13 @@ import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { systemOptions } from "../../../utils/system/options"
 import { getMajorityDate } from "../../../utils/tb/helpers/getMajorityDate"
 import { formatCpf } from "../../../utils/tb/format/cpf"
+import Button from "../../../components/Button"
 
 type Props = {
   handleField: (field: string, value: any) => void
   handleCancel: (params?: any) => void
   handleSave: (form: any) => Promise<void>
+  handleChangePassword: () => Promise<void>
   form: any
   formSubmitFields: TBlock["groups"][number]
 
@@ -24,6 +26,7 @@ const MyAccountManager = (props: Props) => {
     handleField,
     handleCancel,
     handleSave,
+    handleChangePassword,
 
     form,
     formSubmitFields,
@@ -87,6 +90,26 @@ const MyAccountManager = (props: Props) => {
                         gridSizes: { big: 12 },
                       },
                     ],
+                  },
+                  {
+                    type: "custom",
+                    title: "Senha",
+                    smallTitle: true,
+                    element: (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          type="main"
+                          text="Alterar senha"
+                          action={handleChangePassword}
+                          fit={true}
+                        />
+                      </div>
+                    ),
                   },
                   {
                     type: "fields",

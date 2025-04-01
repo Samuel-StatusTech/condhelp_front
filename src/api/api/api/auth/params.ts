@@ -1,5 +1,8 @@
 export type TApi_Params_Auth = {
   auth: {
+    requestPasswordLink: {
+      email: string
+    }
     register: {
       usuario: string
       senha: string

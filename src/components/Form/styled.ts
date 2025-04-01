@@ -45,11 +45,12 @@ export const Block = styled.div<{
   }
 `
 
-export const BlockTitle = styled.span`
-  color: ${({ theme }) => theme.colors.neutral.lightMain};
+export const BlockTitle = styled.span<{ $small?: boolean }>`
+  color: ${({ $small, theme }) =>
+    $small ? theme.colors.neutral.main : theme.colors.neutral.lightMain};
   font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: ${({ $small }) => ($small ? 400 : 600)};
+  text-transform: ${({ $small }) => ($small ? "none" : "uppercase")};
 `
 
 export const GroupArea = styled.div`
@@ -78,7 +79,7 @@ export const FormLine = styled.div<{ $k: number; $align?: string }>`
   display: flex;
 
   gap: 10px;
-  align-items: ${({$align}) => $align ?? "flex-start"};
+  align-items: ${({ $align }) => $align ?? "flex-start"};
   max-width: 100%;
   z-index: ${({ $k }) => 10 - ($k + 1)};
 

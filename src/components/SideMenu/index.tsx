@@ -76,12 +76,8 @@ const SideMenu = (props: Props) => {
         )}
 
         <S.LoggedUserArea>
-          <S.UserProfile>
-            {user?.photo ? (
-              <img src={user?.photo} alt="" width={"100%"} />
-            ) : (
-              <Icons.User />
-            )}
+          <S.UserProfile $image={user?.photo}>
+            {!user?.photo && <Icons.User />}
           </S.UserProfile>
           <S.NameArea>
             <S.UserName>{user?.name}</S.UserName>

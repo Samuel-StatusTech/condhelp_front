@@ -9,6 +9,7 @@ import { TOption } from "../../../utils/@types/data/option"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { TCity } from "../../../utils/@types/data/region"
 import { formatCNPJ } from "../../../utils/tb/format/cnpj"
+import Button from "../../../components/Button"
 
 type Props = {
   handleField: (field: string, value: any) => void
@@ -18,6 +19,7 @@ type Props = {
   formSubmitFields: TBlock["groups"][number]
 
   handleSelectCity: (city: TCity) => void
+  handleChangePassword: () => Promise<void>
 
   options: {
     [key: string]: TOption[]
@@ -30,6 +32,7 @@ const MyAccountProvider = (props: Props) => {
     handleField,
     handleCancel,
     handleSave,
+    handleChangePassword,
 
     form,
     formSubmitFields,
@@ -348,6 +351,26 @@ const MyAccountProvider = (props: Props) => {
                         },
                       ],
                     ],
+                  },
+                  {
+                    type: "custom",
+                    title: "Senha",
+                    smallTitle: true,
+                    element: (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          type="main"
+                          text="Alterar senha"
+                          action={handleChangePassword}
+                          fit={true}
+                        />
+                      </div>
+                    ),
                   },
                   formSubmitFields,
                 ],

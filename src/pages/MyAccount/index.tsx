@@ -44,10 +44,17 @@ const MyAccount = () => {
     franchises: [],
     category: [],
   })
+
   const [errors, setErrors] = useState<TErrorsCheck>({
     fields: [],
     has: false,
   })
+
+  const [loading, setLoading] = useState(true)
+
+  const handleCancel = () => {
+    navigate(-1)
+  }
 
   const getObj = (
     image: string | null,
@@ -96,12 +103,6 @@ const MyAccount = () => {
 
       return parsed
     }
-  }
-
-  const [loading, setLoading] = useState(true)
-
-  const handleCancel = () => {
-    navigate(-1)
   }
 
   const getUserDocument = (obj: any) => {
@@ -485,12 +486,48 @@ const MyAccount = () => {
     })
   }, [controllers.modal, loading])
 
+  const handleChangePassword = async () => {
+    setLoading(true)
+
+    try {
+      const req = await Api.auth.requestPasswordLink({
+        email: user?.email as string,
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message:
+            "Um link foi enviado ao seu email. Acesse para trocar a senha.",
+          state: "success",
+          visible: true,
+        })
+      } else {
+        controllers.feedback.setData({
+          message:
+            "Houve um erro ao solicitar o link. Tente novamente mais tarde.",
+          state: "alert",
+          visible: true,
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Houve um erro ao solicitar o link. Tente novamente mais tarde.",
+        state: "alert",
+        visible: true,
+      })
+    }
+
+    setLoading(false)
+  }
+
   return (
     <MyAccountContent
       info={{
         handleField: onHandleField,
         handleCancel,
         handleSave: handleSave,
+        handleChangePassword: handleChangePassword,
         form,
         formSubmitFields,
         options: options,

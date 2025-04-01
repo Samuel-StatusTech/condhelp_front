@@ -12,7 +12,7 @@ export const ImageWrapper = styled.div`
   width: fit-content;
 `
 
-export const ImageContent = styled.div`
+export const ImageContent = styled.div<{ $image?: string | null }>`
   width: 75px;
   height: 75px;
   border-radius: 120px;
@@ -23,6 +23,11 @@ export const ImageContent = styled.div`
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.neutral.medium};
   cursor: pointer;
+
+  background-image: ${({ $image }) => ($image ? `url(${$image})` : "unset")};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `
 
 export const Image = styled.img`

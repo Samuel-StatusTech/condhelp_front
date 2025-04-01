@@ -107,8 +107,11 @@ const InputProfile = (props: Props) => {
         <C.Label>{label}</C.Label>
         <S.Box $hasContent={!!value}>
           <S.ImageWrapper>
-            <S.ImageContent onClick={handleClick}>
-              {value && <S.Image src={getImageUrl()} alt="" />}
+            <S.ImageContent
+              onClick={handleClick}
+              $image={value ? getImageUrl() : undefined}
+            >
+              {!value && <Icons.User />}
             </S.ImageContent>
           </S.ImageWrapper>
 

@@ -93,7 +93,9 @@ const Form = ({ handleField, columns }: Props) => {
                     }}
                   >
                     <Divider />
-                    <S.BlockTitle>{group.title}</S.BlockTitle>
+                    <S.BlockTitle $small={group.smallTitle}>
+                      {group.title}
+                    </S.BlockTitle>
                     <S.GroupArea>
                       <S.FormArea>
                         {group.type === "custom"
