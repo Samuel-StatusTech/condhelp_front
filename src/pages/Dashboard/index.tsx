@@ -46,18 +46,28 @@ const Dashboard = () => {
     [controllers.feedback, controllers.modal, user?.email]
   )
 
+  const handleTogglePasswordModal = useCallback(() => {
+    controllers.modal.open({
+      role: "resetPassword",
+      visible: true,
+      width: "sm",
+      bluredBack: true,
+      handleOp: handlePasswordReset,
+    })
+  }, [controllers.modal, handlePasswordReset])
+
   useEffect(() => {
     const shouldResetPass = location.state && location.state.resetPass
     if (shouldResetPass) {
       controllers.modal.open({
-        role: "resetPassword",
+        role: "welcome",
         visible: true,
         width: "sm",
         bluredBack: true,
-        handleOp: handlePasswordReset,
+        handleOp: handleTogglePasswordModal,
       })
     } else setCanLoadData(true)
-  }, [controllers.modal, handlePasswordReset, location.state])
+  }, [controllers.modal, handleTogglePasswordModal, location.state])
 
   const PageContent = useCallback(() => {
     switch (user?.profile) {

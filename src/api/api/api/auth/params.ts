@@ -5,7 +5,7 @@ export type TApi_Params_Auth = {
     }
     register: {
       usuario: string
-      senha: string
+      senha: string | null
       tipo: string
       document: string
     }

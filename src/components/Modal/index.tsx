@@ -16,6 +16,7 @@ import EditBudget from "./variations/EditBudget"
 import ReopenBudget from "./variations/ReopenBudget"
 import ImageEditor from "./variations/ImageEditor"
 import ResetPassword from "./variations/ResetPassword"
+import WelcomeModal from "./variations/Welcome"
 
 export type ModalProps = {
   bluredBack?: boolean
@@ -39,6 +40,7 @@ export type TModals =
   | "contactInfo"
   | "imageEditor"
   | "resetPassword"
+  | "welcome"
 
 const Modal = () => {
   const { modal, controllers } = getStore()
@@ -113,6 +115,15 @@ const Modal = () => {
             data={data}
             onClose={handleClose}
             handleOp={handleOp as (newPass: string) => Promise<void>}
+          />
+        )
+        break
+      case "welcome":
+        el = (
+          <WelcomeModal
+            data={data}
+            onClose={handleClose}
+            handleOp={handleOp as () => Promise<void>}
           />
         )
         break
