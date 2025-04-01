@@ -143,11 +143,21 @@ const authResetPassword: TApi["auth"]["resetPassword"] = async (data) => {
             })
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          let backMessage =
+            "Não foi possível alterar sua senha. Tente novamente mais tarde."
+
+          if (
+            (err.response?.status === 400 || err.response?.status === 404) &&
+            err.response &&
+            err.response.data
+          ) {
+            backMessage = (err.response.data as any).error
+          }
+
           resolve({
             ok: false,
-            error:
-              "Não foi possível alterar sua senha. Tente novamente mais tarde.",
+            error: backMessage,
           })
         })
     } catch (error) {

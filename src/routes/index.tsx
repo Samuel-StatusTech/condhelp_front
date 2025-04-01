@@ -2,7 +2,18 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
 import { getStore } from "../store"
 
 // Pages
+
+/*
+ *  Authentication
+ */
+
 import Login from "../pages/Login"
+import ResetPassPage from "../pages/ResetPass"
+
+/*
+ *  System
+ */
+
 import AuthRoute from "./AuthRoute"
 import Dashboard from "../pages/Dashboard"
 import DashTemplate from "../pages/_DashTemplate"
@@ -49,6 +60,7 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="login" element={<Login />} />
+        <Route path="resetPass" element={<ResetPassPage />} />
         <Route element={<AuthRoute />}>
           <Route
             path="/monitoring"
