@@ -29,6 +29,8 @@ const Dashboard = () => {
               state: "success",
               visible: true,
             })
+
+            location.state = null
           } else throw new Error()
         } catch (error) {
           controllers.modal.close()
@@ -43,7 +45,7 @@ const Dashboard = () => {
 
       setCanLoadData(true)
     },
-    [controllers.feedback, controllers.modal, user?.email]
+    [controllers.feedback, controllers.modal, location, user?.email]
   )
 
   const handleTogglePasswordModal = useCallback(() => {
