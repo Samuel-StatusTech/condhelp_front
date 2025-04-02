@@ -99,10 +99,14 @@ const Login = () => {
             if (auth.ok) {
               const tokenData = getTokenData(auth.data.token)
 
-              const userDataReq = await Api.persons.getSingle({
-                id: auth.data.userId,
-                profile: tokenData.userType as TAccess,
-              })
+              const userDataReq = await Api.persons.getSingle(
+                {
+                  id: auth.data.userId,
+                  profile: tokenData.userType as TAccess,
+                },
+                true,
+                auth.data.userAccount
+              )
 
               if (userDataReq.ok) {
                 controllers.user.setData(userDataReq.data)

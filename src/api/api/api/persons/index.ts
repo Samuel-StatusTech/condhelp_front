@@ -340,134 +340,131 @@ const deleteItem: TApi["persons"]["delete"] = async ({ person }) => {
   })
 }
 
-const getSingle: TApi["persons"]["getSingle"] = async ({
-  id,
-  profile = "USUARIO",
-}) => {
+const getSingle: TApi["persons"]["getSingle"] = async (
+  { id, profile = "USUARIO" },
+  skipUserAccount = false,
+  userInfo?: any
+) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await service
-        .get(`${baseURL}/${id}`)
-        .then(async (res) => {
-          const info = res.data
+      const userBase =
+        skipUserAccount && userInfo
+          ? userInfo
+          : await service
+              .get(`${baseURL}/${id}`)
+              .then(async (res) => res.data ?? null)
 
-          if (info) {
-            const userProfile = info.profile as TAccess
+      const info = userBase
 
-            if (!["ADMIN"].includes(userProfile)) {
-              const url =
-                userProfile === "FILIAL"
-                  ? `${rolesUrlRelations[userProfile]}/useraccount`
-                  : userProfile === "PRESTADOR"
-                  ? `${rolesUrlRelations[userProfile]}/useraccount`
-                  : userProfile === "FRANQUEADO"
-                  ? `${rolesUrlRelations[userProfile]}/useraccount`
-                  : userProfile === "SINDICO"
-                  ? `${rolesUrlRelations[userProfile]}`
-                  : rolesUrlRelations[userProfile] ?? baseURL
+      if (info) {
+        const userProfile = info.profile as TAccess
 
-              const extraDataReq = await service.get(`${url}/${info.userId}`)
+        if (!["ADMIN"].includes(userProfile)) {
+          const url =
+            userProfile === "FILIAL"
+              ? `${rolesUrlRelations[userProfile]}/useraccount`
+              : userProfile === "PRESTADOR"
+              ? `${rolesUrlRelations[userProfile]}/useraccount`
+              : userProfile === "FRANQUEADO"
+              ? `${rolesUrlRelations[userProfile]}/useraccount`
+              : userProfile === "SINDICO"
+              ? `${rolesUrlRelations[userProfile]}`
+              : rolesUrlRelations[userProfile] ?? baseURL
 
-              if (extraDataReq.data) {
-                let extraInfo = extraDataReq.data
+          const extraDataReq = await service.get(`${url}/${info.userId}`)
 
-                let city: TCity | null = null
+          if (extraDataReq.data) {
+            let extraInfo = extraDataReq.data
 
-                if (
-                  extraInfo.address &&
-                  extraInfo.address.city &&
-                  (["FILIAL", "FRANQUEADO", "PRESTADOR"] as TAccess[]).includes(
-                    userProfile
-                  )
-                ) {
-                  const cityReq = await apiCities.getSingle({
-                    id: +extraInfo.address.city,
-                  })
+            let city: TCity | null = null
 
-                  if (cityReq.ok) city = cityReq.data
-                }
-
-                if (userProfile === "PRESTADOR") {
-                  extraInfo = parseUserProvider({
-                    ...info,
-                    ...extraDataReq.data,
-                    status: info.status,
-                  })
-
-                  extraInfo.address.city = city?.name
-                  extraInfo.address.cityId = city?.id
-                } else if (userProfile === "FILIAL") {
-                  extraInfo = parseUserBranch({
-                    ...info,
-                    ...extraDataReq.data,
-                  })
-
-                  extraInfo.address.city = city?.name
-                  extraInfo.address.cityId = city?.id
-                } else if (userProfile === "FRANQUEADO") {
-                  extraInfo = parseUserFranchise({
-                    ...info,
-                    ...extraDataReq.data,
-                  })
-
-                  extraInfo.address.city = city?.name
-                  extraInfo.address.cityId = city?.id
-                } else if (userProfile === "ADMIN") {
-                  extraInfo = {
-                    ...info,
-                    document: {
-                      type: info.document.length > 11 ? "cnpj" : "cpf",
-                      register: info.document,
-                      date: info.birthDate,
-                    },
-                  }
-
-                  extraInfo.address.city = city?.name
-                  extraInfo.address.cityId = city?.id
-                }
-
-                resolve({
-                  ok: true,
-                  data: {
-                    ...info,
-                    ...extraInfo,
-                  },
-                })
-              } else throw new Error()
-            } else {
-              const reg = info.document ?? ""
-
-              const docInfo = {
-                type: reg.length > 11 ? "CPF" : "CNPJ",
-                register: reg,
-                date: info.birthDate,
-              }
-
-              const responseInfo = {
-                ...info,
-                document: docInfo,
-              }
-
-              resolve({
-                ok: true,
-                data: responseInfo,
+            if (
+              extraInfo.address &&
+              extraInfo.address.city &&
+              (["FILIAL", "FRANQUEADO", "PRESTADOR"] as TAccess[]).includes(
+                userProfile
+              )
+            ) {
+              const cityReq = await apiCities.getSingle({
+                id: +extraInfo.address.city,
               })
+
+              if (cityReq.ok) city = cityReq.data
             }
-          } else {
+
+            if (userProfile === "PRESTADOR") {
+              extraInfo = parseUserProvider({
+                ...info,
+                ...extraDataReq.data,
+                status: info.status,
+              })
+
+              extraInfo.address.city = city?.name
+              extraInfo.address.cityId = city?.id
+            } else if (userProfile === "FILIAL") {
+              extraInfo = parseUserBranch({
+                ...info,
+                ...extraDataReq.data,
+              })
+
+              extraInfo.address.city = city?.name
+              extraInfo.address.cityId = city?.id
+            } else if (userProfile === "FRANQUEADO") {
+              extraInfo = parseUserFranchise({
+                ...info,
+                ...extraDataReq.data,
+              })
+
+              extraInfo.address.city = city?.name
+              extraInfo.address.cityId = city?.id
+            } else if (userProfile === "ADMIN") {
+              extraInfo = {
+                ...info,
+                document: {
+                  type: info.document.length > 11 ? "cnpj" : "cpf",
+                  register: info.document,
+                  date: info.birthDate,
+                },
+              }
+
+              extraInfo.address.city = city?.name
+              extraInfo.address.cityId = city?.id
+            }
+
             resolve({
-              ok: false,
-              error:
-                "Não foi possível carregar as informações. Tente novamente mais tarde.",
+              ok: true,
+              data: {
+                ...info,
+                ...extraInfo,
+              },
             })
+          } else throw new Error()
+        } else {
+          const reg = info.document ?? ""
+
+          const docInfo = {
+            type: reg.length > 11 ? "CPF" : "CNPJ",
+            register: reg,
+            date: info.birthDate,
           }
-        })
-        .catch((err: AxiosError) => {
+
+          const responseInfo = {
+            ...info,
+            document: docInfo,
+          }
+
           resolve({
-            ok: false,
-            error:
-              "Não foi possível carregar as informações. Tente novamente mais tarde.",
+            ok: true,
+            data: responseInfo,
           })
+        }
+      } else {
+        resolve({
+          ok: false,
+          error:
+            "Não foi possível carregar as informações. Tente novamente mais tarde.",
         })
+      }
     } catch (error) {
       reject({
         error:
@@ -728,7 +725,9 @@ export type TApi_Persons = {
   ) => TResponses["persons"]["listAll"]
   create: (p: TParams["persons"]["create"]) => TResponses["persons"]["create"]
   getSingle: (
-    p: TParams["persons"]["getSingle"]
+    p: TParams["persons"]["getSingle"],
+    skipUserAccount?: boolean,
+    userInfo?: any
   ) => TResponses["persons"]["getSingle"]
   getSelfData: (
     p: TParams["persons"]["getSelfData"]
