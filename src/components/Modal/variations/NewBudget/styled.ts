@@ -9,6 +9,7 @@ export const Element = styled.div`
   overflow: visible;
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    border-radius: 0px;
     min-width: unset;
     width: 100%;
   }
@@ -98,6 +99,17 @@ export const Row = styled.div<{ $alignTop?: boolean }>`
     min-width: unset;
     max-width: unset;
     width: unset;
+
+    &.firstRow {
+      display: flex;
+      flex-direction: column-reverse;
+      margin-top: 30px;
+      gap: 30px;
+
+      & > div:nth-child(2) {
+        margin-top: -18px;
+      }
+    }
   }
 `
 
@@ -120,6 +132,10 @@ export const Bottom = styled.div`
   padding-top: 48px;
   display: flex;
   justify-content: stretch;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    padding-top: 0;
+  }
 `
 
 export const PointsArea = styled.div`

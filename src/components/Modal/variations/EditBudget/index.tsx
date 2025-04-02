@@ -330,7 +330,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
       </C.Header>
 
       <S.Content>
-        <S.Row>
+        <S.Row className="firstRow">
           {data.id ? (
             <Input.ReadonlyField
               field="nomeCondominio"

@@ -92,6 +92,17 @@ export const Row = styled.div`
     min-width: unset;
     max-width: unset;
     width: unset;
+
+    &.firstRow {
+      display: flex;
+      flex-direction: column-reverse;
+      margin-top: 30px;
+      gap: 30px;
+
+      & > div:nth-child(2) {
+        margin-top: -18px;
+      }
+    }
   }
 `
 

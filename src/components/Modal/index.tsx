@@ -1,6 +1,6 @@
 import { getStore } from "../../store"
 
-import { Dialog, DialogProps } from "@mui/material"
+import { Dialog, DialogProps, styled } from "@mui/material"
 
 /*
  *  Variations
@@ -17,6 +17,37 @@ import ReopenBudget from "./variations/ReopenBudget"
 import ImageEditor from "./variations/ImageEditor"
 import ResetPassword from "./variations/ResetPassword"
 import WelcomeModal from "./variations/Welcome"
+
+const ResponsiveDialog = styled(Dialog, {
+  shouldForwardProp: (props) => props !== "isFullPage",
+  // @ts-ignore
+})<{ isFullPage?: boolean }>(({ theme, isFullPage }) => ({
+  width: "100%",
+  backdropFilter: "blur(5px)",
+  "& .MuiPaper-root": {
+    backgroundColor: "#F4F5F7",
+    borderRadius: "16px",
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: isFullPage
+    ? {
+        borderRadius: 0,
+        "& .MuiPaper-root": {
+          borderRadius: 0,
+          margin: 0,
+          minHeight: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          "& > div": {
+            minHeight: "100%",
+            height: "100%",
+          },
+        },
+      }
+    : undefined,
+}))
 
 export type ModalProps = {
   bluredBack?: boolean
@@ -45,16 +76,7 @@ export type TModals =
 const Modal = () => {
   const { modal, controllers } = getStore()
 
-  const {
-    bluredBack,
-    width,
-    role,
-    visible,
-    data,
-    onClose,
-    handleOp,
-    children,
-  } = modal
+  const { width, role, visible, data, onClose, handleOp, children } = modal
 
   const handleClose = () => {
     onClose && onClose()
@@ -139,21 +161,15 @@ const Modal = () => {
     <LoadingModal />
   ) : (
     <div id={"modal"}>
-      <Dialog
+      <ResponsiveDialog
         open={visible}
         maxWidth={width}
-        sx={{
-          width: "100%",
-          backdropFilter: bluredBack ? "blur(5px)" : undefined,
-          "& .MuiPaper-root": {
-            backgroundColor: "#F4F5F7",
-            borderRadius: "16px",
-            width: "100%",
-          },
-        }}
+        isFullPage={(
+          ["newBudget", "editBudget", "imageEditor"] as TModals[]
+        ).includes(modal.role)}
       >
         {renderModalContent()}
-      </Dialog>
+      </ResponsiveDialog>
     </div>
   )
 }
