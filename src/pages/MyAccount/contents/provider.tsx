@@ -260,6 +260,7 @@ const MyAccountProvider = (props: Props) => {
                           .map((c) => c.value),
                         options: options.category,
                         gridSizes: { big: 12 },
+                        disabled: true,
                         error: {
                           has: errors.fields.includes("categories"),
                           message: "Selecione pelo menos 1 categoria",
