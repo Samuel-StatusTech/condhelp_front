@@ -118,7 +118,7 @@ const InputFile = (props: Props) => {
       <C.Area>
         {label && <C.Label>{label}</C.Label>}
 
-        {value && error?.has && error?.message === "Condomínio recusado" && (
+        {value && error?.has && (
           <div
             style={{
               marginBottom: -16,
@@ -127,15 +127,15 @@ const InputFile = (props: Props) => {
               color: error?.has ? theme.colors.red.main : "currentcolor",
             }}
           >
-            <span>{error?.message ?? "Nenhum arquivo selecionado"}</span>
-            {error?.message === "Condomínio recusado" && (
+            <span>Condomínio recusado</span>
+            {
               <>
                 <span>. </span>
                 <S.SeeReasonButton onClick={handleSeeRejection}>
                   Clique aqui para ver o motivo
                 </S.SeeReasonButton>
               </>
-            )}
+            }
           </div>
         )}
         <S.Box $centerContent={singleComponent} $height={height ?? 140}>

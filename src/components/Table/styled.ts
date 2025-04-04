@@ -336,7 +336,7 @@ export const ItemContent = styled.div<{
       ? "flex-end"
       : $align};
   min-width: 100%;
-  height: 46px;
+  min-height: 46px;
   background-color: ${({ theme }) => theme.colors.neutral.white};
   width: ${({ $width }) => $width ?? "unset"};
   white-space: nowrap;
@@ -344,7 +344,7 @@ export const ItemContent = styled.div<{
 
   font-size: 14px;
   font-weight: 400;
-  padding: 0 12px;
+  padding: 4px 12px;
 `
 // #
 // #

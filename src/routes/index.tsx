@@ -21,6 +21,8 @@ import DashTemplate from "../pages/_DashTemplate"
 import UsersPage from "../pages/Users"
 import PersonPage from "../pages/Forms/Users"
 import CondosPage from "../pages/Condos"
+import AwaitingCondosPage from "../pages/CondosAwaiting"
+import RejectedCondosPage from "../pages/CondosRejected"
 import CategoriesPage from "../pages/Categories"
 import SubcategoriesPage from "../pages/Subcategories"
 import RegionsPage from "../pages/Regions"
@@ -52,7 +54,6 @@ import DashboardManagerBudget from "../pages/DashboardManagerBudget"
 import DashboardProviderBudget from "../pages/DashboardProviderBudget"
 import DashboardBudgetsBudget from "../pages/DashboardBudgetsBudget"
 import MyAccount from "../pages/MyAccount"
-import AwaitingCondosPage from "../pages/CondosAwaiting"
 
 const Router = () => {
   const { user } = getStore()
@@ -108,6 +109,7 @@ const Router = () => {
               <Route path="single/:id" element={<FPcondo />} />
             </Route>
             <Route path="awaitingcondos" element={<AwaitingCondosPage />} />
+            <Route path="rejectedcondos" element={<RejectedCondosPage />} />
             <Route path="categories">
               <Route path="" element={<CategoriesPage />} />
               <Route path="single" element={<FPcategory />} />

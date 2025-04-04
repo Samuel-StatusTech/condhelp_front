@@ -94,7 +94,11 @@ const SideMenu = (props: Props) => {
               key={k}
               action={toggleSideMenu}
               data={item}
-              active={page === item.tag}
+              active={
+                Array.isArray(item.tag)
+                  ? item.tag.includes(page)
+                  : page === item.tag
+              }
             />
           ))}
         </S.MenuContainer>

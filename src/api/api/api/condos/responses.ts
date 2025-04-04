@@ -8,6 +8,7 @@ export type TApi_Responses_Condos = {
     getSingle: Promise<TDefaultRes<TCondominium>>
     update: Promise<TDefaultRes<TCondominium>>
     delete: Promise<TDefaultRes<{}>>
+    getRejectedList: Promise<TDefaultRes<TDefaultList<TCondominium>>>
     getWaitingList: Promise<TDefaultRes<TDefaultList<TCondominium>>>
     reject: Promise<TDefaultRes<{}>>
     approve: Promise<TDefaultRes<{}>>

@@ -799,7 +799,7 @@ const FPcondo = () => {
                             message: errors.fields.includes("electionFile")
                               ? "Insira um arquivo"
                               : form.status === "REJECTED"
-                              ? "Condomínio recusado"
+                              ? form.rejectionReason
                               : "",
                           }}
                         />

@@ -1,6 +1,6 @@
 import * as S from "./styled"
 import { TConfig } from "../../utils/system/table"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { TDefaultList } from "../../api/types/responses"
 import Skeleton from "../Skeleton"
 import Input from "../Input"
@@ -188,25 +188,17 @@ const RowItem = (props: TRowItemProps) => {
             : item[col.field]
 
           return (
-            <S.ItemData
-              key={k}
-              $hasPointer={expandComponent && k !== config.columns.length - 1}
-              $align={col.align}
-              $width={col.width}
+            <ItemData
+              k={k}
+              hasPointer={expandComponent && k !== config.columns.length - 1}
+              col={col}
               onClick={
                 expandComponent && k !== config.columns.length - 1
                   ? toggleExpand
                   : undefined
               }
-            >
-              <S.ItemContent
-                $hasPointer={expandComponent && k !== config.columns.length - 1}
-                $align={col.align}
-                $width={col.width}
-              >
-                {content}
-              </S.ItemContent>
-            </S.ItemData>
+              content={content}
+            />
           )
         })}
       </S.RowItem>
@@ -220,6 +212,39 @@ const RowItem = (props: TRowItemProps) => {
         </S.RowExpandable>
       )}
     </>
+  )
+}
+
+const ItemData = ({ k, hasPointer, col, onClick, content }: any) => {
+  const componentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (componentRef.current) {
+      const parentElement = componentRef.current.parentElement
+      const parentHeight = parentElement?.clientHeight ?? 46
+
+      componentRef.current.style.height = `${parentHeight}px`
+    }
+  }, [componentRef])
+
+  return (
+    <S.ItemData
+      key={k}
+      $hasPointer={hasPointer}
+      $align={col.align}
+      $width={col.width}
+      onLoadedData={(e) => console.log(e)}
+      onClick={onClick}
+    >
+      <S.ItemContent
+        ref={componentRef}
+        $hasPointer={hasPointer}
+        $align={col.align}
+        $width={col.width}
+      >
+        {content}
+      </S.ItemContent>
+    </S.ItemData>
   )
 }
 

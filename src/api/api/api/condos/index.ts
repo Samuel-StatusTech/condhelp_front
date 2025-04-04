@@ -220,6 +220,49 @@ const getSingle: TApi["condos"]["getSingle"] = async ({ id }) => {
   })
 }
 
+const getRejectedList: TApi["condos"]["getRejectedList"] = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${baseURL}/rejected`)
+        .then((res) => {
+          const info = res.data
+
+          if (res.status === 200) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os condomínios no momento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível listar os condomínios no momento. Tente novamente mais tarde."
+
+          if (err.response && err.response.data) {
+            backMessage = (err.response.data as any).error ?? backMessage
+          }
+
+          resolve({
+            ok: false,
+            error: backMessage,
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os condomínios no momento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 const getWaitingList: TApi["condos"]["getWaitingList"] = async () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -363,6 +406,9 @@ export type TApi_Condos = {
   getWaitingList: (
     p: TParams["condos"]["getWaitingList"]
   ) => TResponses["condos"]["getWaitingList"]
+  getRejectedList: (
+    p: TParams["condos"]["getRejectedList"]
+  ) => TResponses["condos"]["getRejectedList"]
   reject: (p: TParams["condos"]["reject"]) => TResponses["condos"]["reject"]
   approve: (p: TParams["condos"]["approve"]) => TResponses["condos"]["approve"]
 }
@@ -374,6 +420,7 @@ export const apiCondos: TApi["condos"] = {
   update: update,
   delete: deleteItem,
   getWaitingList: getWaitingList,
+  getRejectedList: getRejectedList,
   reject: rejectItem,
   approve: approveItem,
 }

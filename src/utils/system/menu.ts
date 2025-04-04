@@ -63,7 +63,7 @@ export const menu: {
     {
       icon: "condos",
       text: "Condomínios",
-      tag: "condos",
+      tag: ["condos", "awaitingcondos", "rejectedcondos"],
       access: ["ADMIN"],
       subMenus: [
         {
@@ -71,8 +71,12 @@ export const menu: {
           link: "/condos",
         },
         {
-          title: "Outros",
+          title: "Em análise",
           link: "/awaitingcondos",
+        },
+        {
+          title: "Recusados",
+          link: "/rejectedcondos",
         },
       ],
     },

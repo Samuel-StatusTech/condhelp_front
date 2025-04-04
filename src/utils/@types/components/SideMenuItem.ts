@@ -4,7 +4,7 @@ export type PSideMenuItem = {
   icon: string
   text: string
   link?: string
-  tag: string
+  tag: string | string[]
   access?: TAccess[]
   subMenus?: SubMenu[]
 }

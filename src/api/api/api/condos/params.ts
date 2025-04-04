@@ -19,6 +19,7 @@ export type TApi_Params_Condos = {
     getSingle: {
       id: number
     }
+    getRejectedList: {}
     getWaitingList: {}
     reject: {
       id: number
