@@ -132,6 +132,7 @@ const RejectedCondosPage = () => {
           config={tableConfig.rejectedcondos}
           searchData={searchControl}
           setSearchFilters={setSearchFilters}
+          loading={loading}
           data={condos.filter((i) => {
             let ok = true
 

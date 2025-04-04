@@ -7,6 +7,7 @@ import Input from "../Input"
 import { systemOptions } from "../../utils/system/options"
 import { Icons } from "../../assets/icons/icons"
 import { TDefaultFilters } from "../../api/types/params"
+import { theme } from "../../theme"
 
 type Props = {
   loading?: boolean
@@ -87,11 +88,7 @@ const Table = ({
           </S.TableHead>
           <S.TableBody $noHover={noHover}>
             {loading ? (
-              <Skeleton
-                role="table"
-                columns={config.columns.length}
-                rows={10}
-              />
+              <Skeleton role="table" columns={config.columns.length} rows={3} />
             ) : (
               data.map((item, k) => (
                 <RowItem
@@ -105,9 +102,23 @@ const Table = ({
             )}
           </S.TableBody>
         </S.Table>
+
+        {loading === false && data.length === 0 && (
+          <span
+            style={{
+              color: theme.colors.neutral.lightMain,
+              textAlign: "center",
+              marginTop: 48,
+              marginBottom: 48,
+              display: "block",
+            }}
+          >
+            Nenhum resultado encontrado
+          </span>
+        )}
       </S.TableWrapper>
 
-      {searchData && (
+      {searchData && data.length > 0 && (
         <S.PaginationWrapper>
           <S.Showinglabel>
             Exibindo{" "}

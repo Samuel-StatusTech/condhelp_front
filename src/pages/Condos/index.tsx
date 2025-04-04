@@ -185,6 +185,7 @@ const CondosPage = () => {
 
         {/* Table content */}
         <Table
+          loading={loading}
           config={tableConfig.condos}
           searchData={searchControl}
           setSearchFilters={setSearchFilters}

@@ -115,8 +115,6 @@ const AwaitingCondosPage = () => {
     condoId: number,
     rejectionReason: string
   ) => {
-    console.log(condoId)
-
     try {
       const req = await Api.condos.reject({ id: condoId, rejectionReason })
       if (req.ok) {
@@ -251,6 +249,7 @@ const AwaitingCondosPage = () => {
         {/* Table content */}
         <Table
           config={tableConfig.awaitingcondos}
+          loading={loading}
           searchData={searchControl}
           setSearchFilters={setSearchFilters}
           data={condos.filter((i) => {
