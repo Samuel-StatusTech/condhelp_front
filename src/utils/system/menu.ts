@@ -57,8 +57,24 @@ export const menu: {
       icon: "condos",
       text: "Condomínios",
       link: "/condos",
+      tag: "condos/single",
+      access: ["FILIAL", "FRANQUEADO", "SINDICO"],
+    },
+    {
+      icon: "condos",
+      text: "Condomínios",
       tag: "condos",
-      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO"],
+      access: ["ADMIN"],
+      subMenus: [
+        {
+          title: "Ativos",
+          link: "/condos",
+        },
+        {
+          title: "Outros",
+          link: "/awaitingcondos",
+        },
+      ],
     },
     {
       icon: "folder",

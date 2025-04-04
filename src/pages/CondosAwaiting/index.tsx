@@ -20,7 +20,7 @@ import initials from "../../utils/initials"
 import { TDefaultFilters } from "../../api/types/params"
 import { matchSearch } from "../../utils/tb/helpers/matchSearch"
 
-const CondosPage = () => {
+const AwaitingCondosPage = () => {
   const { user, controllers } = getStore()
 
   const navigate = useNavigate()
@@ -69,29 +69,19 @@ const CondosPage = () => {
       setLoading(true)
 
       try {
-        if (user?.profile === "SINDICO") {
-          const userReq = await Api.persons.getSingle({
-            id: user?.userId as number,
-          })
+        const userReq = await Api.persons.getSingle({
+          id: user?.userId as number,
+        })
 
-          if (userReq.ok) {
-            controllers.user.setData(userReq.data)
-          }
+        if (userReq.ok) {
+          controllers.user.setData(userReq.data)
         }
 
-        const req = await Api.condos.listAll(params)
+        const req = await Api.condos.getWaitingList({})
 
         if (req.ok) {
           setSearchControl(req.data)
-
-          const list =
-            user?.profile === "SINDICO"
-              ? req.data.content.filter(
-                  (i) => i.manager.userAccountId === user?.userAccountId
-                )
-              : req.data.content
-
-          setCondos(list)
+          setCondos(req.data.content)
         } else {
           controllers.feedback.setData({
             visible: true,
@@ -107,7 +97,6 @@ const CondosPage = () => {
         setLoading(false)
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [controllers.feedback, controllers.user, user?.userId]
   )
 
@@ -122,10 +111,93 @@ const CondosPage = () => {
     })
   }, [controllers.modal, loading])
 
+  const rejectCondoAction = async (
+    condoId: number,
+    rejectionReason: string
+  ) => {
+    console.log(condoId)
+
+    try {
+      const req = await Api.condos.reject({ id: condoId, rejectionReason })
+      if (req.ok) {
+        controllers.modal.close()
+
+        controllers.feedback.setData({
+          visible: true,
+          state: "error",
+          message: "Condomínio recusado com sucesso.",
+        })
+
+        setCondos((prev) => prev.filter((c) => c.id !== condoId))
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "error",
+          message: req.error,
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message:
+          "Houve um erro ao recusar o condomínio. Tente novamente mais tarde.",
+      })
+    }
+  }
+
+  const approveCondoAction = async (condoId: number) => {
+    setLoading(true)
+
+    try {
+      const req = await Api.condos.approve({ id: condoId })
+      if (req.ok) {
+        controllers.feedback.setData({
+          visible: true,
+          state: "success",
+          message: "Condomínio aprovado com sucesso.",
+        })
+
+        setCondos((prev) => prev.filter((c) => c.id !== condoId))
+      } else {
+        controllers.feedback.setData({
+          visible: true,
+          state: "error",
+          message: req.error,
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        visible: true,
+        state: "error",
+        message:
+          "Houve um erro ao aprovar o condomínio. Tente novamente mais tarde.",
+      })
+    }
+
+    setLoading(false)
+  }
+
+  const handleRejectCondo = (condo: TCondominium) => {
+    controllers.modal.open({
+      role: "rejectCondominium",
+      visible: true,
+      handleOp: rejectCondoAction as () => Promise<any>,
+      data: {
+        condoId: condo.id,
+      },
+      width: "sm",
+    })
+  }
+
+  const handleApproveCondo = (condo: TCondominium) => {
+    approveCondoAction(condo.id)
+  }
+
   const renderContent = () => {
     return user?.profile === "SINDICO" ? (
       <S.CardsWrapper>
-        {user?.condominiums.length === 0 ? (
+        {user.condominiums.length === 0 ? (
           <S.EmptyListWrapper>
             <Icons.Conds />
             <span>
@@ -143,21 +215,14 @@ const CondosPage = () => {
             />
           </S.EmptyListWrapper>
         ) : (
-          [
-            ...user?.condominiums
-              .filter((c) => c.status !== "ACTIVE")
-              .sort((c) => (c.status === "REJECTED" ? 1 : -1)),
-            ...user?.condominiums.filter((c) => c.status === "ACTIVE"),
-          ]
-            .filter((c) => c.status)
-            .map((c, ck) => (
-              <Card.Condominium
-                k={ck}
-                key={ck}
-                onPick={() => handleEdit(c.id)}
-                data={c}
-              />
-            ))
+          user.condominiums.map((c, ck) => (
+            <Card.Condominium
+              k={ck}
+              key={ck}
+              onPick={() => handleEdit(c.id)}
+              data={c}
+            />
+          ))
         )}
       </S.CardsWrapper>
     ) : (
@@ -185,7 +250,7 @@ const CondosPage = () => {
 
         {/* Table content */}
         <Table
-          config={tableConfig.condos}
+          config={tableConfig.awaitingcondos}
           searchData={searchControl}
           setSearchFilters={setSearchFilters}
           data={condos.filter((i) => {
@@ -207,7 +272,8 @@ const CondosPage = () => {
             return ok
           })}
           actions={{
-            edit: handleEdit,
+            rejectCondo: handleRejectCondo,
+            approveCondo: handleApproveCondo,
           }}
         />
       </>
@@ -225,4 +291,4 @@ const CondosPage = () => {
   )
 }
 
-export default CondosPage
+export default AwaitingCondosPage

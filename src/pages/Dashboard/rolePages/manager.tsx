@@ -180,7 +180,11 @@ const DashboardManager = ({ canLoadData }: { canLoadData: boolean }) => {
         ...opts,
         condos: [
           { key: "all", value: "Todos" },
-          ...parseOptionList(user?.condominiums, "id", "name"),
+          ...parseOptionList(
+            user?.condominiums.filter((c) => c.status === "ACTIVE"),
+            "id",
+            "name"
+          ),
         ],
       }))
 

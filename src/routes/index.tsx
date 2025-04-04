@@ -52,6 +52,7 @@ import DashboardManagerBudget from "../pages/DashboardManagerBudget"
 import DashboardProviderBudget from "../pages/DashboardProviderBudget"
 import DashboardBudgetsBudget from "../pages/DashboardBudgetsBudget"
 import MyAccount from "../pages/MyAccount"
+import AwaitingCondosPage from "../pages/CondosAwaiting"
 
 const Router = () => {
   const { user } = getStore()
@@ -106,6 +107,7 @@ const Router = () => {
               <Route path="single" element={<FPcondo />} />
               <Route path="single/:id" element={<FPcondo />} />
             </Route>
+            <Route path="awaitingcondos" element={<AwaitingCondosPage />} />
             <Route path="categories">
               <Route path="" element={<CategoriesPage />} />
               <Route path="single" element={<FPcategory />} />

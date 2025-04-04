@@ -36,3 +36,18 @@ export const Label = styled.label`
   color: ${({ theme }) => theme.colors.neutral.main};
   width: fit-content;
 `
+
+export const SeeReasonButton = styled.button`
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: currentColor;
+
+  font-size: 16px;
+  font-weight: 400;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`

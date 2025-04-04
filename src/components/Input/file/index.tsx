@@ -99,10 +99,45 @@ const InputFile = (props: Props) => {
     }
   }
 
+  const handleSeeRejection = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    controllers.modal.open({
+      visible: true,
+      role: "seeCondominiumRejection",
+      width: "sm",
+      data: {
+        rejectionReason: error?.message,
+      },
+    })
+  }
+
   return (
     <C.Wrapper $gridSizes={props.gridSizes}>
       <C.Area>
         {label && <C.Label>{label}</C.Label>}
+
+        {value && error?.has && error?.message === "Condomínio recusado" && (
+          <div
+            style={{
+              marginBottom: -16,
+              marginLeft: 24,
+
+              color: error?.has ? theme.colors.red.main : "currentcolor",
+            }}
+          >
+            <span>{error?.message ?? "Nenhum arquivo selecionado"}</span>
+            {error?.message === "Condomínio recusado" && (
+              <>
+                <span>. </span>
+                <S.SeeReasonButton onClick={handleSeeRejection}>
+                  Clique aqui para ver o motivo
+                </S.SeeReasonButton>
+              </>
+            )}
+          </div>
+        )}
         <S.Box $centerContent={singleComponent} $height={height ?? 140}>
           {singleComponent ? (
             <div>

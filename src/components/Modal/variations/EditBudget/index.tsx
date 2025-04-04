@@ -42,7 +42,6 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [categories, setCategories] = useState<TCategory[]>([])
-  const [, setCondos] = useState<TCondominium[]>([])
 
   const [options, setOptions] = useState<any>({
     subsidiary: [],
@@ -190,7 +189,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
 
       // • Condos
       if (user?.profile === "SINDICO") {
-        condosList = user?.condominiums
+        condosList = user?.condominiums.filter((c) => c.status === "ACTIVE")
       } else {
         proms.push(
           Api.condos
@@ -268,7 +267,6 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
       await Promise.allSettled(proms)
 
       setCategories(categoriesList)
-      setCondos(condosList)
 
       const newOptions = {
         condo: parseOptionList(condosList, "id", "name"),

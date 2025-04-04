@@ -24,6 +24,7 @@ export const Label = styled.label<{ $error?: boolean }>`
 export const Textarea = styled.textarea<{
   $disabled?: boolean
   $error?: boolean
+  $nonEditable?: boolean
 }>`
   padding: 10px;
   border-radius: 4px;
@@ -41,6 +42,8 @@ export const Textarea = styled.textarea<{
   color: ${({ $error, theme }) =>
     $error ? theme.colors.red.main : theme.colors.neutral.main};
   transition: color 0.3s;
+  pointer-events: ${({ $nonEditable }) => ($nonEditable ? "none" : "unset")};
+  resize: ${({ $nonEditable }) => ($nonEditable ? "none" : "unset")};
 
   &::placeholder {
     color: ${({ $error, theme }) =>

@@ -5,6 +5,7 @@ import { Icons } from "../../../../assets/icons/icons"
 
 import { TCondominium } from "../../../../utils/@types/data/condominium"
 import Divider from "../../../_minimals/Divider"
+import { theme } from "../../../../theme"
 
 type Props = {
   k: number
@@ -24,7 +25,19 @@ const CondominiumCard = ({ k, data, onPick }: Props) => {
       <C.Header>
         <S.CardTitle>{data.name}</S.CardTitle>
 
-        <Icons.Expand />
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          {data.status === "UNDER_REVIEW" && (
+            <span style={{ color: theme.colors.green.medium, fontSize: 14 }}>
+              Em Análise
+            </span>
+          )}
+          {data.status === "REJECTED" && (
+            <span style={{ color: theme.colors.red.main, fontSize: 14 }}>
+              Recusado
+            </span>
+          )}
+          <Icons.Expand />
+        </div>
       </C.Header>
 
       <C.MainWrapper $expanded={true}>

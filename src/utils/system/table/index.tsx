@@ -8,10 +8,12 @@ import { faqTableConfig } from "./faqTableConfig"
 import { finishedBudgetsTableConfig } from "./finishedBudgetsTableConfig"
 import { callsTableConfig } from "./callsHistoryTableConfig"
 import { finishedBudgetsResumeTableConfig } from "./finishedBudgetsResumeTableConfig"
+import { condoUnaprovedTableConfig } from "./condoUnaprovedTableConfig"
 
 type TTableConfigs =
   | "users"
   | "condos"
+  | "awaitingcondos"
   | "categories"
   | "subcategories"
   | "regions"
@@ -25,6 +27,7 @@ export const tableConfig: {
   [key in TTableConfigs]: TConfig
 } = {
   users: userTableConfig,
+  awaitingcondos: condoUnaprovedTableConfig,
   condos: condoTableConfig,
   categories: categoryTableConfig,
   subcategories: subcategoryTableConfig,

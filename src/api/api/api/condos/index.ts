@@ -175,7 +175,6 @@ const deleteItem: TApi["condos"]["delete"] = async ({ id }) => {
     }
   })
 }
-
 const getSingle: TApi["condos"]["getSingle"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -221,6 +220,138 @@ const getSingle: TApi["condos"]["getSingle"] = async ({ id }) => {
   })
 }
 
+const getWaitingList: TApi["condos"]["getWaitingList"] = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${baseURL}/wating`)
+        .then((res) => {
+          const info = res.data
+
+          if (res.status === 200) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível listar os condomínios no momento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível listar os condomínios no momento. Tente novamente mais tarde."
+
+          if (err.response && err.response.data) {
+            backMessage = (err.response.data as any).error ?? backMessage
+          }
+
+          resolve({
+            ok: false,
+            error: backMessage,
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível listar os condomínios no momento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const rejectItem: TApi["condos"]["reject"] = async ({
+  id,
+  rejectionReason,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`${baseURL}/${id}/rejected`, { rejectionReason })
+        .then((res) => {
+          const info = res.data
+
+          if (res.status === 200) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível recusar o condomínio no momento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível recusar o condomínio no momento. Tente novamente mais tarde."
+
+          if (err.response && err.response.data) {
+            backMessage = (err.response.data as any).error ?? backMessage
+          }
+
+          resolve({
+            ok: false,
+            error: backMessage,
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível recusar o condomínio no momento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+const approveItem: TApi["condos"]["approve"] = async ({ id }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`${baseURL}/${id}/active`)
+        .then((res) => {
+          const info = res.data
+
+          if (res.status === 200) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível aprovar o condomínio no momento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          let backMessage =
+            "Não foi possível aprovar o condomínio no momento. Tente novamente mais tarde."
+
+          if (err.response && err.response.data) {
+            backMessage = (err.response.data as any).error ?? backMessage
+          }
+
+          resolve({
+            ok: false,
+            error: backMessage,
+          })
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível aprovar o condomínio no momento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export type TApi_Condos = {
   listAll: (p: TParams["condos"]["listAll"]) => TResponses["condos"]["listAll"]
   create: (p: TParams["condos"]["create"]) => TResponses["condos"]["create"]
@@ -229,6 +360,11 @@ export type TApi_Condos = {
   ) => TResponses["condos"]["getSingle"]
   update: (p: TParams["condos"]["update"]) => TResponses["condos"]["update"]
   delete: (p: TParams["condos"]["delete"]) => TResponses["condos"]["delete"]
+  getWaitingList: (
+    p: TParams["condos"]["getWaitingList"]
+  ) => TResponses["condos"]["getWaitingList"]
+  reject: (p: TParams["condos"]["reject"]) => TResponses["condos"]["reject"]
+  approve: (p: TParams["condos"]["approve"]) => TResponses["condos"]["approve"]
 }
 
 export const apiCondos: TApi["condos"] = {
@@ -237,4 +373,7 @@ export const apiCondos: TApi["condos"] = {
   getSingle: getSingle,
   update: update,
   delete: deleteItem,
+  getWaitingList: getWaitingList,
+  reject: rejectItem,
+  approve: approveItem,
 }

@@ -19,6 +19,9 @@ export type TNewCondominium = {
   electionDate: string | number | Date
 
   electionFile: null | string
+
+  status: TCondominumStatus
+  rejectionReason: string
 }
 
 export type TCondominium = {
@@ -41,6 +44,11 @@ export type TCondominium = {
 
   electionFile: null | string
 
+  status: TCondominumStatus
+  rejectionReason: string
+
   branchId: number
   franchiseId: number
 }
+
+export type TCondominumStatus = "ACTIVE" | "REJECTED" | "UNDER_REVIEW"

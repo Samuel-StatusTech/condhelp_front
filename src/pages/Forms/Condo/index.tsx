@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import * as S from "./styled"
 import * as C from "../styled"
 
 import initials from "../../../utils/initials"
@@ -26,6 +27,7 @@ import { FormField } from "../../../utils/@types/components/FormFields"
 import { TCity, TState } from "../../../utils/@types/data/region"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { sendFile } from "../../../utils/tb/helpers/file/sendFile"
+import Input from "../../../components/Input"
 
 const FPcondo = () => {
   const navigate = useNavigate()
@@ -42,6 +44,8 @@ const FPcondo = () => {
   const [form, setForm] = useState<TNewCondominium | TCondominium>(
     initials.forms.condo
   )
+
+  const [changedElectionFile, setChangedElectionFile] = useState(false)
 
   const [pickedCity, setPickedCity] = useState<TCity | null>(null)
 
@@ -108,6 +112,11 @@ const FPcondo = () => {
       managerId: mId,
       branchId: branchId,
       franchiseId: franchiseId,
+      status: params.id
+        ? !changedElectionFile
+          ? form.status
+          : "UNDER_REVIEW"
+        : form.status,
       photo: imgUrl,
     }
 
@@ -352,6 +361,11 @@ const FPcondo = () => {
         fields: newFieldsList,
         has: newFieldsList.length > 0,
       })
+    }
+
+    if (field === "electionFile") {
+      if (params.id) setChangedElectionFile(true)
+      setForm((f: any) => ({ ...f, [field]: value }))
     }
 
     if (["addressNumber", "zipCode"].includes(field)) {
@@ -755,21 +769,47 @@ const FPcondo = () => {
                     ],
                   },
                   {
-                    type: "fields",
-                    fields: [
-                      {
-                        type: "file",
-                        label: "Ata da eleição",
-                        field: "electionFile",
-                        value: form.electionFile,
-                        gridSizes: { big: 12 },
-                        allowsPdf: true,
-                        error: {
-                          has: errors.fields.includes("electionFile"),
-                          message: "Insira um arquivo",
-                        },
-                      },
-                    ],
+                    type: "custom",
+                    element: (
+                      <div
+                        style={{
+                          display: "flex",
+                          gridColumn: 12,
+                          position: "relative",
+                          padding: form.status === "UNDER_REVIEW" ? "8px" : "0",
+                        }}
+                      >
+                        <Input.File
+                          label="Ata da eleição"
+                          // label={form.status}
+                          field="electionFile"
+                          onChange={
+                            form.status !== "UNDER_REVIEW" || !params.id
+                              ? handleField
+                              : () => {}
+                          }
+                          value={form.electionFile}
+                          allowsPdf={true}
+                          error={{
+                            has: params.id
+                              ? changedElectionFile
+                                ? errors.fields.includes("electionFile")
+                                : form.status === "REJECTED"
+                              : errors.fields.includes("electionFile"),
+                            message: errors.fields.includes("electionFile")
+                              ? "Insira um arquivo"
+                              : form.status === "REJECTED"
+                              ? "Condomínio recusado"
+                              : "",
+                          }}
+                        />
+                        {form.status === "UNDER_REVIEW" && params.id && (
+                          <S.FileIndicator>
+                            <span>Em análise</span>
+                          </S.FileIndicator>
+                        )}
+                      </div>
+                    ),
                   },
                   {
                     type: "custom",

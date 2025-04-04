@@ -41,5 +41,8 @@ export const condoForm: TNewCondominium = {
 
     condominiums: [],
   },
+
   electionFile: null,
+
+  status: "UNDER_REVIEW",
 }

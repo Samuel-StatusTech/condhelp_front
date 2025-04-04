@@ -12,6 +12,7 @@ export type TInputTextArea = {
   disabled?: boolean
 
   error?: TFieldError
+  nonEditable?: boolean
 }
 
 type Props = TInputTextArea & {
@@ -30,6 +31,7 @@ const InputTextArea = (props: Props) => {
     onChange,
     disabled,
     error,
+    nonEditable,
   } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -51,6 +53,7 @@ const InputTextArea = (props: Props) => {
           onChange={handleChange}
           rows={4}
           $disabled={disabled}
+          $nonEditable={nonEditable}
         />
 
         <div

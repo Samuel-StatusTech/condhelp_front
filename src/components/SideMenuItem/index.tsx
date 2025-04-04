@@ -38,7 +38,9 @@ const SideMenuItem = ({ data, active, k, action }: Props) => {
   const location = useLocation()
 
   const userAllowed =
-    user?.profile !== "SINDICO" || user?.condominiums.length > 0
+    user?.profile !== "SINDICO" ||
+    user?.condominiums.length > 0 ||
+    user?.condominiums.every((c) => c.status !== "ACTIVE")
 
   const render = !data.access
     ? true
@@ -59,7 +61,7 @@ const SideMenuItem = ({ data, active, k, action }: Props) => {
             <S.Title>{data.text}</S.Title>
           </div>
         ) : (
-          <Link to={`/dashboard${data.link}`} onClick={action}>
+          <Link to={`/dashboard${data.link ?? ""}`} onClick={action}>
             {renderIcon()}
             <S.Title>{data.text}</S.Title>
           </Link>
@@ -85,7 +87,7 @@ const SideMenuItem = ({ data, active, k, action }: Props) => {
                   $active={location.pathname.includes(sm.link)}
                 >
                   <Link
-                    to={`/dashboard${data.link}${sm.link}`}
+                    to={`/dashboard${data.link ?? ""}${sm.link}`}
                     onClick={action}
                     className="submenu"
                   >

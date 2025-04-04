@@ -17,6 +17,8 @@ import ReopenBudget from "./variations/ReopenBudget"
 import ImageEditor from "./variations/ImageEditor"
 import ResetPassword from "./variations/ResetPassword"
 import WelcomeModal from "./variations/Welcome"
+import RejectCondominium from "./variations/RejectCondominium"
+import SeeCondominiumRejection from "./variations/SeeCondominiumRejection"
 
 const ResponsiveDialog = styled(Dialog, {
   shouldForwardProp: (props) => props !== "isFullPage",
@@ -71,6 +73,8 @@ export type TModals =
   | "contactInfo"
   | "imageEditor"
   | "resetPassword"
+  | "rejectCondominium"
+  | "seeCondominiumRejection"
   | "welcome"
 
 const Modal = () => {
@@ -139,6 +143,20 @@ const Modal = () => {
             handleOp={handleOp as (newPass: string) => Promise<void>}
           />
         )
+        break
+      case "rejectCondominium":
+        el = (
+          <RejectCondominium
+            data={data}
+            onClose={handleClose}
+            handleOp={
+              handleOp as (condoId: number, reason: string) => Promise<void>
+            }
+          />
+        )
+        break
+      case "seeCondominiumRejection":
+        el = <SeeCondominiumRejection data={data} onClose={handleClose} />
         break
       case "welcome":
         el = (

@@ -109,7 +109,10 @@ const SideMenu = (props: Props) => {
             icon={<Icons.PlusCircle />}
             iconLeft={true}
             fromSidebar={true}
-            disabled={user?.condominiums.length === 0}
+            disabled={
+              user?.condominiums.length === 0 ||
+              user?.condominiums.every((c) => c.status !== "ACTIVE")
+            }
           />
         </S.ButtonWrapper>
       )}

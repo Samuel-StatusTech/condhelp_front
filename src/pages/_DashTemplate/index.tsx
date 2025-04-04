@@ -23,7 +23,7 @@ const DashTemplate = ({ withoutSidebar, noHideOverflow }: Props) => {
   const loadManagerPermissions = useCallback(async () => {
     const allowedRoutes = ["dashboard/condos", "dashboard/condos/single"]
 
-    if (allowedRoutes.every((i) => !location.pathname.endsWith(i))) {
+    if (allowedRoutes.every((i) => !location.pathname.includes(i))) {
       navigate("/dashboard/condos")
     }
   }, [location.pathname, navigate])
@@ -49,7 +49,11 @@ const DashTemplate = ({ withoutSidebar, noHideOverflow }: Props) => {
         setPage(!!val ? val : "dash")
       }
 
-      if (user.profile === "SINDICO" && user.condominiums.length === 0) {
+      if (
+        user.profile === "SINDICO" &&
+        (user.condominiums.length === 0 ||
+          user.condominiums.every((c) => c.status !== "ACTIVE"))
+      ) {
         loadManagerPermissions()
       }
     } else {
