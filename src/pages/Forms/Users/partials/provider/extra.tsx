@@ -156,6 +156,10 @@ export const extraProvider = (
                 value: form.federalCndDocument,
                 gridSizes: { big: 8, small: 12 },
                 allowsPdf: true,
+                error: {
+                  has: errors.fields.includes("federalCndDocument"),
+                  message: "",
+                },
               },
             ],
           ],
@@ -224,6 +228,10 @@ export const extraProvider = (
                 value: form.stateCndDocument,
                 gridSizes: { big: 8, small: 12 },
                 allowsPdf: true,
+                error: {
+                  has: errors.fields.includes("stateCndDocument"),
+                  message: "",
+                },
               },
             ],
           ],
@@ -292,6 +300,10 @@ export const extraProvider = (
                 value: form.cityCndDocument,
                 gridSizes: { big: 8, small: 12 },
                 allowsPdf: true,
+                error: {
+                  has: errors.fields.includes("cityCndDocument"),
+                  message: "",
+                },
               },
             ],
           ],
@@ -360,6 +372,10 @@ export const extraProvider = (
                 value: form.fgtsCndDocument,
                 gridSizes: { big: 8, small: 12 },
                 allowsPdf: true,
+                error: {
+                  has: errors.fields.includes("fgtsCndDocument"),
+                  message: "",
+                },
               },
             ],
           ],

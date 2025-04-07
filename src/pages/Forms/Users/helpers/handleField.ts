@@ -213,9 +213,12 @@ export const handleField = async (
             if (value === true) {
               const newFieldsList = errors.fields.filter(
                 (errorItem) =>
-                  !["federalCnd", "federalCndStart", "federalCndEnd"].includes(
-                    errorItem
-                  )
+                  ![
+                    "federalCnd",
+                    "federalCndStart",
+                    "federalCndEnd",
+                    "federalCndDocument",
+                  ].includes(errorItem)
               )
               setErrors({
                 fields: newFieldsList,
@@ -256,9 +259,12 @@ export const handleField = async (
             if (value === true) {
               const newFieldsList = errors.fields.filter(
                 (errorItem) =>
-                  !["stateCnd", "stateCndStart", "stateCndEnd"].includes(
-                    errorItem
-                  )
+                  ![
+                    "stateCnd",
+                    "stateCndStart",
+                    "stateCndEnd",
+                    "stateCndDocument",
+                  ].includes(errorItem)
               )
               setErrors({
                 fields: newFieldsList,
@@ -299,7 +305,12 @@ export const handleField = async (
             if (value === true) {
               const newFieldsList = errors.fields.filter(
                 (errorItem) =>
-                  !["cityCnd", "cityCndStart", "cityCndEnd"].includes(errorItem)
+                  ![
+                    "cityCnd",
+                    "cityCndStart",
+                    "cityCndEnd",
+                    "cityCndDocument",
+                  ].includes(errorItem)
               )
               setErrors({
                 fields: newFieldsList,
@@ -340,7 +351,12 @@ export const handleField = async (
             if (value === true) {
               const newFieldsList = errors.fields.filter(
                 (errorItem) =>
-                  !["fgtsCnd", "fgtsCndStart", "fgtsCndEnd"].includes(errorItem)
+                  ![
+                    "fgtsCnd",
+                    "fgtsCndStart",
+                    "fgtsCndEnd",
+                    "fgtsCndDocument",
+                  ].includes(errorItem)
               )
               setErrors({
                 fields: newFieldsList,

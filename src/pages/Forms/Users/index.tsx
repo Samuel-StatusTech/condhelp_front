@@ -420,16 +420,18 @@ const FPpeople = () => {
         }
       }
 
-      const newFormInfo = {
-        ...form,
-        federalCndDocument: urls.federal ?? null,
-        stateCndDocument: urls.state ?? null,
-        cityCndDocument: urls.city ?? null,
-        fgtsCndDocument: urls.fgts ?? null,
-        cnpjCard: urls.cnpjCard ?? null,
-      }
+      if (!cndError) {
+        const newFormInfo = {
+          ...form,
+          federalCndDocument: urls.federal ?? null,
+          stateCndDocument: urls.state ?? null,
+          cityCndDocument: urls.city ?? null,
+          fgtsCndDocument: urls.fgts ?? null,
+          cnpjCard: urls.cnpjCard ?? null,
+        }
 
-      return newFormInfo
+        return newFormInfo
+      } else return false
     } catch (error) {
       return false
     }
@@ -477,8 +479,9 @@ const FPpeople = () => {
       }
     } catch (error) {
       // ...
-      setLoading(false)
     }
+
+    setLoading(false)
   }
 
   const handleDelete = async () => {
