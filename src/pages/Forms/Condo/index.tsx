@@ -781,7 +781,7 @@ const FPcondo = () => {
                       >
                         <Input.File
                           label="Ata da eleição"
-                          // label={form.status}
+                          isForCondo={true}
                           field="electionFile"
                           onChange={
                             form.status !== "UNDER_REVIEW" || !params.id

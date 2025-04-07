@@ -19,6 +19,7 @@ export type TInputFile = {
   allowsPdf?: boolean
   allowsPdfAndImages?: boolean
   error?: TFieldError
+  isForCondo?: boolean
 }
 
 type Props = TInputFile & {
@@ -43,6 +44,7 @@ const InputFile = (props: Props) => {
     value,
     onChange,
     error,
+    isForCondo,
   } = props
 
   const acceptableMimeTypes = allowsPdfAndImages
@@ -118,7 +120,7 @@ const InputFile = (props: Props) => {
       <C.Area>
         {label && <C.Label>{label}</C.Label>}
 
-        {value && error?.has && (
+        {value && error?.has && isForCondo && (
           <div
             style={{
               marginBottom: -16,

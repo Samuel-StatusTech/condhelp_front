@@ -59,9 +59,12 @@ const FPdocuments = () => {
         if (value === true) {
           const newFieldsList = errors.fields.filter(
             (errorItem) =>
-              !["federalCnd", "federalCndStart", "federalCndEnd"].includes(
-                errorItem
-              )
+              ![
+                "federalCnd",
+                "federalCndStart",
+                "federalCndEnd",
+                "federalCndDocument",
+              ].includes(errorItem)
           )
           setErrors({
             fields: newFieldsList,
@@ -102,7 +105,12 @@ const FPdocuments = () => {
         if (value === true) {
           const newFieldsList = errors.fields.filter(
             (errorItem) =>
-              !["stateCnd", "stateCndStart", "stateCndEnd"].includes(errorItem)
+              ![
+                "stateCnd",
+                "stateCndStart",
+                "stateCndEnd",
+                "stateCndDocument",
+              ].includes(errorItem)
           )
           setErrors({
             fields: newFieldsList,
@@ -143,7 +151,12 @@ const FPdocuments = () => {
         if (value === true) {
           const newFieldsList = errors.fields.filter(
             (errorItem) =>
-              !["cityCnd", "cityCndStart", "cityCndEnd"].includes(errorItem)
+              ![
+                "cityCnd",
+                "cityCndStart",
+                "cityCndEnd",
+                "cityCndDocument",
+              ].includes(errorItem)
           )
           setErrors({
             fields: newFieldsList,
@@ -184,7 +197,12 @@ const FPdocuments = () => {
         if (value === true) {
           const newFieldsList = errors.fields.filter(
             (errorItem) =>
-              !["fgtsCnd", "fgtsCndStart", "fgtsCndEnd"].includes(errorItem)
+              ![
+                "fgtsCnd",
+                "fgtsCndStart",
+                "fgtsCndEnd",
+                "fgtsCndDocument",
+              ].includes(errorItem)
           )
           setErrors({
             fields: newFieldsList,
@@ -386,14 +404,16 @@ const FPdocuments = () => {
         }
       }
 
-      const newFormInfo = {
-        federalCndDocument: urls.federal ?? null,
-        stateCndDocument: urls.state ?? null,
-        cityCndDocument: urls.city ?? null,
-        fgtsCndDocument: urls.fgts ?? null,
-      }
+      if (!cndError) {
+        const newFormInfo = {
+          federalCndDocument: urls.federal ?? null,
+          stateCndDocument: urls.state ?? null,
+          cityCndDocument: urls.city ?? null,
+          fgtsCndDocument: urls.fgts ?? null,
+        }
 
-      return newFormInfo
+        return newFormInfo
+      } else return false
     } catch (error) {
       return false
     }

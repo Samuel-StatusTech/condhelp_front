@@ -74,6 +74,10 @@ export const extraProvider = (
                 value: form.federalCndDocument,
                 gridSizes: { big: 8, small: 12 },
                 allowsPdf: true,
+                error: {
+                  has: errors.fields.includes("federalCndDocument"),
+                  message: "",
+                },
               },
             ],
           ],
