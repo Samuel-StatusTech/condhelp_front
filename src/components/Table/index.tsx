@@ -244,7 +244,6 @@ const ItemData = ({ k, hasPointer, col, onClick, content }: any) => {
       $hasPointer={hasPointer}
       $align={col.align}
       $width={col.width}
-      onLoadedData={(e) => console.log(e)}
       onClick={onClick}
     >
       <S.ItemContent

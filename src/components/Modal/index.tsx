@@ -19,6 +19,8 @@ import ResetPassword from "./variations/ResetPassword"
 import WelcomeModal from "./variations/Welcome"
 import RejectCondominium from "./variations/RejectCondominium"
 import SeeCondominiumRejection from "./variations/SeeCondominiumRejection"
+import NewAccountType from "./variations/NewAccountType"
+import { TUserProfile } from "../../utils/@types/data/user"
 
 const ResponsiveDialog = styled(Dialog, {
   shouldForwardProp: (props) => props !== "isFullPage",
@@ -75,6 +77,7 @@ export type TModals =
   | "resetPassword"
   | "rejectCondominium"
   | "seeCondominiumRejection"
+  | "newAccountType"
   | "welcome"
 
 const Modal = () => {
@@ -157,6 +160,17 @@ const Modal = () => {
         break
       case "seeCondominiumRejection":
         el = <SeeCondominiumRejection data={data} onClose={handleClose} />
+        break
+      case "newAccountType":
+        el = (
+          <NewAccountType
+            data={data}
+            handleOp={
+              handleOp as unknown as (profile: TUserProfile) => Promise<boolean>
+            }
+            onClose={handleClose}
+          />
+        )
         break
       case "welcome":
         el = (
