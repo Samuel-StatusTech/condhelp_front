@@ -14,6 +14,8 @@ type Props =
       fromSidebar?: boolean
       red?: boolean
       iconSize?: number
+      keepSizeOnMobile?: boolean
+      fillOnMobile?: boolean
     }
   | {
       type: "tertiary"
@@ -25,6 +27,8 @@ type Props =
       fromSidebar?: boolean
       red?: boolean
       iconSize?: number
+      keepSizeOnMobile?: boolean
+      fillOnMobile?: boolean
     }
 
 const Button = (props: Props) => {
@@ -39,6 +43,8 @@ const Button = (props: Props) => {
       disabled={props.disabled}
       $fromSidebar={props.fromSidebar}
       $iconSize={props.iconSize}
+      $keepSizeOnMobile={props.keepSizeOnMobile}
+      $fillOnMobile={props.fillOnMobile}
     >
       {
         // @ts-ignore

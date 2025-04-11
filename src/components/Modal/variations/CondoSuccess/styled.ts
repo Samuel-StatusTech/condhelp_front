@@ -1,13 +1,18 @@
 import styled from "styled-components"
 
 export const Element = styled.div`
-  padding: 48px 48px;
+  padding: 32px 32px;
 `
 
-export const ModalTitle = styled.span`
+export const ModalTitle = styled.span<{ $biggerOnMobile?: boolean }>`
   font-size: 20px;
   font-weight: 500;
   color: #232323;
+  text-transform: uppercase;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    font-size: ${({ $biggerOnMobile }) => ($biggerOnMobile ? 24 : 20)}px;
+  }
 `
 
 export const Content = styled.div`
@@ -34,10 +39,8 @@ export const ContentArea = styled.div`
 
 export const Message = styled.span<{ $bold?: boolean }>`
   font-size: 14px;
-  font-weight: ${({ $bold }) => ($bold ? 600 : 300)};
+  font-weight: ${({ $bold }) => ($bold ? 600 : 500)};
   color: ${({ theme }) => theme.colors.neutral.dark};
-  /* color: ${({ $bold, theme }) =>
-    $bold ? theme.colors.neutral.dark : theme.colors.neutral.dark}; */
   flex: 1;
   white-space: pre-line;
 `

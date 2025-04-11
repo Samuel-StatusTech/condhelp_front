@@ -39,12 +39,19 @@ export const HeaderDefault = styled.div`
   gap: 8px;
 `
 
-export const HeaderMain = styled.div`
+export const HeaderMain = styled.div<{ $bigMobileLogo?: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 48px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    & > svg.logo {
+      width: ${({ $bigMobileLogo }) => ($bigMobileLogo ? 42 : 32)}px;
+      height: ${({ $bigMobileLogo }) => ($bigMobileLogo ? 42 : 32)}px;
+    }
+  }
 `
 
 export const ModalTitle = styled.span`
@@ -54,17 +61,20 @@ export const ModalTitle = styled.span`
   text-transform: uppercase;
 `
 
-export const CloseBtn = styled.button`
+export const CloseBtn = styled.button<{ $hideOnMobile?: boolean }>`
   border: none;
   outline: none;
   background: none;
-  padding: 7px;
-  display: grid;
-  place-items: center;
+  display: flex;
   cursor: pointer;
 
   svg {
+    transform: translateY(-4px);
     width: 24px;
     height: 24px;
+  }
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    display: ${({ $hideOnMobile }) => ($hideOnMobile ? "none" : "flex")};
   }
 `

@@ -22,10 +22,10 @@ const CondoSuccess = ({ onClose }: Props) => {
     <S.Element>
       <C.Header>
         <C.HeaderDefault>
-          <C.HeaderMain>
-            <Icons.Logo width={32} height={32} />
+          <C.HeaderMain $bigMobileLogo={true}>
+            <Icons.Logo width={32} height={32} className="logo" />
 
-            <C.CloseBtn onClick={handleClose}>
+            <C.CloseBtn onClick={handleClose} $hideOnMobile={true}>
               <Icons.Close />
             </C.CloseBtn>
           </C.HeaderMain>
@@ -33,7 +33,9 @@ const CondoSuccess = ({ onClose }: Props) => {
       </C.Header>
 
       <S.Content>
-        <S.ModalTitle>Condomínio cadastrado com sucesso</S.ModalTitle>
+        <S.ModalTitle $biggerOnMobile={true}>
+          Condomínio cadastrado com sucesso
+        </S.ModalTitle>
 
         <S.Message>Você está a um passo de solicitar orçamentos.</S.Message>
 
@@ -42,7 +44,12 @@ const CondoSuccess = ({ onClose }: Props) => {
         </S.Message>
 
         <S.Bottom>
-          <Button type="main" text="Concluir" action={handleClose} fit={true} />
+          <Button
+            type="main"
+            text="Concluir"
+            action={handleClose}
+            fillOnMobile={true}
+          />
         </S.Bottom>
       </S.Content>
     </S.Element>

@@ -202,6 +202,7 @@ const FPcondo = () => {
             controllers.modal.open({
               role: "condoSuccess",
               visible: true,
+              width: "xs",
               onClose: () => {
                 controllers.feedback.setData({
                   message: "Condomínio criado com sucesso.",

@@ -8,6 +8,8 @@ export const Element = styled.button<{
   $k?: number
   $fromSidebar?: boolean
   $iconSize?: number
+  $keepSizeOnMobile?: boolean
+  $fillOnMobile?: boolean
 }>`
   ${({ $fit }) => ($fit ? `width: fit-content;` : `flex: 1;`)}
   min-width: ${({ $type, $fit }) =>
@@ -89,8 +91,12 @@ export const Element = styled.button<{
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    min-width: ${({ $type, $fit }) =>
-      $type !== "tertiary" || !$fit ? `100px` : "unset"};
+    min-width: ${({ $type, $fit, $fillOnMobile }) =>
+      $fillOnMobile
+        ? "100%"
+        : $type !== "tertiary" || !$fit
+        ? `100px`
+        : "unset"};
 
     svg {
       min-width: 20px;
