@@ -436,6 +436,11 @@ const getSingle: TApi["persons"]["getSingle"] = async (
               data: {
                 ...info,
                 ...extraInfo,
+                userAccountId:
+                  extraInfo.userAccountid ??
+                  extraInfo.userAccountId ??
+                  info.userAccountid ??
+                  info.userAccountId,
               },
             })
           } else throw new Error()
@@ -450,6 +455,7 @@ const getSingle: TApi["persons"]["getSingle"] = async (
 
           const responseInfo = {
             ...info,
+            userAccountId: info.userAccountid ?? info.userAccountId,
             document: docInfo,
           }
 

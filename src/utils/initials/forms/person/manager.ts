@@ -22,4 +22,6 @@ export const managerInitial: TNewUser & TUManager = {
   birthDate: getMajorityDate().getTime(),
   managerSince: 1,
   condominiums: [],
+
+  termsAccepted: false,
 }

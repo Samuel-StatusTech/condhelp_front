@@ -92,6 +92,8 @@ export type TUManager = {
   documentType: "cpf" | "cnpj"
   documentNumber: string
 
+  termsAccepted?: boolean
+
   birthDate: string | number
 
   managerSince: TExperience

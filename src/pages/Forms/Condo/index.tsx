@@ -112,11 +112,14 @@ const FPcondo = () => {
       managerId: mId,
       branchId: branchId,
       franchiseId: franchiseId,
-      status: params.id
-        ? !changedElectionFile
-          ? form.status
-          : "UNDER_REVIEW"
-        : form.status,
+      status:
+        user?.profile === "ADMIN"
+          ? "ACTIVE"
+          : params.id
+          ? !changedElectionFile
+            ? form.status
+            : "UNDER_REVIEW"
+          : form.status,
       photo: imgUrl,
     }
 
@@ -181,17 +184,40 @@ const FPcondo = () => {
       const req = await Api.condos.create({ newCondo: obj })
 
       if (req.ok) {
-        controllers.feedback.setData({
-          message: "Condomínio criado com sucesso.",
-          state: "success",
-          visible: true,
-        })
-
         setLoading(false)
+        controllers.modal.close()
 
-        if (location.state && location.state.manager)
-          navigate(`/dashboard/users/single/${location.state.manager.id}`)
-        else navigate("/dashboard/condos")
+        setTimeout(() => {
+          if (user?.profile === "ADMIN") {
+            controllers.feedback.setData({
+              message: "Condomínio criado com sucesso.",
+              state: "success",
+              visible: true,
+            })
+
+            if (location.state && location.state.manager)
+              navigate(`/dashboard/users/single/${location.state.manager.id}`)
+            else navigate("/dashboard/condos")
+          } else {
+            controllers.modal.open({
+              role: "condoSuccess",
+              visible: true,
+              onClose: () => {
+                controllers.feedback.setData({
+                  message: "Condomínio criado com sucesso.",
+                  state: "success",
+                  visible: true,
+                })
+
+                if (location.state && location.state.manager)
+                  navigate(
+                    `/dashboard/users/single/${location.state.manager.id}`
+                  )
+                else navigate("/dashboard/condos")
+              },
+            })
+          }
+        }, 100)
       } else {
         if (req.error) {
           controllers.feedback.setData({
@@ -208,9 +234,9 @@ const FPcondo = () => {
         state: "error",
         visible: true,
       })
-    }
 
-    setLoading(false)
+      setLoading(false)
+    }
   }
 
   const handleSave = async () => {

@@ -28,5 +28,6 @@ export type TApi_Responses_Auth = {
         }
       }>
     >
+    acceptTerms: Promise<TDefaultRes<undefined>>
   }
 }

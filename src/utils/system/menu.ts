@@ -85,7 +85,7 @@ export const menu: {
       text: "Categorias",
       link: "/categories",
       tag: "categories",
-      access: ["ADMIN", "FILIAL", "FRANQUEADO", "SINDICO"],
+      access: ["ADMIN", "FILIAL", "FRANQUEADO"],
     },
     {
       icon: "subcategories",

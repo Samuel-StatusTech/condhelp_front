@@ -59,6 +59,7 @@ const ImageEditor = ({ data, onClose, handleOp }: Props) => {
             imageSrc={incomingUrl as string}
             onCancel={() => {}}
             onSave={setCroppedUrl}
+            ratio={data.ratio}
           />
 
           <S.Bottom>

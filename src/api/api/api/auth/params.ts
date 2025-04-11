@@ -17,5 +17,8 @@ export type TApi_Params_Auth = {
       usuario: string
       senha: string
     }
+    acceptTerms: {
+      userId: number
+    }
   }
 }

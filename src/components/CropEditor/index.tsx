@@ -10,11 +10,12 @@ type Props = {
   imageSrc: string
   onSave: (newUrl: string) => void
   onCancel: () => void
+  ratio?: number
 }
 
 type TEditorControllers = "zoom" | "rotate"
 
-const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
+const CropEditor = ({ imageSrc, onSave, onCancel, ratio }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [rotation, setRotation] = useState(0)
   const [zoom, setZoom] = useState(1)
@@ -50,7 +51,7 @@ const CropEditor = ({ imageSrc, onSave, onCancel }: Props) => {
               crop={crop}
               zoom={zoom}
               rotation={rotation}
-              aspect={16 / 9}
+              aspect={ratio ?? 16 / 9}
               onCropChange={setCrop}
               onCropComplete={onCropComplete}
               onZoomChange={setZoom}

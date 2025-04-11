@@ -69,6 +69,7 @@ const InputProfile = (props: Props) => {
           width: "md",
           data: {
             file: file,
+            ratio: 1,
           },
           handleOp: (v) => (v ? handleImageCrop(v) : clearInput()),
         })

@@ -21,6 +21,9 @@ export type TApi_Auth = {
     p: TParams["auth"]["resetPassword"]
   ) => TResponses["auth"]["resetPassword"]
   login: (p: TParams["auth"]["login"]) => TResponses["auth"]["login"]
+  acceptTerms: (
+    p: TParams["auth"]["acceptTerms"]
+  ) => TResponses["auth"]["acceptTerms"]
 }
 
 const requestPasswordLink: TApi["auth"]["requestPasswordLink"] = async (
@@ -209,9 +212,45 @@ const authLogin: TApi["auth"]["login"] = async (data) => {
   })
 }
 
+const acceptTerms: TApi["auth"]["acceptTerms"] = async ({ userId }) => {
+  return new Promise(async (resolve) => {
+    try {
+      await service
+        .put(`/user-accounts/${userId}`, {
+          termsAccepted: true,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            resolve({ ok: true, data: undefined })
+          } else {
+            resolve({
+              ok: false,
+              error:
+                "Não foi possível aceitar os termos no momento. Tente novamente mais tarde.",
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error:
+              "Não foi possível aceitar os termos no momento. Tente novamente mais tarde.",
+          })
+        })
+    } catch (error) {
+      resolve({
+        ok: false,
+        error:
+          "Não foi possível aceitar os termos no momento. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
 export const apiAuth = {
   requestPasswordLink: requestPasswordLink,
   register: authRegister,
   resetPassword: authResetPassword,
   login: authLogin,
+  acceptTerms: acceptTerms,
 }

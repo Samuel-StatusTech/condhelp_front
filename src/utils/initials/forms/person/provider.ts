@@ -75,4 +75,6 @@ export const providerInitial: TNewUserDefault & TUProvider = {
     cityCnd: "none",
     fgts: "none",
   },
+
+  termsAccepted: false,
 }

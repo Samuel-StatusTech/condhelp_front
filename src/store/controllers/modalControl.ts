@@ -10,9 +10,9 @@ const modalControls = (set: TSet): TModalControls => {
         ...store,
         modal: {
           visible: false,
-          role: "newBudget",
+          role: "",
           data: null,
-        },
+        } as any,
       }))
     },
   }

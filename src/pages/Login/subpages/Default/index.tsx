@@ -4,12 +4,13 @@ import Input from "../../../../components/Input/login"
 import Button from "../../../../components/Button"
 import { useState } from "react"
 import { getStore } from "../../../../store"
-import { TUserProfile } from "../../../../utils/@types/data/user"
+import { TUManager, TUserProfile } from "../../../../utils/@types/data/user"
 import { useNavigate } from "react-router-dom"
 import { TAccess } from "../../../../utils/@types/data/access"
 import { Api } from "../../../../api"
 import { getTokenData } from "../../../../utils/tb/helpers/getTokenData"
 import { checkErrors } from "../../../../utils/tb/checkErrors"
+import { TUProvider } from "../../../../utils/@types/data/_user/provider"
 
 type Props = {
   forgottenPass: () => void
@@ -36,6 +37,24 @@ const SPDefault = ({ forgottenPass }: Props) => {
     forgottenPass()
   }
 
+  const handleAcception = async (userId: number) => {
+    setSubmitting(true)
+
+    let res = false
+
+    try {
+      const req = await Api.auth.acceptTerms({ userId })
+
+      if (req.ok) res = false
+      else throw new Error()
+    } catch (error) {
+      res = false
+    }
+
+    setSubmitting(false)
+    return res
+  }
+
   const handleSubmit = async () => {
     try {
       setSubmitting(true)
@@ -60,12 +79,67 @@ const SPDefault = ({ forgottenPass }: Props) => {
           )
 
           if (userDataReq.ok) {
-            controllers.user.setData(userDataReq.data)
-            navigate("/dashboard", {
-              state: {
-                resetPass: auth.data.renewPassword,
-              },
-            })
+            if (
+              (["PRESTADOR", "SINDICO"] as TAccess[]).includes(
+                userDataReq.data.profile
+              )
+            ) {
+              if (!(userDataReq.data as TUManager | TUProvider).termsAccepted) {
+                controllers.modal.open({
+                  role: "terms",
+                  visible: true,
+                  width: "sm",
+                  data: {
+                    profile: userDataReq.data.profile,
+                  },
+                  handleOp: async () => {
+                    controllers.modal.close()
+
+                    console.log(userDataReq.data)
+                    const acception = await handleAcception(
+                      userDataReq.data.userId
+                    )
+
+                    if (acception) {
+                      controllers.user.setData(userDataReq.data)
+                      navigate("/dashboard", {
+                        state: {
+                          resetPass: auth.data.renewPassword,
+                        },
+                      })
+                    } else {
+                      controllers.feedback.setData({
+                        state: "error",
+                        message:
+                          "Houve um erro ao aceitar os termos. Tente novamente mais tarde",
+                        visible: true,
+                      })
+                    }
+                  },
+                  onClose: () => {
+                    controllers.feedback.setData({
+                      state: "alert",
+                      message: "Realize o login novamente.",
+                      visible: true,
+                    })
+                  },
+                })
+              } else {
+                controllers.user.setData(userDataReq.data)
+                navigate("/dashboard", {
+                  state: {
+                    resetPass: auth.data.renewPassword,
+                  },
+                })
+              }
+            } else {
+              controllers.user.setData(userDataReq.data)
+              navigate("/dashboard", {
+                state: {
+                  resetPass: auth.data.renewPassword,
+                },
+              })
+            }
           } else {
             controllers.feedback.setData({
               state: "error",

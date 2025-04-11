@@ -21,6 +21,8 @@ import RejectCondominium from "./variations/RejectCondominium"
 import SeeCondominiumRejection from "./variations/SeeCondominiumRejection"
 import NewAccountType from "./variations/NewAccountType"
 import { TUserProfile } from "../../utils/@types/data/user"
+import CondoSuccess from "./variations/CondoSuccess"
+import TermsModal from "./variations/Terms"
 
 const ResponsiveDialog = styled(Dialog, {
   shouldForwardProp: (props) => props !== "isFullPage",
@@ -66,6 +68,8 @@ export type ModalProps = {
 
 export type TModals =
   | "loading"
+  | "terms"
+  | "condoSuccess"
   | "newBudget"
   | "editBudget"
   | "reopenBudget"
@@ -94,6 +98,16 @@ const Modal = () => {
     let el: any = null
 
     switch (role) {
+      case "terms":
+        el = (
+          <TermsModal data={data} onClose={handleClose} handleOp={handleOp} />
+        )
+        break
+      case "condoSuccess":
+        el = (
+          <CondoSuccess data={data} onClose={handleClose} handleOp={handleOp} />
+        )
+        break
       case "newBudget":
         el = <NewBudget data={data} onClose={handleClose} handleOp={handleOp} />
         break

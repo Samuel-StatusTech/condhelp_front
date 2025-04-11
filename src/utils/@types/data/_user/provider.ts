@@ -68,6 +68,7 @@ export type TUProvider = {
   }
 
   openingDate?: any
+  termsAccepted: boolean
 }
 
 export type T_Back_Provider = {
