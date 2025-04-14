@@ -248,6 +248,7 @@ const FPpeople = () => {
       const document = getUserDocument(getObj(0, img, cndsUrls))
 
       const accountRegister = await Api.auth.register({
+        nome: form.name,
         tipo: personType !== "PRESTADOR" ? personType : "PRESTADOR_SERVICO",
         senha: null,
         usuario: form.email,
