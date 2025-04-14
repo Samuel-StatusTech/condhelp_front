@@ -45,7 +45,7 @@ const SPDefault = ({ forgottenPass }: Props) => {
     try {
       const req = await Api.auth.acceptTerms({ userId })
 
-      if (req.ok) res = false
+      if (req.ok) res = true
       else throw new Error()
     } catch (error) {
       res = false
