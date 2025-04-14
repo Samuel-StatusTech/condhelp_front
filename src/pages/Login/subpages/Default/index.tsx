@@ -2,15 +2,16 @@ import * as S from "../../styled"
 
 import Input from "../../../../components/Input/login"
 import Button from "../../../../components/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getStore } from "../../../../store"
 import { TUManager, TUserProfile } from "../../../../utils/@types/data/user"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { TAccess } from "../../../../utils/@types/data/access"
 import { Api } from "../../../../api"
 import { getTokenData } from "../../../../utils/tb/helpers/getTokenData"
 import { checkErrors } from "../../../../utils/tb/checkErrors"
 import { TUProvider } from "../../../../utils/@types/data/_user/provider"
+import { validEmail } from "../../../../utils/tb/checkErrors/email"
 
 type Props = {
   forgottenPass: () => void
@@ -20,12 +21,26 @@ const managerFormUrl = "https://condhelp.com/sindico"
 
 const SPDefault = ({ forgottenPass }: Props) => {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
 
   const { controllers } = getStore()
 
+  const [incomingEmail, setIncomingEmail] = useState("")
   const [email, setEmail] = useState("")
   const [pass, setPass] = useState("")
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    const paramEmail = params.get("email")
+
+    if (!incomingEmail) {
+      if (paramEmail && validEmail(paramEmail)) {
+        setIncomingEmail(paramEmail)
+        setEmail(paramEmail)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params])
 
   const clearFields = () => {
     setEmail("")
