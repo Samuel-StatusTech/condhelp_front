@@ -32,14 +32,14 @@ const requestPasswordLink: TApi["auth"]["requestPasswordLink"] = async (
   return new Promise(async (resolve) => {
     try {
       await service
-        .post(`/auth/requestPasswordLink`, data)
+        .post(`/auth/forgot-password`, data)
         .then((res) => {
-          const info = res.data
+          const isOk = res.status === 200
 
-          if (info) {
+          if (isOk) {
             resolve({
               ok: true,
-              data: info,
+              data: {},
             })
           } else {
             resolve({
