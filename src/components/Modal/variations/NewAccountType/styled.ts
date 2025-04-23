@@ -47,14 +47,7 @@ export const Row = styled.div<{ $alignTop?: boolean }>`
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-
-    align-items: unset;
-
-    min-width: unset;
-    max-width: unset;
-    width: unset;
+    flex-direction: column;
   }
 `
 
@@ -92,6 +85,10 @@ export const ProfileOption = styled.div<{ $active: boolean }>`
   transition: border-color 0.3s;
   padding: 12px 28px;
   cursor: pointer;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    width: 100%;
+  }
 `
 
 export const POIndicator = styled.div<{ $active: boolean }>`

@@ -62,6 +62,7 @@ const SPPassmail = ({ backToLogin, handleRecoveryMail }: Props) => {
         placeholder={"E-mail"}
         value={recoveryEmail}
         onChange={(v: any) => setRecoveryEmail(v)}
+        avoidAutoCap={true}
       />
       <Button
         type={"main"}

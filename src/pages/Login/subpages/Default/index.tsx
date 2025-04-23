@@ -239,6 +239,7 @@ const SPDefault = ({ forgottenPass }: Props) => {
         placeholder={"E-mail"}
         value={email}
         onChange={(v) => setEmail(v as any)}
+        avoidAutoCap={true}
       />
       <Input
         type={"pass"}
@@ -246,6 +247,7 @@ const SPDefault = ({ forgottenPass }: Props) => {
         value={pass}
         onChange={(v) => setPass(v as any)}
         onEnter={handleSubmit}
+        avoidAutoCap={true}
       />
       <Button
         type={"main"}

@@ -7,12 +7,13 @@ type Props = {
   type: "mail" | "pass"
   placeholder?: string
   value: string | boolean
+  avoidAutoCap?: boolean
   onChange: (v: string | boolean) => void
   onEnter?: (params?: any) => void
 }
 
 const Input = (props: Props) => {
-  const { type, placeholder, value, onChange, onEnter } = props
+  const { type, placeholder, value, avoidAutoCap, onChange, onEnter } = props
 
   const [secure, setSecure] = useState(true)
 
@@ -41,6 +42,7 @@ const Input = (props: Props) => {
         placeholder={placeholder}
         value={String(value)}
         onChange={handleChange}
+        autoCapitalize={avoidAutoCap ? "none" : undefined}
         onKeyUp={(e) => {
           if (e.key === "Enter" && onEnter) {
             onEnter()
