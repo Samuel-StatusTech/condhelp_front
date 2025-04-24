@@ -17,7 +17,7 @@ type Props = {
   forgottenPass: () => void
 }
 
-const managerFormUrl = "https://condhelp.com/sindico"
+const managerFormUrl = "https://condhelp.com/cadastrosindico"
 
 const SPDefault = ({ forgottenPass }: Props) => {
   const navigate = useNavigate()
