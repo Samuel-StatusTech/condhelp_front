@@ -7,6 +7,7 @@ import SPDefault from "./subpages/Default"
 import Modal from "../../components/Modal"
 import SPPassmail from "./subpages/Passmail"
 import { Api } from "../../api"
+import { InstallPWA } from "../../components/InstallPWA"
 
 const Login = () => {
   const { controllers } = getStore()
@@ -79,6 +80,7 @@ const Login = () => {
         <span>ACESSO AO SISTEMA</span>
         {renderContent()}
       </S.FormContainer>
+      <InstallPWA />
     </S.Page>
   )
 }
