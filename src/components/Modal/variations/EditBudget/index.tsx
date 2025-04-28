@@ -207,7 +207,7 @@ const EditBudget = ({ data, onClose, handleOp }: Props) => {
       // • Categories
       proms.push(
         Api.categories
-          .listAll({})
+          .listAll({ size: 200 })
           .then((res) => {
             if (res.ok) categoriesList = res.data.content
             else throw new Error()
