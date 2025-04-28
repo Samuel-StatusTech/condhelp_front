@@ -23,7 +23,7 @@
     "csvtojson": "^2.0.10",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.12",
-    "framer-motion": "^12.5.0",
+    "framer-motion": "^12.9.2",
     "google-api-javascript-client": "^0.1.0",
     "googleapis": "^142.0.0",
     "jwt-decode": "^4.0.0",
