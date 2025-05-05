@@ -257,7 +257,7 @@ const FPpeople = () => {
 
       if (accountRegister.ok) {
         // @ts-ignore
-        const obj = getObj(accountRegister.data.id, img)
+        const obj = getObj(accountRegister.data.id, img, cndsUrls)
 
         const req = await Api.persons.create({
           newPerson: { ...obj, doc: document } as TNewUser,
