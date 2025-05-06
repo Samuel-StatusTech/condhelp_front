@@ -110,10 +110,12 @@ const SPDefault = ({ forgottenPass }: Props) => {
                   handleOp: async () => {
                     controllers.modal.close()
 
-                    console.log(userDataReq.data)
-                    const acception = await handleAcception(
-                      userDataReq.data.userId
-                    )
+                    const uid =
+                      userDataReq.data.profile === "PRESTADOR"
+                        ? userDataReq.data.userAccountId
+                        : userDataReq.data.userId
+
+                    const acception = await handleAcception(uid)
 
                     if (acception) {
                       controllers.user.setData(userDataReq.data)
