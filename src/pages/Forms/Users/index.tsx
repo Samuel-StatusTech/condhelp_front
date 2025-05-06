@@ -559,11 +559,17 @@ const FPpeople = () => {
 
             const reqInfo = req.data as any
 
+            const parsedTagId =
+              reqInfo.isUserFlag && reqInfo.tag && reqInfo.tag.id
+                ? reqInfo.tag.id
+                : null
+
             const gettedInfo = {
               ...form,
               ...initialRoleInfo,
               ...{
                 ...reqInfo,
+                tagId: parsedTagId,
                 address: !!reqInfo.address
                   ? {
                       ...reqInfo.address,
@@ -824,7 +830,7 @@ const FPpeople = () => {
   useEffect(() => {
     if (
       (["SINDICO", "PRESTADOR"] as TAccess[]).includes(form.profile) &&
-      form.isUserTag &&
+      form.isUserFlag &&
       options.tags.length === 0
     ) {
       loadTags()

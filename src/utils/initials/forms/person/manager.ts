@@ -24,6 +24,6 @@ export const managerInitial: TNewUser & TUManager = {
   condominiums: [],
 
   termsAccepted: false,
-  isUserTag: false,
+  isUserFlag: false,
   tagId: null,
 }

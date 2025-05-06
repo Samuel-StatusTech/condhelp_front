@@ -101,7 +101,7 @@ export type TUManager = {
 
   condominiums: TCondominium[]
 
-  isUserTag: false
+  isUserFlag: false
   tagId?: number | null
   tag?: TTag | null
 }

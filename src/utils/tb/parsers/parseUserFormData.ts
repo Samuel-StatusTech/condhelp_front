@@ -142,7 +142,7 @@ const getManagerObj = (user: TUserTypes["SINDICO"]) => {
     condominiumIds: user.condominiums.map((c) => c.id),
     managerSince: !Number.isNaN(+user.managerSince) ? +user.managerSince : 1,
     birthDate: getDateStr(user.birthDate, "javaDateTime"),
-    isUserTag: user.isUserTag,
+    isUserFlag: user.isUserFlag,
     tagId: user.tagId,
   }
 
@@ -258,7 +258,7 @@ const getProviderObj = (user: TUserTypes["PRESTADOR"]) => {
       country: user.address.country,
     },
     serviceCategoryIds: user.categories,
-    isUserTag: user.isUserTag,
+    isUserFlag: user.isUserFlag,
     tagId: user.tagId,
   }
 

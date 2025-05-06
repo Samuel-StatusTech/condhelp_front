@@ -182,11 +182,11 @@ export const extraManager = (
             {
               type: "toggler",
               label: "Possui tag",
-              field: "isUserTag",
-              value: form.isUserTag,
+              field: "isUserFlag",
+              value: form.isUserFlag,
               hasTopSpace: true,
             },
-            ...((form.isUserTag
+            ...((form.isUserFlag
               ? [
                   {
                     type: "select",

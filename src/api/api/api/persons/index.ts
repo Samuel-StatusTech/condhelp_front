@@ -68,7 +68,7 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
     try {
       // Other profile
       if (!["SINDICO"].includes(newPerson.profile)) {
-        const userAccountRegister = await service.post(`${baseURL}`, {
+        let obj: any = {
           userId: newPerson.userId,
           photo: newPerson.photo,
           name: newPerson.name,
@@ -78,7 +78,18 @@ const create: TApi["persons"]["create"] = async ({ newPerson }) => {
           branchId: newPerson.branchId,
           franchiseId: newPerson.franchiseId,
           document: newPerson.doc,
-        })
+        }
+
+        if (
+          newPerson.profile === "PRESTADOR" &&
+          newPerson.isUserFlag &&
+          newPerson.tagId
+        ) {
+          obj.isUserFlag = newPerson.isUserFlag
+          obj.tagId = newPerson.tagId
+        }
+
+        const userAccountRegister = await service.post(`${baseURL}`, obj)
 
         if (!userAccountRegister.data) {
           resolve({
@@ -162,19 +173,31 @@ const update: TApi["persons"]["update"] = async ({ person }) => {
   return new Promise(async (resolve) => {
     try {
       // if (!["SINDICO"].includes(person.profile)) {
+      let obj: any = {
+        userId: person.userId,
+        photo: person.photo,
+        name: person.name,
+        email: person.email,
+        profile: person.profile,
+        status: person.status,
+        branchId: person.branchId,
+        franchiseId: person.franchiseId,
+        document: person.doc,
+      }
+
+      if (
+        person.profile === "PRESTADOR" ||
+        (person.profile === "SINDICO" &&
+          person.isUserFlag &&
+          (person as any).tagId)
+      ) {
+        obj.isUserFlag = person.isUserFlag
+        obj.tagId = person.tagId
+      }
+
       const userAccountRegister = await service.put(
         `${baseURL}/${person.userId}`,
-        {
-          userId: person.userId,
-          photo: person.photo,
-          name: person.name,
-          email: person.email,
-          profile: person.profile,
-          status: person.status,
-          branchId: person.branchId,
-          franchiseId: person.franchiseId,
-          document: person.doc,
-        }
+        obj
       )
 
       if (!userAccountRegister.data) {

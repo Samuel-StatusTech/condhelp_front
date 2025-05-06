@@ -71,7 +71,7 @@ export type TUProvider = {
   openingDate?: any
   termsAccepted: boolean
 
-  isUserTag: boolean
+  isUserFlag: boolean
   tagId?: number | null
   tag?: TTag | null
 }

@@ -77,6 +77,6 @@ export const providerInitial: TNewUserDefault & TUProvider = {
   },
 
   termsAccepted: false,
-  isUserTag: false,
+  isUserFlag: false,
   tagId: null,
 }
