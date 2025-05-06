@@ -17,6 +17,7 @@ type Props = {
   actions?: {
     [key: string]: (...props: any[]) => void | any
   }
+  withoutPagination?: boolean
   noHover?: boolean
   search?: string
   searchFields?: string[]
@@ -31,6 +32,7 @@ const Table = ({
   data,
   noHover,
   actions,
+  withoutPagination,
   search,
   searchFields,
   expandComponent,
@@ -118,7 +120,7 @@ const Table = ({
         )}
       </S.TableWrapper>
 
-      {searchData && data.length > 0 && (
+      {!withoutPagination && searchData && data.length > 0 && (
         <S.PaginationWrapper>
           <S.Showinglabel>
             Exibindo{" "}

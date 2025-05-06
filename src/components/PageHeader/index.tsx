@@ -10,6 +10,7 @@ export type THeaderFrom =
   | "regions"
   | "errands"
   | "faqs"
+  | "tags"
   | "faqView"
   | "panelBudget"
   | "panelProvider"

@@ -6,6 +6,7 @@ import { condoForm } from "./forms/condo"
 import { regionForm } from "./forms/region"
 import { errandForm } from "./forms/errand"
 import { faqForm } from "./forms/faq"
+import { tagForm } from "./forms/tag"
 
 // Modal
 
@@ -33,6 +34,7 @@ const initials = {
     condo: condoForm,
     region: regionForm,
     errand: errandForm,
+    tag: tagForm,
     faq: faqForm,
   },
   modals: {

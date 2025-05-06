@@ -15,6 +15,7 @@ import { apiPersons } from "./api/api/persons"
 import { apiBudgets } from "./api/api/budget"
 import { apiCondos } from "./api/api/condos"
 import { apiFaqs } from "./api/api/faqs"
+import { apiTags } from "./api/api/tags"
 import { apiDashboards } from "./api/api/dashboards"
 import { apiMonitoring } from "./api/api/monitoring"
 import { apiFiles } from "./api/api/files"
@@ -79,5 +80,6 @@ export const Api: TApi = {
   countries: apiCountries,
   persons: apiPersons,
   faqs: apiFaqs,
+  tags: apiTags,
   files: apiFiles,
 }

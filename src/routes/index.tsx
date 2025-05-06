@@ -28,6 +28,7 @@ import SubcategoriesPage from "../pages/Subcategories"
 import RegionsPage from "../pages/Regions"
 import ErrandsPage from "../pages/Errands"
 import FaqsPage from "../pages/Faqs"
+import TagsPage from "../pages/Tags"
 
 /*
  *  Head menu pages
@@ -46,6 +47,7 @@ import FPcondo from "../pages/Forms/Condo"
 import FPregion from "../pages/Forms/Region"
 import FPerrand from "../pages/Forms/Errand"
 import FPfaq from "../pages/Forms/Faq"
+import FPtag from "../pages/Forms/Tag"
 import FaqsView from "../pages/Head/Faq"
 import Budgets from "../pages/Budgets"
 import FPdocuments from "../pages/Forms/Documents"
@@ -143,6 +145,11 @@ const Router = () => {
               <Route path="" element={<RegionsPage />} />
               <Route path="single" element={<FPregion />} />
               <Route path="single/:id" element={<FPregion />} />
+            </Route>
+            <Route path="tags">
+              <Route path="" element={<TagsPage />} />
+              <Route path="single" element={<FPtag />} />
+              <Route path="single/:id" element={<FPtag />} />
             </Route>
             <Route path="errands">
               <Route path="" element={<ErrandsPage />} />

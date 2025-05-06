@@ -69,6 +69,7 @@ import { ReactComponent as Search } from "./search.svg"
 import { ReactComponent as Settings } from "./settings.svg"
 import { ReactComponent as Share } from "./share.svg"
 import { ReactComponent as Subcategory } from "./subcategory.svg"
+import { ReactComponent as Tag } from "./tag.svg"
 import { ReactComponent as Team } from "./team.svg"
 import { ReactComponent as Telephone } from "./telephone.svg"
 import { ReactComponent as Trash } from "./trash.svg"
@@ -152,6 +153,7 @@ export const Icons = {
   Settings,
   Share,
   Subcategory,
+  Tag,
   Team,
   Telephone,
   Trash,

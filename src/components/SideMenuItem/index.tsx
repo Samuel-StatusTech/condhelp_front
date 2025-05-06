@@ -27,6 +27,7 @@ const iconRef: { [key: string]: JSX.Element } = {
   budget: <Icons.Budget />,
   chat: <Icons.Chat />,
   faq: <Icons.Faq />,
+  tag: <Icons.Tag />,
   reports: <Icons.Report />,
 }
 

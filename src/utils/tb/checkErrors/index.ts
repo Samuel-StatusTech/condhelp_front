@@ -8,6 +8,7 @@ import { usersCheck } from "./users"
 import { budgetCheck, budgetEditCheck } from "./budget"
 import { documentationCheck } from "./documentation"
 import { faqCheck } from "./faq"
+import { tagCheck } from "./tag"
 import { resetPassCheck } from "./resetPass"
 
 export const checkErrors = {
@@ -21,6 +22,7 @@ export const checkErrors = {
   budgetEdit: budgetEditCheck,
   documentation: documentationCheck,
   faq: faqCheck,
+  tag: tagCheck,
   resetPass: resetPassCheck,
 }
 

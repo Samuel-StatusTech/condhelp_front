@@ -122,6 +122,13 @@ export const menu: {
       tag: "managefaq",
       access: ["ADMIN"],
     },
+    {
+      icon: "tag",
+      text: "Tags",
+      link: "/tags",
+      tag: "tag",
+      access: ["ADMIN"],
+    },
     // {
     //   icon: "reports",
     //   text: "Relatórios",

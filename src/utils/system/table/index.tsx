@@ -10,6 +10,7 @@ import { callsTableConfig } from "./callsHistoryTableConfig"
 import { finishedBudgetsResumeTableConfig } from "./finishedBudgetsResumeTableConfig"
 import { condoUnaprovedTableConfig } from "./condoUnaprovedTableConfig"
 import { condoRejectedTableConfig } from "./condoRejectedTableConfig"
+import { tagsTableConfig } from "./tagsTableConfig"
 
 type TTableConfigs =
   | "users"
@@ -21,6 +22,7 @@ type TTableConfigs =
   | "regions"
   | "errands"
   | "faqs"
+  | "tags"
   | "finishedBudgets"
   | "finishedBudgetsResume"
   | "calls"
@@ -37,6 +39,7 @@ export const tableConfig: {
   regions: regionTableConfig,
   errands: errandTableConfig,
   faqs: faqTableConfig,
+  tags: tagsTableConfig,
   finishedBudgets: finishedBudgetsTableConfig,
   finishedBudgetsResume: finishedBudgetsResumeTableConfig,
   calls: callsTableConfig,

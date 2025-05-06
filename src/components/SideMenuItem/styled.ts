@@ -24,6 +24,7 @@ export const Wrapper = styled.div<{ $active: boolean; $k: number }>`
     color: ${({ theme }) => theme.colors.green.medium};
     svg {
       width: 24px;
+      height: 24px;
     }
   }
 

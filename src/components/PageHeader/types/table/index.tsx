@@ -25,6 +25,7 @@ const titleRelations: { [key in THeaderFrom]: string } = {
   regions: "Regiões",
   errands: "Recados",
   faqs: "Perguntas frequentes",
+  tags: "Tags",
   faqView: "Perguntas frequentes",
 }
 
