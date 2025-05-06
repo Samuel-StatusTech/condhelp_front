@@ -58,6 +58,37 @@ export const basicProvider = ({
       ],
     },
 
+    // Tags
+    {
+      type: "fields",
+      title: "Tags",
+      fields: [
+        {
+          type: "toggler",
+          label: "Possui tag",
+          field: "isUserTag",
+          value: form.isUserTag,
+          hasTopSpace: true,
+        },
+        ...((form.isUserTag
+          ? [
+              {
+                type: "select",
+                label: "Selecione a tag",
+                field: "tagId",
+                value: form.tagId,
+                options: options.tags,
+                gridSizes: { big: 12 },
+                error: {
+                  has: errors.fields.includes("tagId"),
+                  message: "Escolha uma tag",
+                },
+              },
+            ]
+          : []) as FormField[]),
+      ],
+    },
+
     // Address
     {
       type: "fields",

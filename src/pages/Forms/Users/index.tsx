@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import initials from "../../../utils/initials"
@@ -76,6 +77,7 @@ const FPpeople = () => {
     state: [],
     franchises: [],
     category: [],
+    tags: [],
   })
 
   const handleCancel = () => {
@@ -759,6 +761,11 @@ const FPpeople = () => {
         franqId: user?.userId as number,
       }))
     }
+
+    setOptions((prev) => ({
+      ...prev,
+      tags: [],
+    }))
   }, [user, personType])
 
   useEffect(() => {
@@ -794,6 +801,35 @@ const FPpeople = () => {
     const check = checkErrors.users(form)
     return check
   }
+
+  const loadTags = async () => {
+    setLoading(true)
+    try {
+      const req = await Api.tags.listAll({})
+
+      if (req.ok) {
+        setOptions((prev) => ({
+          ...prev,
+          tags: parseOptionList(
+            req.data.content.filter((i) => i.type === form.profile),
+            "id",
+            "name"
+          ),
+        }))
+      }
+    } catch (error) {}
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    if (
+      (["SINDICO", "PRESTADOR"] as TAccess[]).includes(form.profile) &&
+      form.isUserTag &&
+      options.tags.length === 0
+    ) {
+      loadTags()
+    }
+  }, [form, loadTags, options.tags.length])
 
   /*
    *  Condominiums management
@@ -963,6 +999,7 @@ const FPpeople = () => {
           errors,
           handleAddCondominium,
           handleDeleteCondominium,
+          options,
           params.id !== undefined
         )
         break

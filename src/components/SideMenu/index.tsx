@@ -8,6 +8,10 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { getStore } from "../../store"
 import { relations } from "../../utils/system/relations"
 import Button from "../Button"
+import TagPath from "./tagPath"
+import { TAccess } from "../../utils/@types/data/access"
+import { TUManager } from "../../utils/@types/data/user"
+import { TUProvider } from "../../utils/@types/data/_user/provider"
 
 type Props = {
   page: string
@@ -76,9 +80,18 @@ const SideMenu = (props: Props) => {
         )}
 
         <S.LoggedUserArea>
-          <S.UserProfile $image={user?.photo}>
-            {!user?.photo && <Icons.User />}
-          </S.UserProfile>
+          <div style={{ position: "relative" }}>
+            {user &&
+              (["SINDICO", "PRESTADOR"] as TAccess[]).includes(user.profile) &&
+              (user as TUManager | TUProvider).tag && (
+                <TagPath
+                  tagName={(user as TUManager | TUProvider).tag?.name as string}
+                />
+              )}
+            <S.UserProfile $image={user?.photo}>
+              {!user?.photo && <Icons.User />}
+            </S.UserProfile>
+          </div>
           <S.NameArea>
             <S.UserName>{user?.name}</S.UserName>
             <S.UserRole>

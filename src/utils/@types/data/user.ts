@@ -5,6 +5,7 @@ import { TUProvider } from "./_user/provider"
 import { TAccess } from "./access"
 import { TCondominium } from "./condominium"
 import { TExperience } from "./managerExperience"
+import { TTag } from "./tag"
 
 export type TUDefault = {
   id: number
@@ -99,6 +100,10 @@ export type TUManager = {
   managerSince: TExperience
 
   condominiums: TCondominium[]
+
+  isUserTag: false
+  tagId?: number | null
+  tag?: TTag | null
 }
 
 export type TUserStatus = "active" | "disabled" | "awaiting"

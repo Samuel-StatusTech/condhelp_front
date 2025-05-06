@@ -2,6 +2,7 @@ import { List } from "../../../../../components/List"
 import { TBlock } from "../../../../../utils/@types/components/Form"
 import { FormField } from "../../../../../utils/@types/components/FormFields"
 import { TCondominium } from "../../../../../utils/@types/data/condominium"
+import { TOption } from "../../../../../utils/@types/data/option"
 import { TUManager } from "../../../../../utils/@types/data/user"
 import { TErrorsCheck } from "../../../../../utils/@types/helpers/checkErrors"
 import { systemOptions } from "../../../../../utils/system/options"
@@ -16,6 +17,7 @@ export const extraManager = (
   errors: TErrorsCheck,
   handleAddCondominium: () => void,
   handleDeleteCondominium: (condominium: TCondominium) => void,
+  options: { [key: string]: TOption[] },
   isEditing?: boolean
 ): TBlock[] => {
   const content: TBlock[] = [
@@ -171,6 +173,35 @@ export const extraManager = (
                 message: "Escolha um período",
               },
             },
+          ],
+        },
+        {
+          type: "fields",
+          title: "Tags",
+          fields: [
+            {
+              type: "toggler",
+              label: "Possui tag",
+              field: "isUserTag",
+              value: form.isUserTag,
+              hasTopSpace: true,
+            },
+            ...((form.isUserTag
+              ? [
+                  {
+                    type: "select",
+                    label: "Selecione a tag",
+                    field: "tagId",
+                    value: form.tagId,
+                    options: options.tags,
+                    gridSizes: { big: 12 },
+                    error: {
+                      has: errors.fields.includes("tagId"),
+                      message: "Escolha uma tag",
+                    },
+                  },
+                ]
+              : []) as FormField[]),
           ],
         },
         {

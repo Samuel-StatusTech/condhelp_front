@@ -23,7 +23,9 @@ export const handleField = async (
     })
   }
 
-  if (field === "status") {
+  if (field === "isUserTag") {
+    setForm((frm: any) => ({ ...frm, isUserTag: value, tagId: null }))
+  } else if (field === "status") {
     setForm((frm: any) => ({ ...frm, status: value ? "ATIVO" : "INATIVO" }))
   } else if (field === "profile") {
     setForm({

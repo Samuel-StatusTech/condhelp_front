@@ -114,6 +114,14 @@ export const LoggedUserArea = styled.div`
     theme.animations.types.fade +
     theme.animations.durations.slow +
     theme.animations.delays.main(5)}
+
+  svg.circle-text {
+    transform: rotate(-54deg) scale(1.4);
+    z-index: 100;
+    position: absolute;
+    top: -2px;
+    left: -2.5px;
+  }
 `
 
 export const UserProfile = styled.div<{ $image?: string | null }>`
@@ -125,6 +133,7 @@ export const UserProfile = styled.div<{ $image?: string | null }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  /* position: relative; */
 
   border-radius: 75px;
 

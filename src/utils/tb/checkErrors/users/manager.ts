@@ -43,6 +43,7 @@ export const managerCheck = (
         state = getInvalidCheck(state, "documentNumber")
     }
     if (!data.managerSince) state = getInvalidCheck(state, "managerSince")
+    if (data.isUserTag && !data.tagId) state = getInvalidCheck(state, "tagId")
     if (!data.birthDate) state = getInvalidCheck(state, "birthDate")
   }
 

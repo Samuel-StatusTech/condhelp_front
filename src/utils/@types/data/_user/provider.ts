@@ -1,5 +1,6 @@
 import { TAddress } from "../address"
 import { TBudgetStatus } from "../status"
+import { TTag } from "../tag"
 import { TDocument } from "./document"
 
 export type TProviderOnBudget = {
@@ -69,6 +70,10 @@ export type TUProvider = {
 
   openingDate?: any
   termsAccepted: boolean
+
+  isUserTag: boolean
+  tagId?: number | null
+  tag?: TTag | null
 }
 
 export type T_Back_Provider = {

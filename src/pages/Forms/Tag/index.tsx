@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react"
-import * as S from "./styled"
 import * as C from "../styled"
 
 import initials from "../../../utils/initials"
@@ -12,8 +11,6 @@ import { getStore } from "../../../store"
 import { Api } from "../../../api"
 import { checkErrors } from "../../../utils/tb/checkErrors"
 import FormDefaultButtons from "../../../components/FormDefaultButtons"
-import Button from "../../../components/Button"
-import { Icons } from "../../../assets/icons/icons"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { TNewTag, TTag } from "../../../utils/@types/data/tag"
 import { TOption } from "../../../components/Input/condosSelect"
@@ -268,17 +265,6 @@ const FPtag = () => {
                   {
                     type: "custom",
                     element: (
-                      // <S.Buttons className="buttonsArea">
-                      //   <Button
-                      //     type="quaternary"
-                      //     action={params.id ? handleDelete : () => {}}
-                      //     text={"Excluir tag"}
-                      //     icon={<Icons.Trash />}
-                      //     iconLeft={true}
-                      //     fit={true}
-                      //     disabled={!params.id}
-                      //   />
-                      // </S.Buttons>
                       <FormDefaultButtons
                         handleCancel={handleCancel}
                         handleSave={handleSave}
