@@ -121,7 +121,7 @@ const TagsPage = () => {
 
       <SearchBlock
         search={search}
-        searchPlaceholder={"Pesquisar categoria"}
+        searchPlaceholder={"Pesquisar tag"}
         onSearchChange={setSearch}
         onFilterChange={handleFilters}
         onSearch={handleSearch}

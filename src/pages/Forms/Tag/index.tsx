@@ -268,10 +268,10 @@ const FPtag = () => {
                       <FormDefaultButtons
                         handleCancel={handleCancel}
                         handleSave={handleSave}
-                        handleDelete={onConfirmDelete}
-                        deleteBtnText="Excluir tag"
-                        deleteModalTitle="Excluir tag"
-                        disabled={errors.has}
+                        handleDelete={params.id ? onConfirmDelete : undefined}
+                        deleteBtnText={params.id ? "Excluir tag" : undefined}
+                        deleteModalTitle={params.id ? "Excluir tag" : undefined}
+                        disabled={params.id ? errors.has : undefined}
                       />
                     ),
                   },
