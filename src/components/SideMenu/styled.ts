@@ -107,7 +107,7 @@ export const LoggedUserArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 
   opacity: 0;
   ${({ theme }) =>
