@@ -23,7 +23,7 @@ type Props = {
     errors: TErrorsCheck
   } & {
     // Provider
-    handleSelectCity?: (city: TCity) => void
+    handleSelectCity: (city: TCity) => void
     options?: {
       [key: string]: TOption[]
     }

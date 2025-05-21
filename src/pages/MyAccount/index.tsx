@@ -15,7 +15,7 @@ import { TCategory } from "../../utils/@types/data/category"
 import { TOption } from "../../utils/@types/data/option"
 import { TErrorsCheck } from "../../utils/@types/helpers/checkErrors"
 import { checkErrors } from "../../utils/tb/checkErrors"
-import { TState } from "../../utils/@types/data/region"
+import { TCity, TState } from "../../utils/@types/data/region"
 import { sendFile } from "../../utils/tb/helpers/file/sendFile"
 
 const MyAccount = () => {
@@ -29,6 +29,8 @@ const MyAccount = () => {
 
   const [, setCategories] = useState<TCategory[]>([])
   const [states, setStates] = useState<TState[]>([])
+
+  const [pickedCity, setPickedCity] = useState<TCity | null>(null)
 
   const [options, setOptions] = useState<{ [key: string]: TOption[] }>({
     company: [],
@@ -85,8 +87,14 @@ const MyAccount = () => {
             ? { ...form, ...providerDocumentsUrls }
             : form),
           userId: id,
-          // @ts-ignore
-          address: { ...(form.address ?? {}), city: form.cityId },
+          address: {
+            ...(form.address ?? {}),
+            city: form.address
+              ? pickedCity
+                ? pickedCity.id
+                : form.cityId ?? form.address.cityId
+              : null,
+          },
         },
         (form as TNewUser).profile
       )
@@ -538,6 +546,15 @@ const MyAccount = () => {
     })
   }, [controllers.modal, handlePasswordReset])
 
+  const handleSelectCity = (city: TCity) => {
+    setPickedCity(city)
+
+    setForm((frm: any) => ({
+      ...frm,
+      cityId: city.id,
+    }))
+  }
+
   return (
     <MyAccountContent
       info={{
@@ -545,6 +562,7 @@ const MyAccount = () => {
         handleCancel,
         handleSave: handleSave,
         handleChangePassword: handleChangePassword,
+        handleSelectCity,
         form,
         formSubmitFields,
         options: options,
