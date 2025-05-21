@@ -145,6 +145,16 @@ const NewBudget = ({ onClose, handleOp }: Props) => {
   }
 
   const handleField = (field: string, value: boolean | string) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = errors.fields.filter(
+        (errorItem) => errorItem !== field
+      )
+      setErrors({
+        fields: newFieldsList,
+        has: newFieldsList.length > 0,
+      })
+    }
+
     if (field === "serviceCategoryId") {
       setForm((f) => ({
         ...f,
