@@ -224,25 +224,25 @@ const DashboardProvider = ({ canLoadData }: { canLoadData: boolean }) => {
               <DataResumeItem
                 type={"approved"}
                 number={budgetsResume.completed}
-                total={budgetsResume.total}
+                percentage={budgetsResume.completedPercentage}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"awaiting"}
                 number={budgetsResume.inProgress}
-                total={budgetsResume.total}
+                percentage={budgetsResume.inProgressPercentage}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"rejected"}
                 number={budgetsResume.canceled}
-                total={budgetsResume.total}
+                percentage={budgetsResume.canceledPercentage}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"recused"}
                 number={budgetsResume.recused}
-                total={budgetsResume.total}
+                percentage={budgetsResume.recusedPercentage}
                 role={"budgets"}
               />
             </S.MBRDataArea>

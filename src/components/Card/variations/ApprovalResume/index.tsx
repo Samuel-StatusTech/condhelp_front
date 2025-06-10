@@ -17,7 +17,7 @@ type Props = {
 type PDataResumeItem = {
   type: "approved" | "awaiting" | "rejected" | "recused"
   number: number
-  total: number
+  percentage?: number
   role: "budgets" | "providers"
 }
 
@@ -43,12 +43,11 @@ const textRelations = {
 export const DataResumeItem = ({
   type,
   number,
-  total,
   role,
+  percentage,
 }: PDataResumeItem) => {
   const renderType = () => {
-    const pNumber = Math.round((number / total) * 100)
-    const percentage = !Number.isNaN(pNumber) ? pNumber : 0
+    const pctg = percentage ?? 0
 
     let str = ""
 
@@ -72,7 +71,7 @@ export const DataResumeItem = ({
         break
     }
 
-    return str + ` (${percentage}%)`
+    return str + ` (${pctg}%)`
   }
 
   return (
@@ -133,20 +132,20 @@ const ApprovalResume = ({
             <DataResumeItem
               type="approved"
               number={data.approved}
-              total={total}
+              percentage={data.approvedPercentage}
               role={role}
             />
             <DataResumeItem
               type="awaiting"
               number={data.awaiting}
-              total={total}
+              percentage={data.awaitingPercentage}
               role={role}
             />
             {data.rejected !== undefined && (
               <DataResumeItem
                 type="rejected"
                 number={data.rejected}
-                total={total}
+                percentage={data.rejectedPercentage}
                 role={role}
               />
             )}
@@ -162,19 +161,10 @@ const ApprovalResume = ({
               </S.Graph>
             ) : (
               <S.Graph>
-                <GraphData
-                  type={"approved"}
-                  size={(data.approved / total) * 100}
-                />
-                <GraphData
-                  type={"awaiting"}
-                  size={(data.awaiting / total) * 100}
-                />
+                <GraphData type={"approved"} size={data.approvedPercentage} />
+                <GraphData type={"awaiting"} size={data.awaitingPercentage} />
                 {data.rejected !== undefined && (
-                  <GraphData
-                    type={"rejected"}
-                    size={(data.rejected / total) * 100}
-                  />
+                  <GraphData type={"rejected"} size={data.rejectedPercentage} />
                 )}
               </S.Graph>
             )}

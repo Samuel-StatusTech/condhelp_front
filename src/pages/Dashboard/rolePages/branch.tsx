@@ -159,8 +159,11 @@ const DashboardBranch = ({ canLoadData }: { canLoadData: boolean }) => {
           title="Estatísticas gerais de orçamentos"
           data={{
             approved: data.totalBudgetsCompleted,
+            approvedPercentage: data.totalBudgetsCompletedPercentage,
             awaiting: data.totalBudgetsInProgress,
+            awaitingPercentage: data.totalBudgetsInProgressPercentage,
             rejected: data.totalBudgetsCancelled,
+            rejectedPercentage: data.totalBudgetsCancelledPercentage,
           }}
           role="budgets"
           doubledCard={true}
@@ -170,7 +173,11 @@ const DashboardBranch = ({ canLoadData }: { canLoadData: boolean }) => {
           title="Estatísticas gerais de prestadores"
           data={{
             approved: data.providerPercentage?.totalProvideActive ?? 0,
+            approvedPercentage:
+              data.providerPercentage?.totalProvideActivePercentage ?? 0,
             awaiting: data.providerPercentage?.totalProvideInative ?? 0,
+            awaitingPercentage:
+              data.providerPercentage?.totalProvideInativePercentage ?? 0,
           }}
           role="providers"
           doubledCard={true}

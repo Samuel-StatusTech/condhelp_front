@@ -306,25 +306,25 @@ const DashboardManager = ({ canLoadData }: { canLoadData: boolean }) => {
               <DataResumeItem
                 type={"approved"}
                 number={statistics.completed}
-                total={statistics.total}
+                percentage={statistics.completedPercentage}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"awaiting"}
                 number={statistics.inProgress}
-                total={statistics.total}
+                percentage={statistics.inProgressPercentage}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"rejected"}
                 number={statistics.canceled}
-                total={statistics.total}
+                percentage={statistics.canceledPercentage}
                 role={"budgets"}
               />
               <DataResumeItem
                 type={"recused"}
                 number={statistics.recused}
-                total={statistics.total}
+                percentage={statistics.recusedPercentage}
                 role={"budgets"}
               />
             </S.MBRDataArea>

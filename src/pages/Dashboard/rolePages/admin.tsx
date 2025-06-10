@@ -150,8 +150,11 @@ const DashboardAdmin = ({ canLoadData }: { canLoadData: boolean }) => {
           title="Todos os Orçamentos"
           data={{
             approved: data.totalBudgetsCompleted,
+            approvedPercentage: data.totalBudgetsCompletedPercentage,
             awaiting: data.totalBudgetsInProgress,
+            awaitingPercentage: data.totalBudgetsInProgressPercentage,
             rejected: data.totalBudgetsCancelled,
+            rejectedPercentage: data.totalBudgetsCancelledPercentage,
           }}
           role="budgets"
         />
