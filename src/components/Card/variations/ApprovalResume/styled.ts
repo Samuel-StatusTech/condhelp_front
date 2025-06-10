@@ -58,13 +58,15 @@ export const DataResumeItem = styled.div`
 `
 
 export const StatusColor = styled.div<{
-  $status: "approved" | "awaiting" | "rejected" | "recused"
+  $status: "awaitingResponse" | "approved" | "awaiting" | "rejected" | "recused"
 }>`
   width: 8px;
   height: 8px;
   border-radius: 8px;
   background-color: ${({ $status, theme }) =>
-    $status === "approved"
+    $status === "awaitingResponse"
+      ? theme.colors.blue.cyan
+      : $status === "approved"
       ? theme.colors.green.light
       : $status === "awaiting"
       ? theme.colors.orange.main

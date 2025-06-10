@@ -56,10 +56,12 @@ const DashboardProvider = ({ canLoadData }: { canLoadData: boolean }) => {
   const [budgets, setBudgets] = useState<TProviderBudgetResume[]>([])
   const [budgetsResume, setBudgetsResume] = useState<TBudgetStatistics>({
     total: 0,
+    awaiting: 0,
     completed: 0,
     inProgress: 0,
     canceled: 0,
     recused: 0,
+    awaitingPercentage: 0,
     completedPercentage: 0,
     inProgressPercentage: 0,
     canceledPercentage: 0,
@@ -221,6 +223,12 @@ const DashboardProvider = ({ canLoadData }: { canLoadData: boolean }) => {
               orçamentos:
             </S.MBRMessage>
             <S.MBRDataArea>
+              <DataResumeItem
+                type={"awaitingResponse"}
+                number={budgetsResume.awaiting ?? 0}
+                percentage={budgetsResume.awaitingPercentage}
+                role={"budgets"}
+              />
               <DataResumeItem
                 type={"approved"}
                 number={budgetsResume.completed}

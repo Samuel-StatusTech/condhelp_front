@@ -15,7 +15,7 @@ type Props = {
 }
 
 type PDataResumeItem = {
-  type: "approved" | "awaiting" | "rejected" | "recused"
+  type: "awaitingResponse" | "approved" | "awaiting" | "rejected" | "recused"
   number: number
   percentage?: number
   role: "budgets" | "providers"
@@ -27,12 +27,14 @@ type PDataResumeItem = {
 
 const textRelations = {
   budgets: {
+    awaitingResponse: "Aguardando",
     approved: "Finalizado",
     awaiting: "Em andamento",
     rejected: "Cancelado",
     recused: "Recusado",
   },
   providers: {
+    awaitingResponse: "Aguardando",
     approved: "Ativo",
     awaiting: "Inativo",
     rejected: "Cancelado",
@@ -52,6 +54,9 @@ export const DataResumeItem = ({
     let str = ""
 
     switch (type) {
+      case "awaitingResponse":
+        str = `${textRelations[role][type]}`
+        break
       case "approved":
         str = `${textRelations[role][type]}${number > 1 ? "s" : ""}`
         break
