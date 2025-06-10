@@ -27,14 +27,14 @@ type PDataResumeItem = {
 
 const textRelations = {
   budgets: {
-    awaitingResponse: "Aguardando",
+    awaitingResponse: "Aguardando participação",
     approved: "Finalizado",
     awaiting: "Em andamento",
     rejected: "Cancelado",
     recused: "Recusado",
   },
   providers: {
-    awaitingResponse: "Aguardando",
+    awaitingResponse: "Aguardando participação",
     approved: "Ativo",
     awaiting: "Inativo",
     rejected: "Cancelado",
