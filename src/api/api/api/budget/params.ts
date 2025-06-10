@@ -33,6 +33,7 @@ export type TApi_Params_Budgets = {
     }
     finish: {
       id: number
+      reason?: string
     }
     delete: {
       id: number

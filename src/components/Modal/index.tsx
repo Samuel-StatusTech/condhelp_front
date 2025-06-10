@@ -23,6 +23,7 @@ import NewAccountType from "./variations/NewAccountType"
 import { TUserProfile } from "../../utils/@types/data/user"
 import CondoSuccess from "./variations/CondoSuccess"
 import TermsModal from "./variations/Terms"
+import FinishBudget from "./variations/FinishBudget"
 
 const ResponsiveDialog = styled(Dialog, {
   shouldForwardProp: (props) => props !== "isFullPage",
@@ -73,6 +74,7 @@ export type TModals =
   | "newBudget"
   | "editBudget"
   | "reopenBudget"
+  | "finishBudget"
   | "newErrand"
   | "successFeedback"
   | "confirmDelete"
@@ -119,6 +121,15 @@ const Modal = () => {
       case "reopenBudget":
         el = (
           <ReopenBudget data={data} onClose={handleClose} handleOp={handleOp} />
+        )
+        break
+      case "finishBudget":
+        el = (
+          <FinishBudget
+            data={data}
+            onClose={handleClose}
+            handleOp={handleOp as any}
+          />
         )
         break
       case "newErrand":

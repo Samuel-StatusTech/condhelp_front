@@ -79,12 +79,12 @@ const DashboardManagerBudget = () => {
     }
   }, [controllers.modal, budgetData])
 
-  const handleFinish = async () => {
+  const handleFinishAction = async (reason?: string) => {
     if (budgetData) {
       setLoading(true)
 
       try {
-        const req = await Api.budgets.finish({ id: budgetData.id })
+        const req = await Api.budgets.finish({ id: budgetData.id, reason })
 
         if (req.ok) {
           controllers.feedback.setData({
@@ -104,6 +104,52 @@ const DashboardManagerBudget = () => {
       }
 
       setLoading(false)
+    }
+  }
+
+  const toggleDescriberModal = () => {
+    controllers.modal.close()
+    setTimeout(() => {
+      controllers.modal.open({
+        role: "finishBudget",
+        visible: true,
+        bluredBack: true,
+        width: "sm",
+        data: {},
+        handleOp: (reason) => {
+          handleFinishAction(reason)
+          controllers.modal.close()
+        },
+      })
+    }, 100)
+  }
+
+  const handleFinish = async () => {
+    if (budgetData) {
+      const participantsCount = budgetData.providers.length
+      const hasDeal = budgetData.providers.some(
+        (p) => p.status === "CONTRATADO"
+      )
+
+      if (participantsCount < 3 || !hasDeal) {
+        controllers.modal.open({
+          role: "confirmDelete",
+          visible: true,
+          bluredBack: true,
+          width: "sm",
+          data: {
+            title: "Atenção!",
+            deleteFullText: `Você está prestes a finalizar seu orçamento. ${
+              participantsCount > 0 &&
+              "Vimos que você não contratou nenhuma das empresas participantes."
+            }`,
+            deleteSecondaryText: "Deseja continuar?",
+            deleteBtnText: "Finalizar",
+            canCancel: true,
+          },
+          handleOp: toggleDescriberModal,
+        })
+      } else handleFinishAction()
     }
   }
 

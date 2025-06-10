@@ -15,6 +15,8 @@ type Props = {
     deleteTextDescriptor?: string
     deleteBtnText?: string
     deleteFullText?: string
+    deleteSecondaryText?: string
+    canCancel?: boolean
   }
   onClose: () => void
   handleOp?: () => void
@@ -56,6 +58,10 @@ const DeleteConfirm = ({ data, onClose, handleOp }: Props) => {
           </S.Message>
         </S.ContentArea>
 
+        {data.deleteSecondaryText && (
+          <S.Message>{data.deleteSecondaryText}</S.Message>
+        )}
+
         <Input.Multiple
           field="confirm"
           value={confirm ? ["confirm"] : []}
@@ -64,6 +70,14 @@ const DeleteConfirm = ({ data, onClose, handleOp }: Props) => {
         />
 
         <S.Bottom>
+          {data.canCancel && (
+            <Button
+              type="quaternary"
+              action={handleClose}
+              text="Cancelar"
+              red={true}
+            />
+          )}
           <Button
             disabled={!confirm}
             type="main"
