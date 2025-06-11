@@ -338,7 +338,7 @@ const Budgets = () => {
           />
 
           <Table
-            config={tableConfig.finishedBudgetsResume}
+            config={tableConfig.finishedBudgetsResumeDescripted}
             searchData={searchControl}
             setSearchFilters={setSearchFilters}
             data={finishedBudgets.filter((i) => {

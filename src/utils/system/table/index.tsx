@@ -8,6 +8,7 @@ import { faqTableConfig } from "./faqTableConfig"
 import { finishedBudgetsTableConfig } from "./finishedBudgetsTableConfig"
 import { callsTableConfig } from "./callsHistoryTableConfig"
 import { finishedBudgetsResumeTableConfig } from "./finishedBudgetsResumeTableConfig"
+import { finishedBudgetsResumeDescriptedTableConfig } from "./finishedBudgetsResumeDescriptedTableConfig"
 import { condoUnaprovedTableConfig } from "./condoUnaprovedTableConfig"
 import { condoRejectedTableConfig } from "./condoRejectedTableConfig"
 import { tagsTableConfig } from "./tagsTableConfig"
@@ -25,6 +26,7 @@ type TTableConfigs =
   | "tags"
   | "finishedBudgets"
   | "finishedBudgetsResume"
+  | "finishedBudgetsResumeDescripted"
   | "calls"
 
 export const tableConfig: {
@@ -42,6 +44,7 @@ export const tableConfig: {
   tags: tagsTableConfig,
   finishedBudgets: finishedBudgetsTableConfig,
   finishedBudgetsResume: finishedBudgetsResumeTableConfig,
+  finishedBudgetsResumeDescripted: finishedBudgetsResumeDescriptedTableConfig,
   calls: callsTableConfig,
 }
 

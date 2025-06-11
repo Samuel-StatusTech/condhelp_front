@@ -351,11 +351,13 @@ const update: TApi["budgets"]["update"] = async ({ budget }) => {
   })
 }
 
-const finish: TApi["budgets"]["finish"] = async ({ id }) => {
+const finish: TApi["budgets"]["finish"] = async ({ id, reason }) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const body = reason ? { reason } : undefined
+
       await service
-        .put(`${baseURL}/${id}/finish`)
+        .put(`${baseURL}/${id}/finish`, body)
         .then((res) => {
           const info = res.data
 

@@ -70,6 +70,7 @@ export type TBudgetResume = {
   rejected: number
   accepted: number
   status?: TBudgetStatus
+  reason?: string
 }
 
 export type TProviderBudgetResume = {
