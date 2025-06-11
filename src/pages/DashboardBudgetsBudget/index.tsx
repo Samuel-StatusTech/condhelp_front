@@ -17,6 +17,7 @@ import { TProviderOnBudget } from "../../utils/@types/data/_user/provider"
 import { TUserTypes } from "../../utils/@types/data/user"
 import { TBudgetStatus } from "../../utils/@types/data/status"
 import ProviderDetails from "./provider"
+import { capitalizeFirstLetter } from "../../utils/tb/helpers/text"
 
 const DashboardBudgetsBudget = () => {
   const { controllers } = getStore()
@@ -209,7 +210,7 @@ const DashboardBudgetsBudget = () => {
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
                 <S.DetailValue>
-                  {budget?.title ?? "Carregando..."}
+                  {capitalizeFirstLetter(budget?.title ?? "Carregando...")}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
@@ -370,7 +371,7 @@ const DashboardBudgetsBudget = () => {
           </S.Block>
         </S.Column>
         <S.Column>
-          {(!budget || loading) && (
+          {!budget && (
             <S.EmptyMessage>
               <span style={{ marginTop: 12, fontWeight: 500 }}>
                 Carregando...

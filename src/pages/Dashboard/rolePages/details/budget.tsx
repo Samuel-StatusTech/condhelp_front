@@ -277,7 +277,7 @@ const BudgetDetails = ({
           </S.Block>
         </S.Column>
         <S.Column>
-          {(!budgetData || loading) && (
+          {(!budgetData) && (
             <S.EmptyMessage>
               <span style={{ marginTop: 12, fontWeight: 500 }}>
                 Carregando...

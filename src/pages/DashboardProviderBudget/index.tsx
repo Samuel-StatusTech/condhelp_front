@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from "react"
 import { Api } from "../../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { formatCNPJ } from "../../utils/tb/format/cnpj"
+import { capitalizeFirstLetter } from "../../utils/tb/helpers/text"
 
 const DashboardProviderBudget = () => {
   const { user, controllers } = getStore()
@@ -111,7 +112,7 @@ const DashboardProviderBudget = () => {
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
                 <S.DetailValue>
-                  {budget?.title ?? "Carregando..."}
+                  {capitalizeFirstLetter(budget?.title ?? "Carregando...")}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>

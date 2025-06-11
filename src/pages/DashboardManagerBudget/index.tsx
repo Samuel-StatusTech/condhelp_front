@@ -127,12 +127,13 @@ const DashboardManagerBudget = () => {
 
   const handleFinish = async () => {
     if (budgetData) {
-      const participantsCount = budgetData.providers.length
+      // const participantsCount = budgetData.providers.length
       const hasDeal = budgetData.providers.some(
         (p) => p.status === "CONTRATADO"
       )
 
-      if (participantsCount < 3 || !hasDeal) {
+      // if (participantsCount < 3 || !hasDeal) {
+      if (!hasDeal) {
         controllers.modal.open({
           role: "confirmDelete",
           visible: true,
@@ -140,10 +141,7 @@ const DashboardManagerBudget = () => {
           width: "sm",
           data: {
             title: "Atenção!",
-            deleteFullText: `Você está prestes a finalizar seu orçamento. ${
-              participantsCount > 0 &&
-              "Vimos que você não contratou nenhuma das empresas participantes."
-            }`,
+            deleteFullText: `Você está quase finalizando seu orçamento.`,
             deleteSecondaryText: "Deseja continuar?",
             deleteBtnText: "Finalizar",
             canCancel: true,
@@ -474,7 +472,7 @@ const DashboardManagerBudget = () => {
           </S.Block>
         </S.Column>
         <S.Column>
-          {(!budgetData || loading) && (
+          {!budgetData && (
             <S.EmptyMessage>
               <span style={{ marginTop: 12, fontWeight: 500 }}>
                 Carregando...
