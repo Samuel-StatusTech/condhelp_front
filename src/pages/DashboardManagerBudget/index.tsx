@@ -16,6 +16,7 @@ import ProviderDetails from "./provider"
 import { TProviderOnBudget } from "../../utils/@types/data/_user/provider"
 import { TBudgetStatus } from "../../utils/@types/data/status"
 import { useNavigate, useParams } from "react-router-dom"
+import { capitalizeFirstLetter } from "../../utils/tb/helpers/text"
 
 const DashboardManagerBudget = () => {
   const { controllers } = getStore()
@@ -346,7 +347,7 @@ const DashboardManagerBudget = () => {
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
                 <S.DetailValue>
-                  {budgetData?.title ?? "Carregando..."}
+                  {capitalizeFirstLetter(budgetData?.title ?? "Carregando...")}
                 </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>

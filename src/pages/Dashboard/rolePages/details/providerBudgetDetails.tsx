@@ -11,6 +11,7 @@ import Divider from "../../../../components/_minimals/Divider"
 import { getStore } from "../../../../store"
 import { useEffect, useState } from "react"
 import { Api } from "../../../../api"
+import { capitalizeFirstLetter } from "../../../../utils/tb/helpers/text"
 
 type Props = {
   budget: TProviderBudgetResume
@@ -71,7 +72,9 @@ const ProviderBudgetDetails = ({ budget, handleBack }: Props) => {
             <S.DetailsList>
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
-                <S.DetailValue>{budget.title}</S.DetailValue>
+                <S.DetailValue>
+                  {capitalizeFirstLetter(budget.title)}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Condomínio:</S.DetailName>

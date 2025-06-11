@@ -10,6 +10,7 @@ import { Api } from "../../../../api"
 import { getStore } from "../../../../store"
 import { TBudgetStatus } from "../../../../utils/@types/data/status"
 import { useEffect, useState } from "react"
+import { capitalizeFirstLetter } from "../../../../utils/tb/helpers/text"
 
 type Props = {
   k: number
@@ -132,7 +133,7 @@ const ManagerBudgetResume = ({
       <C.HTop>
         <C.Header>
           <C.HPart $k={k}>
-            <S.CardTitle>{data.title}</S.CardTitle>
+            <S.CardTitle>{capitalizeFirstLetter(data.title)}</S.CardTitle>
           </C.HPart>
         </C.Header>
       </C.HTop>

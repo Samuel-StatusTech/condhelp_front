@@ -15,6 +15,7 @@ import { Api } from "../../../../api"
 import ProviderDetails from "./provider"
 import { TProviderOnBudget } from "../../../../utils/@types/data/_user/provider"
 import { TBudgetStatus } from "../../../../utils/@types/data/status"
+import { capitalizeFirstLetter } from "../../../../utils/tb/helpers/text"
 
 type Props = {
   budget: TBudget
@@ -175,7 +176,9 @@ const BudgetDetails = ({
             <S.DetailsList>
               <S.DetailItem>
                 <S.DetailName>Título:</S.DetailName>
-                <S.DetailValue>{budgetData?.title}</S.DetailValue>
+                <S.DetailValue>
+                  {capitalizeFirstLetter(budgetData?.title)}
+                </S.DetailValue>
               </S.DetailItem>
               <S.DetailItem>
                 <S.DetailName>Condomínio:</S.DetailName>

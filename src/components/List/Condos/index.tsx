@@ -5,6 +5,7 @@ import { Icons } from "../../../assets/icons/icons"
 import Button from "../../Button"
 import { TUManager } from "../../../utils/@types/data/user"
 import { TCondominium } from "../../../utils/@types/data/condominium"
+import { capitalizeFirstLetter } from "../../../utils/tb/helpers/text"
 
 type Props = {
   title: string
@@ -17,7 +18,7 @@ type Props = {
 const CondosList = ({ title, list, handleAdd, handleDelete }: Props) => {
   return (
     <S.Wrapper>
-      <S.ListTitle>{title}</S.ListTitle>
+      <S.ListTitle>{capitalizeFirstLetter(title)}</S.ListTitle>
       {list.map((item, sk) => (
         <S.Item $k={sk} key={sk}>
           <S.ItemName>{item.name}</S.ItemName>

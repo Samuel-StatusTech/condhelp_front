@@ -5,6 +5,7 @@ import { Icons } from "../../../../assets/icons/icons"
 import { TBudgetResume } from "../../../../utils/@types/data/budget"
 import { getDateStr } from "../../../../utils/tb/format/date"
 import Divider from "../../../_minimals/Divider"
+import { capitalizeFirstLetter } from "../../../../utils/tb/helpers/text"
 
 type Props = {
   k: number
@@ -108,7 +109,7 @@ const ManagerBudgetResume = ({
       <C.HTop>
         <C.Header>
           <C.HPart $k={k}>
-            <S.CardTitle>{data.title}</S.CardTitle>
+            <S.CardTitle>{capitalizeFirstLetter(data.title)}</S.CardTitle>
           </C.HPart>
         </C.Header>
       </C.HTop>
