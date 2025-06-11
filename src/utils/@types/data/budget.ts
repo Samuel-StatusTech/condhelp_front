@@ -53,6 +53,8 @@ export type TBudget = {
 
   userId?: number
   contacts?: any[]
+
+  reason?: string
 }
 
 export type TBudgetResume = {

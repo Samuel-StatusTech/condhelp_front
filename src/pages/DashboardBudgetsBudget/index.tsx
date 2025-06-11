@@ -64,6 +64,7 @@ const DashboardBudgetsBudget = () => {
     controllers.modal.open({
       role: "loading",
       visible: loading,
+      bluredBack: true,
     })
   }, [controllers.modal, loading])
 
@@ -369,7 +370,16 @@ const DashboardBudgetsBudget = () => {
           </S.Block>
         </S.Column>
         <S.Column>
-          {budget && budget.providers.length > 0 ? (
+          {(!budget || loading) && (
+            <S.EmptyMessage>
+              <span style={{ marginTop: 12, fontWeight: 500 }}>
+                Carregando...
+              </span>
+            </S.EmptyMessage>
+          )}
+
+          {budget &&
+            budget.providers.length > 0 &&
             budget.providers.map((p, pk) => (
               <Card.ProviderResume
                 key={pk}
@@ -381,15 +391,55 @@ const DashboardBudgetsBudget = () => {
                 budgetStatus={budget.status}
                 forHigherView={true}
               />
-            ))
-          ) : (
-            <S.EmptyMessage>
-              <Icons.Clock />
-              <span style={{ marginTop: 12, fontWeight: 500 }}>
-                Aguardando participantes...
-              </span>
-            </S.EmptyMessage>
-          )}
+            ))}
+
+          {budget &&
+            !(
+              [
+                "FINALIZADO",
+                "CANCELADO_SINDICO",
+                "EXPIRADO",
+                "CANCELADO_PRESTADOR",
+              ] as TBudgetStatus[]
+            ).includes(budget.status) && (
+              <S.EmptyMessage>
+                <Icons.Clock />
+                <span style={{ marginTop: 12, fontWeight: 500 }}>
+                  Aguardando participantes...
+                </span>
+              </S.EmptyMessage>
+            )}
+
+          {budget &&
+            (["FINALIZADO"] as TBudgetStatus[]).includes(budget.status) &&
+            budget.reason && (
+              <S.Block>
+                <S.BlockHeader>
+                  <S.BlockTitle>Descrição da contratação</S.BlockTitle>
+                </S.BlockHeader>
+
+                <Divider />
+
+                <span>{budget.reason}</span>
+              </S.Block>
+            )}
+
+          {budget &&
+            (
+              [
+                "FINALIZADO",
+                "CANCELADO_SINDICO",
+                "EXPIRADO",
+                "CANCELADO_PRESTADOR",
+              ] as TBudgetStatus[]
+            ).includes(budget.status) &&
+            budget.providers.length === 0 && (
+              <S.EmptyMessage>
+                <span style={{ marginTop: 12, fontWeight: 500 }}>
+                  Sem participantes
+                </span>
+              </S.EmptyMessage>
+            )}
         </S.Column>
       </S.SubContent>
     </C.SubContent>

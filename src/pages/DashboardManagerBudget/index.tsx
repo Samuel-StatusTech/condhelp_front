@@ -473,7 +473,16 @@ const DashboardManagerBudget = () => {
           </S.Block>
         </S.Column>
         <S.Column>
-          {budgetData && budgetData.providers.length > 0 ? (
+          {(!budgetData || loading) && (
+            <S.EmptyMessage>
+              <span style={{ marginTop: 12, fontWeight: 500 }}>
+                Carregando...
+              </span>
+            </S.EmptyMessage>
+          )}
+
+          {budgetData &&
+            budgetData.providers.length > 0 &&
             budgetData.providers.map((p, pk) => (
               <Card.ProviderResume
                 key={pk}
@@ -484,15 +493,55 @@ const DashboardManagerBudget = () => {
                 handleResponseProvider={handleResponseProvider}
                 budgetStatus={budgetData.status}
               />
-            ))
-          ) : (
-            <S.EmptyMessage>
-              <Icons.Clock />
-              <span style={{ marginTop: 12, fontWeight: 500 }}>
-                Aguardando participantes...
-              </span>
-            </S.EmptyMessage>
-          )}
+            ))}
+
+          {budgetData &&
+            !(
+              [
+                "FINALIZADO",
+                "CANCELADO_SINDICO",
+                "EXPIRADO",
+                "CANCELADO_PRESTADOR",
+              ] as TBudgetStatus[]
+            ).includes(budgetData.status) && (
+              <S.EmptyMessage>
+                <Icons.Clock />
+                <span style={{ marginTop: 12, fontWeight: 500 }}>
+                  Aguardando participantes...
+                </span>
+              </S.EmptyMessage>
+            )}
+
+          {budgetData &&
+            (["FINALIZADO"] as TBudgetStatus[]).includes(budgetData.status) &&
+            budgetData.reason && (
+              <S.Block>
+                <S.BlockHeader>
+                  <S.BlockTitle>Descrição da contratação</S.BlockTitle>
+                </S.BlockHeader>
+
+                <Divider />
+
+                <span>{budgetData.reason}</span>
+              </S.Block>
+            )}
+
+          {budgetData &&
+            (
+              [
+                "FINALIZADO",
+                "CANCELADO_SINDICO",
+                "EXPIRADO",
+                "CANCELADO_PRESTADOR",
+              ] as TBudgetStatus[]
+            ).includes(budgetData.status) &&
+            budgetData.providers.length === 0 && (
+              <S.EmptyMessage>
+                <span style={{ marginTop: 12, fontWeight: 500 }}>
+                  Sem participantes
+                </span>
+              </S.EmptyMessage>
+            )}
         </S.Column>
       </S.SubContent>
     </C.SubContent>
