@@ -3,6 +3,7 @@ import { TFaq } from "../../@types/data/faq"
 import { relations } from "../relations"
 
 import TableActions from "../../../components/TableActions"
+import { capitalizeFirstLetter } from "../../tb/helpers/text"
 
 export const faqTableConfig: TConfig = {
   columns: [
@@ -12,6 +13,7 @@ export const faqTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
+    title: (item: TFaq) => capitalizeFirstLetter(item.title),
     accessProfiles: (item: TFaq) =>
       `${item.accessProfiles.map((i) => relations.roles[i]).join(", ")}`,
     size: (item: TFaq) => item.items.length,

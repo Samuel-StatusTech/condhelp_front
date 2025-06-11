@@ -3,6 +3,7 @@ import { TConfig } from "."
 import TableActions from "../../../components/TableActions"
 import { getDateStr } from "../../tb/format/date"
 import { TCall } from "../../@types/data/call"
+import { capitalizeFirstLetter } from "../../tb/helpers/text"
 
 export const callsTableConfig: TConfig = {
   columns: [
@@ -17,7 +18,7 @@ export const callsTableConfig: TConfig = {
   specialFields: {
     openedAt: (item: TCall) => getDateStr(item.opendAt, "dmy"),
     category: (item: TCall) => item.categoryName ?? "",
-    title: (item: TCall) => item.budgetTitle ?? "",
+    title: (item: TCall) => capitalizeFirstLetter(item.budgetTitle ?? ""),
     condo: (item: TCall) => item.condominiumName,
     closedAt: (item: TCall) => getDateStr(item.closedAt, "dmy"),
 

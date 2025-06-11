@@ -6,6 +6,7 @@ import ColorTextIndicator from "../../../components/ColorTextIndicator"
 import { getDateStr } from "../../tb/format/date"
 import { relations } from "../relations"
 import { TBudgetStatus } from "../../@types/data/status"
+import { capitalizeFirstLetter } from "../../tb/helpers/text"
 
 export const finishedBudgetsTableConfig: TConfig = {
   columns: [
@@ -16,6 +17,7 @@ export const finishedBudgetsTableConfig: TConfig = {
     { title: "", field: "actions", align: "right" },
   ],
   specialFields: {
+    title: (item: TBudget) => capitalizeFirstLetter(item.title),
     condo: (item: TBudget) => item.condominiumName,
     endDate: (item: TBudget) => getDateStr(item.endDate, "dmy"),
     status: (item: TBudget) => (
