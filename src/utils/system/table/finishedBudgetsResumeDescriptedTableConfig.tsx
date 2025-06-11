@@ -6,22 +6,7 @@ import ColorTextIndicator from "../../../components/ColorTextIndicator"
 import { getDateStr } from "../../tb/format/date"
 import { relations } from "../relations"
 import { TBudgetStatus } from "../../@types/data/status"
-import { capitalizeFirstLetter } from "../../tb/helpers/text"
-
-const getReasonStr = (reason: string) => {
-  let str = ""
-
-  const words = reason.trim().split(" ").slice(0, 1)
-
-  if (words.length > 1) {
-    const lastIndex = reason.lastIndexOf(words[1]) + words[1].length
-    if (reason.length > lastIndex) {
-      str = `${reason.slice(0, lastIndex)}...`
-    } else str = reason
-  } else str = reason
-
-  return str
-}
+import { capitalizeFirstLetter, collapseText } from "../../tb/helpers/text"
 
 export const finishedBudgetsResumeDescriptedTableConfig: TConfig = {
   columns: [
@@ -48,7 +33,7 @@ export const finishedBudgetsResumeDescriptedTableConfig: TConfig = {
       />
     ),
     reason: (item: TBudgetResume) =>
-      item.reason ? `${getReasonStr(item.reason)}` : "-",
+      item.reason ? `${collapseText(item.reason)}` : "-",
 
     actions: (item: TBudget, { callbacks }) => {
       return (
