@@ -1,3 +1,4 @@
+import { ReactComponent as AiStars } from "./ai_stars.svg"
 import { ReactComponent as Alert } from "./alert.svg"
 import { ReactComponent as AlertThin } from "./alert_thin.svg"
 import { ReactComponent as ArrowGreen } from "./arrow-green.svg"
@@ -82,6 +83,7 @@ import { ReactComponent as Valid } from "./valid.svg"
 import { ReactComponent as Web } from "./web.svg"
 
 export const Icons = {
+  AiStars,
   Alert,
   AlertThin,
   ArrowGreen,

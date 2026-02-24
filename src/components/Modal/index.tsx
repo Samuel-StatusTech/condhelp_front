@@ -24,6 +24,7 @@ import { TUserProfile } from "../../utils/@types/data/user"
 import CondoSuccess from "./variations/CondoSuccess"
 import TermsModal from "./variations/Terms"
 import FinishBudget from "./variations/FinishBudget"
+import Maintence from "./variations/Maintence"
 
 const ResponsiveDialog = styled(Dialog, {
   shouldForwardProp: (props) => props !== "isFullPage",
@@ -85,6 +86,7 @@ export type TModals =
   | "seeCondominiumRejection"
   | "newAccountType"
   | "welcome"
+  | "maintence"
 
 const Modal = () => {
   const { modal, controllers } = getStore()
@@ -205,6 +207,9 @@ const Modal = () => {
             handleOp={handleOp as () => Promise<void>}
           />
         )
+        break
+      case "maintence":
+        el = <Maintence />
         break
       default:
         el = children
