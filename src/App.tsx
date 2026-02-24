@@ -3,7 +3,7 @@ import Router from "./routes"
 import { getStore } from "./store"
 import Feedback from "./components/Feedback"
 
-const isOnMaintence = false
+const isOnMaintence = true
 
 function App() {
   const { controllers, feedback } = getStore()
